@@ -1,0 +1,24 @@
+%Use a minimal document style (the resulting figure size should conform to the contents%
+
+\documentclass{minimal}
+
+%Load the graphics package that allows figures to be added
+\usepackage{graphicx}
+
+%Start the document environment
+\begin{document}
+
+%Start the horizontal box environment.  This should line up separate items
+%within horizontally.  Use the \vbox environment instead to do this vertically.
+\vbox{
+%\hbox{
+\begin{center}
+\includegraphics[bb=76 326 536 590,clip]{pdfmapfiga}\\
+\includegraphics[bb=76 326 536 590,clip]{pdfmapfigb}
+\end{center}
+%}
+}
+
+%end of the document, duh
+\end{document}
+
