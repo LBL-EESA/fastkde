@@ -2,12 +2,13 @@
 from numpy import *
 from numpy.random import randn
 import knuthAverage as kn
-import ftnphisc
+import ftnbp11helper
 import copy
 from types import *
 import pdb
 import time
 
+#A simple timer for comparing ECF calculation methods
 class Timer():
    def __init__(self,n=None): self.n = n
    def __enter__(self): self.start = time.time()
@@ -57,7 +58,7 @@ class bernacchiaDensityEstimate:
 
     usage: bdensity = bernacchiaDensityEstimate(  data, \
                                                   x = [], \
-                                                  numPoints = 8197,\
+                                                  numPoints = 4097,\
                                                   numSigma = 20, \
                                                   deltaX = [], \
                                                   dataAverage = [], \
@@ -128,11 +129,8 @@ class bernacchiaDensityEstimate:
       #Set the number of data points
       self.numDataPoints = len(data)
 
-      #Determine threshold for valid frequencies
-      self.ecfThreshold = (4.*(self.numDataPoints-1.))/(self.numDataPoints**2)
     else:
       self.numDataPoints = 0
-      self.ecfThreshold = None
 
     #Store the doFFT flag
     self.doFFT = doFFT
@@ -197,55 +195,165 @@ class bernacchiaDensityEstimate:
     self.distributionThreshold = float(countThreshold)/(self.numDataPoints*self.deltaX)
 
     if(data != []):
+
+      #*************************************************
+      # Calculate the Empirical Characteristic Function
+      #*************************************************
       if(self.doApproximateECF):
         #Note that this routine also standardizes the data on-the-fly
         self.__calculateECFbyFFT__(data)
-
-        if(self.compareECF):
-          #Calculate the optimal distribution (in Fourier space) based on the ECF
-          #Note that this routine also standardizes the data on-the-fly
-          self.__calculatephiSC__(data)
-        else:
-          self.ECF = self.fftECF
+        self.ECF = self.fftECF
       else:
         #Calculate the optimal distribution (in Fourier space) based on the ECF
         #Note that this routine also standardizes the data on-the-fly
-        self.__calculatephiSC__(data)
+        self.__calculateECFDirect__(data)
 
 
       if(self.doFFT):
+        #*************************************************
+        # Apply the filter
+        #*************************************************
+        #Apply the Bernacchia filter to the ECF to obtain
+        #the fourier representation of the self-consistent density
+        self.applyBernacchiaFilter()
+
+        #*************************************************
+        # Transform to real space
+        #*************************************************
         #Transform the optimal distribution to real space
-        if(self.doApproximateECF):
-          self.calculateDensityFromECF()
-        else:
-          self.__transformphiSC__()
+        self.__transformphiSC__()
 
         self.goodDistributionInds = self.findGoodDistributionInds()
 
     return
 
-  def __calculatephiSC__(self,mydata):
-    """Estimate the optimum distribution (in Fourier space) using the BP11 method"""
+
+  #*****************************************************************************
+  #** bernacchiaDensityEstimate: ***********************************************
+  #******************* applyBernacchiaFilter() *********************************
+  #*****************************************************************************
+  #*****************************************************************************
+  def applyBernacchiaFilter(self,doFlushArrays=False):
+    """ Given an ECF, calculate the self-consistent density in fourier-space by
+    applying the BP11 filter."""
+
+    #Make an easy-to-read and float version of self.numDataPoints
+    N = float(self.numDataPoints)
+
+    #Calculate the stability threshold for the ECF
+    ecfThresh = 4.*(N-1.)/(N*N)
+
+    #Calculate the squared magnitude of the ECF signal
+    ecfSq = abs(self.ECF)**2
+
+    #Find indices above the ECF thresold
+    iAboveThresh = nonzero(ecfSq >= ecfThresh)[0]
+
+    #Determine the indices over which to calculate phiSC; these will be
+    #values where ECF is above the ECF threshold, and below the frequency
+    #where the ECF threshold has been below-threshold ithresh consecutive times
+    iDiff = diff(iAboveThresh)
+    iCutOff = nonzero(iDiff > (self.ithresh+1))[0]
+    if(len(iCutOff) > 0):
+      #Cut off indices above the point where ithresh or more ECF
+      #values are below the threshold (if there are any)
+      iCalcPhi = iAboveThresh[:(iCutOff[0]+1)]
+    else:
+      #Otherwise just return the above-threshold indices
+      iCalcPhi = iAboveThresh
+    
+    if(doFlushArrays):
+      self.phiSC[:] = (0.0+0.0j)
+
+    #Do the phiSC calculation only for the necessary points
+    self.phiSC[iCalcPhi] = (N*self.ECF[iCalcPhi]/(2*(N-1)))\
+                            *(1+sqrt(1-ecfThresh/ecfSq[iCalcPhi]))
+
+
+  #*****************************************************************************
+  #** bernacchiaDensityEstimate: ***********************************************
+  #******************* __calculateECFDirect__() ********************************
+  #*****************************************************************************
+  #*****************************************************************************
+  def __calculateECFDirect__(self,mydata):
+    """Directly calculate the fourier-space representation of the input data"""
 
     #Call a Fortran routine to do an efficient calculation of the density in
     #fourier space.
-    [self.phiSC,self.ECF] = ftnphisc.calculatephisc( 
-                                          datapoints = mydata, \
-                                          dataaverage = self.dataAverage, \
-                                          datastd = self.dataStandardDeviation, \
-                                          tpoints = self.t, \
-                                          ithresh = self.ithresh, \
-                                         )
+    self.ECF = ftnbp11helper.calculateecf( 
+                                        datapoints = mydata, \
+                                        dataaverage = self.dataAverage, \
+                                        datastd = self.dataStandardDeviation, \
+                                        tpoints = self.t
+                                       )
     
+  #*****************************************************************************
+  #** bernacchiaDensityEstimate: ***********************************************
+  #******************* __calculateECFbyFFT__() *********************************
+  #*****************************************************************************
+  #*****************************************************************************
+  def __calculateECFbyFFT__(self,data):
+    """Use the non-uniform FFT method to estimate the fourier representation of
+    the input data."""
+
+    #Calculate details of the gaussian kernel
+    tau = 1.5629
+    nspread = 30
+    nspreadhalf = nspread/2
+    fourTau = 4*tau
+
+    fkde = zeros([self.numXPoints])
+
+    fkde = ftnbp11helper.calculatekerneldensityestimate(  \
+                                                        datapoints = data, \
+                                                        dataaverage = self.dataAverage, \
+                                                        datastd = self.dataStandardDeviation, \
+                                                        xpoints = self.x,\
+                                                        nspreadhalf = nspreadhalf,\
+                                                        fourtau = fourTau)
+
+
+    #Calculate the FFT of the kernel density estimate
+    kdeFFT = fft.ihfft(fft.ifftshift(fkde),len(fkde))
+
+    #pdb.set_trace()
+    #Deconvolve the transformed kde to obtain the empirical characteristic 
+    #function
+    tprime = self.t*self.deltaX
+    self.fftECF = kdeFFT*exp(tau*tprime**2)/kdeFFT[0]
+
+  #*****************************************************************************
+  #** bernacchiaDensityEstimate: ***********************************************
+  #******************* findGoodDistributionInds() ******************************
+  #*****************************************************************************
+  #*****************************************************************************
+  def findGoodDistributionInds(self):
+    """Find indices of the optimal distribution that are above a specificed threshold"""
+    return nonzero(self.fSC >= self.distributionThreshold)[0]
+
+  #*****************************************************************************
+  #** bernacchiaDensityEstimate: ***********************************************
+  #******************* __transformphiSC__() ************************************
+  #*****************************************************************************
+  #*****************************************************************************
   def __transformphiSC__(self):
-    """ Transform the self-consistent estimate of the distribution from frequency to real
-        space 
-    """
+    """ Transform the self-consistent estimate of the distribution from
+    frequency space to real space"""
+
     #Since phiSC is Hermitian, use the numpy hfft routine to guarantee a transform
     #that is real
     self.fSC = fft.fftshift(fft.hfft(self.phiSC,self.numXPoints))*self.deltaT/(2*pi)
 
+  #*****************************************************************************
+  #** bernacchiaDensityEstimate: ***********************************************
+  #******************* Addition operator __add__ *******************************
+  #*****************************************************************************
+  #*****************************************************************************
   def __add__(self,rhs):
+    """ Addition operator for the bernacchiaDensityEstimate object.  Adds the
+        empirical characteristic functions of the two estimates, reapplies
+        the BP11 filter, and transforms back to real space.  This is useful
+        for parallelized calculation of densities. """
     #Check for proper typing
     if(not isinstance(rhs,bernacchiaDensityEstimate)):
       raise TypeError, "unsupported operand type(s) for +: {} and {}".format(type(self),type(rhs))
@@ -273,79 +381,12 @@ class bernacchiaDensityEstimate:
                 /retObj.numDataPoints
 
     if(retObj.doFFT):
-      retObj.calculateDensityFromECF()
+      retObj.applyBernacchiaFilter()
+      retObj.__transformphiSC__()
 
     #Return the new object
     return retObj
 
-  def calculateDensityFromECF(self,doFlushArrays=False):
-    """ Given an ECF, calculate the self-consistent density in fourier-space
-        and transform that density to real space to obtain fSC. """
-    #Make an easy-to-read and float version of self.numDataPoints
-    N = float(self.numDataPoints)
-
-    #Calculate the stability threshold for the ECF
-    ecfThresh = 4.*(N-1.)/(N*N)
-
-    #Calculate the squared magnitude of the ECF signal
-    ecfSq = abs(self.ECF)**2
-
-    #Find indices above the ECF thresold
-    iAboveThresh = nonzero(ecfSq >= ecfThresh)[0]
-
-    #Determine the indices over which to calculate phiSC; these will be
-    #values where ECF is above the ECF threshold, and below the frequency
-    #where the ECF threshold has been below-threshold ithresh consecutive times
-    iDiff = diff(iAboveThresh)
-    iCutOff = nonzero(iDiff > (self.ithresh+1))[0]
-    if(len(iCutOff) > 0):
-      #Cut off indices above the point where ithresh or more ECF
-      #values are below the threshold (if there are any)
-      iCalcPhi = iAboveThresh[:(iCutOff[0]+1)]
-    else:
-      #Otherwise just return the above-threshold indices
-      iCalcPhi = iAboveThresh
-    
-    if(doFlushArrays):
-      #self.phiSC = (0.0+0.0j)*zeros([self.numTPoints])
-      self.phiSC[:] = (0.0+0.0j)
-    #Do the phiSC calculation only for the necessary points
-    self.phiSC[iCalcPhi] = (N*self.ECF[iCalcPhi]/(2*(N-1)))\
-                            *(1+sqrt(1-ecfThresh/ecfSq[iCalcPhi]))
-
-    #Transform phiSC into the real-space distribution
-    self.__transformphiSC__()
-
-
-  def __calculateECFbyFFT__(self,data):
-    #Calculate details of the gaussian kernel
-    tau = 1.5629
-    nspread = 30
-    nspreadhalf = nspread/2
-    fourTau = 4*tau
-
-    self.fkde = zeros([self.numXPoints])
-
-    self.fkde = ftnphisc.calculatekerneldensityestimate(  \
-                                                        datapoints = data, \
-                                                        dataaverage = self.dataAverage, \
-                                                        datastd = self.dataStandardDeviation, \
-                                                        xpoints = self.x,\
-                                                        nspreadhalf = nspreadhalf,\
-                                                        fourtau = fourTau)
-
-
-    #Calculate the FFT of the kernel density estimate
-    kdeFFT = fft.ihfft(fft.ifftshift(self.fkde),len(self.fkde))
-
-    #pdb.set_trace()
-    #Deconvolve the transformed kde to obtain the empirical characteristic 
-    #function
-    tprime = self.t*self.deltaX
-    self.fftECF = kdeFFT*exp(tau*tprime**2)/kdeFFT[0]
-
-  def findGoodDistributionInds(self):
-    return nonzero(self.fSC >= self.distributionThreshold)[0]
 
 #*******************************************************************************
 #*******************************************************************************
@@ -362,7 +403,7 @@ if(__name__ == "__main__"):
   import pylab as P
   import scipy.stats as stats
 
-  #print ftnphisc.__doc__
+  #print ftnbp11helper.__doc__
 
   #Define a gaussian function for evaluation purposes
   def mygaus(x,mu=0.,sig=1.):
@@ -376,36 +417,6 @@ if(__name__ == "__main__"):
   nmax = 2**powmax
   #Create a random normal sample of this size
   randsample = 3*random.normal(size = nmax)
-
-
-  bTestFFTMethod = False
-  if(bTestFFTMethod):
-    bkernel = bernacchiaDensityEstimate(randsample,compareECF=True,numPoints=16385)
-
-    #Plot the ECF
-    P.subplot(2,2,1)
-    P.title("Real(ECF)")
-    P.plot(bkernel.t,real(bkernel.ECF),'b-')
-    P.plot(bkernel.t,real(bkernel.fftECF),'r-')
-
-    P.subplot(2,2,2)
-    P.title("Imag(ECF)")
-    P.plot(bkernel.t,imag(bkernel.ECF),'b-')
-    P.plot(bkernel.t,imag(bkernel.fftECF),'r-')
-
-    P.subplot(2,2,3,xscale="log",yscale="log")
-    P.title("|ECF|^2")
-    P.plot(bkernel.t[1:],abs(bkernel.ECF[1:])**2,'b-')
-    P.plot(bkernel.t[1:],abs(bkernel.fftECF[1:])**2,'r-')
-
-    P.subplot(2,2,4,yscale="log")
-    P.title("|ECF-fftECF]")
-    #P.plot(bkernel.t[1:],abs(bkernel.ECF[1:]-bkernel.fftECF[1:]))
-    P.plot(asarray(range(1,bkernel.numTPoints)),abs(bkernel.ECF[1:]-bkernel.fftECF[1:]))
-    #P.plot(bkernel.x,bkernel.fkde)
-
-    P.show()
-    quit()
 
 
   #Pre-define sample size and error-squared arrays

@@ -8,10 +8,10 @@ FFLAGS=-Ofast
 
 #SRC := $(wildcard *.f90)
 SRC = \
-      ftnphisc.f90
+      ftnbp11helper.f90
 
 SOSRC = \
-      ftnphisc.f90
+      ftnbp11helper.f90
 
 OBJ := $(addsuffix .o, $(basename $(SRC)))
 SOFILES := $(addsuffix .so, $(basename $(SOSRC)))
@@ -21,8 +21,8 @@ all: main
 %.o: %.f90
 	$(FC) $(FFLAGS) -c $< -o $@
 
-ftnphisc.so: ftnphisc.f90
-	${F2PY} -c ${F2PYFLAGS} -m ftnphisc $^
+ftnbp11helper.so: ftnbp11helper.f90
+	${F2PY} -c ${F2PYFLAGS} -m ftnbp11helper $^
 
 main: $(OBJ) $(SOFILES)
 

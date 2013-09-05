@@ -1,15 +1,12 @@
-      !Calculates the Fourier representation of the optimal,
-      !self-consistent distribution of a given set of data points.
-      !Based on Bernacchia and Pigolotti (2011, J. R. Statistic Soc. B.).
-      subroutine calculatephisc(  &
+      !Calculates the empirical characteristic function of a given set
+      !of input points
+      subroutine calculateecf(  &
                                   datapoints, &   !The random data points on which to base the distribution
                                   ndatapoints,  & !The number of data points
                                   dataaverage,  & !The average of the data 
                                   datastd,  &     !The stddev of the data 
                                   tpoints,    &   !The frequency points at which to calculate the optimal distribution
                                   ntpoints,   &   !The number of frequency points
-                                  ithresh, &      !The threshold number of consecutive below-threshold points before breaking the loop
-                                  phisc, &        !The optimal distribution
                                   ecf  &          !The empirical characteristic function
                                 )
       implicit none
@@ -26,13 +23,9 @@
       double precision,intent(in) :: dataaverage,datastd
       !f2py double precision,intent(in),dimension(ntpoints) :: tpoints
       double precision, intent(in), dimension(ntpoints) :: tpoints
-      !f2py integer,intent(in) :: ithresh
-      integer, intent(in) :: ithresh
       !*******************************
       ! Output variables
       !*******************************
-      !f2py complex(kind=8),intent(out),dimension(ntpoints) :: phisc
-      complex(kind=8),intent(out),dimension(ntpoints) :: phisc
       !f2py complex(kind=8),intent(out),dimension(ntpoints) :: ecf
       complex(kind=8),intent(out),dimension(ntpoints) :: ecf
       !*******************************
@@ -47,89 +40,37 @@
       double precision :: N
       complex(kind=8) :: cN
       integer :: numConsecutive
-      logical :: bCalculateECF,bCalculatePhiSC
       complex(kind=8) :: myECF
       complex(kind=8) :: myECFsq
-      complex(kind=8) :: myECFThreshold
       double precision :: dum
-      integer,parameter :: idofullcalc = 1
-
-        !Flag that we should calculate the ECF
-        bCalculateECF = .true.
-        bCalculatePhiSC = .true.
-        !Set the counter of consecutive below-threshold frequencies
-        !after which to unset the bCalculateECF flag
-        numConsecutive = 0
 
         !Set a double version of ndatapoints
         N = dble(ndatapoints)
+        !and a complex version too
         cN = complex(N,0.0d0)
-
-        !Calculate the threshold of stability for the ECF
-        myECFThreshold = complex(4.d0*(N - 1.d0)/(N*N),0.0d0)
 
         tloop:  &
         do i = 1, ntpoints
-          !Initialize phisc to 0 at this frequency
-          phisc(i) = complex(0.0d0,0.0d0)
           ecf(i) = complex(0.0d0,0.0d0) 
           t = complex(tpoints(i),0.0d0)
 
-          if(bCalculateECF.or.(idofullcalc.ne.0))then
-            !********************************************************************
-            ! Calculate the empirical characteristic function at this frequency  
-            !********************************************************************
-            myECF = complex(0.0d0,0.0d0)
-            dataloop: &
-            do j = 1,ndatapoints
-              !Create a complex version of the data points, and
-              !standardize the data on the fly
-              x = complex((datapoints(j) - dataaverage)/datastd,0.0d0)
-              myECF = myECF + exp(ii*t*x)
-            end do dataloop
-            myECF = myECF/cN
-            ecf(i) = myECF
-          end if
-
-          if(bCalculateECF)then
-            myECFsq = complex(abs(myECF)*abs(myECF),0.0d0)
-            !********************************************************************
-            ! Determine if the ECF is above the stability threshold
-            !********************************************************************
-            !Check if we are above the threshold
-            if(real(myECFsq).ge.real(myECFThreshold))then
-              bCalculatePhiSC = .true.
-              numConsecutive = 0
-            else
-              bCalculatePhiSC = .false.
-              numConsecutive = numConsecutive + 1
-            end if
-
-            !If we have reached the maximum number of consecutive
-            !below-threshold values, then don't do any more ECF or PhiSC
-            !calculation (to save compute time).  However, keep looping
-            !so that we can make sure tha phisc is set to 0 for the
-            !rest of the values.
-            !(Note that the bCalculateECF flag is ignored if idofullcalc
-            !is set to something other than 0)
-            if(numConsecutive.gt.ithresh)then
-              bCalculateECF = .false.
-              bCalculatePhiSC = .false.
-            end if
-
-            !********************************************************************
-            ! Calculate the optimal, self-consistent distribution 
-            !********************************************************************
-            if(bCalculatePhiSC)then
-              dum = 1.0d0 + sqrt(1.0d0 - real(myECFThreshold)/real(myECFsq))
-              phisc(i) =  (cN*myECF/(c2*(cN - c1)))  &
-                        * complex(dum,0.0d0)
-            end if
-          end if
+          !********************************************************************
+          ! Calculate the empirical characteristic function at this frequency  
+          !********************************************************************
+          myECF = complex(0.0d0,0.0d0)
+          dataloop: &
+          do j = 1,ndatapoints
+            !Create a complex version of the data points, and
+            !standardize the data on the fly
+            x = complex((datapoints(j) - dataaverage)/datastd,0.0d0)
+            myECF = myECF + exp(ii*t*x)
+          end do dataloop
+          myECF = myECF/cN
+          ecf(i) = myECF
         end do tloop
 
 
-      end subroutine calculatephisc
+      end subroutine calculateecf
 
 
       subroutine calculatekerneldensityestimate(  &
