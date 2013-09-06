@@ -2,6 +2,7 @@
       !of input points
       subroutine calculateecf(  &
                                   datapoints, &   !The random data points on which to base the distribution
+                                  nvariables, &   !The number of variables
                                   ndatapoints,  & !The number of data points
                                   dataaverage,  & !The average of the data 
                                   datastd,  &     !The stddev of the data 
@@ -15,19 +16,21 @@
       !*******************************
       !f2py integer,intent(hide),depend(tpoints) :: ntpoints = len(tpoints)
       integer, intent(in) :: ntpoints
-      !f2py integer,intent(hide),depend(datapoints) :: ndatapoints = len(datapoints)
+      !f2py integer,intent(hide),depend(datapoints) :: nvariables = shape(datapoints,0)
+      integer, intent(in) :: nvariables
+      !f2py integer,intent(hide),depend(datapoints) :: ndatapoints = shape(datapoints,1)
       integer, intent(in) :: ndatapoints
-      !f2py double precision,intent(in),dimension(ndatapoints) :: datapoints
-      double precision, intent(in), dimension(ndatapoints) :: datapoints
-      !f2py double precision,intent(in) :: dataaverage, datastd
-      double precision,intent(in) :: dataaverage,datastd
+      !f2py double precision,intent(in),dimension(nvariables,ndatapoints) :: datapoints
+      double precision, intent(in), dimension(nvariables,ndatapoints) :: datapoints
+      !f2py double precision,intent(in),dimension(nvariables) :: dataaverage, datastd
+      double precision,intent(in),dimension(nvariables) :: dataaverage,datastd
       !f2py double precision,intent(in),dimension(ntpoints) :: tpoints
       double precision, intent(in), dimension(ntpoints) :: tpoints
       !*******************************
       ! Output variables
       !*******************************
-      !f2py complex(kind=8),intent(out),dimension(ntpoints) :: ecf
-      complex(kind=8),intent(out),dimension(ntpoints) :: ecf
+      !f2py complex(kind=8),intent(out),dimension(nvariables,ntpoints) :: ecf
+      complex(kind=8),intent(out),dimension(nvariables,ntpoints) :: ecf
       !*******************************
       ! Local variables
       !*******************************
@@ -35,7 +38,7 @@
                                             c1 = (1.0d0, 0.0d0), &
                                             c2 = (2.0d0, 0.0d0), &
                                             c4 = (4.0d0, 0.0d0)
-      integer :: i,j
+      integer :: i,j,vt,vj
       complex(kind=8) :: t,x
       double precision :: N
       complex(kind=8) :: cN
@@ -49,25 +52,31 @@
         !and a complex version too
         cN = complex(N,0.0d0)
 
-        tloop:  &
-        do i = 1, ntpoints
-          ecf(i) = complex(0.0d0,0.0d0) 
-          t = complex(tpoints(i),0.0d0)
+        vtloop: &
+        do vt = 1, nvariables
+          tloop:  &
+          do i = 1, ntpoints
+            ecf(vt,i) = complex(0.0d0,0.0d0) 
+            t = complex(tpoints(i),0.0d0)
 
-          !********************************************************************
-          ! Calculate the empirical characteristic function at this frequency  
-          !********************************************************************
-          myECF = complex(0.0d0,0.0d0)
-          dataloop: &
-          do j = 1,ndatapoints
-            !Create a complex version of the data points, and
-            !standardize the data on the fly
-            x = complex((datapoints(j) - dataaverage)/datastd,0.0d0)
-            myECF = myECF + exp(ii*t*x)
-          end do dataloop
-          myECF = myECF/cN
-          ecf(i) = myECF
-        end do tloop
+            !********************************************************************
+            ! Calculate the empirical characteristic function at this frequency  
+            !********************************************************************
+            myECF = complex(0.0d0,0.0d0)
+            variableloop: &
+            do vj = 1, nvariables
+              dataloop: &
+              do j = 1,ndatapoints
+                !Create a complex version of the data points, and
+                !standardize the data on the fly
+                x = complex((datapoints(vj,j) - dataaverage(vj))/datastd(vj),0.0d0)
+                myECF = myECF + exp(ii*t*x)
+              end do dataloop
+            end do variableloop
+            myECF = myECF/cN
+            ecf(vt,i) = myECF
+          end do tloop
+        end do vtloop
 
 
       end subroutine calculateecf

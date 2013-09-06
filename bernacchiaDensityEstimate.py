@@ -104,30 +104,50 @@ class bernacchiaDensityEstimate:
     """
     
     if(data != []):
+
+      #First check the rank of the data
+      dataRank = len(shape(data))
+      #If the data are a vector, promote the data to a rank-1 array with only 1 column
+      if(dataRank == 1):
+        data = reshape(data,[1,len(data)])
+      if(dataRank > 2):
+        raise ValueError
+
+      #Set the number of variables
+      self.numVariables = shape(data)[0]
+      #Set the number of data points
+      self.numDataPoints = shape(data)[1]
+
       #Calculate and/or save the standard deviation/average of the data
-      if(dataAverage == []):
-        self.dataAverage = average(data)
+      if(dataAverage == [] or len(dataAverage) != self.numVariables):
+        self.dataAverage = zeros([self.numVariables])
+        for v in range(self.numVariables):
+          self.dataAverage[v] = average(data[v,:])
       else:
         self.dataAverage = dataAverage
       #Standard deviation
-      if(dataStandardDeviation == []):
-        self.dataStandardDeviation = std(data)
+      if(dataStandardDeviation == [] or len(dataStandardDeviation) != self.numVariables):
+        self.dataStandardDeviation = zeros([self.numVariables])
+        for v in range(self.numVariables):
+          self.dataStandardDeviation[v] = std(data[v,:])
       else:
         self.dataStandardDeviation = dataStandardDeviation
 
       #Minimum
-      if(dataMin == []):
-        self.dataMin = amin(data)
+      if(dataMin == [] or len(dataMin) != self.numVariables):
+        self.dataMin = zeros([self.numVariables])
+        for v in range(self.numVariables):
+          self.dataMin[v] = amin(data[v,:])
       else:
         self.dataMin = dataMin
       #Maximum
-      if(dataMax == []):
-        self.dataMax = amax(data)
+      if(dataMax == [] or len(dataMin) != self.numVariables):
+        self.dataMax = zeros([self.numVariables])
+        for v in range(self.numVariables):
+          self.dataMax[v] = amax(data[v,:])
       else:
         self.dataMax = dataMax
 
-      #Set the number of data points
-      self.numDataPoints = len(data)
 
     else:
       self.numDataPoints = 0
@@ -185,8 +205,8 @@ class bernacchiaDensityEstimate:
                       #loop to stop
 
 
-    self.phiSC = (0.0+0.0j)*zeros([self.numTPoints])
-    self.ECF = (0.0+0.0j)*zeros([self.numTPoints])
+    self.phiSC = (0.0+0.0j)*zeros([self.numVariables,self.numTPoints])
+    self.ECF = (0.0+0.0j)*zeros([self.numVariables,self.numTPoints])
 
     #Initialize the good distribution index
     self.goodDistributionInds = []
@@ -201,12 +221,12 @@ class bernacchiaDensityEstimate:
       #*************************************************
       if(self.doApproximateECF):
         #Note that this routine also standardizes the data on-the-fly
-        self.__calculateECFbyFFT__(data)
+        self.__calculateECFbyFFT__(data,self.dataAverage,self.dataStandardDeviation)
         self.ECF = self.fftECF
       else:
         #Calculate the optimal distribution (in Fourier space) based on the ECF
         #Note that this routine also standardizes the data on-the-fly
-        self.__calculateECFDirect__(data)
+        self.__calculateECFDirect__(data,self.dataAverage,self.dataStandardDeviation)
 
 
       if(self.doFFT):
@@ -247,7 +267,7 @@ class bernacchiaDensityEstimate:
     ecfSq = abs(self.ECF)**2
 
     #Find indices above the ECF thresold
-    iAboveThresh = nonzero(ecfSq >= ecfThresh)[0]
+    iAboveThresh = nonzero(ecfSq[0,:] >= ecfThresh)[0]
 
     #Determine the indices over which to calculate phiSC; these will be
     #values where ECF is above the ECF threshold, and below the frequency
@@ -263,11 +283,11 @@ class bernacchiaDensityEstimate:
       iCalcPhi = iAboveThresh
     
     if(doFlushArrays):
-      self.phiSC[:] = (0.0+0.0j)
+      self.phiSC[:,:] = (0.0+0.0j)
 
     #Do the phiSC calculation only for the necessary points
-    self.phiSC[iCalcPhi] = (N*self.ECF[iCalcPhi]/(2*(N-1)))\
-                            *(1+sqrt(1-ecfThresh/ecfSq[iCalcPhi]))
+    self.phiSC[0,iCalcPhi] = (N*self.ECF[0,iCalcPhi]/(2*(N-1)))\
+                              *(1+sqrt(1-ecfThresh/ecfSq[0,iCalcPhi]))
 
 
   #*****************************************************************************
@@ -275,15 +295,15 @@ class bernacchiaDensityEstimate:
   #******************* __calculateECFDirect__() ********************************
   #*****************************************************************************
   #*****************************************************************************
-  def __calculateECFDirect__(self,mydata):
+  def __calculateECFDirect__(self,mydata,myaverage,mystddev):
     """Directly calculate the fourier-space representation of the input data"""
 
     #Call a Fortran routine to do an efficient calculation of the density in
     #fourier space.
     self.ECF = ftnbp11helper.calculateecf( 
                                         datapoints = mydata, \
-                                        dataaverage = self.dataAverage, \
-                                        datastd = self.dataStandardDeviation, \
+                                        dataaverage = myaverage, \
+                                        datastd = mystddev, \
                                         tpoints = self.t
                                        )
     
@@ -292,7 +312,7 @@ class bernacchiaDensityEstimate:
   #******************* __calculateECFbyFFT__() *********************************
   #*****************************************************************************
   #*****************************************************************************
-  def __calculateECFbyFFT__(self,data):
+  def __calculateECFbyFFT__(self,data,myaverage,mystddev):
     """Use the non-uniform FFT method to estimate the fourier representation of
     the input data."""
 
@@ -306,8 +326,8 @@ class bernacchiaDensityEstimate:
 
     fkde = ftnbp11helper.calculatekerneldensityestimate(  \
                                                         datapoints = data, \
-                                                        dataaverage = self.dataAverage, \
-                                                        datastd = self.dataStandardDeviation, \
+                                                        dataaverage = myaverage, \
+                                                        datastd = mystddev, \
                                                         xpoints = self.x,\
                                                         nspreadhalf = nspreadhalf,\
                                                         fourtau = fourTau)
@@ -329,7 +349,8 @@ class bernacchiaDensityEstimate:
   #*****************************************************************************
   def findGoodDistributionInds(self):
     """Find indices of the optimal distribution that are above a specificed threshold"""
-    return nonzero(self.fSC >= self.distributionThreshold)[0]
+    #TODO: Remove the 0-index 
+    return nonzero(self.fSC[0,:] >= self.distributionThreshold)[0]
 
   #*****************************************************************************
   #** bernacchiaDensityEstimate: ***********************************************
@@ -410,7 +431,7 @@ if(__name__ == "__main__"):
     return (1./(sig*sqrt(2*pi)))*exp(-(x-mu)**2/(2.*sig**2))
   
   #Set the size of the sample to calculate
-  powmax = 19
+  powmax = 15
   npow = asarray(range(powmax)) + 1.0
 
   #Set the maximum sample size
@@ -434,24 +455,24 @@ if(__name__ == "__main__"):
 
     with Timer(nsample[i]):
       #Do the BP11 density estimate
-      bkernel = bernacchiaDensityEstimate(randgauss)
+      bkernel = bernacchiaDensityEstimate(randgauss,doApproximateECF=False)
 
     #Calculate the mean squared error between the estimated density
     #And the gaussian
     #esq[i] = average(abs(mygaus(bkernel.x)-bkernel.fSC)**2 *bkernel.deltaX)
     igood = bkernel.goodDistributionInds
-    esq[i] = average(abs(mygaus(bkernel.x)-bkernel.fSC)**2 *bkernel.deltaX)
-    epct[i] = 100*sum(abs(mygaus(bkernel.x)-bkernel.fSC)*bkernel.deltaX)
+    esq[i] = average(abs(mygaus(bkernel.x)-bkernel.fSC[0,:])**2 *bkernel.deltaX)
+    epct[i] = 100*sum(abs(mygaus(bkernel.x)-bkernel.fSC[0,:])*bkernel.deltaX)
     #Print the sample size and the error to show that the code is proceeeding
     #print "{}, {}%".format(nsample[i],epct[i])
 
     #Plot the optimal distribution
     P.subplot(2,2,1)
-    P.plot(bkernel.x[bkernel.goodDistributionInds],bkernel.fSC[bkernel.goodDistributionInds],'b-')
+    P.plot(bkernel.x[bkernel.goodDistributionInds],bkernel.fSC[0,bkernel.goodDistributionInds],'b-')
 
     #Plot the empirical characteristic function
     P.subplot(2,2,2,xscale="log",yscale="log")
-    P.plot(bkernel.t[1:],abs(bkernel.ECF[1:])**2,'b-')
+    P.plot(bkernel.t[1:],abs(bkernel.ECF[0,1:])**2,'b-')
 
 
   #Plot the sample gaussian
@@ -508,7 +529,7 @@ if(__name__ == "__main__"):
 
     #Plot the ECF
     P.subplot(2,2,2,xscale="log",yscale="log")
-    P.plot(bkernel2.t[1:],abs(bkernel2.ECF[1:])**2,'b-')
+    P.plot(bkernel2.t[1:],abs(bkernel2.ECF[0,1:])**2,'b-')
 
     #Plot the error-rate change
     P.subplot(2,2,3)
