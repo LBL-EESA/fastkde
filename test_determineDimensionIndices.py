@@ -2,18 +2,19 @@
 from numpy import *
 import ftnbp11helper as ftn
 
-print ftn.determinedimensionindices.__doc__
+print ftn.mapdimensionindices.__doc__
 dimsize = 4
 ndims = 3
+npoints = dimsize**ndims
 
 testVals = range(1,dimsize**ndims + 1)
 testArray = reshape(testVals,ndims*[dimsize])
 
 print testArray
 
-for i in range(1,dimsize**ndims + 1):
-  funcInds =  ftn.determinedimensionindices(i=i,dimsize=dimsize,ndims=ndims)
-  funcInds -= 1 
+funcInds =  ftn.mapdimensionindices(npoints=npoints,dimsize=dimsize,ndims=ndims)
+for i in range(npoints):
+  funcInds[i,:] -= 1 
   
-  print funcInds + 1, \
-        i,testArray[funcInds[0],funcInds[1],funcInds[2]]
+  print funcInds[i,:] + 1, \
+        i+1,testArray[funcInds[i,0],funcInds[i,1],funcInds[i,2]]
