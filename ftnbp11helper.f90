@@ -1,13 +1,68 @@
+      !
+      !calculateecfdirect(datapoints,nvariables,ndatapoints,dataaverage,datastd,
+      !                   tpoints,ntpoints,ecf)
+      !
       !Calculates the empirical characteristic function of a given set
-      !of input points
-      subroutine calculateecf(  &
+      !of arbitrarily-dimensioned data points using a direct Fourier
+      !transform.  This routine standardizes the data on-the-fly, such
+      !that the real-space mean and std-dev for each variable are 0 and
+      !1 respectively.
+      !
+      ! datapoints (in) : array([nvariables,ndatapoints])
+      !                 Input data that are assumed to be a set of
+      !                 'ndatapoints' groups of 'nvariables' points (so
+      !                 the dataset is 'nvariables'-dimensional); in
+      !                 otherwords, they are samples of 'nvariables'
+      !                 jointly distributed variables.
+      !
+      !
+      ! nvariables (in) : integer
+      !                 The number of variables (dimensions) of the
+      !                 dataset
+      !
+      ! ndatapoints(in) : integer
+      !                 The number of samples
+      !
+      ! dataaverage(in) : array([nvariables])
+      !                 The average of each of the variables in the
+      !                 dataset
+      !
+      ! datastd    (in) : array([nvariables])
+      !                 The standard deviation of each of the variables 
+      !                 in the dataset
+      !
+      ! tpoints    (in) : array([ntpoints])
+      !                 The set of frequency points at which to
+      !                 calculate the ECF. This same set of frequency
+      !                 points is used for all dimenions of the ECF.
+      !
+      ! ntpoints   (in) : integer
+      !                 The number of frequency points
+      !
+      ! freqspacesize (in) : integer
+      !                 The total number of frequency points.  Should
+      !                 be equal to ntpoints**nvariables
+      !
+      ! ecf        (out): array([freqspacesize])
+      !                 A flattened array representing the ECF of the
+      !                 data points.  It is ordered such that it can
+      !                 be reconstructed into a multidimensional array
+      !                 in Python by the following code:
+      !
+      !                   ecf = reshape(ecf,nvariables*[ntpoints])
+      !
+      !                 The resulting array will have 'nvariables'
+      !                 dimensions each of length 'ntpoints'.
+      !
+      subroutine calculateecfdirect(  &
                                   datapoints, &   !The random data points on which to base the distribution
                                   nvariables, &   !The number of variables
                                   ndatapoints,  & !The number of data points
                                   dataaverage,  & !The average of the data 
                                   datastd,  &     !The stddev of the data 
                                   tpoints,    &   !The frequency points at which to calculate the optimal distribution
-                                  ntpoints,   &   !The number of frequency points
+                                  ntpoints,   &   !The number of frequency points along each dimensions
+                                  freqspacesize,& !The total number of frequency points
                                   ecf  &          !The empirical characteristic function
                                 )
       implicit none
@@ -26,11 +81,13 @@
       double precision,intent(in),dimension(nvariables) :: dataaverage,datastd
       !f2py double precision,intent(in),dimension(ntpoints) :: tpoints
       double precision, intent(in), dimension(ntpoints) :: tpoints
+      !f2py integer :: freqspacesize
+      integer, intent(in) :: freqspacesize
       !*******************************
       ! Output variables
       !*******************************
-      !f2py complex(kind=8),intent(out),dimension(nvariables,ntpoints) :: ecf
-      complex(kind=8),intent(out),dimension(ntpoints**nvariables) :: ecf
+      !f2py complex(kind=8),intent(out),dimension(freqspacesize) :: ecf
+      complex(kind=8),intent(out),dimension(freqspacesize) :: ecf
       !*******************************
       ! Local variables
       !*******************************
@@ -46,21 +103,25 @@
       complex(kind=8) :: myECF
       complex(kind=8) :: myECFsq
       double precision :: dum
-      integer :: freqSpaceSize
       integer,dimension(nvariables) :: iDimCounters
-
-        freqSpaceSize = ntpoints**nvariables
 
         !Set a double version of ndatapoints
         N = dble(ndatapoints)
         !and a complex version too
         cN = complex(N,0.0d0)
 
+        !Loop over all the frequencies.  Note that the ECF
+        ! is flattened, so the determinedimensionindices()
+        ! routine is used to convert the 1D frequency index,
+        ! i, into a set of multidimensional indices corresponding
+        ! to the point in the nvariables-dimensioned frequency space.
+        ! These indices are then used in the tpoints variable to access
+        ! the acual frequencies of the current point.
         !Frequency-space loop
         floop: &
         do i = 1,freqSpaceSize
           !Calculate the dimension index counters
-           call determineDimensionIndices(&
+           call determinedimensionindices(&
                                   i, &
                                   ntpoints, &
                                   iDimCounters, &
@@ -70,22 +131,32 @@
           ! Calculate the empirical characteristic function at this frequency  
           !********************************************************************
           myECF = complex(0.0d0,0.0d0)
-          !Data loop
+          !Loop over all the data points
           dataloop: &
           do j = 1,ndatapoints
+            ecfArg = 0.0
+            !Loop over all the variables
+            variableloop: &
             do k = 1,nvariables
               !Standardize the data on the fly
               x = (datapoints(k,j) - dataaverage(k))/datastd(k)
 
+
+              !Augment the argument of the ECF exponential
               ecfArg = ecfArg + tpoints(iDimCounters(k))*x
-            end do
-            myECF = myECF + exp(ii*complex(ecfArg,0.0d0))
+              !write(*,*),i,iDimCounters,tpoints(iDimCounters(k)),ecfArg
+            end do variableloop
+            !Calculate the exponential term of the ECF
+            !for this data point, and add it to the running
+            !ECF calculation for this frequency point
+            myECF = myECF + exp(ii*ecfArg)
           end do dataloop
 
-          ecf(i) = myECF
+          !Set the ECF of this frequency point
+          ecf(i) = myECF/(nvariables*ndatapoints)
         end do floop
 
-      end subroutine calculateecf
+      end subroutine calculateecfdirect
 
 
       subroutine calculatekerneldensityestimate(  &
@@ -153,7 +224,7 @@
 
       end subroutine calculateKernelDensityEstimate
 
-      subroutine determineDimensionIndices(i,dimSize,iDimCounters,ndims)
+      subroutine determinedimensionindices(i,dimSize,iDimCounters,ndims)
       implicit none
         !******************
         ! Input variables
@@ -184,9 +255,9 @@
         ! i =   iDimCounters(1) + dimSize*iDimCounters(2)
         !     + dimSize**2*iDimCounters(3) + ... 
         !     + dimSize**(ndims-1)*iDimCounters(ndims)
-      end subroutine determineDimensionIndices
+      end subroutine determinedimensionindices
 
-      subroutine mapDimensionIndices(npoints,dimSize,iDimCounters,ndims)
+      subroutine mapdimensionindices(npoints,dimSize,iDimCounters,ndims)
       implicit none
         !******************
         ! Input variables
@@ -219,4 +290,4 @@
         ! i =   iDimCounters(1) + dimSize*iDimCounters(2)
         !     + dimSize**2*iDimCounters(3) + ... 
         !     + dimSize**(ndims-1)*iDimCounters(ndims)
-      end subroutine mapDimensionIndices
+      end subroutine mapdimensionindices
