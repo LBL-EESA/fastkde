@@ -144,7 +144,6 @@
 
               !Augment the argument of the ECF exponential
               ecfArg = ecfArg + tpoints(iDimCounters(k))*x
-              !write(*,*),i,iDimCounters,tpoints(iDimCounters(k)),ecfArg
             end do variableloop
             !Calculate the exponential term of the ECF
             !for this data point, and add it to the running
@@ -153,7 +152,7 @@
           end do dataloop
 
           !Set the ECF of this frequency point
-          ecf(i) = myECF/(nvariables*ndatapoints)
+          ecf(i) = myECF/(ndatapoints)
         end do floop
 
       end subroutine calculateecfdirect
