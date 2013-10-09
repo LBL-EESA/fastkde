@@ -99,11 +99,8 @@
       double precision :: N
       double precision :: x,ecfArg
       complex(kind=8) :: cN
-      integer :: numConsecutive
       complex(kind=8) :: myECF
-      complex(kind=8) :: myECFsq
-      double precision :: dum
-      integer,dimension(nvariables) :: iDimCounters
+      integer,dimension(nvariables) :: idimcounters
 
         !Set a double version of ndatapoints
         N = dble(ndatapoints)
@@ -124,7 +121,7 @@
            call determinedimensionindices(&
                                   i, &
                                   ntpoints, &
-                                  iDimCounters, &
+                                  idimcounters, &
                                   nvariables)
 
           !********************************************************************
@@ -143,7 +140,7 @@
 
 
               !Augment the argument of the ECF exponential
-              ecfArg = ecfArg + tpoints(iDimCounters(k))*x
+              ecfArg = ecfArg + tpoints(idimcounters(k))*x
             end do variableloop
             !Calculate the exponential term of the ECF
             !for this data point, and add it to the running
@@ -161,69 +158,133 @@
       subroutine calculatekerneldensityestimate(  &
                                   datapoints, &   !The random data points on which to base the distribution
                                   ndatapoints,  & !The number of data points
+                                  nvariables,  &  !The number of variables
                                   dataaverage,  & !The average of the data 
                                   datastd,  &     !The stddev of the data 
                                   xpoints,    &   !The values of the x grid
                                   nxpoints,   &   !The number of grid values
                                   nspreadhalf,  & !The number of values to involve in the convolution (divided by 2)
                                   fourtau,    &   !The kernel width parameter
+                                  realspacesize, &!The size of the kde
                                   fkde        &   !The kernel density estimate
                                   )
+      implicit none
       !*******************************
       ! Input variables
       !*******************************
       !f2py integer,intent(hide),depend(xpoints) :: nxpoints = len(xpoints)
       integer, intent(in) :: nxpoints
-      !f2py integer,intent(hide),depend(datapoints) :: ndatapoints = len(datapoints)
-      integer, intent(in) :: ndatapoints
-      !f2py double precision,intent(in),dimension(ndatapoints) :: datapoints
-      double precision, intent(in), dimension(ndatapoints) :: datapoints
-      !f2py double precision,intent(in) :: dataaverage, datastd
-      double precision,intent(in) :: dataaverage,datastd
+      !f2py integer,intent(hide),depend(datapoints) :: nvariables = shape(datapoints,0)
+      !f2py integer,intent(hide),depend(datapoints) :: ndatapoints = shape(datapoints,1)
+      integer, intent(in) :: nvariables,ndatapoints
+      !f2py double precision,intent(in),dimension(nvariables,ndatapoints) :: datapoints
+      double precision, intent(in), dimension(nvariables,ndatapoints) :: datapoints
+      !f2py double precision,intent(in),dimension(nvariables) :: dataaverage, datastd
+      double precision,intent(in),dimension(nvariables) :: dataaverage,datastd
       !f2py double precision,intent(in),dimension(nxpoints) :: xpoints
       double precision, intent(in), dimension(nxpoints) :: xpoints
+      !f2py integer,intent(in) :: nspreadhalf
+      integer,intent(in) :: nspreadhalf
+      !f2py double precision,intent(in) :: fourtau
+      double precision,intent(in) :: fourtau
+      !f2py integer,intent(in) :: realspacesize
+      integer, intent(in) :: realspacesize
       !*******************************
       ! Output variables
       !*******************************
-      !f2py double precision,intent(out),dimension(nxpoints) :: fkde
-      double precision, intent(out),dimension(nxpoints) :: fkde
+      !f2py double precision,intent(out),dimension(realspacesize) :: fkde
+      double precision, intent(out),dimension(realspacesize) :: fkde
       !*******************************
       ! Local variables
       !*******************************
-      integer :: j,m,m0
+      integer :: i,v,k,j
       double precision :: xmin,deltax,gaussTerm
       double precision :: xj,mprime
       double precision,parameter :: pi = 3.141592653589793
+      integer,dimension(nvariables) :: m0vec,mvec
+      double precision,dimension(nvariables) :: mprimevec,diffvec
+
+      integer :: hyperslabsize
 
         !Calculate the quantites necessary for estimating 
         !x-indices.
         xmin = xpoints(1)
         deltax = xpoints(2) - xpoints(1)
 
+        hyperslabsize = (nspreadhalf*2)**nvariables
+
         fkde = 0.0 
 
         dataloop: &
         do j = 1,ndatapoints
-          !Set the x-point, and standardize the data on-the-fly
-          xj = (datapoints(j) - dataaverage)/datastd
-          mprime = (xj - xmin)/deltax + 1
-          m0 = floor(mprime)
 
-          mmin = max(1,m0-nspreadhalf+1)
-          mmax = min(nxpoints,m0+nspreadhalf)
-          gridloop: &
-          do m = mmin,mmax
-            !gaussTerm = exp(-((xpoints(m) - xj)**2)/fourtau)
-            gaussTerm = exp(-((m-mprime)**2)/fourtau)
-            fkde(m) = fkde(m) + gaussTerm
-          end do gridloop
+          !Variable loop
+          variableloop: &
+          do v = 1,nvariables
+            !Set the x-point, and standardize the data on-the-fly
+            xj = (datapoints(v,j) - dataaverage(v))/datastd(v)
+            mprime = (xj - xmin)/deltax + 1
+            !Set the vector of indices of the point nearest to
+            !the current data point
+            m0vec(v) = floor(mprime)
+            !Set the mprime vector in hyperslab-centric coordinates
+            mprimevec(v) = mprime - m0vec(v) + nspreadhalf
+          end do variableloop
+
+
+          !hyperslab loop
+          hyperslabloop:  &
+          do i = 1,hyperslabsize
+            call determinedimensionindices( &
+                                    i, &
+                                    nspreadhalf*2,  &
+                                    mvec, &
+                                    nvariables)
+            !Calculate the distance between the data point and
+            !the current hyperslab point
+            diffvec = mvec - mprimevec
+            gaussTerm = exp(-dot_product(diffvec,diffvec)/fourtau)
+
+            !Transform from hyper-slab coordinates back to full-space
+            !coordinates
+            mvec = (mvec + m0vec) - nspreadhalf
+
+            !Calculate the flattened array index of the current point
+            call determineflattenedindex( mvec, &
+                                          nxpoints, &
+                                          nvariables,  &
+                                          k)
+
+            fkde(k) = fkde(k) + gaussTerm
+
+
+
+          end do hyperslabloop
+
         end do dataloop
+
+!        dataloop: &
+!        do j = 1,ndatapoints
+!          !Set the x-point, and standardize the data on-the-fly
+!          xj = (datapoints(j) - dataaverage)/datastd
+!          mprime = (xj - xmin)/deltax + 1
+!          m0 = floor(mprime)
+!
+!          mmin = max(1,m0-nspreadhalf+1)
+!          mmax = min(nxpoints,m0+nspreadhalf)
+!          gridloop: &
+!          do m = mmin,mmax
+!            !gaussTerm = exp(-((xpoints(m) - xj)**2)/fourtau)
+!            gaussTerm = exp(-((m-mprime)**2)/fourtau)
+!            fkde(m) = fkde(m) + gaussTerm
+!          end do gridloop
+!        end do dataloop
 
       return 
 
       end subroutine calculateKernelDensityEstimate
 
-      subroutine determinedimensionindices(i,dimSize,iDimCounters,ndims)
+      subroutine determinedimensionindices(i,dimSize,idimcounters,ndims)
       implicit none
         !******************
         ! Input variables
@@ -235,8 +296,8 @@
         !******************
         ! Output variables
         !******************
-        !f2py integer,dimension(ndims),intent(out) :: iDimCounters
-        integer,dimension(ndims),intent(out) :: iDimCounters
+        !f2py integer,dimension(ndims),intent(out) :: idimcounters
+        integer,dimension(ndims),intent(out) :: idimcounters
 
         !******************
         ! Local variables
@@ -246,17 +307,17 @@
         iDum = i
         do n = ndims,1,-1
           np = ndims-n+1
-          iDimCounters(np) = floor(float(iDum-1)/float(dimSize**(n-1))) + 1
-          iDum = iDum - (iDimCounters(np)-1)*dimSize**(n-1)
+          idimcounters(np) = floor(float(iDum-1)/float(dimSize**(n-1))) + 1
+          iDum = iDum - (idimcounters(np)-1)*dimSize**(n-1)
         end do
           
         
-        ! i =   iDimCounters(1) + dimSize*iDimCounters(2)
-        !     + dimSize**2*iDimCounters(3) + ... 
-        !     + dimSize**(ndims-1)*iDimCounters(ndims)
+        ! i =   idimcounters(1) + dimSize*idimcounters(2)
+        !     + dimSize**2*idimcounters(3) + ... 
+        !     + dimSize**(ndims-1)*idimcounters(ndims)
       end subroutine determinedimensionindices
 
-      subroutine mapdimensionindices(npoints,dimSize,iDimCounters,ndims)
+      subroutine mapdimensionindices(npoints,dimSize,idimcounters,ndims)
       implicit none
         !******************
         ! Input variables
@@ -268,8 +329,8 @@
         !******************
         ! Output variables
         !******************
-        !f2py integer,dimension(npoints,ndims),intent(out) :: iDimCounters
-        integer,dimension(npoints,ndims),intent(out) :: iDimCounters
+        !f2py integer,dimension(npoints,ndims),intent(out) :: idimcounters
+        integer,dimension(npoints,ndims),intent(out) :: idimcounters
 
         !******************
         ! Local variables
@@ -280,13 +341,48 @@
           iDum = i
           do n = ndims,1,-1
             np = ndims-n+1
-            iDimCounters(i,np) = floor(float(iDum-1)/float(dimSize**(n-1))) + 1
-            iDum = iDum - (iDimCounters(i,np)-1)*dimSize**(n-1)
+            idimcounters(i,np) = floor(float(iDum-1)/float(dimSize**(n-1))) + 1
+            iDum = iDum - (idimcounters(i,np)-1)*dimSize**(n-1)
           end do
         end do
           
         
-        ! i =   iDimCounters(1) + dimSize*iDimCounters(2)
-        !     + dimSize**2*iDimCounters(3) + ... 
-        !     + dimSize**(ndims-1)*iDimCounters(ndims)
+        ! i =   idimcounters(1) + dimSize*idimcounters(2)
+        !     + dimSize**2*idimcounters(3) + ... 
+        !     + dimSize**(ndims-1)*idimcounters(ndims)
       end subroutine mapdimensionindices
+
+      subroutine determineflattenedindex(idimcounters,dimSize,ndims,i)
+      implicit none
+        !******************
+        ! Input variables
+        !******************
+        !f2py integer,intent(in) :: dimSize
+        integer,intent(in) :: dimSize
+        !f2py integer,intent(hide),depend(idimcounters) :: ndims  = len(idimcounters)
+        integer,intent(in) :: ndims
+        !f2py integer,dimension(ndims),intent(in) :: idimcounters
+        integer,dimension(ndims),intent(in) :: idimcounters
+        !******************
+        ! Output variables
+        !******************
+        !f2py integer,intent(out) :: i
+        integer,intent(out) :: i
+
+        !******************
+        ! Local variables
+        !******************
+        integer :: n
+
+        i = 0
+        do n = ndims,1,-1
+          i = i + (dimSize**(ndims-n))*(idimcounters(n)-1)
+        end do
+        i = i + 1
+          
+        
+        ! i =   idimcounters(ndims) + dimSize*idimcounters(ndims-1)
+        !     + dimSize**2*idimcounters(ndims-2) + ... 
+        !     + dimSize**(ndims-1)*idimcounters(1)
+      end subroutine determineflattenedindex
+
