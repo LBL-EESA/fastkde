@@ -88,6 +88,7 @@ class ECF:
                                   tpoints = self.tpoints,  \
                                   freqspacesize = len(self.tpoints)**self.nvariables  \
                               )
+    ecf = reshape(ecf,self.nvariables*[len(tpoints)])
     return ecf
 
   #*****************************************************************************
@@ -132,9 +133,54 @@ class ECF:
 
 
 if(__name__ == "__main__"):
+  from mpl_toolkits.mplot3d import Axes3D
+  import matplotlib.pyplot as plt
 
-  xpoints = linspace(-20,20,1025)
-  tpoints = calcTfromX(xpoints)
-  xpoints2 = calcXfromT(tpoints)
 
-  print xpoints-xpoints2
+  random.seed(0)
+
+
+  def mySTDGaus2D(x,y):
+    return 1./(2*pi) * exp(-(x**2 + y**2)/2)
+
+  #Set the frequency points (Hermitian FFT-friendly)
+  numXPoints = 513
+  xpoints = linspace(-20,20,numXPoints)
+  deltaX = xpoints[1] - xpoints[0]
+  dum = fft.fftfreq(numXPoints,deltaX/(2*pi))
+  tpoints = dum[0:len(dum)/2 + 1]
+
+  xp2d,yp2d = meshgrid(xpoints,xpoints)
+  mygaus2d = mySTDGaus2D(xp2d,yp2d)
+  tmpcf = fft.ifft(fft.ifftshift(mygaus2d))
+  mygauscf = tmpcf[:len(tpoints),:len(tpoints)]
+  mygauscf /= mygauscf[0,0]
+
+
+  ndatapoints = 2**10
+  nvariables = 2
+  xyrand = random.normal(loc=0.0,scale=1.0,size=[nvariables,ndatapoints])
+
+  ecfFFT = ECF(xyrand,tpoints,useFFTApproximation=True).ECF
+  ecfDFT = ECF(xyrand,tpoints,useFFTApproximation=False).ECF
+
+  tp2d,wp2d = meshgrid(tpoints,tpoints)
+
+  fig = plt.figure()
+  ax = fig.add_subplot(211,projection='3d')
+
+  ax.plot_wireframe(tp2d[::4,::4],wp2d[::4,::4],(abs(ecfFFT)**2)[::4,::4],color='r')
+  ax.plot_wireframe(tp2d[::4,::4],wp2d[::4,::4],(abs(ecfDFT)**2)[::4,::4],color='b')
+
+  ax2 = fig.add_subplot(212,xscale="log",yscale="log")
+
+  errorK = average(abs(ecfFFT-ecfDFT),0)
+
+  print ecfFFT[0,0],ecfDFT[0,0],mygauscf[0,0]
+  ax2.plot(tpoints,abs(average(ecfFFT,0))**2,'r-')
+  ax2.plot(tpoints,abs(average(ecfDFT,0))**2,'b-')
+  ax2.plot(tpoints,abs(average(mygauscf,0))**2,'k-')
+
+  plt.show()
+
+
