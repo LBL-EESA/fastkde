@@ -27,7 +27,8 @@ def calcTfromX(xpoints):
 
 class ECF:
 
-  def __init__( inputdata, \
+  def __init__( self,\
+                inputData, \
                 tpoints, \
                 dataAverage = None, \
                 dataStandardDeviation = None, \
@@ -40,35 +41,33 @@ class ECF:
       #TODO: Check for proper dimensioning
       self.dataAverage = dataAverage
     else:
-      self.dataAverage = average(inputdata,2)
+      self.dataAverage = average(inputData,1)
 
 
     if(dataStandardDeviation != None):
       #TODO: Check for proper dimensioning
       self.dataStandardDeviation = dataStandardDeviation
     else:
-      self.dataStandardDeviation = std(inputdata,2)
+      self.dataStandardDeviation = std(inputData,1)
 
     #Get the data shape (nvariables,ndatapoints)
     #TODO: Check for proper dimensioning
     dshape = shape(inputData)
-    self.nvariables = dshape(0)
-    self.ndatapoints = dshape(1)
+    self.nvariables = dshape[0]
+    self.ndatapoints = dshape[1]
 
 
     self.useFFTApproximation = useFFTApproximation
 
 
     if(self.useFFTApproximation):
-      self.ECF = __calculateECFbyFFT__( inputData,\
-                                        self.dataAverage, \
-                                        self.dataStandardDeviation,\
-                                        self.tpoints)
+      self.ECF = self.__calculateECFbyFFT__(  inputData,\
+                                              self.dataAverage, \
+                                              self.dataStandardDeviation)
     else:
-      self.ECF = __calculateECFDirect__(inputData,\
-                                        self.dataAverage, \
-                                        self.dataStandardDeviation,\
-                                        self.tpoints)
+      self.ECF = self.__calculateECFDirect__( inputData,\
+                                              self.dataAverage, \
+                                              self.dataStandardDeviation)
 
     return
 
@@ -89,7 +88,7 @@ class ECF:
                                   tpoints = self.tpoints,  \
                                   freqspacesize = len(self.tpoints)**self.nvariables  \
                               )
-    return
+    return ecf
 
   #*****************************************************************************
   #*****************************************************************************
@@ -99,6 +98,8 @@ class ECF:
   def __calculateECFbyFFT__(self,mydata,myaverage,mystddev):
     """Use the non-uniform FFT method to estimate the fourier representation of
     the input data."""
+
+    xpoints = calcXfromT(self.tpoints)
 
     #Calculate details of the gaussian kernel
     tau = 1.5629
@@ -114,6 +115,20 @@ class ECF:
                                               fourtau = fourTau, \
                                               realspacesize = len(xpoints)**self.nvariables  \
                                             )
+
+    kde = reshape(kde,self.nvariables*[len(xpoints)])
+
+    tmpfft = fft.ifft(fft.ifftshift(kde))
+    kdeFFT = tmpfft[:len(self.tpoints),:len(self.tpoints)]
+
+    tpointgrids = meshgrid(*self.nvariables*[self.tpoints])
+
+    #Deconvolve FFT(kde) (divide by the FFT of the gaussian) to obtain the ECF estimate
+    deltaX = xpoints[1] - xpoints[0]
+    ecf = kdeFFT*exp(tau*(sum((tpointgrids*deltaX**2),axis=0)))/kdeFFT[0,0]
+
+    return ecf
+
 
 
 if(__name__ == "__main__"):

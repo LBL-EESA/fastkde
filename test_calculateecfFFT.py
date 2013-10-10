@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 from numpy import *
-import ftnecf as ftn
+import empiricalCharacteristicFunction as ECF
 
 random.seed(0)
 
-print ftn.calculatekerneldensityestimate.__doc__
 
 def mySTDGaus1D(x):
   return 1./sqrt(2*pi) * exp(-x**2/2)
@@ -90,24 +89,12 @@ if(doTwoDimensionalTest):
   nvariables = 2
   xyrand = random.normal(loc=0.0,scale=1.0,size=[nvariables,ndatapoints])
 
-  kde = ftn.calculatekerneldensityestimate( datapoints = xyrand,  \
-                                            dataaverage = asarray([0.0,0.0]), \
-                                            datastd = asarray([1.0,1.0]), \
-                                            xpoints = xpoints,  \
-                                            nspreadhalf = nspreadhalf, \
-                                            fourtau = fourTau, \
-                                            realspacesize = len(xpoints)**nvariables  \
-                                          )
-  kde = reshape(kde,nvariables*[len(xpoints)])
-
-  tmpfft = fft.ifft(fft.ifftshift(kde))
-  kdeFFT = tmpfft[:len(tpoints),:len(tpoints)]
-
-  tp2d,wp2d = meshgrid(tpoints,tpoints)
-
-  ecf = kdeFFT*exp(tau*((tp2d*deltaX)**2 + (wp2d*deltaX)**2))/kdeFFT[0,0]
+  myecf = ECF.ECF(xyrand,tpoints)
+  ecf = myecf.ECF
 
   print ecf[0,0],mygauscf[0,0]
+
+  tp2d,wp2d = meshgrid(tpoints,tpoints)
 
   fig = plt.figure()
   ax = fig.add_subplot(211,projection='3d')
