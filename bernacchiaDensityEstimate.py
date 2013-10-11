@@ -3,6 +3,7 @@ from numpy import *
 from numpy.random import randn
 import knuthAverage as kn
 import empiricalCharacteristicFunction as ecf
+import ftnbp11 as ftn
 import copy
 from types import *
 import pdb
@@ -232,29 +233,36 @@ class bernacchiaDensityEstimate:
 
     #Calculate the squared magnitude of the ECF signal
     ecfSq = abs(self.ECF)**2
+#
+#    #Find indices above the ECF thresold
+#    iAboveThresh = nonzero(ecfSq >= ecfThresh)[0]
+#
+#    #Determine the indices over which to calculate phiSC; these will be
+#    #values where ECF is above the ECF threshold, and below the frequency
+#    #where the ECF threshold has been below-threshold ithresh consecutive times
+#    iDiff = diff(iAboveThresh)
+#    iCutOff = nonzero(iDiff > (self.ithresh+1))[0]
+#    if(len(iCutOff) > 0):
+#      #Cut off indices above the point where ithresh or more ECF
+#      #values are below the threshold (if there are any)
+#      iCalcPhi = iAboveThresh[:(iCutOff[0]+1)]
+#    else:
+#      #Otherwise just return the above-threshold indices
+#      iCalcPhi = iAboveThresh
 
-    #Find indices above the ECF thresold
-    iAboveThresh = nonzero(ecfSq >= ecfThresh)[0]
-
-    #Determine the indices over which to calculate phiSC; these will be
-    #values where ECF is above the ECF threshold, and below the frequency
-    #where the ECF threshold has been below-threshold ithresh consecutive times
-    iDiff = diff(iAboveThresh)
-    iCutOff = nonzero(iDiff > (self.ithresh+1))[0]
-    if(len(iCutOff) > 0):
-      #Cut off indices above the point where ithresh or more ECF
-      #values are below the threshold (if there are any)
-      iCalcPhi = iAboveThresh[:(iCutOff[0]+1)]
-    else:
-      #Otherwise just return the above-threshold indices
-      iCalcPhi = iAboveThresh
+    iCalcPhitmp,imax = ftn.lowesthypervolumefilter( ecfsq = ecfSq.ravel(), \
+                                        ecfthreshold = ecfThresh, \
+                                        nvariables = self.numVariables, \
+                                        ntpoints = self.numTPoints)
+    
+    iCalcPhi = iCalcPhitmp[:imax]
     
     if(doFlushArrays):
       self.phiSC[:] = (0.0+0.0j)
 
     #Do the phiSC calculation only for the necessary points
-    self.phiSC[iCalcPhi] = (N*self.ECF[iCalcPhi]/(2*(N-1)))\
-                              *(1+sqrt(1-ecfThresh/ecfSq[iCalcPhi]))
+    self.phiSC.ravel()[iCalcPhi] = (N*self.ECF.ravel()[iCalcPhi]/(2*(N-1)))\
+                              *(1+sqrt(1-ecfThresh/ecfSq.ravel()[iCalcPhi]))
 
   #*****************************************************************************
   #** bernacchiaDensityEstimate: ***********************************************
