@@ -392,7 +392,7 @@ class bernacchiaDensityEstimate:
     return tuple([ (self.x*self.dataStandardDeviation[i] + self.dataAverage[i]) for i in range(self.numVariables) ])
 
   def getTransformedPDF(self):
-    return self.fSC*prod(self.dataStandardDeviation)
+    return self.fSC/prod(self.dataStandardDeviation)
 
 #*******************************************************************************
 #*******************************************************************************
@@ -544,16 +544,58 @@ if(__name__ == "__main__"):
     #Define a 2-var independent gaussian function for evaluation purposes
     def mygaus2d(x,y):
       return 1./(2*pi)*exp(-(x**2 + y**2)/2)
+
+    def norm2d(x,y,mux=0,muy=0,sx=1,sy=1,r=0):
+      coef = 1./(2*pi*sx*sy*sqrt(1.-r**2))
+      expArg = -(1./(2*(1-r**2)))*( (x-mux)**2/sx**2 + (y-muy)**2/sy**2 - 2*r*(x-mux)*(y-muy)/(sx*sy))
+      return coef*exp(expArg)
     
     #Set the size of the sample to calculate
-    powmax = 15
+    powmax = 17
     npow = asarray(range(powmax)) + 1.0
+
+    def measure(n):
+      """Measurement model, return two coupled measurements."""
+      m1 = random.normal(size=n)
+      m2 = random.normal(scale=0.5, size=n)
+      return m1+m2, m1-m2
 
     #Set the maximum sample size
     nmax = 2**powmax
     #Create a random normal sample of this size
-    randsample = random.normal(loc=0.0,scale=1.0,size = [nvariables,nmax])
-    randsample[1,nmax/2:] = random.normal(loc=8.0,scale=2.0,size = [nmax/2])
+#    randsample1 = random.normal(loc=0.0,scale=1.0,size = [nvariables,nmax/4])
+#    randsample2 = asarray(measure(nmax/4))
+#    randsample2[0,:] += 6.0
+#    randsample3 = random.normal(loc=0.0,scale=1.0,size = [nvariables,nmax/4])
+#    randsample3[1,:] /= 2.0
+#    randsample3[1,:] += 6.0
+#    randsample4 = random.normal(loc=0.0,scale=1.0,size = [nvariables,nmax/4])
+#    randsample4[0,:] /= 2.0
+#    randsample4 += 6.0
+#    randsample = concatenate((randsample1,randsample2,randsample3,randsample4),axis=1)
+
+    def covMat(sx,sy,r):
+      return [[sx**2,r*sx*sy],[r*sx*sy,sy**2]]
+
+    gausParams = []
+    gausParams.append([0.0,0.0,1.0,1.0,0.0]) #Standard, uncorrelated bivariate
+    gausParams.append([2.0,0.0,1.0,1.0,0.7]) #correlation 0.7, mean x+2
+    gausParams.append([0.0,2.0,1.0,0.5,0.0]) #Flat in y-direction, mean y+2
+    gausParams.append([2.0,2.0,0.5,1.0,0.0]) #Flat in x-direction, mean xy+2
+
+    randsamples = []
+    ngg = len(gausParams)
+    for gg in gausParams:
+      mu = gg[:2]
+      cov = covMat(*tuple(gg[2:]))
+      size = tuple([2,nmax/ngg])
+      randsamples.append(random.multivariate_normal(mu,cov,(nmax/ngg,)).transpose())
+
+    randsample = concatenate(tuple(randsamples),axis=1)
+    
+
+    #randsample[1,nmax/2:] = random.normal(loc=8.0,scale=2.0,size = [nmax/2])
+    #randsample[1,:] = random.uniform(low=1.0,high=2.0)
 #    def measure(n):
 #      """Measurement model, return two coupled measurements."""
 #      m1 = random.normal(size=n)
@@ -574,18 +616,34 @@ if(__name__ == "__main__"):
 
     x,y = bp2d.getTransformedAxes()
     x2d,y2d = meshgrid(x,y)
-    #x2d,y2d = meshgrid(bp2d.x,bp2d.x)
-    gaus2d = mygaus2d(x2d[::4],y2d[::4])
+
+    #Generate the corresponding standard
+    pdfStandard = zeros(2*[bp2d.numXPoints])
+    for gg in gausParams:
+      pdfStandard += norm2d(x2d,y2d,*tuple(gg))*(1./ngg)
 
     fig = plt.figure()
     #ax1 = fig.add_subplot(111,projection='3d')
     #ax1.plot_wireframe(x2d[::4],y2d[::4],bp2d.fSC[::4])
-    ax1 = fig.add_subplot(111)
+    ax1 = fig.add_subplot(221)
     #ax1.imshow(bp2d.fSC)
     #ax1.contour(x2d,y2d,log(bp2d.getTransformedPDF().transpose()),color='k')
-    ax1.contour(x2d,y2d,bp2d.fSC)
+    clevs = asarray(range(1,10))/100.
+    clevs[0] - bp2d.distributionThreshold
+    pfsc = ax1.contour(x2d,y2d,bp2d.getTransformedPDF(),levels = clevs)
+    #plt.clabel(pfsc,inline=1,fontsize=10)
     #ax1.contour(x2d,y2d,bp2d.convolvedData,color='k')
-    ax1.plot(randsample[0,::4],randsample[1,::4],'k.',markersize=1)
-    plt.xlim([-10,10])
-    plt.ylim([-5,15])
+    #ax1.plot(randsample[0,::16],randsample[1,::16],'k.',markersize=1)
+    plt.xlim([-4,6])
+    plt.ylim([-4,6])
+    ax2 = fig.add_subplot(222)
+    pstd = ax2.contour(x2d,y2d,pdfStandard,levels=clevs)
+    #plt.clabel(pstd,inline=1,fontsize=10)
+    plt.xlim([-4,6])
+    plt.ylim([-4,6])
+    ax3 = fig.add_subplot(223)
+    ax3.plot(randsample[0,::16],randsample[1,::16],'k.',markersize=1)
+    plt.xlim([-4,6])
+    plt.ylim([-4,6])
+    #plt.clabel(pstd,inline=1,fontsize=10)
     plt.show()
