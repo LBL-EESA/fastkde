@@ -8,6 +8,7 @@ import copy
 from types import *
 import pdb
 import time
+import sys
 
 #A simple timer for comparing ECF calculation methods
 class Timer():
@@ -29,7 +30,8 @@ class bernacchiaDensityEstimate:
                 dataMax = [], \
                 countThreshold = 1, \
                 doApproximateECF = True, \
-                doFFT = True \
+                doFFT = True, \
+                beVerbose = False \
               ):
     """ 
 
@@ -104,6 +106,9 @@ class bernacchiaDensityEstimate:
       self.numVariables = shape(data)[0]
       #Set the number of data points
       self.numDataPoints = shape(data)[1]
+
+      if(beVerbose):
+        print "Operating on data with numVariables = {}, numDataPoints = {}".format(self.numVariables,self.numDataPoints)
 
       #Calculate and/or save the standard deviation/average of the data
       if(dataAverage == [] or len(dataAverage) != self.numVariables):
@@ -182,6 +187,9 @@ class bernacchiaDensityEstimate:
     #Initialize the good distribution index
     self.goodDistributionInds = []
 
+    #Set the verbosity flag
+    self.beVerbose = beVerbose
+
     #Calculate the distribution frequency corresponding to the given count threshold
     self.distributionThreshold = float(countThreshold)/(self.numDataPoints*self.deltaX)
 
@@ -191,6 +199,9 @@ class bernacchiaDensityEstimate:
       # Calculate the Empirical Characteristic Function
       #*************************************************
       #Note that this routine also standardizes the data on-the-fly
+      if(self.beVerbose):
+        print "Calculating the ECF"
+        sys.stdout.flush()
       self.ECF = ecf.ECF( inputData = data, \
                           tpoints = self.t, \
                           dataAverage = self.dataAverage, \
@@ -203,14 +214,22 @@ class bernacchiaDensityEstimate:
         #*************************************************
         #Apply the Bernacchia filter to the ECF to obtain
         #the fourier representation of the self-consistent density
+        if(self.beVerbose):
+          print "Applying the filter"
         self.applyBernacchiaFilter()
 
         #*************************************************
         # Transform to real space
         #*************************************************
         #Transform the optimal distribution to real space
+        if(self.beVerbose):
+          print "Transforming to real space"
+          sys.stdout.flush()
         self.__transformphiSC__()
 
+        if(self.beVerbose):
+          print "Finding good distribution indices"
+          sys.stdout.flush()
         self.goodDistributionInds = self.findGoodDistributionInds()
 
     return
@@ -354,7 +373,7 @@ class bernacchiaDensityEstimate:
 # the theoretical and empirical convergence rate given in BP11.
 if(__name__ == "__main__"):
 
-  doOneDimensionalTests = True
+  doOneDimensionalTests = False
   if(doOneDimensionalTests):
     import pylab as P
     import scipy.stats as stats
@@ -477,3 +496,42 @@ if(__name__ == "__main__"):
 
       #Show the plots
       P.show()
+
+  doTwoDimensionalTests = True
+  if(doTwoDimensionalTests):
+    import matplotlib
+    import numpy as np
+    import matplotlib.cm as cm
+    import matplotlib.mlab as mlab
+    import matplotlib.pyplot as plt
+    import scipy.stats as stats
+
+    nvariables = 2
+
+    #print ftnbp11helper.__doc__
+
+    #Define a 2-var independent gaussian function for evaluation purposes
+    def mygaus2d(x,y):
+      return 1./(2*pi)*exp(-(x**2 + y**2)/2)
+    
+    #Set the size of the sample to calculate
+    powmax = 15
+    npow = asarray(range(powmax)) + 1.0
+
+    #Set the maximum sample size
+    nmax = 2**powmax
+    #Create a random normal sample of this size
+    randsample = 3*random.normal(loc=0.0,scale=1.0,size = [nvariables,nmax])
+
+
+    bp2d = bernacchiaDensityEstimate(randsample,beVerbose=True,numPoints=1025)
+
+
+    x2d,y2d = meshgrid(bp2d.x,bp2d.x)
+    gaus2d = mygaus2d(x2d[::4],y2d[::4])
+
+    fig = plt.figure()
+    ax1 = fig.add_subplot(111)
+    ax1.contour(x2d,y2d,bp2d.fSC)
+    ax1.contour(x2d[::4],y2d[::4],gaus2d,colors='k')
+    plt.show()
