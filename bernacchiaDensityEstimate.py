@@ -342,8 +342,8 @@ class bernacchiaDensityEstimate:
       midPointAccessor = tuple(self.numVariables*[(self.numTPoints-1)/2])
       print "Normalization of fSC = {}. phiSC[0] = {}".format(normConst,self.phiSC[midPointAccessor])
 
-    #self.fSC = ma.masked_less(fSC,self.distributionThreshold)
-    self.fSC = ma.masked_less(fSC,0.0)
+    self.fSC = ma.masked_less(fSC.transpose(),self.distributionThreshold)
+    #self.fSC = ma.masked_less(fSC.transpose(),0.0)
 
   #*****************************************************************************
   #** bernacchiaDensityEstimate: ***********************************************
@@ -552,15 +552,15 @@ if(__name__ == "__main__"):
     #Set the maximum sample size
     nmax = 2**powmax
     #Create a random normal sample of this size
-#    randsample = random.normal(loc=0.0,scale=1.0,size = [nvariables,nmax])
-#    randsample[1,nmax/2:] = random.normal(loc=8.0,scale=5.0,size = [nmax/2])
-    def measure(n):
-      """Measurement model, return two coupled measurements."""
-      m1 = random.normal(size=n)
-      m2 = random.normal(scale=0.5, size=n)
-      return m1+m2, m1-m2
-
-    randsample = asarray(measure(nmax))
+    randsample = random.normal(loc=0.0,scale=1.0,size = [nvariables,nmax])
+    randsample[1,nmax/2:] = random.normal(loc=8.0,scale=2.0,size = [nmax/2])
+#    def measure(n):
+#      """Measurement model, return two coupled measurements."""
+#      m1 = random.normal(size=n)
+#      m2 = random.normal(scale=0.5, size=n)
+#      return m1+m2, m1-m2
+#
+#    randsample = asarray(measure(nmax))
 #    print shape(randsample)
 #    quit()
 
@@ -573,8 +573,8 @@ if(__name__ == "__main__"):
 
 
     x,y = bp2d.getTransformedAxes()
-    #x2d,y2d = meshgrid(x,y)
-    x2d,y2d = meshgrid(bp2d.x,bp2d.x)
+    x2d,y2d = meshgrid(x,y)
+    #x2d,y2d = meshgrid(bp2d.x,bp2d.x)
     gaus2d = mygaus2d(x2d[::4],y2d[::4])
 
     fig = plt.figure()
@@ -586,4 +586,6 @@ if(__name__ == "__main__"):
     ax1.contour(x2d,y2d,bp2d.fSC)
     #ax1.contour(x2d,y2d,bp2d.convolvedData,color='k')
     ax1.plot(randsample[0,::4],randsample[1,::4],'k.',markersize=1)
+    plt.xlim([-10,10])
+    plt.ylim([-5,15])
     plt.show()
