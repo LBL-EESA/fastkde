@@ -30,6 +30,7 @@ class bernacchiaDensityEstimate:
                 dataMax = [], \
                 countThreshold = 1, \
                 doApproximateECF = True, \
+                doStoreConvolution = False, \
                 doFFT = True, \
                 beVerbose = False \
               ):
@@ -55,6 +56,7 @@ class bernacchiaDensityEstimate:
                                                   dataAverage = [], \
                                                   dataStandardDeviation = [], \
                                                   doApproximateECF = True, \
+                                                  doStoreConvolution = False, \
                                                   doFFT = True \
                                                 )
 
@@ -83,6 +85,8 @@ class bernacchiaDensityEstimate:
                             FFT.  In tests, this is accurate to ~1e-14 over low 
                             frequencies, but is inaccurate to ~1e-2 for the highest ~5% 
                             of frequencies.
+
+      doStoreConvolution  : flags whether to store the KDE used in the nuFFT
 
       doFFT               : flags whether to calculate phiSC and its FFT to obtain
                             fSC
@@ -190,6 +194,9 @@ class bernacchiaDensityEstimate:
     #Set the verbosity flag
     self.beVerbose = beVerbose
 
+    self.doStoreConvolution = doStoreConvolution
+    self.convolvedData = None
+
     #Calculate the distribution frequency corresponding to the given count threshold
     self.distributionThreshold = float(countThreshold)/(self.numDataPoints*self.deltaX)
 
@@ -202,11 +209,18 @@ class bernacchiaDensityEstimate:
       if(self.beVerbose):
         print "Calculating the ECF"
         sys.stdout.flush()
-      self.ECF = ecf.ECF( inputData = data, \
-                          tpoints = self.t, \
-                          dataAverage = self.dataAverage, \
-                          dataStandardDeviation = self.dataStandardDeviation, \
-                          useFFTApproximation = self.doApproximateECF).ECF
+
+      ecfObj = ecf.ECF( inputData = data, \
+                        tpoints = self.t, \
+                        dataAverage = self.dataAverage, \
+                        dataStandardDeviation = self.dataStandardDeviation, \
+                        useFFTApproximation = self.doApproximateECF, \
+                        doStoreConvolution = self.doStoreConvolution)
+
+      #Extract the ECF
+      self.ECF = ecfObj.ECF
+      if(self.doStoreConvolution):
+        self.convolvedData = ecfObj.convolvedData
 
       if(self.doFFT):
         #*************************************************
@@ -303,18 +317,22 @@ class bernacchiaDensityEstimate:
     frequency space to real space"""
 
     #Generate a set of array slices to access the lower half of the array
-    firstHalfSlice = tuple(self.numVariables*[slice(0,self.numTPoints)])
+#    firstHalfSlice = tuple(self.numVariables*[slice(0,self.numTPoints)])
     #Create a temporary array to hold both the negative and positive frequency
     #values of phiSC (it is Hermitian symmetric) in a way that conforms with fftn()
-    phiSCSymmetric = (0.0+0.0j)*zeros(self.numVariables*[2*self.numTPoints-1])
-    #Set the first half slice to be phiSC
-    phiSCSymmetric[firstHalfSlice] = self.phiSC
-    #Set the last half slice to be the reversed version of phiSC
-    lastHalfSlice = tuple(self.numVariables*[slice(self.numTPoints,None)])
-    reverserSlice = tuple(self.numVariables*[slice(-1,0,-1)])
-    phiSCSymmetric[lastHalfSlice] = self.phiSC[reverserSlice]
+#    phiSCSymmetric = (0.0+0.0j)*zeros(self.numVariables*[2*self.numTPoints-1])
+#    #Set the first half slice to be phiSC
+#    phiSCSymmetric[firstHalfSlice] = self.phiSC
+#    #Set the last half slice to be the reversed version of phiSC
+#    lastHalfSlice = tuple(self.numVariables*[slice(self.numTPoints,None)])
+#    reverserSlice = tuple(self.numVariables*[slice(-1,0,-1)])
+#    phiSCSymmetric[lastHalfSlice] = self.phiSC[reverserSlice]
 
-    self.fSC = real(fft.fftshift(fft.fftn(phiSCSymmetric)*self.deltaT/(2*pi)))
+    padSequence = self.numVariables*[tuple([self.numTPoints-1,0])]
+    phiSCSymmetric = pad(self.phiSC,padSequence,'reflect')
+    
+
+    self.fSC = abs(fft.fftshift(fft.fftn(fft.ifftshift(phiSCSymmetric))*self.deltaT/(2*pi)))
 
   #*****************************************************************************
   #** bernacchiaDensityEstimate: ***********************************************
@@ -521,10 +539,14 @@ if(__name__ == "__main__"):
     #Set the maximum sample size
     nmax = 2**powmax
     #Create a random normal sample of this size
-    randsample = 3*random.normal(loc=0.0,scale=1.0,size = [nvariables,nmax])
+    randsample = random.normal(loc=0.0,scale=1.0,size = [nvariables,nmax])
+    randsample[1,nmax/2:] = random.normal(loc=8.0,scale=3.0,size = [nmax/2])
 
 
-    bp2d = bernacchiaDensityEstimate(randsample,beVerbose=True,numPoints=1025)
+    bp2d = bernacchiaDensityEstimate( randsample,  \
+                                      beVerbose=True, \
+                                      numPoints=1025, \
+                                      doStoreConvolution=True)
 
 
     x2d,y2d = meshgrid(bp2d.x,bp2d.x)
@@ -533,5 +555,5 @@ if(__name__ == "__main__"):
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
     ax1.contour(x2d,y2d,bp2d.fSC)
-    ax1.contour(x2d[::4],y2d[::4],gaus2d,colors='k')
+    #ax1.contour(x2d[::4],y2d[::4],gaus2d,colors='k')
     plt.show()
