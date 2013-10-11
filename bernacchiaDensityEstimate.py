@@ -2,7 +2,7 @@
 from numpy import *
 from numpy.random import randn
 import knuthAverage as kn
-import ftnbp11helper
+import empiricalCharacteristicFunction as ecf
 import copy
 from types import *
 import pdb
@@ -13,17 +13,6 @@ class Timer():
    def __init__(self,n=None): self.n = n
    def __enter__(self): self.start = time.time()
    def __exit__(self, *args): print "N = {}, t = {} seconds".format(self.n,time.time() - self.start)
-
-def calcTfromX(xpoints):
-  """Calculates frequency points given a signal in real space. """
-  #Use fftfreq to produce a set of frequencies that correspond to the fourier
-  #transform of a signal on the self.x points
-  deltaX = xpoints[1] - xpoints[0]
-  dum =  fft.fftfreq(len(xpoints),deltaX/(2*pi))
-
-  #Since we will only be transforming hermitian signals (the ECF is hermitian
-  #by construction), only do calculations for 0-or-positive frequencies
-  return dum[0:len(dum)/2+1]
 
 class bernacchiaDensityEstimate:
 
@@ -39,7 +28,6 @@ class bernacchiaDensityEstimate:
                 dataMax = [], \
                 countThreshold = 1, \
                 doApproximateECF = True, \
-                compareECF = False, \
                 doFFT = True \
               ):
     """ 
@@ -93,8 +81,6 @@ class bernacchiaDensityEstimate:
                             frequencies, but is inaccurate to ~1e-2 for the highest ~5% 
                             of frequencies.
 
-      compareECF          : flags whether to calculate the ECF directly and via FFT
-
       doFFT               : flags whether to calculate phiSC and its FFT to obtain
                             fSC
 
@@ -111,7 +97,7 @@ class bernacchiaDensityEstimate:
       if(dataRank == 1):
         data = reshape(data,[1,len(data)])
       if(dataRank > 2):
-        raise ValueError
+        raise ValueError,"data must be a rank-2 array of shape [numVariables,numDataPoints]"
 
       #Set the number of variables
       self.numVariables = shape(data)[0]
@@ -120,31 +106,23 @@ class bernacchiaDensityEstimate:
 
       #Calculate and/or save the standard deviation/average of the data
       if(dataAverage == [] or len(dataAverage) != self.numVariables):
-        self.dataAverage = zeros([self.numVariables])
-        for v in range(self.numVariables):
-          self.dataAverage[v] = average(data[v,:])
+        self.dataAverage = average(data,1)
       else:
         self.dataAverage = dataAverage
       #Standard deviation
       if(dataStandardDeviation == [] or len(dataStandardDeviation) != self.numVariables):
-        self.dataStandardDeviation = zeros([self.numVariables])
-        for v in range(self.numVariables):
-          self.dataStandardDeviation[v] = std(data[v,:])
+        self.dataStandardDeviation = std(data,1)
       else:
         self.dataStandardDeviation = dataStandardDeviation
 
       #Minimum
       if(dataMin == [] or len(dataMin) != self.numVariables):
-        self.dataMin = zeros([self.numVariables])
-        for v in range(self.numVariables):
-          self.dataMin[v] = amin(data[v,:])
+        self.dataMin = amin(data,1)
       else:
         self.dataMin = dataMin
       #Maximum
       if(dataMax == [] or len(dataMin) != self.numVariables):
-        self.dataMax = zeros([self.numVariables])
-        for v in range(self.numVariables):
-          self.dataMax[v] = amax(data[v,:])
+        self.dataMax = amax(data,1)
       else:
         self.dataMax = dataMax
 
@@ -160,14 +138,6 @@ class bernacchiaDensityEstimate:
 
     #Set whether to approximate the ECF using the FFT method
     self.doApproximateECF = doApproximateECF
-
-    #Set whether to calculate the ECF via both methods
-    self.compareECF = compareECF
-    if(self.compareECF):
-      #Force the calculation of the FFT-based method if comparison is on
-      self.doApproximateECF = True
-      #Turn of real-space transformation
-      self.doFFT = False
 
     if(x == []):
       #Determine the x-points of the estimated PDF
@@ -196,17 +166,17 @@ class bernacchiaDensityEstimate:
       self.xMax = amax(x)
 
     #Calculate the frequency points
-    self.t = calcTfromX(self.x)
+    self.t = ecf.calcTfromX(self.x)
     self.numTPoints = len(self.t)
     self.deltaT = self.t[2] - self.t[1]
 
-    self.ithresh = 3  #Set the number of consecutive frequency points, that are
+    self.ithresh = 1  #Set the number of consecutive frequency points, that are
                       #below the stability threshold, that will cause the phiSC
                       #loop to stop
 
 
-    self.phiSC = (0.0+0.0j)*zeros([self.numVariables,self.numTPoints])
-    self.ECF = (0.0+0.0j)*zeros([self.numVariables,self.numTPoints])
+    self.phiSC = (0.0+0.0j)*zeros(self.numVariables*[self.numTPoints])
+    self.ECF = (0.0+0.0j)*zeros(self.numVariables*[self.numTPoints])
 
     #Initialize the good distribution index
     self.goodDistributionInds = []
@@ -219,15 +189,12 @@ class bernacchiaDensityEstimate:
       #*************************************************
       # Calculate the Empirical Characteristic Function
       #*************************************************
-      if(self.doApproximateECF):
-        #Note that this routine also standardizes the data on-the-fly
-        self.__calculateECFbyFFT__(data,self.dataAverage,self.dataStandardDeviation)
-        self.ECF = self.fftECF
-      else:
-        #Calculate the optimal distribution (in Fourier space) based on the ECF
-        #Note that this routine also standardizes the data on-the-fly
-        self.__calculateECFDirect__(data,self.dataAverage,self.dataStandardDeviation)
-
+      #Note that this routine also standardizes the data on-the-fly
+      self.ECF = ecf.ECF( inputData = data, \
+                          tpoints = self.t, \
+                          dataAverage = self.dataAverage, \
+                          dataStandardDeviation = self.dataStandardDeviation, \
+                          useFFTApproximation = self.doApproximateECF).ECF
 
       if(self.doFFT):
         #*************************************************
@@ -267,7 +234,7 @@ class bernacchiaDensityEstimate:
     ecfSq = abs(self.ECF)**2
 
     #Find indices above the ECF thresold
-    iAboveThresh = nonzero(ecfSq[0,:] >= ecfThresh)[0]
+    iAboveThresh = nonzero(ecfSq >= ecfThresh)[0]
 
     #Determine the indices over which to calculate phiSC; these will be
     #values where ECF is above the ECF threshold, and below the frequency
@@ -283,64 +250,11 @@ class bernacchiaDensityEstimate:
       iCalcPhi = iAboveThresh
     
     if(doFlushArrays):
-      self.phiSC[:,:] = (0.0+0.0j)
+      self.phiSC[:] = (0.0+0.0j)
 
     #Do the phiSC calculation only for the necessary points
-    self.phiSC[0,iCalcPhi] = (N*self.ECF[0,iCalcPhi]/(2*(N-1)))\
-                              *(1+sqrt(1-ecfThresh/ecfSq[0,iCalcPhi]))
-
-
-  #*****************************************************************************
-  #** bernacchiaDensityEstimate: ***********************************************
-  #******************* __calculateECFDirect__() ********************************
-  #*****************************************************************************
-  #*****************************************************************************
-  def __calculateECFDirect__(self,mydata,myaverage,mystddev):
-    """Directly calculate the fourier-space representation of the input data"""
-
-    #Call a Fortran routine to do an efficient calculation of the density in
-    #fourier space.
-    self.ECF = ftnbp11helper.calculateecf( 
-                                        datapoints = mydata, \
-                                        dataaverage = myaverage, \
-                                        datastd = mystddev, \
-                                        tpoints = self.t
-                                       )
-    
-  #*****************************************************************************
-  #** bernacchiaDensityEstimate: ***********************************************
-  #******************* __calculateECFbyFFT__() *********************************
-  #*****************************************************************************
-  #*****************************************************************************
-  def __calculateECFbyFFT__(self,data,myaverage,mystddev):
-    """Use the non-uniform FFT method to estimate the fourier representation of
-    the input data."""
-
-    #Calculate details of the gaussian kernel
-    tau = 1.5629
-    nspread = 30
-    nspreadhalf = nspread/2
-    fourTau = 4*tau
-
-    fkde = zeros([self.numXPoints])
-
-    fkde = ftnbp11helper.calculatekerneldensityestimate(  \
-                                                        datapoints = data, \
-                                                        dataaverage = myaverage, \
-                                                        datastd = mystddev, \
-                                                        xpoints = self.x,\
-                                                        nspreadhalf = nspreadhalf,\
-                                                        fourtau = fourTau)
-
-
-    #Calculate the FFT of the kernel density estimate
-    kdeFFT = fft.ihfft(fft.ifftshift(fkde),len(fkde))
-
-    #pdb.set_trace()
-    #Deconvolve the transformed kde to obtain the empirical characteristic 
-    #function
-    tprime = self.t*self.deltaX
-    self.fftECF = kdeFFT*exp(tau*tprime**2)/kdeFFT[0]
+    self.phiSC[iCalcPhi] = (N*self.ECF[iCalcPhi]/(2*(N-1)))\
+                              *(1+sqrt(1-ecfThresh/ecfSq[iCalcPhi]))
 
   #*****************************************************************************
   #** bernacchiaDensityEstimate: ***********************************************
@@ -350,7 +264,7 @@ class bernacchiaDensityEstimate:
   def findGoodDistributionInds(self):
     """Find indices of the optimal distribution that are above a specificed threshold"""
     #TODO: Remove the 0-index 
-    return nonzero(self.fSC[0,:] >= self.distributionThreshold)[0]
+    return nonzero(self.fSC >= self.distributionThreshold)[0]
 
   #*****************************************************************************
   #** bernacchiaDensityEstimate: ***********************************************
@@ -361,9 +275,19 @@ class bernacchiaDensityEstimate:
     """ Transform the self-consistent estimate of the distribution from
     frequency space to real space"""
 
-    #Since phiSC is Hermitian, use the numpy hfft routine to guarantee a transform
-    #that is real
-    self.fSC = fft.fftshift(fft.hfft(self.phiSC,self.numXPoints))*self.deltaT/(2*pi)
+    #Generate a set of array slices to access the lower half of the array
+    firstHalfSlice = tuple(self.numVariables*[slice(0,self.numTPoints)])
+    #Create a temporary array to hold both the negative and positive frequency
+    #values of phiSC (it is Hermitian symmetric) in a way that conforms with fftn()
+    phiSCSymmetric = (0.0+0.0j)*zeros(self.numVariables*[2*self.numTPoints-1])
+    #Set the first half slice to be phiSC
+    phiSCSymmetric[firstHalfSlice] = self.phiSC
+    #Set the last half slice to be the reversed version of phiSC
+    lastHalfSlice = tuple(self.numVariables*[slice(self.numTPoints,None)])
+    reverserSlice = tuple(self.numVariables*[slice(-1,0,-1)])
+    phiSCSymmetric[lastHalfSlice] = self.phiSC[reverserSlice]
+
+    self.fSC = real(fft.fftshift(fft.fftn(phiSCSymmetric)*self.deltaT/(2*pi)))
 
   #*****************************************************************************
   #** bernacchiaDensityEstimate: ***********************************************
@@ -421,124 +345,127 @@ class bernacchiaDensityEstimate:
 # estimate converges on the true normal distribution like N**-1, which agrees
 # the theoretical and empirical convergence rate given in BP11.
 if(__name__ == "__main__"):
-  import pylab as P
-  import scipy.stats as stats
 
-  #print ftnbp11helper.__doc__
+  doOneDimensionalTests = True
+  if(doOneDimensionalTests):
+    import pylab as P
+    import scipy.stats as stats
 
-  #Define a gaussian function for evaluation purposes
-  def mygaus(x,mu=0.,sig=1.):
-    return (1./(sig*sqrt(2*pi)))*exp(-(x-mu)**2/(2.*sig**2))
-  
-  #Set the size of the sample to calculate
-  powmax = 15
-  npow = asarray(range(powmax)) + 1.0
+    #print ftnbp11helper.__doc__
 
-  #Set the maximum sample size
-  nmax = 2**powmax
-  #Create a random normal sample of this size
-  randsample = 3*random.normal(size = nmax)
+    #Define a gaussian function for evaluation purposes
+    def mygaus(x,mu=0.,sig=1.):
+      return (1./(sig*sqrt(2*pi)))*exp(-(x-mu)**2/(2.*sig**2))
+    
+    #Set the size of the sample to calculate
+    powmax = 19
+    npow = asarray(range(powmax)) + 1.0
 
-
-  #Pre-define sample size and error-squared arrays
-  nsample = zeros([len(npow)])
-  esq = zeros([len(npow)])
-  epct = zeros([len(npow)])
-
-  #Do the optimal calculation on a number of different random draws
-  for i,n in zip(range(len(npow)),npow):
-    #Extract a sample of length 2**n + 1 from the previously-created
-    #random sample
-    randgauss = randsample[:(2**n + 1)]
-    #Set the sample size
-    nsample[i] = len(randgauss)
-
-    with Timer(nsample[i]):
-      #Do the BP11 density estimate
-      bkernel = bernacchiaDensityEstimate(randgauss,doApproximateECF=False)
-
-    #Calculate the mean squared error between the estimated density
-    #And the gaussian
-    #esq[i] = average(abs(mygaus(bkernel.x)-bkernel.fSC)**2 *bkernel.deltaX)
-    igood = bkernel.goodDistributionInds
-    esq[i] = average(abs(mygaus(bkernel.x)-bkernel.fSC[0,:])**2 *bkernel.deltaX)
-    epct[i] = 100*sum(abs(mygaus(bkernel.x)-bkernel.fSC[0,:])*bkernel.deltaX)
-    #Print the sample size and the error to show that the code is proceeeding
-    #print "{}, {}%".format(nsample[i],epct[i])
-
-    #Plot the optimal distribution
-    P.subplot(2,2,1)
-    P.plot(bkernel.x[bkernel.goodDistributionInds],bkernel.fSC[0,bkernel.goodDistributionInds],'b-')
-
-    #Plot the empirical characteristic function
-    P.subplot(2,2,2,xscale="log",yscale="log")
-    P.plot(bkernel.t[1:],abs(bkernel.ECF[0,1:])**2,'b-')
-
-
-  #Plot the sample gaussian
-  P.subplot(2,2,1)
-  P.plot(bkernel.x,mygaus(bkernel.x),'r-')
-
-
-  #Do a simple power law fit to the scaling
-  [m,b,_,_,_] = stats.linregress(log(nsample),log(esq))
-  #Print the error scaling (following BP11, this is expected to be m ~ -1)
-  print "Error scales ~ N**{}".format(m)
-
-  #Plot the error vs sample size on a log-log curve
-  P.subplot(2,2,3)
-  P.loglog(nsample,esq)
-  P.plot(nsample,exp(b)*nsample**m,'r-')
-
-  print ""
-
-  bDemoSum = False
-  if(not bDemoSum):
-    P.show() 
-  else:
-    #*********************************************************************
-    # Demonstrate the capability to sum bernacchiaDensityEstimate objects
-    #*********************************************************************
-
-    nsamp = 512
-    nloop = nmax/nsamp
+    #Set the maximum sample size
+    nmax = 2**powmax
+    #Create a random normal sample of this size
+    randsample = 3*random.normal(size = nmax)
 
 
     #Pre-define sample size and error-squared arrays
-    nsample2 = zeros([nloop])
-    esq2 = zeros([nloop])
+    nsample = zeros([len(npow)])
+    esq = zeros([len(npow)])
+    epct = zeros([len(npow)])
 
-    for i in range(nloop):
-      randgauss = randsample[i*nsamp:(i+1)*nsamp]
-      if(i == 0):
-        bkernel2 = bernacchiaDensityEstimate(randgauss)
-        nsample2[i] = len(randgauss)
-      else:
-        bkernel2 += bernacchiaDensityEstimate(randgauss)
-        nsample2[i] = nsample2[i-1] + len(randgauss)
+    #Do the optimal calculation on a number of different random draws
+    for i,n in zip(range(len(npow)),npow):
+      #Extract a sample of length 2**n + 1 from the previously-created
+      #random sample
+      randgauss = randsample[:(2**n + 1)]
+      #Set the sample size
+      nsample[i] = len(randgauss)
+
+      with Timer(nsample[i]):
+        #Do the BP11 density estimate
+        bkernel = bernacchiaDensityEstimate(randgauss,doApproximateECF=True)
 
       #Calculate the mean squared error between the estimated density
       #And the gaussian
-      esq2[i] = average(abs(mygaus(bkernel2.x)-bkernel2.fSC)**2 * bkernel2.deltaX)
+      #esq[i] = average(abs(mygaus(bkernel.x)-bkernel.fSC)**2 *bkernel.deltaX)
+      igood = bkernel.goodDistributionInds
+      esq[i] = average(abs(mygaus(bkernel.x)-bkernel.fSC[:])**2 *bkernel.deltaX)
+      epct[i] = 100*sum(abs(mygaus(bkernel.x)-bkernel.fSC[:])*bkernel.deltaX)
       #Print the sample size and the error to show that the code is proceeeding
-      print "{}, {}".format(nsample2[i],esq2[i])
+      #print "{}, {}%".format(nsample[i],epct[i])
 
-    #Plot the distribution
+      #Plot the optimal distribution
+      P.subplot(2,2,1)
+      P.plot(bkernel.x[bkernel.goodDistributionInds],bkernel.fSC[bkernel.goodDistributionInds],'b-')
+
+      #Plot the empirical characteristic function
+      P.subplot(2,2,2,xscale="log",yscale="log")
+      P.plot(bkernel.t[1:],abs(bkernel.ECF[1:])**2,'b-')
+
+
+    #Plot the sample gaussian
     P.subplot(2,2,1)
-    P.plot(bkernel2.x,bkernel2.fSC,'g-')
+    P.plot(bkernel.x,mygaus(bkernel.x),'r-')
 
-    #Plot the ECF
-    P.subplot(2,2,2,xscale="log",yscale="log")
-    P.plot(bkernel2.t[1:],abs(bkernel2.ECF[0,1:])**2,'b-')
 
-    #Plot the error-rate change
+    #Do a simple power law fit to the scaling
+    [m,b,_,_,_] = stats.linregress(log(nsample),log(esq))
+    #Print the error scaling (following BP11, this is expected to be m ~ -1)
+    print "Error scales ~ N**{}".format(m)
+
+    #Plot the error vs sample size on a log-log curve
     P.subplot(2,2,3)
-    P.loglog(nsample2,esq2,'g-')
+    P.loglog(nsample,esq)
+    P.plot(nsample,exp(b)*nsample**m,'r-')
 
-    #Plot the difference between the two distributions
-    P.subplot(2,2,4)
-    P.plot(bkernel2.x, abs(bkernel.fSC - bkernel2.fSC)*bkernel.deltaX)
+    print ""
+
+    bDemoSum = False
+    if(not bDemoSum):
+      P.show() 
+    else:
+      #*********************************************************************
+      # Demonstrate the capability to sum bernacchiaDensityEstimate objects
+      #*********************************************************************
+
+      nsamp = 512
+      nloop = nmax/nsamp
 
 
-    #Show the plots
-    P.show()
+      #Pre-define sample size and error-squared arrays
+      nsample2 = zeros([nloop])
+      esq2 = zeros([nloop])
+
+      for i in range(nloop):
+        randgauss = randsample[i*nsamp:(i+1)*nsamp]
+        if(i == 0):
+          bkernel2 = bernacchiaDensityEstimate(randgauss)
+          nsample2[i] = len(randgauss)
+        else:
+          bkernel2 += bernacchiaDensityEstimate(randgauss)
+          nsample2[i] = nsample2[i-1] + len(randgauss)
+
+        #Calculate the mean squared error between the estimated density
+        #And the gaussian
+        esq2[i] = average(abs(mygaus(bkernel2.x)-bkernel2.fSC)**2 * bkernel2.deltaX)
+        #Print the sample size and the error to show that the code is proceeeding
+        print "{}, {}".format(nsample2[i],esq2[i])
+
+      #Plot the distribution
+      P.subplot(2,2,1)
+      P.plot(bkernel2.x,bkernel2.fSC,'g-')
+
+      #Plot the ECF
+      P.subplot(2,2,2,xscale="log",yscale="log")
+      P.plot(bkernel2.t[1:],abs(bkernel2.ECF[0,1:])**2,'b-')
+
+      #Plot the error-rate change
+      P.subplot(2,2,3)
+      P.loglog(nsample2,esq2,'g-')
+
+      #Plot the difference between the two distributions
+      P.subplot(2,2,4)
+      P.plot(bkernel2.x, abs(bkernel.fSC - bkernel2.fSC)*bkernel.deltaX)
+
+
+      #Show the plots
+      P.show()

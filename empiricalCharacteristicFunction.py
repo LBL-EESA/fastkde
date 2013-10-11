@@ -68,8 +68,8 @@ class ECF:
       deltaT = tpoints[1:] - tpoints[:-1]
       #Get the difference between these spacings
       deltaTdiff = deltaT - dt
-      fTolerance = 1e-14
-      #Check that all these differences are 0
+      fTolerance = dt/1e6
+      #Check that all these differences are less than 1/1e6
       if(not all(abs(deltaTdiff < fTolerance))):
         raise ValueError,"tpoints must be regularly spaced if useFFTApproximation is True"
 
@@ -126,7 +126,7 @@ class ECF:
                                   freqspacesize = len(self.tpoints)**self.nvariables  \
                               )
     #Reshape the flattened array into a proper multidimensional array
-    ecf = reshape(ecf,self.nvariables*[len(tpoints)])
+    ecf = reshape(ecf,self.nvariables*[len(self.tpoints)])
 
 
     return ecf
@@ -180,7 +180,7 @@ class ECF:
     #required by ifft)
     tmpfft = fft.ifftn(fft.ifftshift(kde))
     #Generate a set of array slices to access the lower half of the array
-    firstHalfSlice = tuple(self.nvariables*[slice(0,len(tpoints))])
+    firstHalfSlice = tuple(self.nvariables*[slice(0,len(self.tpoints))])
     #Extract the lower half of the tmpfft hypercube, which corresponds
     #to the >0 frequencies
     kdeFFT = tmpfft[firstHalfSlice]
