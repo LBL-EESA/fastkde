@@ -180,7 +180,6 @@ class ECF:
     #Deconvolve FFT(kde) (divide by the FFT of the gaussian) to obtain the ECF estimate
     midPointAccessor = tuple(self.nvariables*[(len(self.tpoints)-1)/2])
     ecf = kdeFFT*exp(tau*sum((tpointgrids*deltaX)**2,axis=0))/kdeFFT[midPointAccessor]
-    #ecf = kdeFFT/kdeFFT[midPointAccessor]
 
     return ecf
 

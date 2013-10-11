@@ -302,9 +302,8 @@ class bernacchiaDensityEstimate:
       self.phiSC[:] = (0.0+0.0j)
 
     #Do the phiSC calculation only for the necessary points
-    #self.phiSC.ravel()[iCalcPhi] = (N*self.ECF.ravel()[iCalcPhi]/(2*(N-1)))\
-    #                          *(1+sqrt(1-ecfThresh/ecfSq.ravel()[iCalcPhi]))
-    self.phiSC = self.ECF
+    self.phiSC.ravel()[iCalcPhi] = (N*self.ECF.ravel()[iCalcPhi]/(2*(N-1)))\
+                              *(1+sqrt(1-ecfThresh/ecfSq.ravel()[iCalcPhi]))
 
   #*****************************************************************************
   #** bernacchiaDensityEstimate: ***********************************************
@@ -335,12 +334,13 @@ class bernacchiaDensityEstimate:
 #
 #    #Transform the PDF estimate to real space
 #    fSC = real(fft.fftshift(fft.fftn(phiSCSymmetric)))*(self.deltaT/(2*pi))**self.numVariables
-    fSC = real(fft.fftshift(fft.fftn(self.phiSC)))*(self.deltaT/(2*pi))**self.numVariables
+    fSC = fft.fftshift(real(fft.fftn(fft.ifftshift(self.phiSC))))*(self.deltaT/(2*pi))**self.numVariables
       
     
     if(self.beVerbose):
       normConst = sum(fSC*self.deltaX**self.numVariables)
-      print "Normalization of fSC = {}. phiSC[0] = {}".format(normConst,self.phiSC.ravel()[0])
+      midPointAccessor = tuple(self.numVariables*[(self.numTPoints-1)/2])
+      print "Normalization of fSC = {}. phiSC[0] = {}".format(normConst,self.phiSC[midPointAccessor])
 
     #self.fSC = ma.masked_less(fSC,self.distributionThreshold)
     self.fSC = ma.masked_less(fSC,0.0)
@@ -584,6 +584,6 @@ if(__name__ == "__main__"):
     #ax1.imshow(bp2d.fSC)
     #ax1.contour(x2d,y2d,log(bp2d.getTransformedPDF().transpose()),color='k')
     ax1.contour(x2d,y2d,bp2d.fSC)
-    ax1.contour(x2d,y2d,bp2d.convolvedData,color='k')
-    #ax1.plot(randsample[0,::4],randsample[1,::4],'k.',markersize=1)
+    #ax1.contour(x2d,y2d,bp2d.convolvedData,color='k')
+    ax1.plot(randsample[0,::4],randsample[1,::4],'k.',markersize=1)
     plt.show()

@@ -9,9 +9,11 @@ print ftn.lowesthypervolumefilter.__doc__
 testVec = range(8,1,-1)
 t1,t2 = meshgrid(testVec,testVec)
 testArray = t1**2 + t2**2 
+#Shift it so the highest value is in the center
+testArray = fft.fftshift(testArray)
 #Set the last index to the first; the standard test will set this to 1
 # but lowesthypervolumefilter() shouldn't
-testArray.ravel()[-1] = testArray.ravel()[0]
+#testArray.ravel()[-1] = testArray.ravel()[0]
 
 thresh = 50
 
@@ -34,3 +36,7 @@ print ""
 print "maskTest: "
 print ""
 print maskTest
+
+print array_equiv(maskTest,maskStandard)
+quit()
+quit()
