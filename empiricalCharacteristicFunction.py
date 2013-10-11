@@ -8,22 +8,18 @@ import ftnecf as ftn
 #*****************************************************************************
 #*****************************************************************************
 def calcXfromT(tpoints):
-  """Calculates real space points given a set of hermetian frequency points (the >0 half). """
+  """Calculates real space points given a set of hermetian frequency points. """
   #Use fftfreq to produce a set of frequencies that correspond to the fourier
   #transform of a signal on the tpoints points
   deltaT = tpoints[1] - tpoints[0]
-  return  fft.fftshift(fft.fftfreq(2*len(tpoints)- 1,deltaT/(2*pi)))
+  return  fft.fftshift(fft.fftfreq(len(tpoints),deltaT/(2*pi)))
 
 def calcTfromX(xpoints):
   """Calculates frequency points given a signal in real space. """
   #Use fftfreq to produce a set of frequencies that correspond to the fourier
   #transform of a signal on the x points
   deltaX = xpoints[1] - xpoints[0]
-  dum =  fft.fftfreq(len(xpoints),deltaX/(2*pi))
-
-  #Since we will only be transforming hermitian signals (the ECF is hermitian
-  #by construction), only do calculations for 0-or-positive frequencies
-  return dum[0:len(dum)/2+1]
+  return fft.fftshift(fft.fftfreq(len(xpoints),deltaX/(2*pi)))
 
 class ECF:
 
@@ -178,15 +174,13 @@ class ECF:
     #Take the FFT of the KDE estimate (ifftshift is used to reorder the kde
     #array such that 0 is the lowest corner [first index] of the array, as
     #required by ifft)
-    tmpfft = fft.ifftn(fft.ifftshift(kde))
-    #Generate a set of array slices to access the lower half of the array
-    firstHalfSlice = tuple(self.nvariables*[slice(0,len(self.tpoints))])
-    #Extract the lower half of the tmpfft hypercube, which corresponds
-    #to the >0 frequencies
-    kdeFFT = tmpfft[firstHalfSlice]
+    #And fftshift is used to put the zero-frequency in the center of the array
+    kdeFFT = fft.fftshift(fft.ifftn(fft.ifftshift(kde)))
 
     #Deconvolve FFT(kde) (divide by the FFT of the gaussian) to obtain the ECF estimate
-    ecf = kdeFFT*exp(tau*sum((tpointgrids*deltaX)**2,axis=0))/kdeFFT.ravel()[0]
+    midPointAccessor = tuple(self.nvariables*[(len(self.tpoints)-1)/2])
+    ecf = kdeFFT*exp(tau*sum((tpointgrids*deltaX)**2,axis=0))/kdeFFT[midPointAccessor]
+    #ecf = kdeFFT/kdeFFT[midPointAccessor]
 
     return ecf
 
@@ -213,9 +207,9 @@ if(__name__ == "__main__"):
     #Calculate the FFT of an actual gaussian; use
     #this as the empirical characteristic function standard
     mygaus1d = mySTDGaus1D(xpoints)
-    tmpcf = fft.ifftn(fft.ifftshift(mygaus1d))
-    mygauscf = tmpcf[:len(tpoints)]
-    mygauscf /= mygauscf[0]
+    mygauscf = fft.fftshift(fft.ifftn(fft.ifftshift(mygaus1d)))
+    nh = (len(tpoints)-1)/2
+    mygauscf /= mygauscf[nh]
 
 
     #Set the number of data points
@@ -231,9 +225,9 @@ if(__name__ == "__main__"):
     ecfDFT = ECF(xyrand,tpoints,useFFTApproximation=False).ECF
 
     #Print the 0-frequencies (should be 1 for all)
-    print ecfFFT[0],ecfDFT[0],mygauscf[0]
+    print ecfFFT[nh],ecfDFT[nh],mygauscf[nh]
 
-    P.subplot(111,xscale="log")
+    P.subplot(111,xscale="log",yscale="log")
     #Plot the magnitude of the fast and slow ECFs
     #(these should overlap for all but the highest half of the frequencies)
     P.plot(tpoints,abs(ecfFFT),'r-')
@@ -258,9 +252,10 @@ if(__name__ == "__main__"):
     #to estimate the characteristic function standard
     xp2d,yp2d = meshgrid(xpoints,xpoints)
     mygaus2d = mySTDGaus2D(xp2d,yp2d)
-    tmpcf = fft.ifftn(fft.ifftshift(mygaus2d))
-    mygauscf = tmpcf[:len(tpoints),:len(tpoints)]
-    mygauscf /= mygauscf[0,0]
+    mygauscf = fft.fftshift(fft.ifftn(fft.ifftshift(mygaus2d)))
+    nh = (len(tpoints)-1)/2
+    midPointAccessor = tuple(2*[nh])
+    mygauscf /= mygauscf[midPointAccessor]
 
 
     #Sample points from a gaussian distribution
@@ -294,21 +289,21 @@ if(__name__ == "__main__"):
 
 
     #Print the normalization constants (should be 1)
-    print ecfFFT[0,0],ecfDFT[0,0],mygauscf[0,0]
+    print ecfFFT[midPointAccessor],ecfDFT[midPointAccessor],mygauscf[midPointAccessor]
 
     #plot the magnitudes of the fast and slow ECFs along
     #an aribtrary slice (they should overlap except in the high frequency range)
-    ax2.plot(tpoints,abs(ecfFFT[5,:]),'r-')
-    ax2.plot(tpoints,abs(ecfDFT[5,:]),'b-')
+    ax2.plot(tpoints,abs(ecfFFT[nh+5,:]),'r-')
+    ax2.plot(tpoints,abs(ecfDFT[nh+5,:]),'b-')
     #Plot the magnitude of the gaussian characteristic function
-    ax2.plot(tpoints,abs(mygauscf[5,:]),'k-')
+    ax2.plot(tpoints,abs(mygauscf[nh+5,:]),'k-')
 
     #Plot the average difference between the slow and fast ECFs
     #(will be relatively high because I use a coarse X grid, so that
     # the slow calculation will finish in my lifetime)
     errorK = average(abs(ecfFFT-ecfDFT),0)
     ax3 = fig.add_subplot(223,xscale="log",yscale="log")
-    ax3.plot(tpoints[:len(tpoints)/2],errorK[:len(tpoints)/2],'k-')
+    ax3.plot(tpoints[len(tpoints)/2:3*len(tpoints)/4],errorK[len(tpoints)/2:3*len(tpoints)/4],'k-')
 
     plt.show()
 

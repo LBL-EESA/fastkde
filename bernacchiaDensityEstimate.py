@@ -4,6 +4,10 @@ from numpy.random import randn
 import knuthAverage as kn
 import empiricalCharacteristicFunction as ecf
 import ftnbp11 as ftn
+#If numpy's version is less than 1.7, then use the version of arraypad
+#supplied with this code, since pad() doesn't exist in lower numpy versions
+if(float(".".join(__version__.split(".")[:2])) < 1.7):
+  from arraypad import pad
 import copy
 from types import *
 import pdb
@@ -125,6 +129,10 @@ class bernacchiaDensityEstimate:
       else:
         self.dataStandardDeviation = dataStandardDeviation
 
+      if(beVerbose):
+        print "Data has average: {}".format(self.dataAverage)
+        print "Data has standard deviation: {}".format(self.dataStandardDeviation)
+
       #Minimum
       if(dataMin == [] or len(dataMin) != self.numVariables):
         self.dataMin = amin(data,1)
@@ -198,7 +206,7 @@ class bernacchiaDensityEstimate:
     self.convolvedData = None
 
     #Calculate the distribution frequency corresponding to the given count threshold
-    self.distributionThreshold = float(countThreshold)/(self.numDataPoints*self.deltaX)
+    self.distributionThreshold = float(countThreshold)/(self.numDataPoints*self.deltaX**self.numVariables)
 
     if(data != []):
 
@@ -241,10 +249,10 @@ class bernacchiaDensityEstimate:
           sys.stdout.flush()
         self.__transformphiSC__()
 
-        if(self.beVerbose):
-          print "Finding good distribution indices"
-          sys.stdout.flush()
-        self.goodDistributionInds = self.findGoodDistributionInds()
+        #if(self.beVerbose):
+        #  print "Finding good distribution indices"
+        #  sys.stdout.flush()
+        #self.goodDistributionInds = self.findGoodDistributionInds()
 
     return
 
@@ -294,8 +302,9 @@ class bernacchiaDensityEstimate:
       self.phiSC[:] = (0.0+0.0j)
 
     #Do the phiSC calculation only for the necessary points
-    self.phiSC.ravel()[iCalcPhi] = (N*self.ECF.ravel()[iCalcPhi]/(2*(N-1)))\
-                              *(1+sqrt(1-ecfThresh/ecfSq.ravel()[iCalcPhi]))
+    #self.phiSC.ravel()[iCalcPhi] = (N*self.ECF.ravel()[iCalcPhi]/(2*(N-1)))\
+    #                          *(1+sqrt(1-ecfThresh/ecfSq.ravel()[iCalcPhi]))
+    self.phiSC = self.ECF
 
   #*****************************************************************************
   #** bernacchiaDensityEstimate: ***********************************************
@@ -316,23 +325,25 @@ class bernacchiaDensityEstimate:
     """ Transform the self-consistent estimate of the distribution from
     frequency space to real space"""
 
-    #Generate a set of array slices to access the lower half of the array
+#    #Generate a set of array slices to access the lower half of the array
 #    firstHalfSlice = tuple(self.numVariables*[slice(0,self.numTPoints)])
-    #Create a temporary array to hold both the negative and positive frequency
-    #values of phiSC (it is Hermitian symmetric) in a way that conforms with fftn()
-#    phiSCSymmetric = (0.0+0.0j)*zeros(self.numVariables*[2*self.numTPoints-1])
-#    #Set the first half slice to be phiSC
-#    phiSCSymmetric[firstHalfSlice] = self.phiSC
-#    #Set the last half slice to be the reversed version of phiSC
-#    lastHalfSlice = tuple(self.numVariables*[slice(self.numTPoints,None)])
-#    reverserSlice = tuple(self.numVariables*[slice(-1,0,-1)])
-#    phiSCSymmetric[lastHalfSlice] = self.phiSC[reverserSlice]
-
-    padSequence = self.numVariables*[tuple([self.numTPoints-1,0])]
-    phiSCSymmetric = pad(self.phiSC,padSequence,'reflect')
+#    #Create a temporary array to hold both the negative and positive frequency
+#    #values of phiSC (it is Hermitian symmetric) in a way that conforms with fftn()
+#    padSequence = self.numVariables*[tuple([self.numTPoints-1,0])]
+#    #phiSCSymmetric = fft.ifftshift(pad(self.phiSC,padSequence,'reflect'))
+#    phiSCSymmetric = pad(self.phiSC,padSequence,'reflect')
+#
+#    #Transform the PDF estimate to real space
+#    fSC = real(fft.fftshift(fft.fftn(phiSCSymmetric)))*(self.deltaT/(2*pi))**self.numVariables
+    fSC = real(fft.fftshift(fft.fftn(self.phiSC)))*(self.deltaT/(2*pi))**self.numVariables
+      
     
+    if(self.beVerbose):
+      normConst = sum(fSC*self.deltaX**self.numVariables)
+      print "Normalization of fSC = {}. phiSC[0] = {}".format(normConst,self.phiSC.ravel()[0])
 
-    self.fSC = abs(fft.fftshift(fft.fftn(fft.ifftshift(phiSCSymmetric))*self.deltaT/(2*pi)))
+    #self.fSC = ma.masked_less(fSC,self.distributionThreshold)
+    self.fSC = ma.masked_less(fSC,0.0)
 
   #*****************************************************************************
   #** bernacchiaDensityEstimate: ***********************************************
@@ -377,6 +388,11 @@ class bernacchiaDensityEstimate:
     #Return the new object
     return retObj
 
+  def getTransformedAxes(self):
+    return tuple([ (self.x*self.dataStandardDeviation[i] + self.dataAverage[i]) for i in range(self.numVariables) ])
+
+  def getTransformedPDF(self):
+    return self.fSC*prod(self.dataStandardDeviation)
 
 #*******************************************************************************
 #*******************************************************************************
@@ -517,10 +533,7 @@ if(__name__ == "__main__"):
 
   doTwoDimensionalTests = True
   if(doTwoDimensionalTests):
-    import matplotlib
-    import numpy as np
-    import matplotlib.cm as cm
-    import matplotlib.mlab as mlab
+    from mpl_toolkits.mplot3d import Axes3D
     import matplotlib.pyplot as plt
     import scipy.stats as stats
 
@@ -539,21 +552,38 @@ if(__name__ == "__main__"):
     #Set the maximum sample size
     nmax = 2**powmax
     #Create a random normal sample of this size
-    randsample = random.normal(loc=0.0,scale=1.0,size = [nvariables,nmax])
-    randsample[1,nmax/2:] = random.normal(loc=8.0,scale=3.0,size = [nmax/2])
+#    randsample = random.normal(loc=0.0,scale=1.0,size = [nvariables,nmax])
+#    randsample[1,nmax/2:] = random.normal(loc=8.0,scale=5.0,size = [nmax/2])
+    def measure(n):
+      """Measurement model, return two coupled measurements."""
+      m1 = random.normal(size=n)
+      m2 = random.normal(scale=0.5, size=n)
+      return m1+m2, m1-m2
+
+    randsample = asarray(measure(nmax))
+#    print shape(randsample)
+#    quit()
 
 
     bp2d = bernacchiaDensityEstimate( randsample,  \
                                       beVerbose=True, \
                                       numPoints=1025, \
-                                      doStoreConvolution=True)
+                                      doStoreConvolution=True, \
+                                      countThreshold = 1)
 
 
+    x,y = bp2d.getTransformedAxes()
+    #x2d,y2d = meshgrid(x,y)
     x2d,y2d = meshgrid(bp2d.x,bp2d.x)
     gaus2d = mygaus2d(x2d[::4],y2d[::4])
 
     fig = plt.figure()
+    #ax1 = fig.add_subplot(111,projection='3d')
+    #ax1.plot_wireframe(x2d[::4],y2d[::4],bp2d.fSC[::4])
     ax1 = fig.add_subplot(111)
+    #ax1.imshow(bp2d.fSC)
+    #ax1.contour(x2d,y2d,log(bp2d.getTransformedPDF().transpose()),color='k')
     ax1.contour(x2d,y2d,bp2d.fSC)
-    #ax1.contour(x2d[::4],y2d[::4],gaus2d,colors='k')
+    ax1.contour(x2d,y2d,bp2d.convolvedData,color='k')
+    #ax1.plot(randsample[0,::4],randsample[1,::4],'k.',markersize=1)
     plt.show()
