@@ -70,7 +70,7 @@
 
         !Set that the highest value in the icalcphi list is at the imax
         !position
-        imax = ilist
+        imax = ilist-1
 
         return
       end subroutine lowesthypervolumefilter
