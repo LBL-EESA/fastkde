@@ -29,7 +29,8 @@ class ECF:
                 dataAverage = None, \
                 dataStandardDeviation = None, \
                 doStoreConvolution = False, \
-                useFFTApproximation = True):
+                useFFTApproximation = True, \
+                beVerbose = False):
     """
     Calculates the empirical characteristic function of arbitrary sets of
     variables.
@@ -82,6 +83,9 @@ class ECF:
     else:
       self.dataStandardDeviation = std(inputData,1)
 
+    #Set verbosity
+    self.beVerbose = beVerbose
+
 
     #Set whether we store the convolved version
     #of the data used in the FFT estimate; mainly
@@ -113,6 +117,8 @@ class ECF:
   def __calculateECFDirect__(self,mydata,myaverage,mystddev):
     """Directly calculate the fourier-space representation of the input data"""
 
+    if(self.beVerbose):
+      print "Entering DFT-based ECF routine"
     #Call a Fortran routine to do an efficient calculation of the density in
     #fourier space.
     ecf = ftn.calculateecfdirect( datapoints = mydata,  \
@@ -121,6 +127,8 @@ class ECF:
                                   tpoints = self.tpoints,  \
                                   freqspacesize = len(self.tpoints)**self.nvariables  \
                               )
+    if(self.beVerbose):
+      print "Exiting DFT-based ECF routine"
     #Reshape the flattened array into a proper multidimensional array
     ecf = reshape(ecf,self.nvariables*[len(self.tpoints)])
 
@@ -155,6 +163,8 @@ class ECF:
       #Otherwise, just create a [1,len(tpoints)] array of the frequency points
       tpointgrids = asarray([self.tpoints])
 
+    if(self.beVerbose):
+      print "Entering convolution routine"
     #Do a fast kernel density estimate, using the Greengard and Lee (2004, SIAM)
     #kernel parameters
     kde = ftn.calculatekerneldensityestimate( datapoints = mydata,  \
@@ -175,10 +185,14 @@ class ECF:
     #array such that 0 is the lowest corner [first index] of the array, as
     #required by ifft)
     #And fftshift is used to put the zero-frequency in the center of the array
+    if(self.beVerbose):
+      print "Fourier transforming the convolved data"
     kdeFFT = fft.fftshift(fft.ifftn(fft.ifftshift(kde)))
 
     #Deconvolve FFT(kde) (divide by the FFT of the gaussian) to obtain the ECF estimate
     midPointAccessor = tuple(self.nvariables*[(len(self.tpoints)-1)/2])
+    if(self.beVerbose):
+      print "Deconvolving the data"
     ecf = kdeFFT*exp(tau*sum((tpointgrids*deltaX)**2,axis=0))/kdeFFT[midPointAccessor]
 
     return ecf

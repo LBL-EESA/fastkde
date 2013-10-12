@@ -223,7 +223,8 @@ class bernacchiaDensityEstimate:
                         dataAverage = self.dataAverage, \
                         dataStandardDeviation = self.dataStandardDeviation, \
                         useFFTApproximation = self.doApproximateECF, \
-                        doStoreConvolution = self.doStoreConvolution)
+                        doStoreConvolution = self.doStoreConvolution,
+                        beVerbose = self.beVerbose)
 
       #Extract the ECF
       self.ECF = ecfObj.ECF
@@ -342,7 +343,8 @@ class bernacchiaDensityEstimate:
       midPointAccessor = tuple(self.numVariables*[(self.numTPoints-1)/2])
       print "Normalization of fSC = {}. phiSC[0] = {}".format(normConst,self.phiSC[midPointAccessor])
 
-    self.fSC = ma.masked_less(fSC.transpose(),self.distributionThreshold)
+    self.fSC = fSC.transpose()
+    #self.fSC = ma.masked_less(fSC.transpose(),self.distributionThreshold)
     #self.fSC = ma.masked_less(fSC.transpose(),0.0)
 
   #*****************************************************************************
@@ -448,7 +450,6 @@ if(__name__ == "__main__"):
       #Calculate the mean squared error between the estimated density
       #And the gaussian
       #esq[i] = average(abs(mygaus(bkernel.x)-bkernel.fSC)**2 *bkernel.deltaX)
-      igood = bkernel.goodDistributionInds
       esq[i] = average(abs(mygaus(bkernel.x)-bkernel.fSC[:])**2 *bkernel.deltaX)
       epct[i] = 100*sum(abs(mygaus(bkernel.x)-bkernel.fSC[:])*bkernel.deltaX)
       #Print the sample size and the error to show that the code is proceeeding
@@ -456,7 +457,8 @@ if(__name__ == "__main__"):
 
       #Plot the optimal distribution
       P.subplot(2,2,1)
-      P.plot(bkernel.x[bkernel.goodDistributionInds],bkernel.fSC[bkernel.goodDistributionInds],'b-')
+      fSCmask = ma.masked_less(bkernel.fSC,bkernel.distributionThreshold)
+      P.plot(bkernel.x,fSCmask,'b-')
 
       #Plot the empirical characteristic function
       P.subplot(2,2,2,xscale="log",yscale="log")
@@ -538,13 +540,10 @@ if(__name__ == "__main__"):
     import scipy.stats as stats
 
     nvariables = 2
+    #Seed with 0 so results are reproducable
+    #random.seed(0)
 
-    #print ftnbp11helper.__doc__
-
-    #Define a 2-var independent gaussian function for evaluation purposes
-    def mygaus2d(x,y):
-      return 1./(2*pi)*exp(-(x**2 + y**2)/2)
-
+    #Define a bivariate normal function
     def norm2d(x,y,mux=0,muy=0,sx=1,sy=1,r=0):
       coef = 1./(2*pi*sx*sy*sqrt(1.-r**2))
       expArg = -(1./(2*(1-r**2)))*( (x-mux)**2/sx**2 + (y-muy)**2/sy**2 - 2*r*(x-mux)*(y-muy)/(sx*sy))
@@ -552,27 +551,10 @@ if(__name__ == "__main__"):
     
     #Set the size of the sample to calculate
     powmax = 17
-    npow = asarray(range(powmax)) + 1.0
-
-    def measure(n):
-      """Measurement model, return two coupled measurements."""
-      m1 = random.normal(size=n)
-      m2 = random.normal(scale=0.5, size=n)
-      return m1+m2, m1-m2
+    npow = asarray(range(3,powmax)) + 1.0
 
     #Set the maximum sample size
     nmax = 2**powmax
-    #Create a random normal sample of this size
-#    randsample1 = random.normal(loc=0.0,scale=1.0,size = [nvariables,nmax/4])
-#    randsample2 = asarray(measure(nmax/4))
-#    randsample2[0,:] += 6.0
-#    randsample3 = random.normal(loc=0.0,scale=1.0,size = [nvariables,nmax/4])
-#    randsample3[1,:] /= 2.0
-#    randsample3[1,:] += 6.0
-#    randsample4 = random.normal(loc=0.0,scale=1.0,size = [nvariables,nmax/4])
-#    randsample4[0,:] /= 2.0
-#    randsample4 += 6.0
-#    randsample = concatenate((randsample1,randsample2,randsample3,randsample4),axis=1)
 
     def covMat(sx,sy,r):
       return [[sx**2,r*sx*sy],[r*sx*sy,sy**2]]
@@ -583,67 +565,119 @@ if(__name__ == "__main__"):
     gausParams.append([0.0,2.0,1.0,0.5,0.0]) #Flat in y-direction, mean y+2
     gausParams.append([2.0,2.0,0.5,1.0,0.0]) #Flat in x-direction, mean xy+2
 
+    #Define the corresponding standard function
+    def pdfStandard(x,y):
+      pdfStandard = zeros(shape(x))
+      for gg in gausParams:
+        pdfStandard += norm2d(x2d,y2d,*tuple(gg))*(1./ngg)
+
+      return pdfStandard
+
+
+    #Generate samples from this distribution
     randsamples = []
     ngg = len(gausParams)
     for gg in gausParams:
       mu = gg[:2]
       cov = covMat(*tuple(gg[2:]))
       size = tuple([2,nmax/ngg])
+      #Append a 2D gaussian to the list
       randsamples.append(random.multivariate_normal(mu,cov,(nmax/ngg,)).transpose())
 
+    #Concatenate the gaussian samples
     randsample = concatenate(tuple(randsamples),axis=1)
-    
 
-    #randsample[1,nmax/2:] = random.normal(loc=8.0,scale=2.0,size = [nmax/2])
-    #randsample[1,:] = random.uniform(low=1.0,high=2.0)
-#    def measure(n):
-#      """Measurement model, return two coupled measurements."""
-#      m1 = random.normal(size=n)
-#      m2 = random.normal(scale=0.5, size=n)
-#      return m1+m2, m1-m2
-#
-#    randsample = asarray(measure(nmax))
-#    print shape(randsample)
-#    quit()
+    #Shuffle the samples along the long axis so that we
+    #can draw successively larger samples
+    ishuffle = asarray(range(nmax))
+    random.shuffle(ishuffle)
+    randsample = randsample[:,ishuffle]
+
+    #Pre-define sample size and error-squared arrays
+    nsample = zeros([len(npow)])
+    esq = zeros([len(npow)])
+    epct = zeros([len(npow)])
+
+    evaluateError = True
+    if(evaluateError):
+      #Do the optimal calculation on a number of different random draws
+      for z,n in zip(range(len(npow)),npow):
+        #Extract a sample of length 2**n + 1 from the previously-created
+        #random sample
+        randsub = randsample[:,:(2**n)]
+        #Set the sample size
+        nsample[z] = shape(randsub)[1]
+
+        with Timer(nsample[z]):
+          #Do the BP11 density estimate
+          bkernel = bernacchiaDensityEstimate(  randsub,  \
+                                                beVerbose=False, \
+                                                numPoints=1025, \
+                                                numSigma=10, \
+                                                doStoreConvolution=False, \
+                                                countThreshold = 1)
 
 
-    bp2d = bernacchiaDensityEstimate( randsample,  \
-                                      beVerbose=True, \
-                                      numPoints=1025, \
-                                      doStoreConvolution=True, \
-                                      countThreshold = 1)
+
+        x,y = bkernel.getTransformedAxes()
+        x2d,y2d = meshgrid(x,y)
+
+        #Calculate the mean squared error between the estimated density
+        #And the gaussian
+        #esq[z] = average(abs(mygaus(bkernel.x)-bkernel.fSC)**2 *bkernel.deltaX)
+        #esq[z] = average(abs(pdfStandard(x2d,y2d)-bkernel.getTransformedPDF())**2 *bkernel.deltaX**2)
+        absdiffsq = abs(pdfStandard(x2d,y2d)-bkernel.getTransformedPDF())**2
+        dx = x[1] - x[0]
+        dy = y[1] - y[0]
+        esq[z] = sum(dy*sum(absdiffsq*dx,axis=0))/(len(x)*len(y))
+        #Print the sample size and the error to show that the code is proceeeding
+        print "{}: {}, {}".format(n,nsample[z],esq[z])
+
+      #Do a simple power law fit to the scaling
+      [m,b,_,_,_] = stats.linregress(log(nsample),log(esq))
+      #Print the error scaling (following BP11, this is expected to be m ~ -1)
+      print "Error scales ~ N**{}".format(m)
+    else:
+      with Timer(shape(randsample)[1]):
+        bkernel = bernacchiaDensityEstimate(  randsample,  \
+                                              beVerbose=False, \
+                                              numPoints=1025, \
+                                              numSigma=10, \
+                                              doStoreConvolution=False, \
+                                              countThreshold = 1)
 
 
-    x,y = bp2d.getTransformedAxes()
-    x2d,y2d = meshgrid(x,y)
 
-    #Generate the corresponding standard
-    pdfStandard = zeros(2*[bp2d.numXPoints])
-    for gg in gausParams:
-      pdfStandard += norm2d(x2d,y2d,*tuple(gg))*(1./ngg)
 
-    fig = plt.figure()
-    #ax1 = fig.add_subplot(111,projection='3d')
-    #ax1.plot_wireframe(x2d[::4],y2d[::4],bp2d.fSC[::4])
-    ax1 = fig.add_subplot(221)
-    #ax1.imshow(bp2d.fSC)
-    #ax1.contour(x2d,y2d,log(bp2d.getTransformedPDF().transpose()),color='k')
-    clevs = asarray(range(1,10))/100.
-    clevs[0] - bp2d.distributionThreshold
-    pfsc = ax1.contour(x2d,y2d,bp2d.getTransformedPDF(),levels = clevs)
-    #plt.clabel(pfsc,inline=1,fontsize=10)
-    #ax1.contour(x2d,y2d,bp2d.convolvedData,color='k')
-    #ax1.plot(randsample[0,::16],randsample[1,::16],'k.',markersize=1)
-    plt.xlim([-4,6])
-    plt.ylim([-4,6])
-    ax2 = fig.add_subplot(222)
-    pstd = ax2.contour(x2d,y2d,pdfStandard,levels=clevs)
-    #plt.clabel(pstd,inline=1,fontsize=10)
-    plt.xlim([-4,6])
-    plt.ylim([-4,6])
-    ax3 = fig.add_subplot(223)
-    ax3.plot(randsample[0,::16],randsample[1,::16],'k.',markersize=1)
-    plt.xlim([-4,6])
-    plt.ylim([-4,6])
-    #plt.clabel(pstd,inline=1,fontsize=10)
-    plt.show()
+    doPlot = True
+    if(doPlot):
+
+      x,y = bkernel.getTransformedAxes()
+      x2d,y2d = meshgrid(x,y)
+
+      fig = plt.figure()
+      ax1 = fig.add_subplot(121)
+      clevs = asarray(range(2,10))/100.
+      ax1.contour(x2d,y2d,bkernel.getTransformedPDF(),levels = clevs)
+      ax1.contour(x2d,y2d,pdfStandard(x2d,y2d),levels=clevs,colors='k')
+      #ax1.plot(randsample[0,:],randsample[1,:],'k.',markersize=1)
+      plt.xlim([-4,6])
+      plt.ylim([-4,6])
+
+      if(evaluateError):
+        #Plot the error vs sample size on a log-log curve
+        ax3 = fig.add_subplot(122,xscale="log",yscale="log")
+        ax3.plot(nsample,esq)
+        ax3.plot(nsample,exp(b)*nsample**m,'r-')
+        #ax3 = fig.add_subplot(223)
+        #ax3.plot(randsample[0,::16],randsample[1,::16],'k.',markersize=1)
+        #plt.xlim([-4,6])
+        #plt.ylim([-4,6])
+      else:
+        ax3 = fig.add_subplot(122)
+        errorStandardSum= sum(abs(pdfStandard(x2d,y2d)-bkernel.getTransformedPDF())**2,axis=1)
+        ax3.plot(x,errorStandardSum)
+
+
+
+      plt.show()
