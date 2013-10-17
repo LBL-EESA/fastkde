@@ -1,3 +1,58 @@
+      module arrayind
+
+        contains
+
+        subroutine initializeList()
+        use mod_linkedindex
+        implicit none
+          allocate(indexQueue)
+          nullify(indexQueue%next)
+          nullify(indexQueue%prev)
+          indexQueue%ind = -1
+          isnotinitialized = .false.
+        end subroutine initializeList
+
+        subroutine addIndexToList(ind)
+        use mod_linkedindex
+        implicit none
+        !f2py integer,intent(in) :: ind
+        integer,intent(in) :: ind
+        type(node),pointer :: tempNode
+          if(isnotinitialized) call initializeList
+          allocate(tempNode)
+          tempNode%ind = ind
+          nullify(tempNode%next)
+          indexQueue%next => tempNode
+          tempNode%prev => indexQueue
+          indexQueue => tempNode
+          return 
+        end subroutine addIndexToList
+
+        subroutine removeLastItem()
+        use mod_linkedindex
+        implicit none
+          type(node),pointer :: tempNode
+          if(isnotinitialized) call initializeList
+          tempNode => indexQueue%prev
+          deallocate(indexQueue)
+          nullify(indexQueue)
+          indexQueue => tempNode
+          nullify(indexQueue%next)
+        end subroutine removeLastItem
+
+        subroutine getCurrentIndex(ind)
+        use mod_linkedindex
+        implicit none
+        !f2py integer,intent(out) :: ind
+        integer,intent(out) :: ind
+          if(isnotinitialized) call initializeList
+          ind = indexQueue%ind
+          return
+        end subroutine getCurrentIndex
+
+      end module arrayind
+
+
       subroutine lowesthypervolumefilter( ecfsq,  &
                                           ecfthreshold, &
                                           nvariables, &
@@ -8,7 +63,7 @@
       implicit none
       !*******************************
       ! Input variables
-      !*******************************
+      !*******************************/projects/fractalThoughts/QuikSCATIncrements
       !f2py integer,intent(in) :: nvariables,ntpoints
       integer,intent(in) :: nvariables,ntpoints
       !f2py integer,intent(hide),depend(ecfsq) :: freqspacesize = len(ecfsq)

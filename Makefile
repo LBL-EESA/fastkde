@@ -2,12 +2,13 @@
 
 FC=gfortran
 F2PY=f2py
-F2PYFLAGS=--opt="-O3" --fcompiler="gnu95"
+F2PYFLAGS=--opt="-O3" --fcompiler="gnu95" --debug
 
 FFLAGS=-Ofast
 
 #SRC := $(wildcard *.f90)
 SRC = \
+      mod_linkedindex.f90 \
       ftnecf.f90 \
       ftnbp11.f90
 
@@ -23,8 +24,9 @@ all: main
 %.o: %.f90
 	$(FC) $(FFLAGS) -c $< -o $@
 
-ftnbp11.so: ftnecf.f90 ftnbp11.f90
+ftnbp11.so: ftnecf.f90 ftnbp11.f90 mod_linkedindex.o
 	${F2PY} -c ${F2PYFLAGS} -m ftnbp11 $^
+	#${F2PY} -c ${F2PYFLAGS} -m ftnbp11 ftnecf.f90 ftnbp11.f90 only: initializelist addindextolist removelastitem getcurrentindex : skip : node indexqueue :
 
 ftnecf.so: ftnecf.f90
 	${F2PY} -c ${F2PYFLAGS} -m ftnecf $^

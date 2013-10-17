@@ -255,9 +255,10 @@
                                           nvariables,  &
                                           k)
 
-            fkde(k) = fkde(k) + gaussTerm
-
-
+            !Only add to points within our domain
+            if(k.ge.1.and.k.le.realspacesize)then
+              fkde(k) = fkde(k) + gaussTerm
+            end if
 
           end do hyperslabloop
 

@@ -4,6 +4,26 @@ import ftnbp11 as ftn
 
 print ftn.lowesthypervolumefilter.__doc__
 
+
+testLinkedList = False
+if(testLinkedList):
+
+  print ftn.arrayind.getcurrentindex()
+
+  for i in range(10):
+    ftn.arrayind.addindextolist(i)
+    print ftn.arrayind.getcurrentindex()
+
+  isLooping = True
+  while(isLooping):
+    ftn.arrayind.removelastitem()
+    print ftn.arrayind.getcurrentindex()
+    if(ftn.arrayind.getcurrentindex() == -1):
+      isLooping = False
+
+  quit()
+
+
 #Create an array that starts at 128 and decreases
 #linearly as indices increase
 testVec = range(8,1,-1)
