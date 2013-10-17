@@ -2,7 +2,7 @@
 
 FC=gfortran
 F2PY=f2py
-F2PYFLAGS=--opt="-O3" --fcompiler="gnu95" --debug
+F2PYFLAGS=--opt="-Ofast" --fcompiler="gnu95"
 
 FFLAGS=-Ofast
 

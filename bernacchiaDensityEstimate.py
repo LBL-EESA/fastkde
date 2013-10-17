@@ -34,6 +34,7 @@ class bernacchiaDensityEstimate:
                 dataMax = [], \
                 countThreshold = 1, \
                 doApproximateECF = True, \
+                ecfPrecision = 2, \
                 doStoreConvolution = False, \
                 doFFT = True, \
                 beVerbose = False \
@@ -89,6 +90,9 @@ class bernacchiaDensityEstimate:
                             FFT.  In tests, this is accurate to ~1e-14 over low 
                             frequencies, but is inaccurate to ~1e-2 for the highest ~5% 
                             of frequencies.
+
+      ecfPrecision        : sets the precision of the approximate ECF.  If set to 2, it uses
+                            double precision accuracy; 1 otherwise
 
       doStoreConvolution  : flags whether to store the KDE used in the nuFFT
 
@@ -154,8 +158,12 @@ class bernacchiaDensityEstimate:
     #Set the number of points
     self.numPoints = numPoints
 
+
     #Set whether to approximate the ECF using the FFT method
     self.doApproximateECF = doApproximateECF
+
+    #Set the approximate ECF precision
+    self.ecfPrecision = ecfPrecision
 
     if(x == []):
       #Determine the x-points of the estimated PDF
@@ -223,7 +231,8 @@ class bernacchiaDensityEstimate:
                         dataAverage = self.dataAverage, \
                         dataStandardDeviation = self.dataStandardDeviation, \
                         useFFTApproximation = self.doApproximateECF, \
-                        doStoreConvolution = self.doStoreConvolution,
+                        doStoreConvolution = self.doStoreConvolution, \
+                        precision = self.ecfPrecision, \
                         beVerbose = self.beVerbose)
 
       #Extract the ECF

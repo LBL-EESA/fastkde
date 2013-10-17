@@ -26,6 +26,7 @@ class ECF:
   def __init__( self,\
                 inputData, \
                 tpoints, \
+                precision = 2, \
                 dataAverage = None, \
                 dataStandardDeviation = None, \
                 doStoreConvolution = False, \
@@ -85,6 +86,9 @@ class ECF:
 
     #Set verbosity
     self.beVerbose = beVerbose
+
+    #Set the precision
+    self.precision = precision
 
 
     #Set whether we store the convolved version
@@ -150,8 +154,13 @@ class ECF:
     deltaX = xpoints[1] - xpoints[0]
 
     #Calculate details of the gaussian kernel
-    tau = 1.5629
-    nspread = 30
+    if(self.precision == 1):
+      tau = 0.5993
+      nspread = 10
+    else:
+      tau = 1.5629
+      nspread = 28
+
     nspreadhalf = nspread/2
     fourTau = 4*tau
 
@@ -206,7 +215,7 @@ if(__name__ == "__main__"):
   random.seed(0)
 
   #Flag whether to do the 1-D test
-  doOneDimensionalTest = False
+  doOneDimensionalTest = True
   if(doOneDimensionalTest):
     import pylab as P
     def mySTDGaus1D(x):
@@ -240,16 +249,23 @@ if(__name__ == "__main__"):
     #Print the 0-frequencies (should be 1 for all)
     print ecfFFT[nh],ecfDFT[nh],mygauscf[nh]
 
-    P.subplot(111,xscale="log",yscale="log")
+    P.subplot(121,xscale="log",yscale="log")
     #Plot the magnitude of the fast and slow ECFs
     #(these should overlap for all but the highest half of the frequencies)
     P.plot(tpoints,abs(ecfFFT),'r-')
     P.plot(tpoints,abs(ecfDFT),'b-')
     #Plot the gaussian characteristic function standard
     P.plot(tpoints,abs(mygauscf),'k-')
+
+    P.subplot(122,xscale="log",yscale="log")
+
+    ihalf = len(ecfDFT)/2
+    ithreequarters = ihalf + ihalf/2
+    sh = slice(ihalf,ithreequarters)
+    P.plot(tpoints[sh],abs(ecfDFT[sh]-ecfFFT[sh]),'k-')
     P.show()
     
-  doTwoDimensionalTest = True #Flag whether to do 2D tests
+  doTwoDimensionalTest = False #Flag whether to do 2D tests
   if(doTwoDimensionalTest):
     from mpl_toolkits.mplot3d import Axes3D
     import matplotlib.pyplot as plt
