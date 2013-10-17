@@ -34,6 +34,7 @@ testArray = fft.fftshift(testArray)
 #Set the last index to the first; the standard test will set this to 1
 # but lowesthypervolumefilter() shouldn't
 #testArray.ravel()[-1] = testArray.ravel()[0]
+#testArray.ravel()[0] = testArray.ravel()[-1]
 
 thresh = 50
 

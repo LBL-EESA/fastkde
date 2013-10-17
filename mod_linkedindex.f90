@@ -10,5 +10,4 @@ module mod_linkedindex
 
   logical :: isnotinitialized = .true.
 
-
 end module mod_linkedindex

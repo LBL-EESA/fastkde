@@ -140,7 +140,7 @@
         return
       end subroutine lowesthypervolumefilter
 
-      recursive subroutine aremyneighborsabove( ecfsq,  &
+      subroutine aremyneighborsabove( ecfsq,  &
                                       ecfthreshold, &
                                       nvariables, &
                                       ntpoints, &
@@ -150,6 +150,7 @@
                                       hasnotbeensearched,  &
                                       freqspacesize &
                                     )
+      use arrayind
       implicit none
       !*******************************
       ! Input variables
@@ -171,6 +172,7 @@
       !*******************************
       !f2py integer, intent(out), dimension(freqspacesize) :: icalcphi
       integer,dimension(freqspacesize),intent(out) :: icalcphi
+      integer :: istack
 
 
       !*******************************
@@ -179,66 +181,71 @@
       integer :: inext,k,j
       integer,dimension(nvariables) :: idimcounters
       integer,parameter,dimension(2) :: plusminus = (/-1,1/)
+      logical :: queueIsNotEmpty
 
-         !Calculate the dimension index counters
-         call determinedimensionindices(&
-                                icurrent, &
-                                ntpoints, &
-                                idimcounters, &
-                                nvariables)
+        call addIndexToList(icurrent)
+        queueIsNotEmpty = .true.
 
-        !dimension (variable) loop
-        dimloop:  &
-        do k = 1,nvariables
-          !Direction loop (backward vs forward in the current direction)
-          plusminusloop:  &
-          do j = 1,2
-            !Add 1 to the dimension counter for the current dimension
-            !(i.e. search forward in this dimension) to access
-            !the neighbor that is idimcounters(k)+1 away in the k
-            !direction
-            idimcounters(k) = idimcounters(k) + plusminus(j)
-            !Check if this dimension counter is within the dimension
-            !bounds; do nothing if not, since it would otherwise mean
-            !we are already at a dimension boundary
-            if(idimcounters(k).ge.1.and.idimcounters(k).le.ntpoints)then
-              !Determine the flattened index of this new neighbor point
-              call determineflattenedindex( idimcounters, &
-                                            ntpoints, &
-                                            nvariables,  &
-                                            inext)
+        queueloop: &
+        do while(queueIsNotEmpty)
+          !get the current index off the stack
+          call getCurrentIndex(istack)
+          !If the list is empty (index is -1) exit the queuing loop
+          if(istack.eq.-1)exit queueloop
 
-   
+          !Calculate the dimension index counters
+          call determinedimensionindices(&
+                                  istack, &
+                                  ntpoints, &
+                                  idimcounters, &
+                                  nvariables)
 
-              !Check if this neighbor is above the threshold and hasn't
-              !been searched yet
-              if((ecfsq(inext).ge.ecfthreshold).and.hasnotbeensearched(inext)) then
-                !Flag that it has now been searched
-                hasnotbeensearched(inext) = .false.
-                !Add this index to the filter list
-                icalcphi(ilist) = inext - 1
-                !increment the filter list counter
-                ilist = ilist + 1
-                !Check if this cell has any neighbors that are
-                !above the threshold
-                call aremyneighborsabove( ecfsq,  &
-                                          ecfthreshold, &
-                                          nvariables, &
-                                          ntpoints, &
-                                          icalcphi, &
-                                          inext,  &
-                                          ilist,  &
-                                          hasnotbeensearched,  &
-                                          freqspacesize &
-                                        )
+          !Pop this index off the stack
+          call removeLastItem()
 
+          !dimension (variable) loop
+          dimloop:  &
+          do k = 1,nvariables
+            !Direction loop (backward vs forward in the current direction)
+            plusminusloop:  &
+            do j = 1,2
+              !Add 1 to the dimension counter for the current dimension
+              !(i.e. search forward in this dimension) to access
+              !the neighbor that is idimcounters(k)+1 away in the k
+              !direction
+              idimcounters(k) = idimcounters(k) + plusminus(j)
+              !Check if this dimension counter is within the dimension
+              !bounds; do nothing if not, since it would otherwise mean
+              !we are already at a dimension boundary
+              if(idimcounters(k).ge.1.and.idimcounters(k).le.ntpoints)then
+                !Determine the flattened index of this new neighbor point
+                call determineflattenedindex( idimcounters, &
+                                              ntpoints, &
+                                              nvariables,  &
+                                              inext)
 
+     
+
+                !Check if this neighbor is above the threshold and hasn't
+                !been searched yet
+                if((ecfsq(inext).ge.ecfthreshold).and.hasnotbeensearched(inext)) then
+                  !Flag that it has now been searched
+                  hasnotbeensearched(inext) = .false.
+                  !Add this index to the filter list
+                  icalcphi(ilist) = inext - 1
+                  !increment the filter list counter
+                  ilist = ilist + 1
+                  !Queue to check if this cell has any neighbors that are
+                  !above the threshold
+                  call addIndexToList(inext)
+
+                end if
               end if
-            end if
 
-            !decrement the dimension counter;
-            idimcounters(k) = idimcounters(k) - plusminus(j)
-          end do plusminusloop
-        end do dimloop
+              !decrement the dimension counter;
+              idimcounters(k) = idimcounters(k) - plusminus(j)
+            end do plusminusloop
+          end do dimloop
+        end do queueloop
 
       end subroutine aremyneighborsabove
