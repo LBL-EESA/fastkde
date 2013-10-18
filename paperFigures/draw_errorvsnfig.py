@@ -22,14 +22,14 @@ def mygaus(x,mu=0.,sig=1.):
 #*******************************************************************************
 #*******************************************************************************
 #Set the number of draws
-numDraws = 100
+numDraws = 200
 #Set the size of the sample to calculate
-powmax = 18
+powmax = 17
 npow = asarray(range(powmax)) + 1.0
 #Set the maximum sample size
 nmax = 2**powmax
 
-numPerBin = Bin.Bin(1,10000,nperdecade = 30)
+numPerBin = Bin.Bin(1,1000,nperdecade = 30)
 
 esqsum = zeros([numPerBin.count])
 esq = zeros([numPerBin.count])
@@ -97,4 +97,4 @@ superp.set_xlabel("Number of data points per interval, $\hat{n}$")
 superp.set_ylabel("Relative error in BP11 estimate [%]")
 
 P.tight_layout()
-P.savefig("errorvsn.eps")
+P.savefig("errorvsnfig.eps")
