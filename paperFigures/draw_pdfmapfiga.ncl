@@ -13,7 +13,7 @@ begin
 ;*******************************************************************************
 
   ;Open the file that contains postprocessed information about the PDF
-  infilename = "postHocAnalysis.nc"
+  infilename = "postHocAnalysis2.nc"
   fin = addfile(infilename,"r")
 
   ;Reconstruct the estimated Hurst exponents (using Hdiff = Hfit - H)

@@ -68,7 +68,7 @@ figGthroughI = figInfo(ilat=510,ilev=24,figName="uincpdfghi.eps")
 
 
 #Load PDF data
-infile = "/projects/regional/APE/updraftAnalysis/firststep.inc.mpas_655362.nc"
+infile = "/projects/regional/APE/updraftAnalysis/combinedPDFsOnSameGrid.nc"
 
 fin = nc.Dataset(infile,"r")
 
