@@ -32,10 +32,11 @@ class bernacchiaDensityEstimate:
                 dataStandardDeviation = [], \
                 dataMin = [], \
                 dataMax = [], \
-                countThreshold = 1, \
+                countThreshold = 30, \
                 doApproximateECF = True, \
                 ecfPrecision = 2, \
                 doStoreConvolution = False, \
+                doSaveTransformedKernel = False, \
                 doFFT = True, \
                 beVerbose = False \
               ):
@@ -95,6 +96,8 @@ class bernacchiaDensityEstimate:
                             double precision accuracy; 1 otherwise
 
       doStoreConvolution  : flags whether to store the KDE used in the nuFFT
+
+      doSaveTransformedKernel : flags whether to save the transformed kernel
 
       doFFT               : flags whether to calculate phiSC and its FFT to obtain
                             fSC
@@ -165,6 +168,15 @@ class bernacchiaDensityEstimate:
     #Set the approximate ECF precision
     self.ecfPrecision = ecfPrecision
 
+    #Preinitialize the ecf threshold
+    self.ecfThreshold = None
+
+    #Flag whether to save the transformed kernel
+    self.doSaveTransformedKernel = doSaveTransformedKernel
+    #initialize the kernel and its transform
+    self.kappaSC = None
+    self.kSC = None
+
     if(x == []):
       #Determine the x-points of the estimated PDF
       if(deltaX == []): 
@@ -214,7 +226,7 @@ class bernacchiaDensityEstimate:
     self.convolvedData = None
 
     #Calculate the distribution frequency corresponding to the given count threshold
-    self.distributionThreshold = float(countThreshold)/(self.numDataPoints*self.deltaX**self.numVariables)
+    self.countThreshold = countThreshold
 
     if(data != []):
 
@@ -281,6 +293,7 @@ class bernacchiaDensityEstimate:
 
     #Calculate the stability threshold for the ECF
     ecfThresh = 4.*(N-1.)/(N*N)
+    self.ecfThreshold = ecfThresh
 
     #Calculate the squared magnitude of the ECF signal
     ecfSq = abs(self.ECF)**2
@@ -311,9 +324,23 @@ class bernacchiaDensityEstimate:
     if(doFlushArrays):
       self.phiSC[:] = (0.0+0.0j)
 
-    #Do the phiSC calculation only for the necessary points
-    self.phiSC.ravel()[iCalcPhi] = (N*self.ECF.ravel()[iCalcPhi]/(2*(N-1)))\
+
+    kappaSC = (1.0+0.0j)*zeros(shape(self.ECF))
+    kappaSC.ravel()[iCalcPhi] = (N/(2*(N-1)))\
                               *(1+sqrt(1-ecfThresh/ecfSq.ravel()[iCalcPhi]))
+
+    #Store the fourier kernel if we are going to save the transformed kernel
+    if(self.doSaveTransformedKernel):
+      self.kappaSC = kappaSC
+
+    #Do the phiSC calculation only for the necessary points
+    self.phiSC.ravel()[iCalcPhi] = self.ECF.ravel()[iCalcPhi]*kappaSC.ravel()[iCalcPhi]
+
+    #Calculate the magnitude of the transformed kernel at the 0-point
+    self.kSCMax = real(sum(kappaSC.ravel()[iCalcPhi])*(self.deltaT/(2*pi))**self.numVariables)
+
+    #Calculate the distribution threshold as a multiple of an individual kernelet
+    self.distributionThreshold = self.countThreshold*(self.kSCMax/self.numDataPoints)
 
   #*****************************************************************************
   #** bernacchiaDensityEstimate: ***********************************************
@@ -345,7 +372,7 @@ class bernacchiaDensityEstimate:
 #    #Transform the PDF estimate to real space
 #    fSC = real(fft.fftshift(fft.fftn(phiSCSymmetric)))*(self.deltaT/(2*pi))**self.numVariables
     fSC = fft.fftshift(real(fft.fftn(fft.ifftshift(self.phiSC))))*(self.deltaT/(2*pi))**self.numVariables
-      
+
     
     if(self.beVerbose):
       normConst = sum(fSC*self.deltaX**self.numVariables)
@@ -353,6 +380,10 @@ class bernacchiaDensityEstimate:
       print "Normalization of fSC = {}. phiSC[0] = {}".format(normConst,self.phiSC[midPointAccessor])
 
     self.fSC = fSC.transpose()
+
+    if(self.doSaveTransformedKernel):
+      kSC = fft.fftshift(real(fft.fftn(fft.ifftshift(self.kappaSC))))*(self.deltaT/(2*pi))**self.numVariables
+      self.kSC = kSC.transpose()
     #self.fSC = ma.masked_less(fSC.transpose(),self.distributionThreshold)
     #self.fSC = ma.masked_less(fSC.transpose(),0.0)
 
@@ -607,7 +638,7 @@ if(__name__ == "__main__"):
     esq = zeros([len(npow)])
     epct = zeros([len(npow)])
 
-    evaluateError = True
+    evaluateError = False
     if(evaluateError):
       #Do the optimal calculation on a number of different random draws
       for z,n in zip(range(len(npow)),npow):
