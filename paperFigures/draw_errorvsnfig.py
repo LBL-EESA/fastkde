@@ -40,7 +40,7 @@ for i in range(numDraws):
   randsample = random.normal(size = nmax)
 
   #Do the BP11 estimate
-  bkernel = be.bernacchiaDensityEstimate(randsample)
+  bkernel = be.bernacchiaDensityEstimate(randsample,countThreshold=1)
   #Find parts of the estimate that have at least one data point per bin
   iAboveOne = bkernel.findGoodDistributionInds()
 
@@ -48,7 +48,8 @@ for i in range(numDraws):
   tmpesq = abs(mygaus(bkernel.x[iAboveOne])-bkernel.fSC[iAboveOne])/mygaus(bkernel.x[iAboveOne])
   tmpones = tmpesq/tmpesq
   #Calculate the number of data points per bin
-  tmpNumPerBin = bkernel.numDataPoints*bkernel.deltaX*bkernel.fSC[iAboveOne]
+  #tmpNumPerBin = bkernel.numDataPoints*bkernel.deltaX*bkernel.fSC[iAboveOne]
+  tmpNumPerBin = bkernel.fSC[iAboveOne]/bkernel.distributionThreshold
   binInds = asarray([numPerBin.getIndex(num) for num in tmpNumPerBin])
   esqsum[binInds] += tmpesq
   countPerBin[binInds] += tmpones

@@ -2,7 +2,7 @@ load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_code.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/contributed.ncl"
 load "$HOME/src/climes_ncl/earthPhysics.ncl"
-load "markerSpec.ncl" ;Read in plot marker locations
+load "./markerSpec.ncl" ;Read in plot marker locations
 
 begin
 
@@ -15,12 +15,12 @@ begin
 ;*******************************************************************************
 
   ;Open the file that contains postprocessed information about the PDF
-  infilename = "postHocAnalysis.nc"
+  infilename = "./postHocAnalysis2.nc"
   fin = addfile(infilename,"r")
 
   ;Read in the distribution moments
-  m2 = fin->structureFunctions(:,:,1,3:) ;Read in the second moment from distance index 3 to the end
-  m4 = fin->structureFunctions(:,:,3,3:) ;Read in the fourth moment from distance index 3 to the end
+  m2 = fin->structureFunctions(:,:,1,0:0) ;Read in the second moment from distance index 3 to the end
+  m4 = fin->structureFunctions(:,:,3,0:0) ;Read in the fourth moment from distance index 3 to the end
 
   ;Set the fillValues
   m2@_FillValue = -9999.
@@ -82,7 +82,7 @@ begin
   res@trXMinF = -50. ;Set the plot's left bound
   res@trXMaxF = 50. ;Set the plot's right bound
   res@trYMaxF = 1050. ;Set the plot's lower bound
-  res@trYMinF = 380. ;Set the plot's upper bound
+  res@trYMinF = 80. ;Set the plot's upper bound
   res@trYReverse = True ;Put higher pressures at the bottom
 
   ;Set axis labels
@@ -99,7 +99,8 @@ begin
 
   ;Set the countour levels
   res@cnLevelSelectionMode = "ExplicitLevels"
-  res@cnLevels = ispan(-250,800,25)/100.
+ ; res@cnLevels = ispan(-250,800,25)/100.
+  res@cnLevels = ispan(-350,1000,25)/100.
 
   ;Tell NCL not to draw or advance the frame (so we can add text/annotation)
   res@gsnFrame = False
@@ -121,7 +122,7 @@ begin
   ;Draw the subfigure label
   resText = True
   resText@txFontHeightF = 0.025
-  gsn_text(wks,plot,"(b)",-46.,430.,resText)
+  gsn_text(wks,plot,"(b)",-46.,100.,resText)
 
   ;Draw the location markers specified in markerSpec.ncl
   resMark = True

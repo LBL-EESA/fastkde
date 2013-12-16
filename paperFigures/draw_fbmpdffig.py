@@ -78,7 +78,8 @@ for ix in range(myInc.num_distance_values):
 
 
 #Find the 1-item density
-oneItemDensity = 1./(myInc.bePDF[0].numDataPoints*myInc.bePDF[0].deltaX)
+#oneItemDensity = 1./(myInc.bePDF[0].numDataPoints*myInc.bePDF[0].deltaX)
+oneItemDensity = myInc.bePDF[0].distributionThreshold
 #plot the 1-item density
 pdfplot.plot(myInc.bePDF[0].x,oneItemDensity*ones([myInc.bePDF[0].numXPoints]),\
             color="gray",\

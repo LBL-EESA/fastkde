@@ -5,6 +5,7 @@ import knuthAverage as kn
 import ftnphisc
 import copy
 from types import *
+from scipy.interpolate import interp1d
 import pdb
 import time
 
@@ -24,22 +25,67 @@ def calcTfromX(xpoints):
   #by construction), only do calculations for 0-or-positive frequencies
   return dum[0:len(dum)/2+1]
 
+def reStandardizeECF(origFreq,origECF,origAvg,origStd,newAvg,newStd):
+  """Given a new average and standard deviation, return an approximation of the
+     ECF that would have been calculated had newAvg and newStd been used to standardize
+     the data in the first place.
+     
+       origFreq     : The frequencies of the original ECF
+
+       origECF      : The original ECF (a complex array)
+       
+       origAvg      : The average originally used to standardize the ECF
+
+       origStd      : The standard deviation originally used to standardize the ECF
+       
+       newAvg       : The new average
+
+       newStd       : The new standard deviation
+
+       Returns:
+        A restandardized ECF sampled on the origFreq grid
+       
+  """
+
+  #Scale the frequencies accordingly
+  newFreq = origFreq*(newStd/origStd)
+
+  #Swap the newAvg with origAvg
+  newECF = origECF*exp(1j*(origAvg-newAvg)*origFreq/origStd)
+
+
+  #Generate a linear spline representation of the ECF
+  interpolationType='linear'
+  ecfSplineReal = interp1d(newFreq,real(newECF),interpolationType,bounds_error=False,fill_value=0.0)
+  ecfSplineImag = interp1d(newFreq,imag(newECF),interpolationType,bounds_error=False,fill_value=0.0)
+
+
+
+  newECF = zeros([len(origFreq)]) + 0.0j*zeros([len(origFreq)])
+  #Sample the new ECF at the original frequencies
+  newECF = ecfSplineReal(origFreq) + 1.0j*ecfSplineImag(origFreq)
+  #newECF /= newECF[0]
+ 
+  #Return the restandardized ECF
+  return newECF
+
 class bernacchiaDensityEstimate:
 
   def __init__( self,\
-                data = [],\
-                x = [], \
+                data = None,\
+                x = None, \
                 numPoints = 4097, \
                 numSigma = 20, \
-                deltaX = [], \
-                dataAverage = [], \
-                dataStandardDeviation = [], \
-                dataMin = [], \
-                dataMax = [], \
+                deltaX = None, \
+                dataAverage = None, \
+                dataStandardDeviation = None, \
+                dataMin = None, \
+                dataMax = None, \
                 countThreshold = 1, \
                 doApproximateECF = True, \
                 compareECF = False, \
-                doFFT = True \
+                doFFT = True, \
+                doStoreData = False\
               ):
     """ 
 
@@ -56,12 +102,12 @@ class bernacchiaDensityEstimate:
     unit standard deviations of the data; the default is 20-sigma.
 
     usage: bdensity = bernacchiaDensityEstimate(  data, \
-                                                  x = [], \
+                                                  x = None, \
                                                   numPoints = 8197,\
                                                   numSigma = 20, \
-                                                  deltaX = [], \
-                                                  dataAverage = [], \
-                                                  dataStandardDeviation = [], \
+                                                  deltaX = None, \
+                                                  dataAverage = None, \
+                                                  dataStandardDeviation = None, \
                                                   doApproximateECF = True, \
                                                   doFFT = True \
                                                 )
@@ -97,30 +143,31 @@ class bernacchiaDensityEstimate:
       doFFT               : flags whether to calculate phiSC and its FFT to obtain
                             fSC
 
+      doStoreData         : flags whether to store the incoming data
 
     Returns: a bernacchiaDensityEstimate object
 
     """
     
-    if(data != []):
+    if(data != None):
       #Calculate and/or save the standard deviation/average of the data
-      if(dataAverage == []):
+      if(dataAverage == None):
         self.dataAverage = average(data)
       else:
         self.dataAverage = dataAverage
       #Standard deviation
-      if(dataStandardDeviation == []):
+      if(dataStandardDeviation == None):
         self.dataStandardDeviation = std(data)
       else:
         self.dataStandardDeviation = dataStandardDeviation
 
       #Minimum
-      if(dataMin == []):
+      if(dataMin == None):
         self.dataMin = amin(data)
       else:
         self.dataMin = dataMin
       #Maximum
-      if(dataMax == []):
+      if(dataMax == None):
         self.dataMax = amax(data)
       else:
         self.dataMax = dataMax
@@ -128,11 +175,12 @@ class bernacchiaDensityEstimate:
       #Set the number of data points
       self.numDataPoints = len(data)
 
-      #Determine threshold for valid frequencies
-      self.ecfThreshold = (4.*(self.numDataPoints-1.))/(self.numDataPoints**2)
     else:
       self.numDataPoints = 0
-      self.ecfThreshold = None
+
+    self.doStoreData = doStoreData
+    if(self.doStoreData):
+      self.data = data
 
     #Store the doFFT flag
     self.doFFT = doFFT
@@ -151,9 +199,9 @@ class bernacchiaDensityEstimate:
       #Turn of real-space transformation
       self.doFFT = False
 
-    if(x == []):
+    if(x == None):
       #Determine the x-points of the estimated PDF
-      if(deltaX == []): 
+      if(deltaX == None): 
         assert numPoints > 1, "numPoints < 2: {}".format(numPoints)
         assert type(numPoints) is IntType, "numPoints is not an integer: {}".formate(numPoints)
         self.x = linspace(-numSigma,numSigma,numPoints)
@@ -193,10 +241,11 @@ class bernacchiaDensityEstimate:
     #Initialize the good distribution index
     self.goodDistributionInds = []
 
-    #Calculate the distribution frequency corresponding to the given count threshold
-    self.distributionThreshold = float(countThreshold)/(self.numDataPoints*self.deltaX)
+    #Set the threshold for the `number of kernels contributions' above which
+    #the PDF will be considered valid
+    self.countThreshold = countThreshold
 
-    if(data != []):
+    if(data != None):
       if(self.doApproximateECF):
         #Note that this routine also standardizes the data on-the-fly
         self.__calculateECFbyFFT__(data)
@@ -253,27 +302,61 @@ class bernacchiaDensityEstimate:
     retObj = copy.deepcopy(self)
     retObj.phiSC = (0+0j)*zeros([retObj.numTPoints])
 
-    #Update the data average, standard deviation, and count
-    [ retObj.dataAverage, \
-      retObj.dataStandardDeviation, \
-      retObj.numDataPoints ] = \
-                                    kn.knuthCombine( \
-                                                    self.dataAverage,\
-                                                    self.dataStandardDeviation**2,\
-                                                    self.numDataPoints,\
-                                                    rhs.dataAverage,\
-                                                    rhs.dataStandardDeviation**2,\
-                                                    rhs.numDataPoints)
+    if( (self.dataAverage == rhs.dataAverage) and (self.dataStandardDeviation == rhs.dataStandardDeviation) ):
+      #If the dataAverage and standardDeviation for both objects are the same, then the avg/stddev don't need
+      #to be recalculated, and the ECFs don't need to be resampled
+      retObj.numDataPoints = self.numDataPoints + retObj.numDataPoints
+      selfECFReStandardized = self.ECF
+      rhsECFReStandardized = rhs.ECF
+    else:
+      #Update the data average, standard deviation, and count
+      [ retObj.dataAverage, \
+        retObj.dataStandardDeviation, \
+        retObj.numDataPoints ] = \
+                                      kn.knuthCombine( \
+                                                      self.dataAverage,\
+                                                      self.dataStandardDeviation**2,\
+                                                      self.numDataPoints,\
+                                                      rhs.dataAverage,\
+                                                      rhs.dataStandardDeviation**2,\
+                                                      rhs.numDataPoints)
 
-    #Convert the returned variance back into standard deviation
-    retObj.dataStandardDeviation = sqrt(retObj.dataStandardDeviation)
+      #Convert the returned variance back into standard deviation
+      retObj.dataStandardDeviation = sqrt(retObj.dataStandardDeviation)
 
-    #Average the Empirical Characteristic Function of the two objects
-    retObj.ECF = (self.numDataPoints*self.ECF + rhs.numDataPoints*rhs.ECF) \
+      #********************************************************************
+      # Average the Empirical Characteristic Function of the two objects
+      #********************************************************************
+
+      #Re-standardize the LHS ECF value
+      selfECFReStandardized = reStandardizeECF(origFreq = self.t, \
+                                               origECF  = self.ECF, \
+                                               origAvg  = self.dataAverage, \
+                                               origStd  = self.dataStandardDeviation, \
+                                               newAvg   = retObj.dataAverage, \
+                                               newStd   = retObj.dataStandardDeviation)
+
+      #Re-standardize the RHS ECF value
+      rhsECFReStandardized  = reStandardizeECF(origFreq = rhs.t, \
+                                               origECF  = rhs.ECF, \
+                                               origAvg  = rhs.dataAverage, \
+                                               origStd  = rhs.dataStandardDeviation, \
+                                               newAvg   = retObj.dataAverage, \
+                                               newStd   = retObj.dataStandardDeviation)
+
+
+    #Average the restandardized ECF values (restandardization is necessary
+    #so that the corresponding frequencies are equivalent)
+    retObj.ECF = (self.numDataPoints*selfECFReStandardized + rhs.numDataPoints*rhsECFReStandardized) \
                 /retObj.numDataPoints
 
     if(retObj.doFFT):
       retObj.calculateDensityFromECF()
+
+
+    #If we are storing data, then join the new data onto the data store
+    if(retObj.doStoreData):
+      retObj.data = concatenate((self.data,rhs.data))
 
     #Return the new object
     return retObj
@@ -309,9 +392,24 @@ class bernacchiaDensityEstimate:
     if(doFlushArrays):
       #self.phiSC = (0.0+0.0j)*zeros([self.numTPoints])
       self.phiSC[:] = (0.0+0.0j)
-    #Do the phiSC calculation only for the necessary points
-    self.phiSC[iCalcPhi] = (N*self.ECF[iCalcPhi]/(2*(N-1)))\
+
+    #Calculate the transform kernel (only at unfiltered points)
+    kappaSC = (0.0+0.0j)*zeros(shape(self.ECF))
+    kappaSC[iCalcPhi] = (N/(2*(N-1)))\
                             *(1+sqrt(1-ecfThresh/ecfSq[iCalcPhi]))
+
+    #Do the phiSC calculation only for the necessary points
+    self.phiSC[iCalcPhi] =  self.ECF[iCalcPhi]*kappaSC[iCalcPhi]
+
+    #Calculate the magnitude of the transformed kernel at the 0-point
+    #(this is used for thresholding the real-space distribution to avoid
+    # points with very little kernel contribution)
+    self.kSCMax = sum(kappaSC[iCalcPhi])*(self.deltaT/(2*pi))
+    self.kSC = fft.hfft(kappaSC,self.numXPoints)*self.deltaT/(2*pi)
+    print self.kSC[0],self.kSCMax,self.kSCMax/self.kSC[0]
+
+    #Calculate the distribution threshold as a multiple of an individual kernelet
+    self.distributionThreshold = self.countThreshold*(self.kSCMax/self.numDataPoints)
 
     #Transform phiSC into the real-space distribution
     self.__transformphiSC__()
@@ -347,6 +445,11 @@ class bernacchiaDensityEstimate:
   def findGoodDistributionInds(self):
     return nonzero(self.fSC >= self.distributionThreshold)[0]
 
+  def deStandardizeX(self):
+    return self.x*self.dataStandardDeviation + self.dataAverage
+
+  def deStandardizePDF(self):
+    return self.fSC/self.dataStandardDeviation
 #*******************************************************************************
 #*******************************************************************************
 #***************************** Unit testing code *******************************
@@ -370,7 +473,7 @@ if(__name__ == "__main__"):
   
   #Set the size of the sample to calculate
   powmax = 19
-  npow = asarray(range(powmax)) + 1.0
+  npow = asarray(range(7,powmax)) + 1.0
 
   #Set the maximum sample size
   nmax = 2**powmax
@@ -423,13 +526,14 @@ if(__name__ == "__main__"):
 
     with Timer(nsample[i]):
       #Do the BP11 density estimate
-      bkernel = bernacchiaDensityEstimate(randgauss)
+      bkernel = bernacchiaDensityEstimate(randgauss,countThreshold=100)
 
     #Calculate the mean squared error between the estimated density
     #And the gaussian
     #esq[i] = average(abs(mygaus(bkernel.x)-bkernel.fSC)**2 *bkernel.deltaX)
     igood = bkernel.goodDistributionInds
-    esq[i] = average(abs(mygaus(bkernel.x)-bkernel.fSC)**2 *bkernel.deltaX)
+    #esq[i] = average(abs(mygaus(bkernel.x)-bkernel.fSC)**2 *bkernel.deltaX)
+    esq[i] = average(abs(mygaus(bkernel.x[igood])-bkernel.fSC[igood])**2 *bkernel.deltaX)
     epct[i] = 100*sum(abs(mygaus(bkernel.x)-bkernel.fSC)*bkernel.deltaX)
     #Print the sample size and the error to show that the code is proceeeding
     #print "{}, {}%".format(nsample[i],epct[i])

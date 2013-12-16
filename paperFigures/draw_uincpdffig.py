@@ -57,7 +57,7 @@ figLetters = ["a","b","c","d","e","f","g","h","i"]
 iLetter = 0
 
 figAthroughC = figInfo(ilat=215,ilev=20,figName="uincpdfabc.eps")
-figDthroughF = figInfo(ilat=384,ilev=18,figName="uincpdfdef.eps")
+figDthroughF = figInfo(ilat=384,ilev=20,figName="uincpdfdef.eps")
 figGthroughI = figInfo(ilat=510,ilev=24,figName="uincpdfghi.eps")
 
 #*******************************************************************************

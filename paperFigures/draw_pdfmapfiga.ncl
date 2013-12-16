@@ -1,7 +1,7 @@
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_code.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/contributed.ncl"
-load "markerSpec.ncl" ;Read in plot marker locations
+load "./markerSpec.ncl" ;Read in plot marker locations
 
 begin
 
@@ -13,21 +13,32 @@ begin
 ;*******************************************************************************
 
   ;Open the file that contains postprocessed information about the PDF
-  infilename = "postHocAnalysis2.nc"
+  infilename = "./postHocAnalysis2.nc"
+  ;infilename = "/projects/regional/APE/updraftAnalysis/combinedPDFsOnSameGrid.nc"
   fin = addfile(infilename,"r")
 
-  ;Reconstruct the estimated Hurst exponents (using Hdiff = Hfit - H)
-  Hfit = fin->H
-  Hdiff = fin->Hdiff
-  H = Hfit
-  H = Hfit - Hdiff
+  climfilename = "/buffalo/data/regional/APE/mpas-latlon/30km/mpas_655362.cam2.h0.0004.zonalavg.nc"
+  fclim = addfile(climfilename,"r")
+
+;  ;Reconstruct the estimated Hurst exponents (using Hdiff = Hfit - H)
+;  Hfit = fin->H
+;  Hdiff = fin->Hdiff
+;  H = Hfit
+;  H = Hfit - Hdiff
+
+  H = fin->sfExponents(:,:,0)
 
   ;Set the title
-  H@long_name = "Power law slope from 1~S~st~N~ order struct. func., H~B~1~N~"
+  ;H@long_name = "Power law slope from 1~S~st~N~ order struct. func., H~B~1~N~"
+  H@long_name = ""
+  H@units = ""
 
   ;Read the lat/lev variables
   lat = H&lat
   lev = H&lev
+
+  ;Read the Zonal wind variable
+  U = fclim->U(0,:,:)
 
 
 ;*******************************************************************************
@@ -48,7 +59,7 @@ begin
   res@trXMinF = -50. ;Set the plot's left bound
   res@trXMaxF = 50. ;Set the plot's right bound
   res@trYMaxF = 1050. ;Set the plot's lower bound
-  res@trYMinF = 380. ;Set the plot's upper bound
+  res@trYMinF = 80. ;Set the plot's upper bound
   res@trYReverse = True ;Put higher pressures at the bottom
 
   ;Set axis labels
@@ -78,13 +89,33 @@ begin
   wks = gsn_open_wks("eps","pdfmapfiga") ;Open the worksheet (file)
   plot = gsn_csm_contour(wks,H,res) ;Create the plot
 
+
+  ;Do an overlay of zonal wind
+  resu = res
+  delete(res@cnFillMode)
+  delete(res@cnFillOn)
+  resu@cnFillOn = False ;Color-fill the raster boxes
+  resu@cnLinesOn = True ;Don't draw contour lines
+  resu@cnLineLabelsOn = True ;Don't draw contour line labels
+  resu@cnInfoLabelOn = False
+  resu@cnLineColor = "Gray30"
+  resu@cnLineLabelFontColor = "Gray30"
+  resu@cnLineLabelBackgroundColor = -1.0
+  delete(resu@cnLevels)
+  delete(resu@cnLevelSelectionMode)
+  U@long_name = ""
+  U@units = ""
+  plotu = gsn_csm_contour(wks,U,resu)
+
+  overlay(plot,plotu)
+
   ;Draw the plot
   draw(plot)
 
   ;Draw the subfigure label
   resText = True
   resText@txFontHeightF = 0.025 ;Set the fontheight
-  gsn_text(wks,plot,"(a)",-46.,430.,resText)
+  gsn_text(wks,plot,"(a)",-46.,100.,resText)
 
   ;Draw the location markers specified in markerSpec.ncl
   resMark = True
