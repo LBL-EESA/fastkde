@@ -404,9 +404,7 @@ class bernacchiaDensityEstimate:
     #Calculate the magnitude of the transformed kernel at the 0-point
     #(this is used for thresholding the real-space distribution to avoid
     # points with very little kernel contribution)
-    self.kSCMax = sum(kappaSC[iCalcPhi])*(self.deltaT/(2*pi))
-    self.kSC = fft.hfft(kappaSC,self.numXPoints)*self.deltaT/(2*pi)
-    print self.kSC[0],self.kSCMax,self.kSCMax/self.kSC[0]
+    self.kSCMax = real(kappaSC[iCalcPhi[0]] + 2*sum(kappaSC[iCalcPhi[1:]]))*(self.deltaT/(2*pi))
 
     #Calculate the distribution threshold as a multiple of an individual kernelet
     self.distributionThreshold = self.countThreshold*(self.kSCMax/self.numDataPoints)
