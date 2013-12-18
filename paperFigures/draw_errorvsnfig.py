@@ -22,52 +22,69 @@ def mygaus(x,mu=0.,sig=1.):
 #*******************************************************************************
 #*******************************************************************************
 #Set the number of draws
-numDraws = 200
+numDraws = 30
 #Set the size of the sample to calculate
 powmax = 13
-npow = asarray(range(powmax)) + 1.0
 #Set the maximum sample size
 nmax = 2**powmax
 
-numPerBin = Bin.Bin(2,nmax,nperdecade = 30)
+#powMaxArray = [13,15,17]
+#powMaxArray = [11,13,15,17,19]
+powMaxArray = range(11,20)
+nmaxArray = [ 2**pp for pp in powMaxArray ]
 
-relativeErrorsum = zeros([numPerBin.count])
-relativeError = zeros([numPerBin.count])
-countPerBin = zeros([numPerBin.count])
+masterNumPerBin = []
+masterRelativeError = []
+masterMinusOneConvergence = []
+masterIGood = []
 
-for i in range(numDraws):
-  #Create a random normal sample of this size
-  randsample = random.normal(size = nmax)
+for nmax,powmax in zip(nmaxArray,powMaxArray):
 
-  #Do the BP11 estimate
-  bkernel = be.bernacchiaDensityEstimate(randsample,countThreshold=1)
-  #Find parts of the estimate that have at least one data point per bin
-  iAboveOne = bkernel.findGoodDistributionInds()
+    numPerBin = Bin.Bin(2,nmax,nperdecade = 30)
 
-  #Calculate the relative error per bin
-  tmprelativeError = abs(mygaus(bkernel.x[iAboveOne])-bkernel.fSC[iAboveOne])/mygaus(bkernel.x[iAboveOne])
-  tmpones = tmprelativeError/tmprelativeError
-  #Calculate the number of data points per bin
-  #tmpNumPerBin = bkernel.numDataPoints*bkernel.deltaX*bkernel.fSC[iAboveOne]
-  tmpNumPerBin = bkernel.fSC[iAboveOne]/bkernel.distributionThreshold
-  binInds = asarray([numPerBin.getIndex(num) for num in tmpNumPerBin])
-  relativeErrorsum[binInds] += tmprelativeError
-  countPerBin[binInds] += tmpones
+    relativeErrorsum = zeros([numPerBin.count])
+    relativeError = zeros([numPerBin.count])
+    countPerBin = zeros([numPerBin.count])
+
+    for i in range(numDraws):
+      #Create a random normal sample of this size
+      randsample = random.normal(size = nmax)
+
+      #Do the BP11 estimate
+      bkernel = be.bernacchiaDensityEstimate(randsample,countThreshold=1)
+      #Find parts of the estimate that have at least one data point per bin
+      iAboveOne = bkernel.findGoodDistributionInds()
+
+      #Calculate the relative error per bin
+      tmprelativeError = abs(mygaus(bkernel.x[iAboveOne])-bkernel.fSC[iAboveOne])/mygaus(bkernel.x[iAboveOne])
+      tmpones = tmprelativeError/tmprelativeError
+      #Calculate the number of data points per bin
+      #tmpNumPerBin = bkernel.numDataPoints*bkernel.deltaX*bkernel.fSC[iAboveOne]
+      tmpNumPerBin = bkernel.fSC[iAboveOne]/bkernel.distributionThreshold
+      binInds = asarray([numPerBin.getIndex(num) for num in tmpNumPerBin])
+      relativeErrorsum[binInds] += tmprelativeError
+      countPerBin[binInds] += tmpones
 
 
-igood = nonzero(countPerBin > 0)[0]
-relativeError[igood] = 100*relativeErrorsum[igood]/countPerBin[igood]
+    igood = nonzero(countPerBin > 0)[0]
+    relativeError[igood] = 100*relativeErrorsum[igood]/countPerBin[igood]
 
-pointThreshold = 50.
-iAbovePointThreshold = nonzero(numPerBin.center > pointThreshold)[0]
-minusOneConvergence = numPerBin.center**(-1.)
-minusOneConvergence *= average((relativeError[iAbovePointThreshold]))/average((minusOneConvergence[iAbovePointThreshold]))
+    #Normalize the number of points to a relative fraction of the total
+    numPerBin.center /= float(nmax)
 
-minusOneHalfConvergence = numPerBin.center**(-1./2.)
-minusOneHalfConvergence *= average((relativeError[iAbovePointThreshold]))/average((minusOneHalfConvergence[iAbovePointThreshold]))
+    pointThreshold = 1e-2
+    iAbovePointThreshold = nonzero(numPerBin.center > pointThreshold)[0]
+    minusOneConvergence = numPerBin.center**(-1.)
+    minusOneConvergence *= average((relativeError[iAbovePointThreshold]))/average((minusOneConvergence[iAbovePointThreshold]))
 
-#Normalize the number of points to a relative fraction of the total
-numPerBin.center /= float(nmax)
+    minusOneHalfConvergence = numPerBin.center**(-1./2.)
+    minusOneHalfConvergence *= average((relativeError[iAbovePointThreshold]))/average((minusOneHalfConvergence[iAbovePointThreshold]))
+
+
+    masterNumPerBin.append(numPerBin)
+    masterRelativeError.append(relativeError)
+    masterMinusOneConvergence.append(minusOneConvergence)
+    masterIGood.append(igood)
 
 #*******************************************************************************
 #*******************************************************************************
@@ -86,19 +103,22 @@ matplotlib.rc('font', **font)
 
 #Generate the main plot of the absolute difference between the two ECF methods
 superp = fig.add_subplot(111,xscale = "log",yscale="log")
-#Plot the error convergence
-#superp.plot(  bkernel.x[iAboveOne], numPerBin, \
-superp.plot(  numPerBin.center[igood], relativeError[igood], \
-              color = 'black', \
-              linewidth = 2)
-#Plot the -1 convergence line
-superp.plot( numPerBin.center, minusOneConvergence, \
-        color = 'gray', \
-        linestyle = '--', \
-        linewidth = 2)
-#superp.plot( numPerBin.center, minusOneHalfConvergence, \
-#        color = 'gray', \
-#        linewidth = 2)
+
+for numPerBin,relativeError,minusOneConvergence,igood in \
+        zip(masterNumPerBin,masterRelativeError,masterMinusOneConvergence,masterIGood):
+    #Plot the error convergence
+    superp.plot(  numPerBin.center[igood], relativeError[igood], \
+                  color = 'black', \
+                  linewidth = 2)
+    #Plot the -1 convergence line
+    superp.plot( numPerBin.center, minusOneConvergence, \
+            color = 'gray', \
+            linestyle = '--', \
+            linewidth = 2)
+    #superp.plot( numPerBin.center, minusOneHalfConvergence, \
+    #        color = 'gray', \
+    #        linewidth = 2)
+
 superp.set_xlabel("Relative number of kernel contributions, $\hat{n}/N$")
 superp.set_ylabel("Relative error in BP11 estimate [%]")
 
