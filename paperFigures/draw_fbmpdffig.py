@@ -86,7 +86,7 @@ pdfplot.plot(myInc.bePDF[0].x,oneItemDensity*ones([myInc.bePDF[0].numXPoints]),\
             linewidth=3, \
             linestyle='--')
 #plot the 10-item density
-pdfplot.plot(myInc.bePDF[0].x,10*oneItemDensity*ones([myInc.bePDF[0].numXPoints]),\
+pdfplot.plot(myInc.bePDF[0].x,100*oneItemDensity*ones([myInc.bePDF[0].numXPoints]),\
             color="gray",\
             linewidth=3,\
             linestyle='--')
@@ -101,7 +101,7 @@ pdfplot.set_ylabel("Probability Density Estimate, $\hat{f}(\Delta_x F)$")
 #Set the y axis properties
 pdfplot.set_yscale('log') #log scale
 pdfplot.set_xlim([-5,15])
-pdfplot.set_ylim([1e-5,1])
+pdfplot.set_ylim([1e-7,1])
 
 #Add the sub-plot label
 pdfplot.text(\

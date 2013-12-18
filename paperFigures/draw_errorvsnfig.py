@@ -24,15 +24,15 @@ def mygaus(x,mu=0.,sig=1.):
 #Set the number of draws
 numDraws = 200
 #Set the size of the sample to calculate
-powmax = 17
+powmax = 13
 npow = asarray(range(powmax)) + 1.0
 #Set the maximum sample size
 nmax = 2**powmax
 
-numPerBin = Bin.Bin(1,1000,nperdecade = 30)
+numPerBin = Bin.Bin(2,nmax,nperdecade = 30)
 
-esqsum = zeros([numPerBin.count])
-esq = zeros([numPerBin.count])
+relativeErrorsum = zeros([numPerBin.count])
+relativeError = zeros([numPerBin.count])
 countPerBin = zeros([numPerBin.count])
 
 for i in range(numDraws):
@@ -44,25 +44,30 @@ for i in range(numDraws):
   #Find parts of the estimate that have at least one data point per bin
   iAboveOne = bkernel.findGoodDistributionInds()
 
-  #Calculate the squared error per bin
-  tmpesq = abs(mygaus(bkernel.x[iAboveOne])-bkernel.fSC[iAboveOne])/mygaus(bkernel.x[iAboveOne])
-  tmpones = tmpesq/tmpesq
+  #Calculate the relative error per bin
+  tmprelativeError = abs(mygaus(bkernel.x[iAboveOne])-bkernel.fSC[iAboveOne])/mygaus(bkernel.x[iAboveOne])
+  tmpones = tmprelativeError/tmprelativeError
   #Calculate the number of data points per bin
   #tmpNumPerBin = bkernel.numDataPoints*bkernel.deltaX*bkernel.fSC[iAboveOne]
   tmpNumPerBin = bkernel.fSC[iAboveOne]/bkernel.distributionThreshold
   binInds = asarray([numPerBin.getIndex(num) for num in tmpNumPerBin])
-  esqsum[binInds] += tmpesq
+  relativeErrorsum[binInds] += tmprelativeError
   countPerBin[binInds] += tmpones
 
 
 igood = nonzero(countPerBin > 0)[0]
-esq[igood] = 100*esqsum[igood]/countPerBin[igood]
+relativeError[igood] = 100*relativeErrorsum[igood]/countPerBin[igood]
 
+pointThreshold = 50.
+iAbovePointThreshold = nonzero(numPerBin.center > pointThreshold)[0]
 minusOneConvergence = numPerBin.center**(-1.)
-minusOneConvergence *= average((esq))/average((minusOneConvergence))
+minusOneConvergence *= average((relativeError[iAbovePointThreshold]))/average((minusOneConvergence[iAbovePointThreshold]))
 
 minusOneHalfConvergence = numPerBin.center**(-1./2.)
-minusOneHalfConvergence *= average((esq))/average((minusOneHalfConvergence))
+minusOneHalfConvergence *= average((relativeError[iAbovePointThreshold]))/average((minusOneHalfConvergence[iAbovePointThreshold]))
+
+#Normalize the number of points to a relative fraction of the total
+numPerBin.center /= float(nmax)
 
 #*******************************************************************************
 #*******************************************************************************
@@ -83,7 +88,7 @@ matplotlib.rc('font', **font)
 superp = fig.add_subplot(111,xscale = "log",yscale="log")
 #Plot the error convergence
 #superp.plot(  bkernel.x[iAboveOne], numPerBin, \
-superp.plot(  numPerBin.center[igood], esq[igood], \
+superp.plot(  numPerBin.center[igood], relativeError[igood], \
               color = 'black', \
               linewidth = 2)
 #Plot the -1 convergence line
@@ -91,11 +96,13 @@ superp.plot( numPerBin.center, minusOneConvergence, \
         color = 'gray', \
         linestyle = '--', \
         linewidth = 2)
-superp.plot( numPerBin.center, minusOneHalfConvergence, \
-        color = 'gray', \
-        linewidth = 2)
-superp.set_xlabel("Number of data points per interval, $\hat{n}$")
+#superp.plot( numPerBin.center, minusOneHalfConvergence, \
+#        color = 'gray', \
+#        linewidth = 2)
+superp.set_xlabel("Relative number of kernel contributions, $\hat{n}/N$")
 superp.set_ylabel("Relative error in BP11 estimate [%]")
+
+superp.set_ylim([1e-2,1e6])
 
 P.tight_layout()
 P.savefig("errorvsnfig.eps")
