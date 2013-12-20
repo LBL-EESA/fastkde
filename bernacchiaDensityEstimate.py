@@ -537,7 +537,7 @@ if(__name__ == "__main__"):
     #print "{}, {}%".format(nsample[i],epct[i])
 
     #Plot the optimal distribution
-    P.subplot(2,2,1)
+    P.subplot(2,2,1,yscale="log")
     P.plot(bkernel.x[bkernel.goodDistributionInds],bkernel.fSC[bkernel.goodDistributionInds],'b-')
 
     #Plot the empirical characteristic function
@@ -546,8 +546,8 @@ if(__name__ == "__main__"):
 
 
   #Plot the sample gaussian
-  P.subplot(2,2,1)
-  P.plot(bkernel.x,mygaus(bkernel.x),'r-')
+  P.subplot(2,2,1,yscale="log")
+  P.plot(bkernel.x[bkernel.goodDistributionInds],mygaus(bkernel.x[bkernel.goodDistributionInds]),'r-')
 
 
   #Do a simple power law fit to the scaling

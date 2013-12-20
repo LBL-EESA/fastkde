@@ -23,28 +23,22 @@ def mygaus(x,mu=0.,sig=1.):
 #*******************************************************************************
 #Set the number of draws
 numDraws = 30
-#Set the size of the sample to calculate
-powmax = 13
-#Set the maximum sample size
-nmax = 2**powmax
 
-#powMaxArray = [13,15,17]
-#powMaxArray = [11,13,15,17,19]
 powMaxArray = range(11,20)
 nmaxArray = [ 2**pp for pp in powMaxArray ]
 
-masterNumPerBin = []
+masterNumKernels = []
 masterRelativeError = []
 masterMinusOneConvergence = []
 masterIGood = []
 
 for nmax,powmax in zip(nmaxArray,powMaxArray):
 
-    numPerBin = Bin.Bin(2,nmax,nperdecade = 30)
+    numKernels = Bin.Bin(2,nmax,nperdecade = 10)
 
-    relativeErrorsum = zeros([numPerBin.count])
-    relativeError = zeros([numPerBin.count])
-    countPerBin = zeros([numPerBin.count])
+    relativeErrorsum = zeros([numKernels.count])
+    relativeError = zeros([numKernels.count])
+    countKernels = zeros([numKernels.count])
 
     for i in range(numDraws):
       #Create a random normal sample of this size
@@ -58,30 +52,32 @@ for nmax,powmax in zip(nmaxArray,powMaxArray):
       #Calculate the relative error per bin
       tmprelativeError = abs(mygaus(bkernel.x[iAboveOne])-bkernel.fSC[iAboveOne])/mygaus(bkernel.x[iAboveOne])
       tmpones = tmprelativeError/tmprelativeError
-      #Calculate the number of data points per bin
-      #tmpNumPerBin = bkernel.numDataPoints*bkernel.deltaX*bkernel.fSC[iAboveOne]
-      tmpNumPerBin = bkernel.fSC[iAboveOne]/bkernel.distributionThreshold
-      binInds = asarray([numPerBin.getIndex(num) for num in tmpNumPerBin])
+      print amin(mygaus(bkernel.x[iAboveOne]))
+      print amin(bkernel.fSC[iAboveOne])
+
+      #Estimate the number of kernels contributions per point
+      tmpNumKernels = bkernel.fSC[iAboveOne]/bkernel.distributionThreshold
+      binInds = asarray([numKernels.getIndex(num) for num in tmpNumKernels])
       relativeErrorsum[binInds] += tmprelativeError
-      countPerBin[binInds] += tmpones
+      countKernels[binInds] += tmpones
 
 
-    igood = nonzero(countPerBin > 0)[0]
-    relativeError[igood] = 100*relativeErrorsum[igood]/countPerBin[igood]
+    igood = nonzero(countKernels > 0)[0]
+    relativeError[igood] = 100*relativeErrorsum[igood]/countKernels[igood]
 
     #Normalize the number of points to a relative fraction of the total
-    numPerBin.center /= float(nmax)
+    #numKernels.center /= float(nmax)
 
-    pointThreshold = 1e-2
-    iAbovePointThreshold = nonzero(numPerBin.center > pointThreshold)[0]
-    minusOneConvergence = numPerBin.center**(-1.)
+    pointThreshold = 1e-2*float(nmax)
+    iAbovePointThreshold = nonzero(numKernels.center > pointThreshold)[0]
+    minusOneConvergence = numKernels.center**(-1.)
     minusOneConvergence *= average((relativeError[iAbovePointThreshold]))/average((minusOneConvergence[iAbovePointThreshold]))
 
-    minusOneHalfConvergence = numPerBin.center**(-1./2.)
+    minusOneHalfConvergence = numKernels.center**(-1./2.)
     minusOneHalfConvergence *= average((relativeError[iAbovePointThreshold]))/average((minusOneHalfConvergence[iAbovePointThreshold]))
 
 
-    masterNumPerBin.append(numPerBin)
+    masterNumKernels.append(numKernels)
     masterRelativeError.append(relativeError)
     masterMinusOneConvergence.append(minusOneConvergence)
     masterIGood.append(igood)
@@ -104,22 +100,22 @@ matplotlib.rc('font', **font)
 #Generate the main plot of the absolute difference between the two ECF methods
 superp = fig.add_subplot(111,xscale = "log",yscale="log")
 
-for numPerBin,relativeError,minusOneConvergence,igood in \
-        zip(masterNumPerBin,masterRelativeError,masterMinusOneConvergence,masterIGood):
+for numKernels,relativeError,minusOneConvergence,igood in \
+        zip(masterNumKernels,masterRelativeError,masterMinusOneConvergence,masterIGood):
     #Plot the error convergence
-    superp.plot(  numPerBin.center[igood], relativeError[igood], \
+    superp.plot(  numKernels.center[igood], relativeError[igood], \
                   color = 'black', \
                   linewidth = 2)
     #Plot the -1 convergence line
-    superp.plot( numPerBin.center, minusOneConvergence, \
+    superp.plot( numKernels.center, minusOneConvergence, \
             color = 'gray', \
             linestyle = '--', \
             linewidth = 2)
-    #superp.plot( numPerBin.center, minusOneHalfConvergence, \
+    #superp.plot( numKernels.center, minusOneHalfConvergence, \
     #        color = 'gray', \
     #        linewidth = 2)
 
-superp.set_xlabel("Relative number of kernel contributions, $\hat{n}/N$")
+superp.set_xlabel("Approximate number of kernel contributions, $\hat{n}$")
 superp.set_ylabel("Relative error in BP11 estimate [%]")
 
 superp.set_ylim([1e-2,1e6])
