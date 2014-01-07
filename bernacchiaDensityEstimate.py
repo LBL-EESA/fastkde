@@ -285,6 +285,12 @@ class bernacchiaDensityEstimate:
                                           tpoints = self.t, \
                                           ithresh = self.ithresh, \
                                          )
+
+    #TODO: Calculate this properly
+    #Calculate the distribution threshold as a multiple of an individual kernelet
+    self.distributionThreshold = 0.0
+
+
     
   def __transformphiSC__(self):
     """ Transform the self-consistent estimate of the distribution from frequency to real
@@ -530,6 +536,8 @@ if(__name__ == "__main__"):
     #And the gaussian
     #esq[i] = average(abs(mygaus(bkernel.x)-bkernel.fSC)**2 *bkernel.deltaX)
     igood = bkernel.goodDistributionInds
+    #igood = bkernel.goodDistributionInds
+    igood = bkernel.findGoodDistributionInds()
     #esq[i] = average(abs(mygaus(bkernel.x)-bkernel.fSC)**2 *bkernel.deltaX)
     esq[i] = average(abs(mygaus(bkernel.x[igood])-bkernel.fSC[igood])**2 *bkernel.deltaX)
     epct[i] = 100*sum(abs(mygaus(bkernel.x)-bkernel.fSC)*bkernel.deltaX)
@@ -539,6 +547,7 @@ if(__name__ == "__main__"):
     #Plot the optimal distribution
     P.subplot(2,2,1,yscale="log")
     P.plot(bkernel.x[bkernel.goodDistributionInds],bkernel.fSC[bkernel.goodDistributionInds],'b-')
+    P.plot(bkernel.x[igood],ones(shape(bkernel.x[igood]))*bkernel.distributionThreshold,'k--')
 
     #Plot the empirical characteristic function
     P.subplot(2,2,2,xscale="log",yscale="log")

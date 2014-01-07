@@ -6,8 +6,8 @@ from increments import  bernacchiaDensityEstimate as be, \
 import time
 import scipy.stats as stats
 import matplotlib
-matplotlib.use('Agg')
 #import pylab as P
+matplotlib.use('Agg')
 import matplotlib.pyplot as P
 
 import pdb
@@ -52,11 +52,16 @@ for nmax,powmax in zip(nmaxArray,powMaxArray):
       #Calculate the relative error per bin
       tmprelativeError = abs(mygaus(bkernel.x[iAboveOne])-bkernel.fSC[iAboveOne])/mygaus(bkernel.x[iAboveOne])
       tmpones = tmprelativeError/tmprelativeError
-      print amin(mygaus(bkernel.x[iAboveOne]))
-      print amin(bkernel.fSC[iAboveOne])
+      #P.subplot(111,yscale="log")
+      #P.plot(bkernel.x,bkernel.fSC)
+      #P.plot(bkernel.x,ones(shape(bkernel.x))*bkernel.distributionThreshold,'r')
+      #P.show()
+      #pdb.set_trace()
+      #print amin(mygaus(bkernel.x[iAboveOne]))
+      #print amin(bkernel.fSC[iAboveOne])
 
       #Estimate the number of kernels contributions per point
-      tmpNumKernels = bkernel.fSC[iAboveOne]/bkernel.distributionThreshold
+      tmpNumKernels = bkernel.countThreshold*bkernel.fSC[iAboveOne]/bkernel.distributionThreshold
       binInds = asarray([numKernels.getIndex(num) for num in tmpNumKernels])
       relativeErrorsum[binInds] += tmprelativeError
       countKernels[binInds] += tmpones
@@ -100,25 +105,37 @@ matplotlib.rc('font', **font)
 #Generate the main plot of the absolute difference between the two ECF methods
 superp = fig.add_subplot(111,xscale = "log",yscale="log")
 
+#Plot the -1 convergence swath
+superp.plot( masterNumKernels[-1].center, masterMinusOneConvergence[-1]/2., \
+        color = 'gray', \
+        linestyle = '-', \
+        linewidth = 75)
+
 for numKernels,relativeError,minusOneConvergence,igood in \
         zip(masterNumKernels,masterRelativeError,masterMinusOneConvergence,masterIGood):
     #Plot the error convergence
     superp.plot(  numKernels.center[igood], relativeError[igood], \
                   color = 'black', \
                   linewidth = 2)
-    #Plot the -1 convergence line
-    superp.plot( numKernels.center, minusOneConvergence, \
-            color = 'gray', \
-            linestyle = '--', \
-            linewidth = 2)
     #superp.plot( numKernels.center, minusOneHalfConvergence, \
     #        color = 'gray', \
     #        linewidth = 2)
 
+
+ymin = 1e-2
+ymax = 1e6
+superp.plot([200.,200.],[ymin,ymax], \
+            linestyle = '--', \
+            color = 'black')
+superp.plot([1.,1e6],[100.,100.], \
+            linestyle = '--', \
+            color = 'black')
+
+
 superp.set_xlabel("Approximate number of kernel contributions, $\hat{n}$")
 superp.set_ylabel("Relative error in BP11 estimate [%]")
 
-superp.set_ylim([1e-2,1e6])
+superp.set_ylim([ymin,ymax])
 
 P.tight_layout()
 P.savefig("errorvsnfig.eps")
