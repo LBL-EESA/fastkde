@@ -85,8 +85,8 @@ superp.legend(hand,lab, \
               loc='upper left',\
               prop = { 'size' : 14 })
 #Set the axis lables
-superp.set_xlabel("Fourier Frequency, $t$")
-superp.set_ylabel("FFT Method Error, $|\Delta_{FFT}$ $-$ $\Delta_{DFT}|$")
+superp.set_xlabel(r"Fourier Frequency, $\tau$")
+superp.set_ylabel("FFT Method Error, $|\mathcal{C}_{FFT}$ $-$ $\mathcal{C}_{DFT}|$")
 
 #Add the sub-plot label
 superp.text(\
@@ -105,8 +105,8 @@ subp.plot( bkernel.t[1:len(bkernel.t)/2], \
         bkernel.ecfThreshold*ones([len(bkernel.t[1:len(bkernel.t)/2])]), \
         color = 'gray')
 #Set the subaxis labels
-subp.set_xlabel("Fourier Frequency, $t$")
-subp.set_ylabel("$|\Delta_{FFT}|^2$")
+subp.set_xlabel(r"Fourier Frequency, $\tau$")
+subp.set_ylabel("$|\mathcal{C}_{FFT}|^2$")
 subp.set_xlim([1e-1,2e2])
 subp.set_yticks(10.**asarray(range(-7,0,2)))
 

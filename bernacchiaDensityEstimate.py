@@ -375,6 +375,8 @@ class bernacchiaDensityEstimate:
 
     #Calculate the stability threshold for the ECF
     ecfThresh = 4.*(N-1.)/(N*N)
+    #Store the threshold
+    self.ecfThreshold = ecfThresh
 
     #Calculate the squared magnitude of the ECF signal
     ecfSq = abs(self.ECF)**2

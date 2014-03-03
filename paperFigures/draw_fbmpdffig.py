@@ -77,22 +77,22 @@ for ix in range(myInc.num_distance_values):
   pdfplot.plot(myInc.bePDF[ix].x[igood],myInc.bePDF[ix].fSC[igood])
 
 
-#Find the 1-item density
-#oneItemDensity = 1./(myInc.bePDF[0].numDataPoints*myInc.bePDF[0].deltaX)
-oneItemDensity = myInc.bePDF[0].distributionThreshold
-#plot the 1-item density
-pdfplot.plot(myInc.bePDF[0].x,oneItemDensity*ones([myInc.bePDF[0].numXPoints]),\
-            color="gray",\
-            linewidth=3, \
-            linestyle='--')
-#plot the 10-item density
-pdfplot.plot(myInc.bePDF[0].x,100*oneItemDensity*ones([myInc.bePDF[0].numXPoints]),\
-            color="gray",\
-            linewidth=3,\
-            linestyle='--')
+drawThresholdLines = False
+if(drawThresholdLines):
+    #Find the 1-item density
+    #oneItemDensity = 1./(myInc.bePDF[0].numDataPoints*myInc.bePDF[0].deltaX)
+    oneItemDensity = myInc.bePDF[0].distributionThreshold
+    #plot the 1-item density
+    pdfplot.plot(myInc.bePDF[0].x,oneItemDensity*ones([myInc.bePDF[0].numXPoints]),\
+                color="gray",\
+                linewidth=3, \
+                linestyle='--')
+    #plot the 10-item density
+    pdfplot.plot(myInc.bePDF[0].x,100*oneItemDensity*ones([myInc.bePDF[0].numXPoints]),\
+                color="gray",\
+                linewidth=3,\
+                linestyle='--')
 
-#Set the x-axis range
-pdfplot.set_xlim([-5,10])
 
 #Set the axis labels
 pdfplot.set_xlabel("Increment Value, $\Delta_x F$")
@@ -100,8 +100,12 @@ pdfplot.set_ylabel("Probability Density Estimate, $\hat{f}(\Delta_x F)$")
 
 #Set the y axis properties
 pdfplot.set_yscale('log') #log scale
-pdfplot.set_xlim([-5,15])
+pdfplot.set_xlim([-4,12])
 pdfplot.set_ylim([1e-7,1])
+
+cutBelowThreshold = True
+if(cutBelowThreshold):
+    pdfplot.set_ylim([myInc.bePDF[0].distributionThreshold,1])
 
 #Add the sub-plot label
 pdfplot.text(\
