@@ -178,6 +178,10 @@ class bernacchiaDensityEstimate:
     else:
       self.numDataPoints = 0
 
+    #Calculate the standardized min/max
+    self.dataMaxStandardized = (self.dataMax - self.dataAverage)/self.dataStandardDeviation
+    self.dataMinStandardized = (self.dataMin - self.dataAverage)/self.dataStandardDeviation
+
     self.doStoreData = doStoreData
     if(self.doStoreData):
       self.data = data
@@ -449,7 +453,7 @@ class bernacchiaDensityEstimate:
     self.fftECF = kdeFFT*exp(tau*tprime**2)/kdeFFT[0]
 
   def findGoodDistributionInds(self):
-    return nonzero(self.fSC >= self.distributionThreshold)[0]
+    return nonzero( logical_and(logical_and(self.fSC >= self.distributionThreshold, self.x >= self.dataMinStandardized),self.x <= self.dataMaxStandardized))[0]
 
   def deStandardizeX(self):
     return self.x*self.dataStandardDeviation + self.dataAverage
