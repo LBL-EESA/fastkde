@@ -9,6 +9,7 @@ from scipy.interpolate import interp1d
 import pdb
 import time
 
+
 class Timer():
    def __init__(self,n=None): self.n = n
    def __enter__(self): self.start = time.time()
@@ -24,6 +25,10 @@ def calcTfromX(xpoints):
   #Since we will only be transforming hermitian signals (the ECF is hermitian
   #by construction), only do calculations for 0-or-positive frequencies
   return dum[0:len(dum)/2+1]
+
+def nextHighestPowerOfTwo(number):
+    """Returns the nearest power of two that is greater than or equal to number"""
+    return int(2**(ceil(log2(number))))
 
 def reStandardizeECF(origFreq,origECF,origAvg,origStd,newAvg,newStd):
   """Given a new average and standard deviation, return an approximation of the
@@ -74,13 +79,14 @@ class bernacchiaDensityEstimate:
   def __init__( self,\
                 data = None,\
                 x = None, \
-                numPoints = 4097, \
-                numSigma = 20, \
+                numPoints = None, \
+                numSigma = None, \
                 deltaX = None, \
                 dataAverage = None, \
                 dataStandardDeviation = None, \
                 dataMin = None, \
                 dataMax = None, \
+                numPointsPerSigma = 100, \
                 countThreshold = 1, \
                 doApproximateECF = True, \
                 compareECF = False, \
@@ -123,6 +129,10 @@ class bernacchiaDensityEstimate:
 
       numSigma            : the number of unit standard deviations that the PDF
                             domain should span.
+
+      numPointsPerSigma   : the number of points on the data grid per standard deviation; this influences
+                            the total size of the x-grid that is automatically calculated if no aspects of the
+                            grid are specified.
 
       deltaX              : if given, this specifies the spacing between domain
                             values.
@@ -206,11 +216,23 @@ class bernacchiaDensityEstimate:
     if(x == None):
       #Determine the x-points of the estimated PDF
       if(deltaX == None): 
+        if(numSigma is None):
+          #Set the width of the grid as the number of standard deviations required
+          #span the range of the data
+          numSigma = 2*(self.dataMax - self.dataMin)/self.dataStandardDeviation
+
+        if(numPoints is None):
+          #Set the width of the grid as the number of standard deviations required
+          #Set the number of points requrired to meet the number of points per standard deviation
+          #and the range of the data
+          numPoints = nextHighestPowerOfTwo(numSigma * numPointsPerSigma)
+
         assert numPoints > 1, "numPoints < 2: {}".format(numPoints)
         assert type(numPoints) is IntType, "numPoints is not an integer: {}".formate(numPoints)
         self.x = linspace(-numSigma,numSigma,numPoints)
         self.deltaX = self.x[1] - self.x[0]
         self.numXPoints = numPoints
+
       else:
         self.x = arange(-numSigma,numSigma+deltaX,deltaX)
         self.deltaX = deltaX
