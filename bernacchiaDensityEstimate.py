@@ -20,18 +20,23 @@ class Timer():
    def __enter__(self): self.start = time.time()
    def __exit__(self, *args): print "N = {}, t = {} seconds".format(self.n,time.time() - self.start)
 
+def nextHighestPowerOfTwo(number):
+    """Returns the nearest power of two that is greater than or equal to number"""
+    return int(2**(ceil(log2(number))))
+
 class bernacchiaDensityEstimate:
 
   def __init__( self,\
-                data = [],\
-                x = [], \
-                numPoints = 4097, \
-                numSigma = 20, \
-                deltaX = [], \
-                dataAverage = [], \
-                dataStandardDeviation = [], \
-                dataMin = [], \
-                dataMax = [], \
+                data = None,\
+                x = None, \
+                numPoints = None, \
+                numSigma = None, \
+                deltaX = None, \
+                dataAverage = None, \
+                dataStandardDeviation = None, \
+                dataMin = None, \
+                dataMax = None, \
+                numPointsPerSigma = 100, \
                 countThreshold = 30, \
                 doApproximateECF = True, \
                 ecfPrecision = 2, \
@@ -55,12 +60,12 @@ class bernacchiaDensityEstimate:
     unit standard deviations of the data; the default is 20-sigma.
 
     usage: bdensity = bernacchiaDensityEstimate(  data, \
-                                                  x = [], \
+                                                  x = None, \
                                                   numPoints = 4097,\
                                                   numSigma = 20, \
-                                                  deltaX = [], \
-                                                  dataAverage = [], \
-                                                  dataStandardDeviation = [], \
+                                                  deltaX = None, \
+                                                  dataAverage = None, \
+                                                  dataStandardDeviation = None, \
                                                   doApproximateECF = True, \
                                                   doStoreConvolution = False, \
                                                   doFFT = True \
@@ -77,6 +82,10 @@ class bernacchiaDensityEstimate:
 
       numSigma            : the number of unit standard deviations that the PDF
                             domain should span.
+
+      numPointsPerSigma   : the number of points on the data grid per standard
+                            deviation; this influences the total size of the x-grid that is
+                            automatically calculated if no aspects of the grid are specified.
 
       deltaX              : if given, this specifies the spacing between domain
                             values.
@@ -107,7 +116,7 @@ class bernacchiaDensityEstimate:
 
     """
     
-    if(data != []):
+    if(data != None):
 
       #First check the rank of the data
       dataRank = len(shape(data))
@@ -126,12 +135,12 @@ class bernacchiaDensityEstimate:
         print "Operating on data with numVariables = {}, numDataPoints = {}".format(self.numVariables,self.numDataPoints)
 
       #Calculate and/or save the standard deviation/average of the data
-      if(dataAverage == [] or len(dataAverage) != self.numVariables):
+      if(dataAverage is None or len(dataAverage) != self.numVariables):
         self.dataAverage = average(data,1)
       else:
         self.dataAverage = dataAverage
       #Standard deviation
-      if(dataStandardDeviation == [] or len(dataStandardDeviation) != self.numVariables):
+      if(dataStandardDeviation is None or len(dataStandardDeviation) != self.numVariables):
         self.dataStandardDeviation = std(data,1)
       else:
         self.dataStandardDeviation = dataStandardDeviation
@@ -141,12 +150,12 @@ class bernacchiaDensityEstimate:
         print "Data has standard deviation: {}".format(self.dataStandardDeviation)
 
       #Minimum
-      if(dataMin == [] or len(dataMin) != self.numVariables):
+      if(dataMin is None or len(dataMin) != self.numVariables):
         self.dataMin = amin(data,1)
       else:
         self.dataMin = dataMin
       #Maximum
-      if(dataMax == [] or len(dataMin) != self.numVariables):
+      if(dataMax is None or len(dataMin) != self.numVariables):
         self.dataMax = amax(data,1)
       else:
         self.dataMax = dataMax
@@ -177,9 +186,22 @@ class bernacchiaDensityEstimate:
     self.kappaSC = None
     self.kSC = None
 
-    if(x == []):
+    if(x is None):
       #Determine the x-points of the estimated PDF
-      if(deltaX == []): 
+      if(deltaX is None): 
+        if(numSigma is None):
+          covarianceMatrix = cov(data)
+          minSigma = amin(sqrt(covarianceMatrix))
+          #Set the width of the grid as the number of standard deviations required
+          #span the range of the data
+          numSigma = 2*(amax(self.dataMax) - amin(self.dataMin))/minSigma
+
+        if(numPoints is None):
+          #Set the width of the grid as the number of standard deviations required
+          #Set the number of points requrired to meet the number of points per standard deviation
+          #and the range of the data
+          numPoints = nextHighestPowerOfTwo(numSigma * numPointsPerSigma) + 1
+
         assert numPoints > 1, "numPoints < 2: {}".format(numPoints)
         assert type(numPoints) is IntType, "numPoints is not an integer: {}".formate(numPoints)
         self.x = linspace(-numSigma,numSigma,numPoints)
@@ -228,7 +250,7 @@ class bernacchiaDensityEstimate:
     #Calculate the distribution frequency corresponding to the given count threshold
     self.countThreshold = countThreshold
 
-    if(data != []):
+    if(data != None):
 
       #*************************************************
       # Calculate the Empirical Characteristic Function
@@ -284,7 +306,7 @@ class bernacchiaDensityEstimate:
   #******************* applyBernacchiaFilter() *********************************
   #*****************************************************************************
   #*****************************************************************************
-  def applyBernacchiaFilter(self,doFlushArrays=False):
+  def applyBernacchiaFilter(self,doFlushArrays=True):
     """ Given an ECF, calculate the self-consistent density in fourier-space by
     applying the BP11 filter."""
 
@@ -319,25 +341,24 @@ class bernacchiaDensityEstimate:
                                         nvariables = self.numVariables, \
                                         ntpoints = self.numTPoints)
     
-    iCalcPhi = iCalcPhitmp[:imax]
+    iCalcPhi = unravel_index(iCalcPhitmp[:imax],shape(ecfSq))
     
     if(doFlushArrays):
       self.phiSC[:] = (0.0+0.0j)
 
-
     kappaSC = (1.0+0.0j)*zeros(shape(self.ECF))
-    kappaSC.ravel()[iCalcPhi] = (N/(2*(N-1)))\
-                              *(1+sqrt(1-ecfThresh/ecfSq.ravel()[iCalcPhi]))
+    kappaSC[iCalcPhi] = (N/(2*(N-1)))\
+                              *(1+sqrt(1-ecfThresh/ecfSq[iCalcPhi]))
 
     #Store the fourier kernel if we are going to save the transformed kernel
     if(self.doSaveTransformedKernel):
       self.kappaSC = kappaSC
 
     #Do the phiSC calculation only for the necessary points
-    self.phiSC.ravel()[iCalcPhi] = self.ECF.ravel()[iCalcPhi]*kappaSC.ravel()[iCalcPhi]
+    self.phiSC[iCalcPhi] = self.ECF[iCalcPhi]*kappaSC[iCalcPhi]
 
     #Calculate the magnitude of the transformed kernel at the 0-point
-    self.kSCMax = real(sum(kappaSC.ravel()[iCalcPhi])*(self.deltaT/(2*pi))**self.numVariables)
+    self.kSCMax = real(sum(kappaSC[iCalcPhi])*(self.deltaT/(2*pi))**self.numVariables)
 
     #Calculate the distribution threshold as a multiple of an individual kernelet
     self.distributionThreshold = self.countThreshold*(self.kSCMax/self.numDataPoints)
@@ -449,7 +470,7 @@ class bernacchiaDensityEstimate:
 # the theoretical and empirical convergence rate given in BP11.
 if(__name__ == "__main__"):
 
-  doOneDimensionalTests = False
+  doOneDimensionalTests = True
   if(doOneDimensionalTests):
     import pylab as P
     import scipy.stats as stats
@@ -573,7 +594,7 @@ if(__name__ == "__main__"):
       #Show the plots
       P.show()
 
-  doTwoDimensionalTests = True
+  doTwoDimensionalTests = False
   if(doTwoDimensionalTests):
     from mpl_toolkits.mplot3d import Axes3D
     import matplotlib.pyplot as plt
