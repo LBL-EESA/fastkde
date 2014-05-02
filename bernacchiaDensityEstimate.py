@@ -36,7 +36,7 @@ class bernacchiaDensityEstimate:
                 dataStandardDeviation = None, \
                 dataMin = None, \
                 dataMax = None, \
-                numPointsPerSigma = 100, \
+                numPointsPerSigma = 10, \
                 countThreshold = 30, \
                 doApproximateECF = True, \
                 ecfPrecision = 2, \
@@ -191,16 +191,24 @@ class bernacchiaDensityEstimate:
       if(deltaX is None): 
         if(numSigma is None):
           covarianceMatrix = cov(data)
-          minSigma = amin(sqrt(covarianceMatrix))
+          minSigma = amin(sqrt(abs(covarianceMatrix)))
+          if(beVerbose):
+            print "sqrt(covarianceMatrix) = {}".format(sqrt(abs(covarianceMatrix)))
           #Set the width of the grid as the number of standard deviations required
           #span the range of the data
           numSigma = 2*(amax(self.dataMax) - amin(self.dataMin))/minSigma
+          if(beVerbose):
+            print "dataMin = {}, dataMax = {}".format(amin(self.dataMin),amax(self.dataMax))
+
 
         if(numPoints is None):
           #Set the width of the grid as the number of standard deviations required
           #Set the number of points requrired to meet the number of points per standard deviation
           #and the range of the data
           numPoints = nextHighestPowerOfTwo(numSigma * numPointsPerSigma) + 1
+
+        if(beVerbose):
+          print "X-grid chose with {} points and a sigma range of +/- {}".format(numPoints,numSigma)
 
         assert numPoints > 1, "numPoints < 2: {}".format(numPoints)
         assert type(numPoints) is IntType, "numPoints is not an integer: {}".formate(numPoints)
@@ -470,7 +478,7 @@ class bernacchiaDensityEstimate:
 # the theoretical and empirical convergence rate given in BP11.
 if(__name__ == "__main__"):
 
-  doOneDimensionalTests = True
+  doOneDimensionalTests = False
   if(doOneDimensionalTests):
     import pylab as P
     import scipy.stats as stats
@@ -594,7 +602,7 @@ if(__name__ == "__main__"):
       #Show the plots
       P.show()
 
-  doTwoDimensionalTests = False
+  doTwoDimensionalTests = True
   if(doTwoDimensionalTests):
     from mpl_toolkits.mplot3d import Axes3D
     import matplotlib.pyplot as plt
@@ -612,7 +620,7 @@ if(__name__ == "__main__"):
     
     #Set the size of the sample to calculate
     powmax = 17
-    npow = asarray(range(3,powmax)) + 1.0
+    npow = asarray(range(3,powmax))
 
     #Set the maximum sample size
     nmax = 2**powmax
@@ -640,10 +648,10 @@ if(__name__ == "__main__"):
     ngg = len(gausParams)
     for gg in gausParams:
       mu = gg[:2]
-      cov = covMat(*tuple(gg[2:]))
+      gCovMat = covMat(*tuple(gg[2:]))
       size = tuple([2,nmax/ngg])
       #Append a 2D gaussian to the list
-      randsamples.append(random.multivariate_normal(mu,cov,(nmax/ngg,)).transpose())
+      randsamples.append(random.multivariate_normal(mu,gCovMat,(nmax/ngg,)).transpose())
 
     #Concatenate the gaussian samples
     randsample = concatenate(tuple(randsamples),axis=1)
@@ -659,7 +667,7 @@ if(__name__ == "__main__"):
     esq = zeros([len(npow)])
     epct = zeros([len(npow)])
 
-    evaluateError = False
+    evaluateError = True
     if(evaluateError):
       #Do the optimal calculation on a number of different random draws
       for z,n in zip(range(len(npow)),npow):
@@ -673,8 +681,6 @@ if(__name__ == "__main__"):
           #Do the BP11 density estimate
           bkernel = bernacchiaDensityEstimate(  randsub,  \
                                                 beVerbose=False, \
-                                                numPoints=1025, \
-                                                numSigma=10, \
                                                 doStoreConvolution=False, \
                                                 countThreshold = 1)
 
@@ -692,7 +698,7 @@ if(__name__ == "__main__"):
         dy = y[1] - y[0]
         esq[z] = sum(dy*sum(absdiffsq*dx,axis=0))/(len(x)*len(y))
         #Print the sample size and the error to show that the code is proceeeding
-        print "{}: {}, {}".format(n,nsample[z],esq[z])
+        #print "{}: {}, {}".format(n,nsample[z],esq[z])
 
       #Do a simple power law fit to the scaling
       [m,b,_,_,_] = stats.linregress(log(nsample),log(esq))
@@ -701,9 +707,7 @@ if(__name__ == "__main__"):
     else:
       with Timer(shape(randsample)[1]):
         bkernel = bernacchiaDensityEstimate(  randsample,  \
-                                              beVerbose=False, \
-                                              numPoints=1025, \
-                                              numSigma=10, \
+                                              beVerbose=True, \
                                               doStoreConvolution=False, \
                                               countThreshold = 1)
 
