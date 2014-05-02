@@ -130,9 +130,9 @@ class bernacchiaDensityEstimate:
       numSigma            : the number of unit standard deviations that the PDF
                             domain should span.
 
-      numPointsPerSigma   : the number of points on the data grid per standard deviation; this influences
-                            the total size of the x-grid that is automatically calculated if no aspects of the
-                            grid are specified.
+      numPointsPerSigma   : the number of points on the data grid per standard
+                            deviation; this influences the total size of the x-grid that is
+                            automatically calculated if no aspects of the grid are specified.
 
       deltaX              : if given, this specifies the spacing between domain
                             values.
