@@ -2,9 +2,11 @@
 
 FC=gfortran
 F2PY=f2py
-F2PYFLAGS=--opt="-Ofast" --fcompiler="gnu95"
+F2PYFLAGS=--opt="-O3 -g" --fcompiler="gnu95"
+#F2PYFLAGS=--opt="-O0 -g" --fcompiler="gnu95"
 
-FFLAGS=-Ofast
+FFLAGS=-O3 -g
+#FFLAGS=-O0 -g
 
 #SRC := $(wildcard *.f90)
 SRC = \

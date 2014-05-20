@@ -126,6 +126,9 @@ class bernacchiaDensityEstimate:
       if(dataRank > 2):
         raise ValueError,"data must be a rank-2 array of shape [numVariables,numDataPoints]"
 
+      #Set the rank of the data
+      self.dataRank = dataRank
+
       #Set the number of variables
       self.numVariables = shape(data)[0]
       #Set the number of data points
@@ -190,15 +193,27 @@ class bernacchiaDensityEstimate:
       #Determine the x-points of the estimated PDF
       if(deltaX is None): 
         if(numSigma is None):
-          covarianceMatrix = cov(data)
-          minSigma = amin(sqrt(abs(covarianceMatrix)))
-          if(beVerbose):
-            print "sqrt(covarianceMatrix) = {}".format(sqrt(abs(covarianceMatrix)))
+          #Do a principal component analysis to estimate the width of the
+          #distribution in the thinnest direction (using the correlation matrix
+          #        instead of covariance to estimate the width in the
+          #        standardized coordinate system)
+          if(dataRank > 1): 
+              rr = corrcoef(data)
+              print shape(rr),shape(data)
+              eigenValue,eigenVectors = linalg.eig(rr)
+              minSigma = sqrt(amin(eigenValue[-1]))
+          else:
+              minSigma = 1
+
           #Set the width of the grid as the number of standard deviations required
           #span the range of the data
-          numSigma = 2*(amax(self.dataMax) - amin(self.dataMin))/minSigma
+          #numSigma = 2*(amax(self.dataMax) - amin(self.dataMin))/minSigma
+          dataRange = self.dataMax - self.dataMin
+          sigmaWidths = (self.dataMax - self.dataMin)/self.dataStandardDeviation
+          numSigma = amax(sigmaWidths/minSigma)
+
           if(beVerbose):
-            print "dataMin = {}, dataMax = {}".format(amin(self.dataMin),amax(self.dataMax))
+            print "numSigma = {}".format(numSigma)
 
 
         if(numPoints is None):
@@ -478,6 +493,9 @@ class bernacchiaDensityEstimate:
 # the theoretical and empirical convergence rate given in BP11.
 if(__name__ == "__main__"):
 
+  #set a seed so that results are repeatable
+  random.seed(0)
+
   doOneDimensionalTests = False
   if(doOneDimensionalTests):
     import pylab as P
@@ -661,6 +679,10 @@ if(__name__ == "__main__"):
     ishuffle = asarray(range(nmax))
     random.shuffle(ishuffle)
     randsample = randsample[:,ishuffle]
+
+    doSaveCSV = True
+    if(doSaveCSV):
+        savetxt("bp11_2d_samples.csv",randsample.transpose(),delimiter=",")
 
     #Pre-define sample size and error-squared arrays
     nsample = zeros([len(npow)])
