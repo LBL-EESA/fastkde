@@ -138,27 +138,27 @@ class bernacchiaDensityEstimate:
         print "Operating on data with numVariables = {}, numDataPoints = {}".format(self.numVariables,self.numDataPoints)
 
       #Calculate and/or save the standard deviation/average of the data
-      if(dataAverage is None or len(dataAverage) != self.numVariables):
+      if(dataAverage is None or len(nditer(dataAverage)) != self.numVariables):
         self.dataAverage = average(data,1)
       else:
-        self.dataAverage = dataAverage
+        self.dataAverage = array(dataAverage)
       #Standard deviation
-      if(dataStandardDeviation is None or len(dataStandardDeviation) != self.numVariables):
+      if(dataStandardDeviation is None or len(nditer(dataStandardDeviation)) != self.numVariables):
         self.dataStandardDeviation = std(data,1)
       else:
-        self.dataStandardDeviation = dataStandardDeviation
+        self.dataStandardDeviation = array(dataStandardDeviation)
 
       if(beVerbose):
         print "Data has average: {}".format(self.dataAverage)
         print "Data has standard deviation: {}".format(self.dataStandardDeviation)
 
       #Minimum
-      if(dataMin is None or len(dataMin) != self.numVariables):
+      if(dataMin is None or len(nditer(dataMin)) != self.numVariables):
         self.dataMin = amin(data,1)
       else:
         self.dataMin = dataMin
       #Maximum
-      if(dataMax is None or len(dataMin) != self.numVariables):
+      if(dataMax is None or len(nditer(dataMin)) != self.numVariables):
         self.dataMax = amax(data,1)
       else:
         self.dataMax = dataMax
