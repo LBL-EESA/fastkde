@@ -138,12 +138,16 @@ class bernacchiaDensityEstimate:
         print "Operating on data with numVariables = {}, numDataPoints = {}".format(self.numVariables,self.numDataPoints)
 
       #Calculate and/or save the standard deviation/average of the data
-      if(dataAverage is None or len(nditer(dataAverage)) != self.numVariables):
+      if(dataAverage is None):
+        self.dataAverage = average(data,1)
+      elif(any([a is None for a in dataAverage])):
         self.dataAverage = average(data,1)
       else:
         self.dataAverage = array(dataAverage)
       #Standard deviation
-      if(dataStandardDeviation is None or len(nditer(dataStandardDeviation)) != self.numVariables):
+      if(dataStandardDeviation is None):
+        self.dataStandardDeviation = std(data,1)
+      elif(any([s is None for s in dataStandardDeviation])):
         self.dataStandardDeviation = std(data,1)
       else:
         self.dataStandardDeviation = array(dataStandardDeviation)
@@ -199,7 +203,6 @@ class bernacchiaDensityEstimate:
           #        standardized coordinate system)
           if(dataRank > 1): 
               rr = corrcoef(data)
-              print shape(rr),shape(data)
               eigenValue,eigenVectors = linalg.eig(rr)
               minSigma = sqrt(amin(eigenValue[-1]))
           else:
