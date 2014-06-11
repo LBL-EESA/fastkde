@@ -138,19 +138,34 @@ class bernacchiaDensityEstimate:
         print "Operating on data with numVariables = {}, numDataPoints = {}".format(self.numVariables,self.numDataPoints)
 
       #Calculate and/or save the standard deviation/average of the data
+      try: 
+        if any([a is None for a in dataAverage]):
+            self.dataAverage = average(data,1)
+        else:
+            self.dataAverage = array(dataAverage)
+      except:
+          try:
+            self.dataAverage = average(data,1)
+          except:
+              pass
+
       if(dataAverage is None):
         self.dataAverage = average(data,1)
-      elif(any([a is None for a in dataAverage])):
-        self.dataAverage = average(data,1)
-      else:
-        self.dataAverage = array(dataAverage)
-      #Standard deviation
+
+      #Calculate and/or save the standard deviation/average of the data
+      try: 
+        if any([s is None for s in dataStandardDeviation]):
+            self.dataStandardDeviation = std(data,1)
+        else:
+            self.dataStandardDeviation = array(dataStandardDeviation)
+      except:
+          try:
+            self.dataStandardDeviation = std(data,1)
+          except:
+              pass
+
       if(dataStandardDeviation is None):
         self.dataStandardDeviation = std(data,1)
-      elif(any([s is None for s in dataStandardDeviation])):
-        self.dataStandardDeviation = std(data,1)
-      else:
-        self.dataStandardDeviation = array(dataStandardDeviation)
 
       if(beVerbose):
         print "Data has average: {}".format(self.dataAverage)
