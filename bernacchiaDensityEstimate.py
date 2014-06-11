@@ -411,8 +411,16 @@ class bernacchiaDensityEstimate:
   #*****************************************************************************
   def findGoodDistributionInds(self):
     """Find indices of the optimal distribution that are above a specificed threshold"""
-    #TODO: Remove the 0-index 
-    return nonzero(self.fSC >= self.distributionThreshold)[0]
+    return where(self.fSC >= self.distributionThreshold)
+
+  #*****************************************************************************
+  #** bernacchiaDensityEstimate: ***********************************************
+  #******************* findBadDistributionInds() *******************************
+  #*****************************************************************************
+  #*****************************************************************************
+  def findBadDistributionInds(self):
+    """Find indices of the optimal distribution that are below a specificed threshold"""
+    return where(self.fSC < self.distributionThreshold)
 
   #*****************************************************************************
   #** bernacchiaDensityEstimate: ***********************************************
@@ -464,7 +472,7 @@ class bernacchiaDensityEstimate:
       raise TypeError, "unsupported operand type(s) for +: {} and {}".format(type(self),type(rhs))
 
     retObj = copy.deepcopy(self)
-    retObj.phiSC = (0+0j)*zeros([retObj.numTPoints])
+    retObj.phiSC = (0.0+0.0j)*zeros(retObj.numVariables*[self.numTPoints])
 
     #Update the data average, standard deviation, and count
     [ retObj.dataAverage, \
