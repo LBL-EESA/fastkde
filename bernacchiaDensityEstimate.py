@@ -39,7 +39,7 @@ class bernacchiaDensityEstimate:
                 numPointsPerSigma = 10, \
                 countThreshold = 30, \
                 doApproximateECF = True, \
-                ecfPrecision = 2, \
+                ecfPrecision = 1, \
                 doStoreConvolution = False, \
                 doSaveTransformedKernel = False, \
                 doFFT = True, \
@@ -663,7 +663,7 @@ if(__name__ == "__main__"):
       return coef*exp(expArg)
     
     #Set the size of the sample to calculate
-    powmax = 17
+    powmax = 21
     npow = asarray(range(3,powmax))
 
     #Set the maximum sample size
@@ -706,7 +706,7 @@ if(__name__ == "__main__"):
     random.shuffle(ishuffle)
     randsample = randsample[:,ishuffle]
 
-    doSaveCSV = True
+    doSaveCSV = False
     if(doSaveCSV):
         savetxt("bp11_2d_samples.csv",randsample.transpose(),delimiter=",")
 
