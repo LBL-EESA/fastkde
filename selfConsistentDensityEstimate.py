@@ -24,7 +24,7 @@ def nextHighestPowerOfTwo(number):
     """Returns the nearest power of two that is greater than or equal to number"""
     return int(2**(ceil(log2(number))))
 
-class bernacchiaDensityEstimate:
+class selfConsistentDensityEstimate:
 
   def __init__( self,\
                 data = None,\
@@ -59,7 +59,7 @@ class bernacchiaDensityEstimate:
     returned domain.  The width of the domain is set in terms of multiples of
     unit standard deviations of the data; the default is 20-sigma.
 
-    usage: bdensity = bernacchiaDensityEstimate(  data, \
+    usage: sdensity = selfConsistentDensityEstimate(  data, \
                                                   x = None, \
                                                   numPoints = 4097,\
                                                   numSigma = 20, \
@@ -112,7 +112,7 @@ class bernacchiaDensityEstimate:
                             fSC
 
 
-    Returns: a bernacchiaDensityEstimate object
+    Returns: a selfConsistentDensityEstimate object
 
     """
     
@@ -241,7 +241,7 @@ class bernacchiaDensityEstimate:
           numPoints = nextHighestPowerOfTwo(numSigma * numPointsPerSigma) + 1
 
         if(beVerbose):
-          print "X-grid chose with {} points and a sigma range of +/- {}".format(numPoints,numSigma)
+          print "X-grid chosen with {} points and a sigma range of +/- {}".format(numPoints,numSigma)
 
         assert numPoints > 1, "numPoints < 2: {}".format(numPoints)
         assert type(numPoints) is IntType, "numPoints is not an integer: {}".formate(numPoints)
@@ -257,7 +257,7 @@ class bernacchiaDensityEstimate:
       self.xMax = numSigma
     else:
       #If the x-points are specified, then use the specified points
-      #TODO: this FFT-based implementation of the BP11 density estimate requires that
+      #TODO: the FFT-based implementation of the BP11 density estimate requires that
       #       x be evenly spaced (and it should have an odd number of points). This
       #       should be checked
       self.x = x
@@ -301,6 +301,7 @@ class bernacchiaDensityEstimate:
         print "Calculating the ECF"
         sys.stdout.flush()
 
+      #Calculate the ECF (see empiricalCharacteristicFunction.py)
       ecfObj = ecf.ECF( inputData = data, \
                         tpoints = self.t, \
                         dataAverage = self.dataAverage, \
@@ -310,7 +311,7 @@ class bernacchiaDensityEstimate:
                         precision = self.ecfPrecision, \
                         beVerbose = self.beVerbose)
 
-      #Extract the ECF
+      #Extract the ECF from the ECF object
       self.ECF = ecfObj.ECF
       if(self.doStoreConvolution):
         self.convolvedData = ecfObj.convolvedData
@@ -319,7 +320,7 @@ class bernacchiaDensityEstimate:
         #*************************************************
         # Apply the filter
         #*************************************************
-        #Apply the Bernacchia filter to the ECF to obtain
+        #Apply the Bernacchia and Pigolotti (2011) filter to the ECF to obtain
         #the fourier representation of the self-consistent density
         if(self.beVerbose):
           print "Applying the filter"
@@ -343,7 +344,7 @@ class bernacchiaDensityEstimate:
 
 
   #*****************************************************************************
-  #** bernacchiaDensityEstimate: ***********************************************
+  #** selfConsistentDensityEstimate: ***********************************************
   #******************* applyBernacchiaFilter() *********************************
   #*****************************************************************************
   #*****************************************************************************
@@ -358,35 +359,41 @@ class bernacchiaDensityEstimate:
     ecfThresh = 4.*(N-1.)/(N*N)
     self.ecfThreshold = ecfThresh
 
-    #Calculate the squared magnitude of the ECF signal
+    #Calculate the squared magnitude of the ECF 
     ecfSq = abs(self.ECF)**2
-#
-#    #Find indices above the ECF thresold
-#    iAboveThresh = nonzero(ecfSq >= ecfThresh)[0]
-#
-#    #Determine the indices over which to calculate phiSC; these will be
-#    #values where ECF is above the ECF threshold, and below the frequency
-#    #where the ECF threshold has been below-threshold ithresh consecutive times
-#    iDiff = diff(iAboveThresh)
-#    iCutOff = nonzero(iDiff > (self.ithresh+1))[0]
-#    if(len(iCutOff) > 0):
-#      #Cut off indices above the point where ithresh or more ECF
-#      #values are below the threshold (if there are any)
-#      iCalcPhi = iAboveThresh[:(iCutOff[0]+1)]
-#    else:
-#      #Otherwise just return the above-threshold indices
-#      iCalcPhi = iAboveThresh
 
+    #See ftnbp11.f90 for the Fortran implementation of the lowest hypervolume
+    #filter.  
+    #
+    #(note: it is implemented in fortran because the filter requires a large
+    #loop, which is horribly slow in Python code).
+    #
+    #The ravel() method of ecfSq is used to flatten ecfSq from a multidimensional array into
+    #a 1D vector of ecfQs values.  This is done because Fortran does not have native capabilities
+    #for dealing with arbitrarily dimensioned arrays; so the functions determineflattendedindex()
+    #and mapdimensionindices() (in ftnecf.f90) are used to do the array math to convert between 1D
+    # and N-D array indices in lowesthypervolumefilter().
+    #
+    # ftn.lowesthypervolumefilter() returns iCalcPhitmp which is a vector of array indices at which
+    # ecfSq is at or above ecfThresh, and imax is the highest index (relative to iCalcPhitmp) at which
+    # iCalcPhitmp has valid indices
     iCalcPhitmp,imax = ftn.lowesthypervolumefilter( ecfsq = ecfSq.ravel(), \
                                         ecfthreshold = ecfThresh, \
                                         nvariables = self.numVariables, \
                                         ntpoints = self.numTPoints)
     
+    #Use the unravel_index() function to convert the 1D indices from
+    #ftn.lowesthypervolumefilter() into N-D indices (this is the Python
+    #equivalent of the mapdimensionindices() function in ftnecf.f90)
     iCalcPhi = unravel_index(iCalcPhitmp[:imax],shape(ecfSq))
     
+    #If flagged, clear the phiSC array.  This is needed if the same selfConsistentDensityEstimate object
+    #is reused for multiple data.
     if(doFlushArrays):
       self.phiSC[:] = (0.0+0.0j)
 
+    #Calculate the transform of the self-consistent Kernel (and only calculate it at
+    # points where ecfSq is above ecfThresh)
     kappaSC = (1.0+0.0j)*zeros(shape(self.ECF))
     kappaSC[iCalcPhi] = (N/(2*(N-1)))\
                               *(1+sqrt(1-ecfThresh/ecfSq[iCalcPhi]))
@@ -395,17 +402,20 @@ class bernacchiaDensityEstimate:
     if(self.doSaveTransformedKernel):
       self.kappaSC = kappaSC
 
-    #Do the phiSC calculation only for the necessary points
+    #Calculate the transform of the self-consistent density estimate
     self.phiSC[iCalcPhi] = self.ECF[iCalcPhi]*kappaSC[iCalcPhi]
 
-    #Calculate the magnitude of the transformed kernel at the 0-point
+    #Calculate the magnitude of the transformed kernel at the (0,0,0....) point
+    #in real space.  It is assumed that this is the peak of the kernel; this is used in
+    # findGoodDistributionInds() to estimate the number of kernels contributing to a given
+    # point on the self-consistent density estimate.
     self.kSCMax = real(sum(kappaSC[iCalcPhi])*(self.deltaT/(2*pi))**self.numVariables)
 
     #Calculate the distribution threshold as a multiple of an individual kernelet
     self.distributionThreshold = self.countThreshold*(self.kSCMax/self.numDataPoints)
 
   #*****************************************************************************
-  #** bernacchiaDensityEstimate: ***********************************************
+  #** selfConsistentDensityEstimate: ***********************************************
   #******************* findGoodDistributionInds() ******************************
   #*****************************************************************************
   #*****************************************************************************
@@ -414,7 +424,7 @@ class bernacchiaDensityEstimate:
     return where(self.fSC >= self.distributionThreshold)
 
   #*****************************************************************************
-  #** bernacchiaDensityEstimate: ***********************************************
+  #** selfConsistentDensityEstimate: ***********************************************
   #******************* findBadDistributionInds() *******************************
   #*****************************************************************************
   #*****************************************************************************
@@ -423,7 +433,7 @@ class bernacchiaDensityEstimate:
     return where(self.fSC < self.distributionThreshold)
 
   #*****************************************************************************
-  #** bernacchiaDensityEstimate: ***********************************************
+  #** selfConsistentDensityEstimate: ***********************************************
   #******************* __transformphiSC__() ************************************
   #*****************************************************************************
   #*****************************************************************************
@@ -431,16 +441,7 @@ class bernacchiaDensityEstimate:
     """ Transform the self-consistent estimate of the distribution from
     frequency space to real space"""
 
-#    #Generate a set of array slices to access the lower half of the array
-#    firstHalfSlice = tuple(self.numVariables*[slice(0,self.numTPoints)])
-#    #Create a temporary array to hold both the negative and positive frequency
-#    #values of phiSC (it is Hermitian symmetric) in a way that conforms with fftn()
-#    padSequence = self.numVariables*[tuple([self.numTPoints-1,0])]
-#    #phiSCSymmetric = fft.ifftshift(pad(self.phiSC,padSequence,'reflect'))
-#    phiSCSymmetric = pad(self.phiSC,padSequence,'reflect')
-#
-#    #Transform the PDF estimate to real space
-#    fSC = real(fft.fftshift(fft.fftn(phiSCSymmetric)))*(self.deltaT/(2*pi))**self.numVariables
+    #Transform the PDF estimate to real space
     fSC = fft.fftshift(real(fft.fftn(fft.ifftshift(self.phiSC))))*(self.deltaT/(2*pi))**self.numVariables
 
     
@@ -449,27 +450,34 @@ class bernacchiaDensityEstimate:
       midPointAccessor = tuple(self.numVariables*[(self.numTPoints-1)/2])
       print "Normalization of fSC = {}. phiSC[0] = {}".format(normConst,self.phiSC[midPointAccessor])
 
+    #transpose the self-consistent density estimate
     self.fSC = fSC.transpose()
 
+    #Take the transform of the self-consistent kernel if flagged
     if(self.doSaveTransformedKernel):
       kSC = fft.fftshift(real(fft.fftn(fft.ifftshift(self.kappaSC))))*(self.deltaT/(2*pi))**self.numVariables
       self.kSC = kSC.transpose()
-    #self.fSC = ma.masked_less(fSC.transpose(),self.distributionThreshold)
-    #self.fSC = ma.masked_less(fSC.transpose(),0.0)
 
   #*****************************************************************************
-  #** bernacchiaDensityEstimate: ***********************************************
+  #** selfConsistentDensityEstimate: ***********************************************
   #******************* Addition operator __add__ *******************************
   #*****************************************************************************
   #*****************************************************************************
   def __add__(self,rhs):
-    """ Addition operator for the bernacchiaDensityEstimate object.  Adds the
+    """ Addition operator for the selfConsistentDensityEstimate object.  Adds the
         empirical characteristic functions of the two estimates, reapplies
         the BP11 filter, and transforms back to real space.  This is useful
-        for parallelized calculation of densities. """
+        for parallelized calculation of densities.  Note that this only works
+        if dataAverage and dataStandardDeviation are the same for both operands."""
     #Check for proper typing
-    if(not isinstance(rhs,bernacchiaDensityEstimate)):
+    if(not isinstance(rhs,selfConsistentDensityEstimate)):
       raise TypeError, "unsupported operand type(s) for +: {} and {}".format(type(self),type(rhs))
+
+    #Check that dataAverage and dataStandardDeviation is the same for both operands
+    if(not allclose(self.dataAverage,rhs.dataAverage) or not allcose(self.dataStandardDeviation,rhs.dataStandardDeviation)):
+        #If it isn't, raise a NotImplementedError.  We would need to implement an algorithm that interpolates
+        #the ECF of rhs to the un-standardized frequency points of the the lhs (self) object.
+        raise NotImplementedError,"addition for operands with different dataAverage and dataStandardDeviation is not available in this version."
 
     retObj = copy.deepcopy(self)
     retObj.phiSC = (0.0+0.0j)*zeros(retObj.numVariables*[self.numTPoints])
@@ -501,9 +509,11 @@ class bernacchiaDensityEstimate:
     return retObj
 
   def getTransformedAxes(self):
+    """Returns a tuple of unstandardized axis values for the self-consistent density (in real space)."""
     return tuple([ (self.x*self.dataStandardDeviation[i] + self.dataAverage[i]) for i in range(self.numVariables) ])
 
   def getTransformedPDF(self):
+    """Returns a destandardized version of the self-consistent density"""
     return self.fSC/prod(self.dataStandardDeviation)
 
 #*******************************************************************************
@@ -558,7 +568,7 @@ if(__name__ == "__main__"):
 
       with Timer(nsample[i]):
         #Do the BP11 density estimate
-        bkernel = bernacchiaDensityEstimate(randgauss,doApproximateECF=True)
+        bkernel = selfConsistentDensityEstimate(randgauss,doApproximateECF=True)
 
       #Calculate the mean squared error between the estimated density
       #And the gaussian
@@ -600,7 +610,7 @@ if(__name__ == "__main__"):
       P.show() 
     else:
       #*********************************************************************
-      # Demonstrate the capability to sum bernacchiaDensityEstimate objects
+      # Demonstrate the capability to sum selfConsistentDensityEstimate objects
       #*********************************************************************
 
       nsamp = 512
@@ -614,10 +624,10 @@ if(__name__ == "__main__"):
       for i in range(nloop):
         randgauss = randsample[i*nsamp:(i+1)*nsamp]
         if(i == 0):
-          bkernel2 = bernacchiaDensityEstimate(randgauss)
+          bkernel2 = selfConsistentDensityEstimate(randgauss)
           nsample2[i] = len(randgauss)
         else:
-          bkernel2 += bernacchiaDensityEstimate(randgauss)
+          bkernel2 += selfConsistentDensityEstimate(randgauss)
           nsample2[i] = nsample2[i-1] + len(randgauss)
 
         #Calculate the mean squared error between the estimated density
@@ -727,7 +737,7 @@ if(__name__ == "__main__"):
 
         with Timer(nsample[z]):
           #Do the BP11 density estimate
-          bkernel = bernacchiaDensityEstimate(  randsub,  \
+          bkernel = selfConsistentDensityEstimate(  randsub,  \
                                                 beVerbose=False, \
                                                 doStoreConvolution=False, \
                                                 countThreshold = 1)
@@ -754,7 +764,7 @@ if(__name__ == "__main__"):
       print "Error scales ~ N**{}".format(m)
     else:
       with Timer(shape(randsample)[1]):
-        bkernel = bernacchiaDensityEstimate(  randsample,  \
+        bkernel = selfConsistentDensityEstimate(  randsample,  \
                                               beVerbose=True, \
                                               doStoreConvolution=False, \
                                               countThreshold = 1)

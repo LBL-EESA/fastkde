@@ -100,6 +100,7 @@ class ECF:
 
 
 
+    #Calculate the ECF
     if(self.useFFTApproximation):
       #Calculate the ECF using the fast method
       self.ECF = self.__calculateECFbyFFT__(  inputData,\
@@ -124,7 +125,7 @@ class ECF:
     if(self.beVerbose):
       print "Entering DFT-based ECF routine"
     #Call a Fortran routine to do an efficient calculation of the density in
-    #fourier space.
+    #fourier space.  Note that this is done in fortran (see ftnecf.f90)
     ecf = ftn.calculateecfdirect( datapoints = mydata,  \
                                   dataaverage = myaverage, \
                                   datastd = mystddev, \
@@ -175,7 +176,7 @@ class ECF:
     if(self.beVerbose):
       print "Entering convolution routine"
     #Do a fast kernel density estimate, using the Greengard and Lee (2004, SIAM)
-    #kernel parameters
+    #kernel parameters. See ftnecf.f90 for the implementation of this.
     kde = ftn.calculatekerneldensityestimate( datapoints = mydata,  \
                                               dataaverage = myaverage, \
                                               datastd = mystddev, \
@@ -208,6 +209,11 @@ class ECF:
 
 
 
+#*******************************************************************************
+#*******************************************************************************
+#******************** Unit testing code ****************************************
+#*******************************************************************************
+#*******************************************************************************
 if(__name__ == "__main__"):
 
 
