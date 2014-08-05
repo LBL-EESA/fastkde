@@ -11,7 +11,8 @@ self-consistent density esimate described by Bernacchia and Pigolotti (2011; J.
 Royal Statistical Society C, doi:10.1111/j.1467-9868.2011.00772.x)
 
 Example usage:
-'''
+
+```
 #!python
  
 import numpy as np
@@ -19,7 +20,7 @@ import selfConsistentDensityEstimate as sc
 import pylab as P
   
 #Generate a 2x100000 random dataset (representing 100000 pairs of datapoints)
-randomdata = np.reshape(np.random.normal(size=[200000]),[2,100000])
+randomdata = np.reshape(np.random.normal(size=[2*100000]),[2,100000])
 
 #Do the self-consistent density estimate
 mysc = sc.selfConsistentDensityEstimate(randomdata)
@@ -42,7 +43,7 @@ x2d,y2d = np.meshgrid(x,y)
 P.contour(x2d,y2d,myPDF2D)
 P.show()
 
-'''
+```
 
 
 ## How do I get set up? ##
@@ -93,4 +94,3 @@ directory is the base of the repository):
 For permanent installation, please consider adding similar lines to your
 .bashrc/.bash\_profile or .cshrc files (replacing ${PWD} with the full path of
 the selfConsistentDensityEstimate directory).
-
