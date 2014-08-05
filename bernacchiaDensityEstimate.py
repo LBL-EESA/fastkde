@@ -654,7 +654,7 @@ if(__name__ == "__main__"):
 
     nvariables = 2
     #Seed with 0 so results are reproducable
-    #random.seed(0)
+    random.seed(0)
 
     #Define a bivariate normal function
     def norm2d(x,y,mux=0,muy=0,sx=1,sy=1,r=0):
