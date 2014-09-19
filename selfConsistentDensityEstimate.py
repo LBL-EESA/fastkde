@@ -43,6 +43,7 @@ class selfConsistentDensityEstimate:
                 doStoreConvolution = False, \
                 doSaveTransformedKernel = False, \
                 doFFT = True, \
+                doSaveMarginals = True, \
                 beVerbose = False \
               ):
     """ 
@@ -110,6 +111,8 @@ class selfConsistentDensityEstimate:
 
       doFFT               : flags whether to calculate phiSC and its FFT to obtain
                             fSC
+
+      doSaveMarginals     : flags whether to calculate and save the marginal distributions
 
 
     Returns: a selfConsistentDensityEstimate object
@@ -291,6 +294,9 @@ class selfConsistentDensityEstimate:
     #Calculate the distribution frequency corresponding to the given count threshold
     self.countThreshold = countThreshold
 
+    #Initialize the marginals
+    self.marginalObjects = None
+
     if(data != None):
 
       #*************************************************
@@ -340,6 +346,17 @@ class selfConsistentDensityEstimate:
         #  sys.stdout.flush()
         #self.goodDistributionInds = self.findGoodDistributionInds()
 
+        #Calculate and save the marginal distribution objects
+        if(doSaveMarginals):
+          self.marginalObjects = []
+          for i in xrange(self.dataRank):
+            self.marginalObjects.append(selfConsistentDensityEstimate(data[i,:], \
+                                          x = self.x, \
+                                          dataAverage = self.dataAverage[i], \
+                                          dataStandardDeviation = self.dataStandardDeviation[i], \
+                                          countThreshold = self.countThreshold, \
+                                          doSaveMarginals = False) )
+                                                                  
     return
 
 
@@ -457,6 +474,54 @@ class selfConsistentDensityEstimate:
     if(self.doSaveTransformedKernel):
       kSC = fft.fftshift(real(fft.fftn(fft.ifftshift(self.kappaSC))))*(self.deltaT/(2*pi))**self.numVariables
       self.kSC = kSC.transpose()
+
+  #*****************************************************************************
+  #** selfConsistentDensityEstimate: ***********************************************
+  #******************* getTransformedCopula      *******************************
+  #*****************************************************************************
+  #*****************************************************************************
+  def getTransformedCopula(self,data=None):
+    """Estimates the copula of the underlying PDF"""
+
+    #If the data are univariate, simply return the PDF itself
+    if(self.dataRank == 1):
+      return self.getTransformedPDF()
+
+    #Check if we need to calculate the marginal distributions
+    if(not self.doSaveMarginals):
+      if(x is None):
+        raise ValueError,"the data must be provided as argument 'x', if doSaveMarginals=False when the original PDF was calculated"
+      else:
+        #Estimate the marginal distributions
+        marginalObjects = []
+        for i in xrange(self.dataRank):
+          marginalObjects.append(selfConsistentDensityEstimate(data[i,:], \
+                                      x = self.x, \
+                                      dataAverage = self.dataAverage[i], \
+                                      dataStandardDeviation = self.dataStandardDeviation[i], \
+                                      countThreshold = self.countThreshold, \
+                                      doSaveMarginals = False))
+    else:
+      #If not, just use the saved marginals
+      marginalObjects = self.marginalObjects
+
+    #Calculate the marginal distributions and mask bad (or zero) values
+    marginals = []
+    for obj in marginalObjects:
+      #Get the transformed PDF
+      m = ma.array(obj.getTransformedPDF())
+      #Mask bad values
+      m[obj.findBadDistributionInds()] = ma.masked
+      #Add the marginal to the list
+      marginals.append(m)
+      
+    #Calculate the PDF assuming independent marginals
+    independencePDF = prod(meshgrid(*tuple(marginals)),axis=0)
+    #Divide off the indepdencnce PDF to calculate the copula
+    copulaPDF = self.getTransformedPDF()/independencePDF
+
+    return copulaPDF
+
 
   #*****************************************************************************
   #** selfConsistentDensityEstimate: ***********************************************
@@ -740,7 +805,8 @@ if(__name__ == "__main__"):
           bkernel = selfConsistentDensityEstimate(  randsub,  \
                                                 beVerbose=False, \
                                                 doStoreConvolution=False, \
-                                                countThreshold = 1)
+                                                countThreshold = 1, \
+                                                doSaveMarginals = False)
 
 
 
