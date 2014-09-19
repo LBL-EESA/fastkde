@@ -195,6 +195,8 @@ class selfConsistentDensityEstimate:
     #Set the number of points
     self.numPoints = numPoints
 
+    #Save the marginals flag
+    self.doSaveMarginals = doSaveMarginals
 
     #Set whether to approximate the ECF using the FFT method
     self.doApproximateECF = doApproximateECF
@@ -514,11 +516,13 @@ class selfConsistentDensityEstimate:
       m[obj.findBadDistributionInds()] = ma.masked
       #Add the marginal to the list
       marginals.append(m)
-      
+
     #Calculate the PDF assuming independent marginals
     independencePDF = prod(meshgrid(*tuple(marginals)),axis=0)
     #Divide off the indepdencnce PDF to calculate the copula
-    copulaPDF = self.getTransformedPDF()/independencePDF
+    actualPDF = ma.array(self.getTransformedPDF())
+    actualPDF[self.findBadDistributionInds()] = ma.masked
+    copulaPDF = actualPDF/independencePDF
 
     return copulaPDF
 
