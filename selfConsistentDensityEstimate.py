@@ -518,7 +518,7 @@ class selfConsistentDensityEstimate:
       marginals.append(m)
 
     #Calculate the PDF assuming independent marginals
-    independencePDF = prod(meshgrid(*tuple(marginals)),axis=0)
+    independencePDF = ma.prod(meshgrid(*tuple(marginals)),axis=0)
     #Divide off the indepdencnce PDF to calculate the copula
     actualPDF = ma.array(self.getTransformedPDF())
     actualPDF[self.findBadDistributionInds()] = ma.masked
