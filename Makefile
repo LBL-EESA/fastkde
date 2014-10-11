@@ -1,5 +1,17 @@
 #PROJECTNAME = 
 
+#.PHONY: default
+#default: build
+
+PYTHON = python2.7
+PYTHON_INCLUDE = ${shell ${PYTHON} -c 'from distutils import sysconfig; print( sysconfig.get_python_inc() )'}
+NUMPY_INCLUDE = ${shell ${PYTHON} -c 'import numpy; print( numpy.get_include() )'}
+
+TIMEIT = ${shell ${PYTHON} -c 'import timeit; print(timeit.__file__)'}
+
+CYTHON = cython-2.7
+
+
 FC=gfortran
 F2PY=f2py
 F2PYFLAGS=--opt="-O3 -g" --fcompiler="gnu95"
@@ -21,6 +33,10 @@ SOSRC = \
 OBJ := $(addsuffix .o, $(basename $(SRC)))
 SOFILES := $(addsuffix .so, $(basename $(SOSRC)))
 
+SOFILES := floodFillSearchC${SO}
+
+SRC := floodFillSearch.c
+
 all: main
 
 %.o: %.f90
@@ -33,8 +49,14 @@ ftnbp11.so: ftnecf.f90 ftnbp11.f90 mod_linkedindex.o
 ftnecf.so: ftnecf.f90
 	${F2PY} -c ${F2PYFLAGS} -m ftnecf $^
 
+floodFillSearch.c: floodFillSearch.pyx
+	${CYTHON} -I ${PYTHON_INCLUDE} -I${NUMPY_INCLUDE} $<
+
+floodFillSearchC${SO}: floodFillSearch.pyx
+	${PYTHON} setup.py build_ext --inplace
+
 main: $(OBJ) $(SOFILES)
 
 clean:
-	-rm -f ./*.o ./*.mod ./*.so
+	-rm -f ./*.o ./*.mod ./*.so floodFillSearch.c
 
