@@ -33,9 +33,9 @@ SOSRC = \
 OBJ := $(addsuffix .o, $(basename $(SRC)))
 SOFILES := $(addsuffix .so, $(basename $(SOSRC)))
 
-SOFILES := floodFillSearchC${SO}
+SOFILES += floodFillSearchC${SO}
 
-SRC := floodFillSearch.c
+SRC += floodFillSearch.c
 
 all: main
 
