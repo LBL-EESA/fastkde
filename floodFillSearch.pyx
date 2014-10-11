@@ -265,3 +265,44 @@ cpdef list floodFillSearch( \
     return contiguousAreas
 
 
+def sortByDistanceFromCenter(inds,varShape):
+    """Takes sets of indicies [e.g., from floodFillSearchC.floodFillSearch()] and sorts them by distance from the center of the array from which the indices were taken.
+    
+        input:
+        ------
+        
+            inds     :  a list of tuples of numpy ndarrays (of type integer and
+                        rank 1), where each tuple item contains a vector of
+                        indices for each index of an array.  Each list item
+                        should conform to the output of the numpy where()
+                        function.  It is assumed that each set of indices
+                        represents a contiguous portion of an array.
+                       
+            varShape : the shape of the variable from which inds originate
+            
+        returns:
+        --------
+
+             A sorted version of inds, where the items are sorted by the
+             distance of the contiguous area relative to the center of the
+             array whose shape is varShape.  The first item is the closest to
+             the center of the array.
+             
+    """
+    #Get the center index
+    center = around(array(varShape)/2)
+    
+    #Transform the indices to be center-relative
+    centeredInds = [ tuple([ aind - cind] for aind,cind in zip(indTuples,center)) for indTuples in inds ]
+    
+    #Calculate center-of-mass ffor each contiguous array
+    centersOfMass = [ array([average(aind) for aind in indTuples]) for indTuples in centeredInds]
+    
+    #Calculate the distance from the origin of each center of mass
+    distances = [ sqrt(sum(indices**2)) for indices in centersOfMass]
+    
+    #Determine the sorting indices that will sort inds by distance from the center
+    isort = list(argsort(distances))
+    
+    #Return the sorted index array
+    return [inds[i] for i in isort]
