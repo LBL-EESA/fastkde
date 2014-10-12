@@ -74,7 +74,7 @@ cdef tuple findNeighbors(   int raveledStartIndex, \
                             np.ndarray[np.int_t,ndim=1] isNotSearched, \
                    ):
     """Does a flood fill algorithim on inputArray in the vicinity of
-    raveledStartIndex to find contiguous areas where raveledStartIndex > searchThreshold 
+    raveledStartIndex to find contiguous areas where raveledStartIndex >= searchThreshold 
     
         input:
         ------
@@ -239,7 +239,7 @@ cpdef list floodFillSearch( \
     for i in xrange(numArrayElements):
         #print "{}/{}".format(i,numArrayElements)
         #Check if the current element meets the search condition
-        if raveledInputArray[i] > searchThreshold and raveledIsNotSearched[i]:
+        if raveledInputArray[i] >= searchThreshold and raveledIsNotSearched[i]:
             #Flag that this cell has been searched
             raveledIsNotSearched[i] = 0
 

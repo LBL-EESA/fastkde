@@ -13,6 +13,7 @@ from types import *
 import pdb
 import time
 import sys
+import floodFillSearchC as flood
 
 #A simple timer for comparing ECF calculation methods
 class Timer():
@@ -44,7 +45,8 @@ class selfConsistentDensityEstimate:
                 doSaveTransformedKernel = False, \
                 doFFT = True, \
                 doSaveMarginals = True, \
-                beVerbose = False \
+                beVerbose = False, \
+                numContiguousHyperVolumes = 1, \
               ):
     """ 
 
@@ -114,6 +116,9 @@ class selfConsistentDensityEstimate:
 
       doSaveMarginals     : flags whether to calculate and save the marginal distributions
 
+      numContiguousHyperVolumes :   the number of contiguous hypervolumes of the ECF, that are above
+                                    the ECF threshold, to use in the density estimate
+
 
     Returns: a selfConsistentDensityEstimate object
 
@@ -136,6 +141,13 @@ class selfConsistentDensityEstimate:
       self.numVariables = shape(data)[0]
       #Set the number of data points
       self.numDataPoints = shape(data)[1]
+
+      #Save the number of contiguous hyper volumes
+      try:
+          xrange(numContiguousHyperVolumes)
+      except:
+          raise ValueError,"numContiguousHyperVolumes must be an integer"
+      self.numContiguousHyperVolumes = numContiguousHyperVolumes
 
       if(beVerbose):
         print "Operating on data with numVariables = {}, numDataPoints = {}".format(self.numVariables,self.numDataPoints)
@@ -381,31 +393,24 @@ class selfConsistentDensityEstimate:
     #Calculate the squared magnitude of the ECF 
     ecfSq = abs(self.ECF)**2
 
-    #See ftnbp11.f90 for the Fortran implementation of the lowest hypervolume
-    #filter.  
-    #
-    #(note: it is implemented in fortran because the filter requires a large
-    #loop, which is horribly slow in Python code).
-    #
-    #The ravel() method of ecfSq is used to flatten ecfSq from a multidimensional array into
-    #a 1D vector of ecfQs values.  This is done because Fortran does not have native capabilities
-    #for dealing with arbitrarily dimensioned arrays; so the functions determineflattendedindex()
-    #and mapdimensionindices() (in ftnecf.f90) are used to do the array math to convert between 1D
-    # and N-D array indices in lowesthypervolumefilter().
-    #
-    # ftn.lowesthypervolumefilter() returns iCalcPhitmp which is a vector of array indices at which
-    # ecfSq is at or above ecfThresh, and imax is the highest index (relative to iCalcPhitmp) at which
-    # iCalcPhitmp has valid indices
-    iCalcPhitmp,imax = ftn.lowesthypervolumefilter( ecfsq = ecfSq.ravel(), \
-                                        ecfthreshold = ecfThresh, \
-                                        nvariables = self.numVariables, \
-                                        ntpoints = self.numTPoints)
-    
-    #Use the unravel_index() function to convert the 1D indices from
-    #ftn.lowesthypervolumefilter() into N-D indices (this is the Python
-    #equivalent of the mapdimensionindices() function in ftnecf.f90)
-    iCalcPhi = unravel_index(iCalcPhitmp[:imax],shape(ecfSq))
-    
+    #Find all hypervolumes where ecfSq is greater than the stability threshold
+    contiguousInds = flood.floodFillSearch(ecfSq,searchThreshold = self.ecfThreshold)
+
+    #Sort them by distance from the center
+    sortedInds = flood.sortByDistanceFromCenter(contiguousInds,shape(ecfSq))
+
+    #Initialize the filtered value list
+    iCalcPhi = self.numVariables*[array([],dtype='int')]
+
+    #Pull out numContiguousHyperVolumes of contiguous hyper volumes, in order of distance from
+    #the origin
+    for i in xrange(self.numContiguousHyperVolumes):
+        for n in xrange(self.numVariables):
+            iCalcPhi[n] = concatenate( (iCalcPhi[n],sortedInds[i][n]) )
+
+    #Convert iCalcPhi to a list of tuples, such that it is compatible with the output of where()
+    iCalcPhi = [ tuple(ii) for ii in iCalcPhi ]
+   
     #If flagged, clear the phiSC array.  This is needed if the same selfConsistentDensityEstimate object
     #is reused for multiple data.
     if(doFlushArrays):
