@@ -11,7 +11,10 @@ libs = []
 
 cmdclass = {'build_ext': build_ext}
 
-extensions = [Extension("floodFillSearchC",["floodFillSearch.pyx"],libraries=libs,library_dirs=lib_dirs,include_dirs=inc_dirs,runtime_library_dirs=lib_dirs)]
+extensions = [ \
+    Extension("floodFillSearchC",["floodFillSearch.pyx"],libraries=libs,library_dirs=lib_dirs,include_dirs=inc_dirs,runtime_library_dirs=lib_dirs),\
+    Extension("nufft",["nufft.pyx"],libraries=libs,library_dirs=lib_dirs,include_dirs=inc_dirs,runtime_library_dirs=lib_dirs),\
+                ]
 
 setup(
             cmdclass = cmdclass,\

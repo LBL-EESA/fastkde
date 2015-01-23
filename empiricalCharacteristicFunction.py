@@ -25,10 +25,8 @@ class ECF:
 
   def __init__( self,\
                 inputData, \
-                tpoints, \
+                tgrids, \
                 precision = 2, \
-                dataAverage = None, \
-                dataStandardDeviation = None, \
                 doStoreConvolution = False, \
                 useFFTApproximation = True, \
                 beVerbose = False):
@@ -39,6 +37,30 @@ class ECF:
     Uses either the direct Fourier transform or nuFFT method (described by
     O'Brien et al. (2014, J. Roy. Stat. Soc. C) to calculate the Fourier transform
     of the data to yield the ECF.
+
+
+        input:
+        ------
+
+            inputData   : The input data. 
+                          Array like with shape = (nvariables,npoints).
+
+            tgrids      : The frequency-space grids to which to transform the data
+                          A list of frequency arrays for each variable dimension.
+
+            doStoreConvolution : Flag whether to store the convolved data that is
+                                 used for the FFT to frequency space (only applies if 
+                                 useFFTApproximation is True)
+
+            useFFTApproximation : Flag whether to use the nuFFT approximation to the DFT
+
+            beVerbose : Flags whether to be verbose
+
+
+        output:
+        -------
+
+            An ECF object.  The ECF itself is stored in self.ECF
 
     """
 
@@ -57,39 +79,38 @@ class ECF:
 
 
     #Set the frequency points
-    self.tpoints = tpoints
+    self.tgrids = list(tgrids)
+
+    try:
+        gridRank = len(self.tgrids)
+    except:
+        raise ValueError,"Could not determine the number of tgrids"
+
+    if  gridRank != self.nvariables):
+        raise ValueError,"The rank of tgrids should be {}.  It is {}".format(gridRank,self.nvariables)
+
     #Check for regularity if we are doing nuFFT
     if(self.useFFTApproximation):
-      #Get the spacing of the first two points
-      dt = tpoints[1]-tpoints[0]
-      #Get the spacing of all points
-      deltaT = tpoints[1:] - tpoints[:-1]
-      #Get the difference between these spacings
-      deltaTdiff = deltaT - dt
-      fTolerance = dt/1e6
-      #Check that all these differences are less than 1/1e6
-      if(not all(abs(deltaTdiff < fTolerance))):
-        raise ValueError,"tpoints must be regularly spaced if useFFTApproximation is True"
+      
+      for n in range(self.nvariables):
+          tpoints = tgrids[n]
 
-    if(dataAverage != None):
-      #TODO: Check for proper dimensioning
-      self.dataAverage = dataAverage
-    else:
-      self.dataAverage = average(inputData,1)
-
-
-    if(dataStandardDeviation != None):
-      #TODO: Check for proper dimensioning
-      self.dataStandardDeviation = dataStandardDeviation
-    else:
-      self.dataStandardDeviation = std(inputData,1)
+          #Get the spacing of the first two points
+          dt = tpoints[1]-tpoints[0]
+          #Get the spacing of all points
+          deltaT = tpoints[1:] - tpoints[:-1]
+          #Get the difference between these spacings
+          deltaTdiff = deltaT - dt
+          fTolerance = dt/1e6
+          #Check that all these differences are less than 1/1e6
+          if(not all(abs(deltaTdiff < fTolerance))):
+            raise ValueError,"All grids in tgrids must be regularly spaced if useFFTApproximation is True"
 
     #Set verbosity
     self.beVerbose = beVerbose
 
     #Set the precision
     self.precision = precision
-
 
     #Set whether we store the convolved version
     #of the data used in the FFT estimate; mainly
