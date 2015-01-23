@@ -1,25 +1,6 @@
 #!/usr/bin/env python
 from numpy import *
-import ftnecf as ftn
-
-#*****************************************************************************
-#*****************************************************************************
-#******************* Frequency/real-space conversions ************************
-#*****************************************************************************
-#*****************************************************************************
-def calcXfromT(tpoints):
-  """Calculates real space points given a set of hermetian frequency points. """
-  #Use fftfreq to produce a set of frequencies that correspond to the fourier
-  #transform of a signal on the tpoints points
-  deltaT = tpoints[1] - tpoints[0]
-  return  fft.fftshift(fft.fftfreq(len(tpoints),deltaT/(2*pi)))
-
-def calcTfromX(xpoints):
-  """Calculates frequency points given a signal in real space. """
-  #Use fftfreq to produce a set of frequencies that correspond to the fourier
-  #transform of a signal on the x points
-  deltaX = xpoints[1] - xpoints[0]
-  return fft.fftshift(fft.fftfreq(len(xpoints),deltaX/(2*pi)))
+import nufft
 
 class ECF:
 
@@ -27,7 +8,6 @@ class ECF:
                 inputData, \
                 tgrids, \
                 precision = 2, \
-                doStoreConvolution = False, \
                 useFFTApproximation = True, \
                 beVerbose = False):
     """
@@ -48,10 +28,6 @@ class ECF:
             tgrids      : The frequency-space grids to which to transform the data
                           A list of frequency arrays for each variable dimension.
 
-            doStoreConvolution : Flag whether to store the convolved data that is
-                                 used for the FFT to frequency space (only applies if 
-                                 useFFTApproximation is True)
-
             useFFTApproximation : Flag whether to use the nuFFT approximation to the DFT
 
             beVerbose : Flags whether to be verbose
@@ -71,7 +47,7 @@ class ECF:
     dshape = shape(inputData)
     rank = len(dshape)
     if(rank != 2):
-      raise ValueError,"inputData must be a rank-2 array of shape [nvariables,ndatapoints]"
+      raise ValueError,"inputData must be a rank-2 array of shape [nvariables,ndatapoints]; got rank = {}".format(rank)
     #Extract the number of variables
     self.nvariables = dshape[0]
     #Extract the number of data points
@@ -86,7 +62,7 @@ class ECF:
     except:
         raise ValueError,"Could not determine the number of tgrids"
 
-    if  gridRank != self.nvariables):
+    if  gridRank != self.nvariables:
         raise ValueError,"The rank of tgrids should be {}.  It is {}".format(gridRank,self.nvariables)
 
     #Check for regularity if we are doing nuFFT
@@ -112,123 +88,46 @@ class ECF:
     #Set the precision
     self.precision = precision
 
-    #Set whether we store the convolved version
-    #of the data used in the FFT estimate; mainly
-    #used for diagnostic purposes
-    self.doStoreConvolution = doStoreConvolution
-    #Initialize the convolvedData member to nothing
-    self.convolvedData = None
+    #Set the fill value for the frequency grids
+    fillValue = -1e20
 
+    #Get the maximum frequency grid length
+    ntmax = amax([len(tgrid) for tgrid in tgrids])
+    #Create the frequency grids array
+    frequencyGrids = fillValue*ones([nvariables,ntmax])
+    #Fill the frequency grids array
+    for v in range(nvariables):
+        frequencyGrids[v,:len(tgrids[v])] = tgrids[v]
 
+    #Simply pass in the input data as provided
+    preparedInputData = inputData
 
     #Calculate the ECF
     if(self.useFFTApproximation):
       #Calculate the ECF using the fast method
-      self.ECF = self.__calculateECFbyFFT__(  inputData,\
-                                              self.dataAverage, \
-                                              self.dataStandardDeviation)
+      ECF = nufft.nuifft( \
+                        abscissas = inputData, \
+                        ordinates = ones([inputData.shape[1]],dtype=complex128), \
+                        frequencyGrids = frequencyGrids, \
+                        missingFreqVal = fillValue, \
+                        precision = precision, \
+                        beVerbose = int(beVerbose))
+
     else:
       #Calculate the ECF using the slow (direct, but exact) method
-      self.ECF = self.__calculateECFDirect__( inputData,\
-                                              self.dataAverage, \
-                                              self.dataStandardDeviation)
+      ECF = nufft.idft( \
+                        abscissas = inputData, \
+                        ordinates = ones([inputData.shape[1]],dtype=complex128), \
+                        frequencyGrids = frequencyGrids, \
+                        missingFreqVal = fillValue)
+
+    #Ensure that the ECF is normalized
+    midPointAccessor = tuple( [ (len(tgrid) - 1)/2 for tgrid in tgrids ])
+    #Save the ECF in the object
+    self.ECF = ECF/ECF[midPointAccessor]
+
 
     return
-
-  #*****************************************************************************
-  #*****************************************************************************
-  #******************* __calculateECFDirect__() ********************************
-  #*****************************************************************************
-  #*****************************************************************************
-  def __calculateECFDirect__(self,mydata,myaverage,mystddev):
-    """Directly calculate the fourier-space representation of the input data"""
-
-    if(self.beVerbose):
-      print "Entering DFT-based ECF routine"
-    #Call a Fortran routine to do an efficient calculation of the density in
-    #fourier space.  Note that this is done in fortran (see ftnecf.f90)
-    ecf = ftn.calculateecfdirect( datapoints = mydata,  \
-                                  dataaverage = myaverage, \
-                                  datastd = mystddev, \
-                                  tpoints = self.tpoints,  \
-                                  freqspacesize = len(self.tpoints)**self.nvariables  \
-                              )
-    if(self.beVerbose):
-      print "Exiting DFT-based ECF routine"
-    #Reshape the flattened array into a proper multidimensional array
-    ecf = reshape(ecf,self.nvariables*[len(self.tpoints)])
-
-
-    return ecf
-
-  #*****************************************************************************
-  #*****************************************************************************
-  #******************* __calculateECFbyFFT__() *********************************
-  #*****************************************************************************
-  #*****************************************************************************
-  def __calculateECFbyFFT__(self,mydata,myaverage,mystddev):
-    """Use the non-uniform FFT method to estimate the fourier representation of
-    the input data."""
-
-    #Determine the points corresponding to the x-grid
-    xpoints = calcXfromT(self.tpoints)
-    #Calculate the grid spacing
-    deltaX = xpoints[1] - xpoints[0]
-
-    #Calculate details of the gaussian kernel
-    if(self.precision == 1):
-      tau = 0.5993
-      nspread = 10
-    else:
-      tau = 1.5629
-      nspread = 28
-
-    nspreadhalf = nspread/2
-    fourTau = 4*tau
-
-    if(self.nvariables > 1):
-      #If this is a multidimensional ECF, use meshgrid to create a multidimensional grid
-      #of all the frequency points
-      tpointgrids = asarray(meshgrid(*self.nvariables*[self.tpoints]))
-    else:
-      #Otherwise, just create a [1,len(tpoints)] array of the frequency points
-      tpointgrids = asarray([self.tpoints])
-
-    if(self.beVerbose):
-      print "Entering convolution routine"
-    #Do a fast kernel density estimate, using the Greengard and Lee (2004, SIAM)
-    #kernel parameters. See ftnecf.f90 for the implementation of this.
-    kde = ftn.calculatekerneldensityestimate( datapoints = mydata,  \
-                                              dataaverage = myaverage, \
-                                              datastd = mystddev, \
-                                              xpoints = xpoints,  \
-                                              nspreadhalf = nspreadhalf, \
-                                              fourtau = fourTau, \
-                                              realspacesize = len(xpoints)**self.nvariables  \
-                                            )
-
-    #Reshape the KDE estimate into a multidimensional array
-    kde = reshape(kde,self.nvariables*[len(xpoints)])
-    if(self.doStoreConvolution):
-      self.convolvedData = kde
-
-    #Take the FFT of the KDE estimate (ifftshift is used to reorder the kde
-    #array such that 0 is the lowest corner [first index] of the array, as
-    #required by ifft)
-    #And fftshift is used to put the zero-frequency in the center of the array
-    if(self.beVerbose):
-      print "Fourier transforming the convolved data"
-    kdeFFT = fft.fftshift(fft.ifftn(fft.ifftshift(kde)))
-
-    #Deconvolve FFT(kde) (divide by the FFT of the gaussian) to obtain the ECF estimate
-    midPointAccessor = tuple(self.nvariables*[(len(self.tpoints)-1)/2])
-    if(self.beVerbose):
-      print "Deconvolving the data"
-    ecf = kdeFFT*exp(tau*sum((tpointgrids*deltaX)**2,axis=0))/kdeFFT[midPointAccessor]
-
-    return ecf
-
-
 
 #*******************************************************************************
 #*******************************************************************************
@@ -251,7 +150,7 @@ if(__name__ == "__main__"):
     #Set the real-space/frequency points (Hermitian FFT-friendly)
     numXPoints = 513
     xpoints = linspace(-20,20,numXPoints)
-    tpoints = calcTfromX(xpoints)
+    tpoints = nufft.calcTfromX(xpoints)
 
     #Calculate the FFT of an actual gaussian; use
     #this as the empirical characteristic function standard
@@ -269,9 +168,9 @@ if(__name__ == "__main__"):
     xyrand = random.normal(loc=0.0,scale=1.0,size=[nvariables,ndatapoints])
 
     #Calculat the ECF using the fast method
-    ecfFFT = ECF(xyrand,tpoints,useFFTApproximation=True).ECF
+    ecfFFT = ECF(xyrand,tpoints[newaxis,:],useFFTApproximation=True).ECF
     #Calculat the ECF using the slow method
-    ecfDFT = ECF(xyrand,tpoints,useFFTApproximation=False).ECF
+    ecfDFT = ECF(xyrand,tpoints[newaxis,:],useFFTApproximation=False).ECF
 
     #Print the 0-frequencies (should be 1 for all)
     print ecfFFT[nh],ecfDFT[nh],mygauscf[nh]
@@ -302,7 +201,7 @@ if(__name__ == "__main__"):
     #Set the frequency points (Hermitian FFT-friendly)
     numXPoints = 513
     xpoints = linspace(-20,20,numXPoints)
-    tpoints = calcTfromX(xpoints)
+    tpoints = nufft.calcTfromX(xpoints)
 
     #Calculate points from a 2D gaussian, and take their 2D FFT
     #to estimate the characteristic function standard
