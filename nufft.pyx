@@ -146,8 +146,8 @@ cpdef np.ndarray[double complex] nufft( \
             deltaxs = np.array([ abscissaGrids[n,1] - abscissaGrids[n,0] for n in range(numDimensions) ])
 
     #Inialize worker terms for the convolution
-    cdef np.ndarray[long,ndim=1] mvec = np.zeros([numDimensions])
-    cdef np.ndarray[long,ndim=1] m0vec = np.zeros([numDimensions])
+    cdef np.ndarray[long,ndim=1] mvec = np.zeros([numDimensions],dtype=np.int)
+    cdef np.ndarray[long,ndim=1] m0vec = np.zeros([numDimensions],dtype=np.int)
     cdef np.ndarray[np.float_t,ndim=1] mprimevec = np.zeros([numDimensions])
     cdef np.float_t mprime = 0.0
     cdef double complex gaussTerm = 0.0
@@ -202,9 +202,6 @@ cpdef np.ndarray[double complex] nufft( \
     cdef np.ndarray[double complex] \
             convolvedFFT = fft.fftshift(fft.ifftn(fft.ifftshift(convolvedRaveled)))
 
-    #Define a grid of frequeny points for use in the deconvolution
-    tpointgrids = np.array(np.meshgrid( * [ frequencyGrids[v,:frequencySizes[v]] for v in range(numDimensions)  ] ))
-
     #Get the height of the DFT at the 0-frequency point (used for normalization
     midPointAccessor = tuple([ (tsize - 1)/2 for tsize in frequencySizes])
     cdef np.float_t convolvedFFTMidPoint = convolvedFFT[midPointAccessor]
@@ -225,7 +222,7 @@ cpdef np.ndarray[double complex] nufft( \
         gaussArg = 0.0
         for v in range(numDimensions):
            gaussArg += (frequencyGrids[v,dimInds[v]]*deltaxs[v])**2
-        DFT[i] = convolvedFFT.ravel() * np.exp(tau*gaussArg) / convolvedFFTMidPoint
+        DFT[i] = convolvedFFTRaveled[i] * np.exp(tau*gaussArg) / convolvedFFTMidPoint
 
 
     #Reshape the DFT to an array
