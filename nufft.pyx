@@ -17,7 +17,8 @@ cpdef np.ndarray[double complex] nufft( \
                             double complex [:] ordinates, \
                             np.ndarray[np.float_t,ndim=2] frequencyGrids, \
                             np.float_t missingFreqVal = -1e20, \
-                            int precision = 2):
+                            int precision = 2, \
+                            int beVerbose = 0):
     """Approximate the direct Fourier transform of abscissa, ordinate pairs
        using the non-uniform FFT method.
         
@@ -43,6 +44,9 @@ cpdef np.ndarray[double complex] nufft( \
             precision   : Sets the precision of the approximation.  1 for floating point
                           and 2 for double precision accuracy.
 
+            beVerbose   : Flags whether to print to STDOUT as the method progresses
+                          (int 0=don't print 1=print)
+
         output:
         -------
 
@@ -62,6 +66,7 @@ cpdef np.ndarray[double complex] nufft( \
     # Get variable dimensionalities
     # and do consistency checks
     #*******************************
+    vprint("Checking dimensionalities and arguments",beVerbose)
     #Get the shape of abscissas 
     try:
         numDimensions = abscissas.shape[0]
@@ -94,6 +99,7 @@ cpdef np.ndarray[double complex] nufft( \
     #********************************************
     # Calculate the size of the frequency spaces
     #********************************************
+    vprint("Getting the size of the frequency spaces",beVerbose)
     cdef int n
     cdef np.ndarray[np.int_t,ndim=1] frequencySizes = np.zeros([numDimensions],dtype=np.int)
 
@@ -114,6 +120,7 @@ cpdef np.ndarray[double complex] nufft( \
     #******************************
     # Calculate the abscissa grids
     #******************************
+    vprint("Creating the convolution grid",beVerbose)
     for n in range(numDimensions):
         abscissaGrids[n,:frequencySizes[n]] = calcXfromT(frequencyGrids[n,:frequencySizes[n]])
 
@@ -121,6 +128,7 @@ cpdef np.ndarray[double complex] nufft( \
     #*******************************
     # Define convolution parameters 
     #*******************************
+    vprint("Initializing the convolution",beVerbose)
     cdef np.float_t tau,fourTau
     cdef long nspread
     cdef long nspreadhalf, hyperSlabSize
@@ -161,20 +169,30 @@ cpdef np.ndarray[double complex] nufft( \
     #***********************************
     # Convolve the data with a gaussian
     #***********************************
+    vprint("Performing the convolution",beVerbose)
     for j in range(numDataPoints):
         
+        #Transform the coordinates of our current abscissas value
+        #into the coordinate system of a hyperslab centered on the nearest
+        #point (nearest in the floor() sense)
         for v in range(numDimensions):
-            #Set the vecctor of indicies of the grid point nearest to the current
-            #data point
+            #Transform the current abscissa value into an approximate
+            #grid value
             mprime = (abscissas[v,j] - xmins[v])/deltaxs[v]
+            #Calculate the nearest (in the floor sense) grid abscissa
             m0vec[v] = <long> floor(mprime)
+            #Finish transforming the absicssa value to hyperslab coordinates
             mprimevec[v] = mprime - m0vec[v] + nspreadhalf
 
+        #Cycle over all the hyperslab points and calculate the gaussian convolution
+        #of the current data point only on points in the hyperslab
         for i in range(hyperSlabSize):
+            #Get the indices (mvec) of the current point (i) in our hyperslab
             unravelIndex(i,hyperSlabShape,mvec)
+
+            gaussArg = 0.0
             #Calculate the distance between the data point and the current
             #hyperslab point
-            gaussArg = 0.0
             for v in range(numDimensions):
                 gaussArg += (<np.float_t>mvec[v] - mprimevec[v])**2
             #Calculate the gaussian of this distance
@@ -190,33 +208,30 @@ cpdef np.ndarray[double complex] nufft( \
             if k >= 0 and k < freqSpaceSize:
                 convolvedData[k] = convolvedData[k] + gaussTerm
 
-
-    #Pack the unraveled convolvedData array into an n-dimensional array
-    cdef np.ndarray[double complex] \
-            convolvedRaveled = np.reshape(convolvedData,frequencySizes)
-
     #Take its FFT
     #( ifftshift is used to reorder the kde array such that 0 is the lowest corner 
     #  first index] of the array, as required by ifft)
     #And fftshift is used to put the zero-frequency in the center of the array
-    cdef np.ndarray[double complex] \
-            convolvedFFT = fft.fftshift(fft.ifftn(fft.ifftshift(convolvedRaveled)))
+    #reshape is used to form a proper n-dimensional array from the vector of convolved data
+    vprint("Raveling and doing FFT on convolved data",beVerbose)
+    convolvedFFT = fft.fftshift(fft.ifftn(fft.ifftshift(np.reshape(convolvedData,frequencySizes))))
 
+    vprint("Initializing the deconvolution",beVerbose)
     #Get the height of the DFT at the 0-frequency point (used for normalization
     midPointAccessor = tuple([ (tsize - 1)/2 for tsize in frequencySizes])
-    cdef np.float_t convolvedFFTMidPoint = convolvedFFT[midPointAccessor]
+    cdef double complex convolvedFFTMidPoint = convolvedFFT[midPointAccessor]
+    vprint("\tmidpoint accessor: {}".format(midPointAccessor),beVerbose)
+
+    #Ravel the convolved data
+    cdef np.ndarray[double complex,ndim=1] convolvedFFTRaveled = convolvedFFT.ravel()
 
     #Pre-declare and allocate a raveled form of the DFT
     cdef np.ndarray[double complex,ndim=1] DFT = np.zeros([freqSpaceSize],dtype=np.complex128)
-    #dft = convolvedFFT * \
-    #        np.exp(tau*np.sum((tpointgrids*deltaX)**2,axis=0)) / \
-    #        convolvedFFT[midPointAccessor]
-
+    #Pre declare a dimension index vector
     cdef np.ndarray[np.int_t,ndim=1] dimInds = np.zeros([numDimensions],dtype=np.int)
 
-    cdef np.ndarray[double complex,ndim=1] convolvedFFTRaveled = convolvedFFT.ravel()
-
     #Deconvolve the FFT (divide by the FFT of the gaussian) to obtain the DFT estimate
+    vprint("Deconvolving the Fourier transformed data",beVerbose)
     for i in range(freqSpaceSize):
         unravelIndex(i,frequencySizes,dimInds)
         gaussArg = 0.0
@@ -226,7 +241,9 @@ cpdef np.ndarray[double complex] nufft( \
 
 
     #Reshape the DFT to an array
-    return np.reshape(DFT,tuple(frequencySizes))
+    vprint("Reshaping and returning.",beVerbose)
+    #return np.reshape(DFT,tuple(frequencySizes))
+    return np.reshape(convolvedData,tuple(frequencySizes))
 
 
 #*******************************************************************************
@@ -437,4 +454,10 @@ def calcTfromX(xpoints):
   #transform of a signal on the x points
   deltaX = xpoints[1] - xpoints[0]
   return fft.fftshift(fft.fftfreq(len(xpoints),deltaX/(2*np.pi)))
+
+def vprint(msg,beVerbose):
+    """Prints only if beVerbose is True"""
+    if beVerbose:
+        print(msg)
+
 
