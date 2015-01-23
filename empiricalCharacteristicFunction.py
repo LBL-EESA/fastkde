@@ -141,7 +141,7 @@ if(__name__ == "__main__"):
   random.seed(0)
 
   #Flag whether to do the 1-D test
-  doOneDimensionalTest = True
+  doOneDimensionalTest = False
   if(doOneDimensionalTest):
     import pylab as P
     def mySTDGaus1D(x):
@@ -191,7 +191,7 @@ if(__name__ == "__main__"):
     P.plot(tpoints[sh],abs(ecfDFT[sh]-ecfFFT[sh]),'k-')
     P.show()
     
-  doTwoDimensionalTest = False #Flag whether to do 2D tests
+  doTwoDimensionalTest = True #Flag whether to do 2D tests
   if(doTwoDimensionalTest):
     from mpl_toolkits.mplot3d import Axes3D
     import matplotlib.pyplot as plt
@@ -199,7 +199,7 @@ if(__name__ == "__main__"):
       return 1./(2*pi) * exp(-(x**2 + y**2)/2)
 
     #Set the frequency points (Hermitian FFT-friendly)
-    numXPoints = 513
+    numXPoints = 127
     xpoints = linspace(-20,20,numXPoints)
     tpoints = nufft.calcTfromX(xpoints)
 
@@ -214,15 +214,16 @@ if(__name__ == "__main__"):
 
 
     #Sample points from a gaussian distribution
-    ndatapoints = 2**10
+    ndatapoints = 2**5
     nvariables = 2
     xyrand = random.normal(loc=0.0,scale=1.0,size=[nvariables,ndatapoints])
 
+    tpointgrids = concatenate(2*(tpoints[newaxis,:],),axis=0)
     #Calculate the ECF using the fast method
-    CecfFFT = ECF(xyrand,tpoints,useFFTApproximation=True)
+    CecfFFT = ECF(xyrand,tpointgrids,useFFTApproximation=True)
     ecfFFT = CecfFFT.ECF
     #Calculate the ECF using the slow method
-    CecfDFT = ECF(xyrand,tpoints,useFFTApproximation=False)
+    CecfDFT = ECF(xyrand,tpointgrids,useFFTApproximation=False)
     ecfDFT = CecfDFT.ECF
 
     #Use meshgrid to generate 2D arrays of the frequency points
