@@ -9,17 +9,17 @@ cdef extern from "math.h" nogil:
 
 #*******************************************************************************
 #*******************************************************************************
-#************************** nufft **********************************************
+#************************** nuifft *********************************************
 #*******************************************************************************
 #*******************************************************************************
-cpdef np.ndarray[double complex] nufft( \
+cpdef np.ndarray[double complex] nuifft( \
                             np.float_t[:,:] abscissas, \
                             double complex [:] ordinates, \
                             np.ndarray[np.float_t,ndim=2] frequencyGrids, \
                             np.float_t missingFreqVal = -1e20, \
                             int precision = 2, \
                             int beVerbose = 0):
-    """Approximate the direct Fourier transform of abscissa, ordinate pairs
+    """Approximates the unnormalized direct Fourier transform of abscissa, ordinate pairs
        using the non-uniform FFT method.
         
         input:
@@ -145,7 +145,9 @@ cpdef np.ndarray[double complex] nufft( \
     hyperSlabSize = nspread**numDimensions
 
     #get the shape of a hyperslab
-    cdef np.ndarray[np.int_t,ndim=1] hyperSlabShape = np.array(numDimensions*(nspread,),dtype=np.int)
+    cdef np.ndarray[np.int_t,ndim=1] hyperSlabShape = np.zeros([numDimensions],dtype=np.int)
+    hyperSlabShape[:] = nspread
+    vprint("\tconvolution hyperslab shape: {}".format(hyperSlabShape),beVerbose)
 
     #Calculate the quantities necessary for estimating x-indices
     cdef np.ndarray[np.float_t,ndim=1]  \
@@ -188,7 +190,7 @@ cpdef np.ndarray[double complex] nufft( \
         #of the current data point only on points in the hyperslab
         for i in range(hyperSlabSize):
             #Get the indices (mvec) of the current point (i) in our hyperslab
-            unravelIndex(i,hyperSlabShape,mvec)
+            unravelIndex(i,hyperSlabShape,mvec,numDimensions)
 
             gaussArg = 0.0
             #Calculate the distance between the data point and the current
@@ -202,7 +204,7 @@ cpdef np.ndarray[double complex] nufft( \
             mvec = (mvec + m0vec) - nspreadhalf
 
             #Calculate the flattened array index of the current point
-            k = ravelIndex(frequencySizes,mvec)
+            k = ravelIndex(frequencySizes,mvec,numDimensions)
 
             #Add the gaussian term to this point (only if it is within our domain
             if k >= 0 and k < freqSpaceSize:
@@ -215,12 +217,9 @@ cpdef np.ndarray[double complex] nufft( \
     #reshape is used to form a proper n-dimensional array from the vector of convolved data
     vprint("Raveling and doing FFT on convolved data",beVerbose)
     convolvedFFT = fft.fftshift(fft.ifftn(fft.ifftshift(np.reshape(convolvedData,frequencySizes))))
+    vprint("\tshape(convolvedFFT) = {}".format(np.shape(convolvedFFT)),beVerbose)
 
     vprint("Initializing the deconvolution",beVerbose)
-    #Get the height of the DFT at the 0-frequency point (used for normalization
-    midPointAccessor = tuple([ (tsize - 1)/2 for tsize in frequencySizes])
-    cdef double complex convolvedFFTMidPoint = convolvedFFT[midPointAccessor]
-    vprint("\tmidpoint accessor: {}".format(midPointAccessor),beVerbose)
 
     #Ravel the convolved data
     cdef np.ndarray[double complex,ndim=1] convolvedFFTRaveled = convolvedFFT.ravel()
@@ -233,30 +232,29 @@ cpdef np.ndarray[double complex] nufft( \
     #Deconvolve the FFT (divide by the FFT of the gaussian) to obtain the DFT estimate
     vprint("Deconvolving the Fourier transformed data",beVerbose)
     for i in range(freqSpaceSize):
-        unravelIndex(i,frequencySizes,dimInds)
+        unravelIndex(i,frequencySizes,dimInds,numDimensions)
         gaussArg = 0.0
         for v in range(numDimensions):
            gaussArg += (frequencyGrids[v,dimInds[v]]*deltaxs[v])**2
-        DFT[i] = convolvedFFTRaveled[i] * np.exp(tau*gaussArg) / convolvedFFTMidPoint
+        DFT[i] = convolvedFFTRaveled[i] * np.exp(tau*gaussArg)
 
 
     #Reshape the DFT to an array
     vprint("Reshaping and returning.",beVerbose)
-    #return np.reshape(DFT,tuple(frequencySizes))
-    return np.reshape(convolvedData,tuple(frequencySizes))
+    return np.reshape(DFT,tuple(frequencySizes))
 
 
 #*******************************************************************************
 #*******************************************************************************
-#************************** dft ************************************************
+#************************** idft ***********************************************
 #*******************************************************************************
 #*******************************************************************************
-cpdef np.ndarray[double complex] dft( \
+cpdef np.ndarray[double complex] idft( \
                             np.float_t[:,:] abscissas, \
                             double complex [:] ordinates, \
                             np.ndarray[np.float_t,ndim=2] frequencyGrids, \
                             np.float_t missingFreqVal = -1e20):
-    """Calculates the direct Fourier transform of abscissa, ordinate pairs
+    """Calculates the unnormalized direct Fourier transform of abscissa, ordinate pairs
         
         input:
         ------
@@ -352,14 +350,11 @@ cpdef np.ndarray[double complex] dft( \
     cdef double ecfArg
 
     #cdef double complex dftConst = -2.0j * <double complex> np.pi
-    cdef double complex dftConst = -1.0j #* <double complex> np.pi
-
-    #cdef double complex normConstant = <double complex> (1./(numDataPoints * (2 * np.pi)**((<float> numDimensions)/2.0)))
-    cdef double complex normConstant = 1.0j
+    cdef double complex dftConst = 1.0j #* <double complex> np.pi
 
 
     for i in range(freqSpaceSize):
-        unravelIndex(i,frequencySizes,dimInds)
+        unravelIndex(i,frequencySizes,dimInds,numDimensions)
 
         myDFT = 0.0 + 0.0j 
 
@@ -371,7 +366,7 @@ cpdef np.ndarray[double complex] dft( \
 
             myDFT += ordinates[j]*np.exp(dftConst * <double complex> ecfArg)
 
-        DFT[i] = normConstant * myDFT
+        DFT[i] = myDFT
 
     return np.reshape(DFT,tuple(frequencySizes))
                 
@@ -384,18 +379,16 @@ cpdef np.ndarray[double complex] dft( \
 #*******************************************************************************
 #*******************************************************************************
 @cython.boundscheck(False)
-cpdef int unravelIndex( \
+cdef inline int unravelIndex( \
                    np.int_t i, \
                    np.int_t [:] frequencySizes, \
-                   np.int_t [:] dimInds) :
+                   np.int_t [:] dimInds, \
+                   np.int_t ndims) nogil:
     """Takes the 1D index i of a raveled variable of shape frequencySizes and returns
     an array of the unraveled indices."""
 
-    cdef np.int_t ndims
     cdef np.int_t n,nd,iDum
     cdef np.int_t hyperSize
-
-    ndims = frequencySizes.shape[0]
 
     hyperSize = 1
     for n in range(1,ndims):
@@ -405,8 +398,10 @@ cpdef int unravelIndex( \
     for n in range(ndims):
         dimInds[n] = <np.int_t> floor((<double> iDum)/(<double> hyperSize))
         iDum -= dimInds[n]*hyperSize
-        if n < ndims:
+        if n < (ndims-1):
             hyperSize /= frequencySizes[n+1]
+        else:
+            hyperSize = 1
 
     return 0
 
@@ -416,18 +411,16 @@ cpdef int unravelIndex( \
 #*******************************************************************************
 #*******************************************************************************
 @cython.boundscheck(False)
-cpdef int ravelIndex( \
+cdef inline int ravelIndex( \
                    np.int_t [:] frequencySizes, \
-                   np.int_t [:] dimInds) :
+                   np.int_t [:] dimInds, \
+                   np.int_t ndims) nogil:
     """Calculates the 1D index i of a raveled variable of shape frequencySizes, given
     an array of the unraveled indices."""
 
-    cdef np.int_t ndims
     cdef np.int_t n
     cdef np.int_t hyperSize
     cdef np.int_t i
-
-    ndims = frequencySizes.shape[0]
 
     hyperSize = 1
     i = 0
