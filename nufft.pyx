@@ -347,7 +347,7 @@ cpdef np.ndarray[double complex] idft( \
     cdef np.ndarray[np.int_t,ndim=1] dimInds = np.zeros([numDimensions],dtype=np.int)
 
     cdef double complex myDFT
-    cdef double ecfArg
+    cdef double expArg
 
     #cdef double complex dftConst = -2.0j * <double complex> np.pi
     cdef double complex dftConst = 1.0j #* <double complex> np.pi
@@ -359,19 +359,16 @@ cpdef np.ndarray[double complex] idft( \
         myDFT = 0.0 + 0.0j 
 
         for j in range(numDataPoints):
-            ecfArg = 0.0
+            expArg = 0.0
 
             for k in range(numDimensions):
-                ecfArg += (abscissas[k,j] * frequencyGrids[k,dimInds[k]])#/frequencySizes[k]
+                expArg += (abscissas[k,j] * frequencyGrids[k,dimInds[k]])#/frequencySizes[k]
 
-            myDFT += ordinates[j]*np.exp(dftConst * <double complex> ecfArg)
+            myDFT += ordinates[j]*np.exp(dftConst * <double complex> expArg)
 
         DFT[i] = myDFT
 
     return np.reshape(DFT,tuple(frequencySizes))
-                
-                
-
 
 #*******************************************************************************
 #*******************************************************************************

@@ -94,9 +94,9 @@ class ECF:
     #Get the maximum frequency grid length
     ntmax = amax([len(tgrid) for tgrid in tgrids])
     #Create the frequency grids array
-    frequencyGrids = fillValue*ones([nvariables,ntmax])
+    frequencyGrids = fillValue*ones([self.nvariables,ntmax])
     #Fill the frequency grids array
-    for v in range(nvariables):
+    for v in range(self.nvariables):
         frequencyGrids[v,:len(tgrids[v])] = tgrids[v]
 
     #Simply pass in the input data as provided
@@ -105,17 +105,16 @@ class ECF:
     #Calculate the ECF
     if(self.useFFTApproximation):
       #Calculate the ECF using the fast method
-      ECF = nufft.nuifft( \
+      myECF = nufft.nuifft( \
                         abscissas = inputData, \
                         ordinates = ones([inputData.shape[1]],dtype=complex128), \
                         frequencyGrids = frequencyGrids, \
                         missingFreqVal = fillValue, \
                         precision = precision, \
                         beVerbose = int(beVerbose))
-
     else:
       #Calculate the ECF using the slow (direct, but exact) method
-      ECF = nufft.idft( \
+      myECF = nufft.idft( \
                         abscissas = inputData, \
                         ordinates = ones([inputData.shape[1]],dtype=complex128), \
                         frequencyGrids = frequencyGrids, \
@@ -123,8 +122,11 @@ class ECF:
 
     #Ensure that the ECF is normalized
     midPointAccessor = tuple( [ (len(tgrid) - 1)/2 for tgrid in tgrids ])
-    #Save the ECF in the object
-    self.ECF = ECF/ECF[midPointAccessor]
+    if myECF[midPointAccessor] > 0.0:
+        #Save the ECF in the object
+        self.ECF = myECF/myECF[midPointAccessor]
+    else:
+        raise RuntimeError,"Midpoint of ECF is 0.0.  min(ECF) = {}, max(ECF) = {}".format(amin(myECF),amax(myECF))
 
 
     return

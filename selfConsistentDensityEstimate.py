@@ -13,6 +13,7 @@ from types import *
 import pdb
 import time
 import sys
+from nufft import calcTfromX
 import floodFillSearchC as flood
 
 #A simple timer for comparing ECF calculation methods
@@ -29,19 +30,11 @@ class selfConsistentDensityEstimate:
 
   def __init__( self,\
                 data = None,\
-                x = None, \
-                numPoints = None, \
-                numSigma = None, \
-                deltaX = None, \
-                dataAverage = None, \
-                dataStandardDeviation = None, \
-                dataMin = None, \
-                dataMax = None, \
+                xgrids = None, \
                 numPointsPerSigma = 10, \
-                countThreshold = 30, \
+                countThreshold = 1, \
                 doApproximateECF = True, \
                 ecfPrecision = 1, \
-                doStoreConvolution = False, \
                 doSaveTransformedKernel = False, \
                 doFFT = True, \
                 doSaveMarginals = True, \
@@ -64,13 +57,11 @@ class selfConsistentDensityEstimate:
 
     usage: sdensity = selfConsistentDensityEstimate(  data, \
                                                   x = None, \
-                                                  numPoints = 4097,\
                                                   numSigma = 20, \
                                                   deltaX = None, \
                                                   dataAverage = None, \
                                                   dataStandardDeviation = None, \
                                                   doApproximateECF = True, \
-                                                  doStoreConvolution = False, \
                                                   doFFT = True \
                                                 )
 
@@ -79,9 +70,6 @@ class selfConsistentDensityEstimate:
 
       x                   : the x-values of the estimated PDF.  They must be evenly
                             spaced and they should have an odd length
-
-      numPoints           : the number of points in the domain.  If deltaX is
-                            given, this value is overwritten.
 
       numSigma            : the number of unit standard deviations that the PDF
                             domain should span.
@@ -107,10 +95,6 @@ class selfConsistentDensityEstimate:
       ecfPrecision        : sets the precision of the approximate ECF.  If set to 2, it uses
                             double precision accuracy; 1 otherwise
 
-      doStoreConvolution  : flags whether to store the KDE used in the nuFFT
-
-      doSaveTransformedKernel : flags whether to save the transformed kernel
-
       doFFT               : flags whether to calculate phiSC and its FFT to obtain
                             fSC
 
@@ -123,16 +107,23 @@ class selfConsistentDensityEstimate:
     Returns: a selfConsistentDensityEstimate object
 
     """
+
+    def vprint(msg):
+        """Only print if beVerbose is True"""
+        if beVerbose:
+            print(msg)
+
+    addOne = True #Force x grids to be (2**n) + 1
     
-    if(data != None):
+    if(data is not None):
 
       #First check the rank of the data
       dataRank = len(shape(data))
       #If the data are a vector, promote the data to a rank-1 array with only 1 column
       if(dataRank == 1):
-        data = reshape(data,[1,len(data)])
+          data = data[newaxis,:]
       if(dataRank > 2):
-        raise ValueError,"data must be a rank-2 array of shape [numVariables,numDataPoints]"
+          raise ValueError,"data must be a rank-2 array of shape [numVariables,numDataPoints]"
 
       #Set the rank of the data
       self.dataRank = dataRank
@@ -142,6 +133,8 @@ class selfConsistentDensityEstimate:
       #Set the number of data points
       self.numDataPoints = shape(data)[1]
 
+      self.dataAverage = average(data,axis=1)
+
       #Save the number of contiguous hyper volumes
       try:
           xrange(numContiguousHyperVolumes)
@@ -149,54 +142,7 @@ class selfConsistentDensityEstimate:
           raise ValueError,"numContiguousHyperVolumes must be an integer"
       self.numContiguousHyperVolumes = numContiguousHyperVolumes
 
-      if(beVerbose):
-        print "Operating on data with numVariables = {}, numDataPoints = {}".format(self.numVariables,self.numDataPoints)
-
-      #Calculate and/or save the standard deviation/average of the data
-      try: 
-        if any([a is None for a in dataAverage]):
-            self.dataAverage = average(data,1)
-        else:
-            self.dataAverage = array(dataAverage)
-      except:
-          try:
-            self.dataAverage = average(data,1)
-          except:
-              pass
-
-      if(dataAverage is None):
-        self.dataAverage = average(data,1)
-
-      #Calculate and/or save the standard deviation/average of the data
-      try: 
-        if any([s is None for s in dataStandardDeviation]):
-            self.dataStandardDeviation = std(data,1)
-        else:
-            self.dataStandardDeviation = array(dataStandardDeviation)
-      except:
-          try:
-            self.dataStandardDeviation = std(data,1)
-          except:
-              pass
-
-      if(dataStandardDeviation is None):
-        self.dataStandardDeviation = std(data,1)
-
-      if(beVerbose):
-        print "Data has average: {}".format(self.dataAverage)
-        print "Data has standard deviation: {}".format(self.dataStandardDeviation)
-
-      #Minimum
-      if(dataMin is None or len(nditer(dataMin)) != self.numVariables):
-        self.dataMin = amin(data,1)
-      else:
-        self.dataMin = dataMin
-      #Maximum
-      if(dataMax is None or len(nditer(dataMin)) != self.numVariables):
-        self.dataMax = amax(data,1)
-      else:
-        self.dataMax = dataMax
-
+      vprint("Operating on data with numVariables = {}, numDataPoints = {}".format(self.numVariables,self.numDataPoints))
 
     else:
       self.numDataPoints = 0
@@ -204,11 +150,10 @@ class selfConsistentDensityEstimate:
     #Store the doFFT flag
     self.doFFT = doFFT
 
-    #Set the number of points
-    self.numPoints = numPoints
-
     #Save the marginals flag
     self.doSaveMarginals = doSaveMarginals
+    if dataRank == 1:
+        self.doSaveMarginals = False
 
     #Set whether to approximate the ECF using the FFT method
     self.doApproximateECF = doApproximateECF
@@ -225,76 +170,88 @@ class selfConsistentDensityEstimate:
     self.kappaSC = None
     self.kSC = None
 
-    if(x is None):
-      #Determine the x-points of the estimated PDF
-      if(deltaX is None): 
-        if(numSigma is None):
-          #Do a principal component analysis to estimate the width of the
-          #distribution in the thinnest direction (using the correlation matrix
-          #        instead of covariance to estimate the width in the
-          #        standardized coordinate system)
-          if(dataRank > 1): 
-              rr = corrcoef(data)
-              eigenValue,eigenVectors = linalg.eig(rr)
-              minSigma = sqrt(amin(eigenValue[-1]))
-          else:
-              minSigma = 1
+    #***********************
+    # Calculate the x grids
+    #***********************
+    if(xgrids is None):
 
-          #Set the width of the grid as the number of standard deviations required
-          #span the range of the data
-          #numSigma = 2*(amax(self.dataMax) - amin(self.dataMin))/minSigma
-          dataRange = self.dataMax - self.dataMin
-          sigmaWidths = (self.dataMax - self.dataMin)/self.dataStandardDeviation
-          numSigma = amax(sigmaWidths/minSigma)
+        #Get the range of the data (inflate it by 5% to ensure that the data all fit
+        #within the range
+        self.xMin = 1.05*amin(data,1)
+        self.xMax = 1.05*amax(data,1)
+        #Get the grid mid-points
+        midPoint = 0.5*(self.xMax + self.xMin)
 
-          if(beVerbose):
-            print "numSigma = {}".format(numSigma)
+        forceZeroDataAverage = False
+        if forceZeroDataAverage:
+            #Shift the edges of the range so that the mid point is also the data average
+            for v in range(self.numVariables):
+                distance = midPoint[v] - self.dataAverage[v]
+                if distance > 0:
+                    self.xMin[v] -= 2*distance
+                else:
+                    self.xMax[v] -= 2*distance 
 
+                assert isclose(0.5*(self.xMax[v] + self.xMin[v]), self.dataAverage[v])
 
-        if(numPoints is None):
-          #Set the width of the grid as the number of standard deviations required
-          #Set the number of points requrired to meet the number of points per standard deviation
-          #and the range of the data
-          numPoints = nextHighestPowerOfTwo(numSigma * numPointsPerSigma) + 1
+            self.midPoint = self.dataAverage
+        else:
+            self.midPoint = midPoint
 
-        if(beVerbose):
-          print "X-grid chosen with {} points and a sigma range of +/- {}".format(numPoints,numSigma)
+        #Calculate the standard deviations
+        dataStandardDeviation = std(data,1)
 
-        assert numPoints > 1, "numPoints < 2: {}".format(numPoints)
-        assert type(numPoints) is IntType, "numPoints is not an integer: {}".formate(numPoints)
-        self.x = linspace(-numSigma,numSigma,numPoints)
-        self.deltaX = self.x[1] - self.x[0]
-        self.numXPoints = numPoints
-      else:
-        self.x = arange(-numSigma,numSigma+deltaX,deltaX)
-        self.deltaX = deltaX
-        self.numXPoints = len(self.x)
+        #Calculate the number of standard deviations there
+        # are in the data range
+        dataRange = self.xMax - self.xMin
+        numSigma = dataRange/dataStandardDeviation
         
-      self.xMin = -numSigma
-      self.xMax = numSigma
+        #Set the number of points for each dimensions
+        self.numXPoints = array([nextHighestPowerOfTwo(ns * numPointsPerSigma) + int(addOne) for ns in numSigma])
+
+        #Set the grids for each dimension
+        self.xgrids = [ linspace(xmin,xmax,np) for xmin,xmax,np in zip(self.xMin,self.xMax,self.numXPoints)]
+
+        vprint("Grids created with xmin: {}, xmax: {}, npoints: {}".format(self.xMin,self.xMax,self.numXPoints))
     else:
-      #If the x-points are specified, then use the specified points
-      #TODO: the FFT-based implementation of the BP11 density estimate requires that
-      #       x be evenly spaced (and it should have an odd number of points). This
-      #       should be checked
-      self.x = x
-      self.deltaX = x[1] - x[0]
-      self.numXPoints = len(self.x)
-      self.xMin = amin(x)
-      self.xMax = amax(x)
-
-    #Calculate the frequency points
-    self.t = ecf.calcTfromX(self.x)
-    self.numTPoints = len(self.t)
-    self.deltaT = self.t[2] - self.t[1]
-
-    self.ithresh = 1  #Set the number of consecutive frequency points, that are
-                      #below the stability threshold, that will cause the phiSC
-                      #loop to stop
+        #Set the xgrid from the function argument
+        self.xgrids = xgrids
+        self.xMin = array([amin(xg) for xg in xgrids])
+        self.xMax = array([amax(xg) for xg in xgrids])
+        self.numXPoints = array([len(xg) for xg in xgrids])
+        #Get the grid mid-points
+        self.midPoint = 0.5*(self.xMax + self.xMin)
 
 
-    self.phiSC = (0.0+0.0j)*zeros(self.numVariables*[self.numTPoints])
-    self.ECF = (0.0+0.0j)*zeros(self.numVariables*[self.numTPoints])
+    #Get the grid spacings
+    self.deltaX = array([ xg[1] - xg[0] for xg in self.xgrids])
+
+    #Check that the xgrids are regular and proper powers of two
+    for v in range(self.numVariables):
+        xg = self.xgrids[v]
+        dx = xg[1:] - xg[:-1]
+        dxdiff = dx - self.deltaX[v]
+        fTolerance = dx/1e6
+        #Check that these differences are less than 1/1e6
+        if(not all(abs(dxdiff < fTolerance))):
+            raise ValueError,"All grids in xgrids must be regularly spaced"
+
+        log2size = log2(len(xg) - addOne)
+        if log2size != floor(log2size):
+            if addOne:
+                extraStr = " + 1"
+            else:
+                extraStr = ""
+
+            raise ValueError,"All grids in xgrids must be powers of 2" + extraStr + ", but got {}".format(len(xg))
+
+    #Calculate the frequency point grids (for 0-centered data)
+    self.tgrids = [ calcTfromX(xg-mp) for xg,mp in zip(self.xgrids,self.midPoint) ]
+    self.numTPoints = array([len(tg) for tg in self.tgrids])
+    self.deltaT = array([tg[2] - tg[1] for tg in self.tgrids])
+
+    self.phiSC = (0.0+0.0j)*zeros(self.numTPoints)
+    self.ECF = (0.0+0.0j)*zeros(self.numTPoints)
 
     #Initialize the good distribution index
     self.goodDistributionInds = []
@@ -302,7 +259,6 @@ class selfConsistentDensityEstimate:
     #Set the verbosity flag
     self.beVerbose = beVerbose
 
-    self.doStoreConvolution = doStoreConvolution
     self.convolvedData = None
 
     #Calculate the distribution frequency corresponding to the given count threshold
@@ -311,30 +267,28 @@ class selfConsistentDensityEstimate:
     #Initialize the marginals
     self.marginalObjects = None
 
-    if(data != None):
+    if(data is not None):
 
       #*************************************************
       # Calculate the Empirical Characteristic Function
       #*************************************************
       #Note that this routine also standardizes the data on-the-fly
-      if(self.beVerbose):
-        print "Calculating the ECF"
-        sys.stdout.flush()
+      vprint("Calculating the ECF")
+      sys.stdout.flush()
 
+      #Transfrom the data to 0-centered coordinates
+      for v in range(self.numVariables):
+          data[v,:] -= self.midPoint[v]
+          
       #Calculate the ECF (see empiricalCharacteristicFunction.py)
       ecfObj = ecf.ECF( inputData = data, \
-                        tpoints = self.t, \
-                        dataAverage = self.dataAverage, \
-                        dataStandardDeviation = self.dataStandardDeviation, \
+                        tgrids = self.tgrids, \
                         useFFTApproximation = self.doApproximateECF, \
-                        doStoreConvolution = self.doStoreConvolution, \
                         precision = self.ecfPrecision, \
                         beVerbose = self.beVerbose)
 
       #Extract the ECF from the ECF object
       self.ECF = ecfObj.ECF
-      if(self.doStoreConvolution):
-        self.convolvedData = ecfObj.convolvedData
 
       if(self.doFFT):
         #*************************************************
@@ -342,32 +296,23 @@ class selfConsistentDensityEstimate:
         #*************************************************
         #Apply the Bernacchia and Pigolotti (2011) filter to the ECF to obtain
         #the fourier representation of the self-consistent density
-        if(self.beVerbose):
-          print "Applying the filter"
+        vprint("Applying the filter")
         self.applyBernacchiaFilter()
 
         #*************************************************
         # Transform to real space
         #*************************************************
         #Transform the optimal distribution to real space
-        if(self.beVerbose):
-          print "Transforming to real space"
-          sys.stdout.flush()
+        vprint("Transforming to real space")
+        sys.stdout.flush()
         self.__transformphiSC__()
 
-        #if(self.beVerbose):
-        #  print "Finding good distribution indices"
-        #  sys.stdout.flush()
-        #self.goodDistributionInds = self.findGoodDistributionInds()
-
         #Calculate and save the marginal distribution objects
-        if(doSaveMarginals):
+        if(self.doSaveMarginals):
           self.marginalObjects = []
           for i in xrange(self.dataRank):
             self.marginalObjects.append(selfConsistentDensityEstimate(data[i,:], \
-                                          x = self.x, \
-                                          dataAverage = self.dataAverage[i], \
-                                          dataStandardDeviation = self.dataStandardDeviation[i], \
+                                          xgrids = self.xgrids, \
                                           countThreshold = self.countThreshold, \
                                           doSaveMarginals = False) )
                                                                   
@@ -395,6 +340,9 @@ class selfConsistentDensityEstimate:
 
     #Find all hypervolumes where ecfSq is greater than the stability threshold
     contiguousInds = flood.floodFillSearch(ecfSq,searchThreshold = self.ecfThreshold)
+
+    if contiguousInds == []:
+        raise RuntimeError,"No ECF values found above the ECF threshold.  max(ecfSq) = {}, ecfThresh = {}".format(amax(ecfSq),ecfThresh)
 
     #Sort them by distance from the center
     sortedInds = flood.sortByDistanceFromCenter(contiguousInds,shape(ecfSq))
@@ -433,7 +381,7 @@ class selfConsistentDensityEstimate:
     #in real space.  It is assumed that this is the peak of the kernel; this is used in
     # findGoodDistributionInds() to estimate the number of kernels contributing to a given
     # point on the self-consistent density estimate.
-    self.kSCMax = real(sum(kappaSC[iCalcPhi])*(self.deltaT/(2*pi))**self.numVariables)
+    self.kSCMax = real(sum(kappaSC[iCalcPhi])*prod(self.deltaT)*(1./(2*pi))**self.numVariables)
 
     #Calculate the distribution threshold as a multiple of an individual kernelet
     self.distributionThreshold = self.countThreshold*(self.kSCMax/self.numDataPoints)
@@ -466,12 +414,12 @@ class selfConsistentDensityEstimate:
     frequency space to real space"""
 
     #Transform the PDF estimate to real space
-    fSC = fft.fftshift(real(fft.fftn(fft.ifftshift(self.phiSC))))*(self.deltaT/(2*pi))**self.numVariables
+    fSC = fft.fftshift(real(fft.fftn(fft.ifftshift(self.phiSC))))*prod(self.deltaT)*(1./(2*pi))**self.numVariables
 
     
     if(self.beVerbose):
-      normConst = sum(fSC*self.deltaX**self.numVariables)
-      midPointAccessor = tuple(self.numVariables*[(self.numTPoints-1)/2])
+      normConst = sum(fSC*prod(self.deltaX))
+      midPointAccessor = tuple([(tp-1)/2 for tp in self.numTPoints])
       print "Normalization of fSC = {}. phiSC[0] = {}".format(normConst,self.phiSC[midPointAccessor])
 
     #transpose the self-consistent density estimate
@@ -479,7 +427,7 @@ class selfConsistentDensityEstimate:
 
     #Take the transform of the self-consistent kernel if flagged
     if(self.doSaveTransformedKernel):
-      kSC = fft.fftshift(real(fft.fftn(fft.ifftshift(self.kappaSC))))*(self.deltaT/(2*pi))**self.numVariables
+      kSC = fft.fftshift(real(fft.fftn(fft.ifftshift(self.kappaSC))))*prod(self.deltaT)*(1./(2*pi))**self.numVariables
       self.kSC = kSC.transpose()
 
   #*****************************************************************************
@@ -496,16 +444,14 @@ class selfConsistentDensityEstimate:
 
     #Check if we need to calculate the marginal distributions
     if(not self.doSaveMarginals):
-      if(x is None):
-        raise ValueError,"the data must be provided as argument 'x', if doSaveMarginals=False when the original PDF was calculated"
+      if(data is None):
+        raise ValueError,"the data must be provided as argument 'data', if doSaveMarginals=False when the original PDF was calculated"
       else:
         #Estimate the marginal distributions
         marginalObjects = []
         for i in xrange(self.dataRank):
           marginalObjects.append(selfConsistentDensityEstimate(data[i,:], \
-                                      x = self.x, \
-                                      dataAverage = self.dataAverage[i], \
-                                      dataStandardDeviation = self.dataStandardDeviation[i], \
+                                      xgrids = self.xgrids, \
                                       countThreshold = self.countThreshold, \
                                       doSaveMarginals = False))
     else:
@@ -542,31 +488,20 @@ class selfConsistentDensityEstimate:
         empirical characteristic functions of the two estimates, reapplies
         the BP11 filter, and transforms back to real space.  This is useful
         for parallelized calculation of densities.  Note that this only works
-        if dataAverage and dataStandardDeviation are the same for both operands."""
+        if the xgrids are the same for both operands."""
     #Check for proper typing
     if(not isinstance(rhs,selfConsistentDensityEstimate)):
       raise TypeError, "unsupported operand type(s) for +: {} and {}".format(type(self),type(rhs))
 
-    #Check that dataAverage and dataStandardDeviation is the same for both operands
-    if(not allclose(self.dataAverage,rhs.dataAverage) or not allcose(self.dataStandardDeviation,rhs.dataStandardDeviation)):
-        #If it isn't, raise a NotImplementedError.  We would need to implement an algorithm that interpolates
-        #the ECF of rhs to the un-standardized frequency points of the the lhs (self) object.
-        raise NotImplementedError,"addition for operands with different dataAverage and dataStandardDeviation is not available in this version."
+    #Check that the xgrids are the same for both objects
+    for sxg,rxg in zip(self.xgrids,rhs.xgrids):
+        if not all(isclose(sxg,rxg)):
+            raise NotImplementedError,"addition for operands with different xgrids is not yet implemented."
 
     retObj = copy.deepcopy(self)
-    retObj.phiSC = (0.0+0.0j)*zeros(retObj.numVariables*[self.numTPoints])
+    retObj.phiSC = (0.0+0.0j)*zeros(self.numTPoints)
 
-    #Update the data average, standard deviation, and count
-    [ retObj.dataAverage, \
-      retObj.dataStandardDeviation, \
-      retObj.numDataPoints ] = \
-                                    kn.knuthCombine( \
-                                                    self.dataAverage,\
-                                                    self.dataStandardDeviation**2,\
-                                                    self.numDataPoints,\
-                                                    rhs.dataAverage,\
-                                                    rhs.dataStandardDeviation**2,\
-                                                    rhs.numDataPoints)
+    retObj.numDataPoints += rhs.numDataPoints
 
     #Convert the returned variance back into standard deviation
     retObj.dataStandardDeviation = sqrt(retObj.dataStandardDeviation)
@@ -581,14 +516,6 @@ class selfConsistentDensityEstimate:
 
     #Return the new object
     return retObj
-
-  def getTransformedAxes(self):
-    """Returns a tuple of unstandardized axis values for the self-consistent density (in real space)."""
-    return tuple([ (self.x*self.dataStandardDeviation[i] + self.dataAverage[i]) for i in range(self.numVariables) ])
-
-  def getTransformedPDF(self):
-    """Returns a destandardized version of the self-consistent density"""
-    return self.fSC/prod(self.dataStandardDeviation)
 
 #*******************************************************************************
 #*******************************************************************************
@@ -606,25 +533,27 @@ if(__name__ == "__main__"):
   #set a seed so that results are repeatable
   random.seed(0)
 
-  doOneDimensionalTests = False
+  doOneDimensionalTests = True
   if(doOneDimensionalTests):
     import pylab as P
     import scipy.stats as stats
 
     #print ftnbp11helper.__doc__
 
+    mu = 0.
+    sig = 3.0
     #Define a gaussian function for evaluation purposes
-    def mygaus(x,mu=0.,sig=1.):
+    def mygaus(x):
       return (1./(sig*sqrt(2*pi)))*exp(-(x-mu)**2/(2.*sig**2))
     
     #Set the size of the sample to calculate
-    powmax = 19
+    powmax = 15
     npow = asarray(range(powmax)) + 1.0
 
     #Set the maximum sample size
     nmax = 2**powmax
     #Create a random normal sample of this size
-    randsample = 3*random.normal(size = nmax)
+    randsample = sig*random.normal(size = nmax) + mu
 
 
     #Pre-define sample size and error-squared arrays
@@ -632,105 +561,133 @@ if(__name__ == "__main__"):
     esq = zeros([len(npow)])
     epct = zeros([len(npow)])
 
-    #Do the optimal calculation on a number of different random draws
-    for i,n in zip(range(len(npow)),npow):
-      #Extract a sample of length 2**n + 1 from the previously-created
-      #random sample
-      randgauss = randsample[:(2**n + 1)]
-      #Set the sample size
-      nsample[i] = len(randgauss)
+    evaluateError = True
+    if evaluateError:
+        #Do the optimal calculation on a number of different random draws
+        for i,n in zip(range(len(npow)),npow):
+          #Extract a sample of length 2**n + 1 from the previously-created
+          #random sample
+          randgauss = randsample[:(2**n + 1)]
+          #Set the sample size
+          nsample[i] = len(randgauss)
 
-      with Timer(nsample[i]):
-        #Do the BP11 density estimate
-        bkernel = selfConsistentDensityEstimate(randgauss,doApproximateECF=True)
+          with Timer(nsample[i]):
+            #Do the BP11 density estimate
+            bkernel = selfConsistentDensityEstimate(randgauss,doApproximateECF=True)
 
-      #Calculate the mean squared error between the estimated density
-      #And the gaussian
-      #esq[i] = average(abs(mygaus(bkernel.x)-bkernel.fSC)**2 *bkernel.deltaX)
-      esq[i] = average(abs(mygaus(bkernel.x)-bkernel.fSC[:])**2 *bkernel.deltaX)
-      epct[i] = 100*sum(abs(mygaus(bkernel.x)-bkernel.fSC[:])*bkernel.deltaX)
-      #Print the sample size and the error to show that the code is proceeeding
-      #print "{}, {}%".format(nsample[i],epct[i])
+          #Calculate the mean squared error between the estimated density
+          #And the gaussian
+          #esq[i] = average(abs(mygaus(bkernel.x)-bkernel.fSC)**2 *bkernel.deltaX)
+          esq[i] = average(abs(mygaus(bkernel.xgrids[0])-bkernel.fSC[:])**2 *bkernel.deltaX[0])
+          epct[i] = 100*sum(abs(mygaus(bkernel.xgrids[0])-bkernel.fSC[:])*bkernel.deltaX[0])
+          #Print the sample size and the error to show that the code is proceeeding
+          #print "{}, {}%".format(nsample[i],epct[i])
 
-      #Plot the optimal distribution
-      P.subplot(2,2,1)
-      fSCmask = ma.masked_less(bkernel.fSC,bkernel.distributionThreshold)
-      P.plot(bkernel.x,fSCmask,'b-')
+          #Plot the optimal distribution
+          P.subplot(2,2,1)
+          fSCmask = ma.masked_less(bkernel.fSC,bkernel.distributionThreshold)
+          P.plot(bkernel.xgrids[0],fSCmask,'b-')
 
-      #Plot the empirical characteristic function
-      P.subplot(2,2,2,xscale="log",yscale="log")
-      P.plot(bkernel.t[1:],abs(bkernel.ECF[1:])**2,'b-')
+          #Plot the empirical characteristic function
+          P.subplot(2,2,2,xscale="log",yscale="log")
+          P.plot(bkernel.tgrids[0][1:],abs(bkernel.ECF[1:])**2,'b-')
 
-
-    #Plot the sample gaussian
-    P.subplot(2,2,1)
-    P.plot(bkernel.x,mygaus(bkernel.x),'r-')
-
-
-    #Do a simple power law fit to the scaling
-    [m,b,_,_,_] = stats.linregress(log(nsample),log(esq))
-    #Print the error scaling (following BP11, this is expected to be m ~ -1)
-    print "Error scales ~ N**{}".format(m)
-
-    #Plot the error vs sample size on a log-log curve
-    P.subplot(2,2,3)
-    P.loglog(nsample,esq)
-    P.plot(nsample,exp(b)*nsample**m,'r-')
-
-    print ""
-
-    bDemoSum = False
-    if(not bDemoSum):
-      P.show() 
-    else:
-      #*********************************************************************
-      # Demonstrate the capability to sum selfConsistentDensityEstimate objects
-      #*********************************************************************
-
-      nsamp = 512
-      nloop = nmax/nsamp
+        #Plot the sample gaussian
+        P.subplot(2,2,1)
+        P.plot(bkernel.xgrids[0],mygaus(bkernel.xgrids[0]),'r-')
 
 
-      #Pre-define sample size and error-squared arrays
-      nsample2 = zeros([nloop])
-      esq2 = zeros([nloop])
+        #Do a simple power law fit to the scaling
+        [m,b,_,_,_] = stats.linregress(log(nsample),log(esq))
+        #Print the error scaling (following BP11, this is expected to be m ~ -1)
+        print "Error scales ~ N**{}".format(m)
 
-      for i in range(nloop):
-        randgauss = randsample[i*nsamp:(i+1)*nsamp]
-        if(i == 0):
-          bkernel2 = selfConsistentDensityEstimate(randgauss)
-          nsample2[i] = len(randgauss)
+        #Plot the error vs sample size on a log-log curve
+        P.subplot(2,2,3)
+        P.loglog(nsample,esq)
+        P.plot(nsample,exp(b)*nsample**m,'r-')
+
+        print ""
+
+        bDemoSum = False
+        if(not bDemoSum):
+          P.show() 
         else:
-          bkernel2 += selfConsistentDensityEstimate(randgauss)
-          nsample2[i] = nsample2[i-1] + len(randgauss)
+          #*********************************************************************
+          # Demonstrate the capability to sum selfConsistentDensityEstimate objects
+          #*********************************************************************
 
-        #Calculate the mean squared error between the estimated density
-        #And the gaussian
-        esq2[i] = average(abs(mygaus(bkernel2.x)-bkernel2.fSC)**2 * bkernel2.deltaX)
-        #Print the sample size and the error to show that the code is proceeeding
-        print "{}, {}".format(nsample2[i],esq2[i])
-
-      #Plot the distribution
-      P.subplot(2,2,1)
-      P.plot(bkernel2.x,bkernel2.fSC,'g-')
-
-      #Plot the ECF
-      P.subplot(2,2,2,xscale="log",yscale="log")
-      P.plot(bkernel2.t[1:],abs(bkernel2.ECF[0,1:])**2,'b-')
-
-      #Plot the error-rate change
-      P.subplot(2,2,3)
-      P.loglog(nsample2,esq2,'g-')
-
-      #Plot the difference between the two distributions
-      P.subplot(2,2,4)
-      P.plot(bkernel2.x, abs(bkernel.fSC - bkernel2.fSC)*bkernel.deltaX)
+          nsamp = 512
+          nloop = nmax/nsamp
 
 
-      #Show the plots
-      P.show()
+          #Pre-define sample size and error-squared arrays
+          nsample2 = zeros([nloop])
+          esq2 = zeros([nloop])
 
-  doTwoDimensionalTests = True
+          for i in range(nloop):
+            randgauss = randsample[i*nsamp:(i+1)*nsamp]
+            if(i == 0):
+              bkernel2 = selfConsistentDensityEstimate(randgauss)
+              nsample2[i] = len(randgauss)
+            else:
+              bkernel2 += selfConsistentDensityEstimate(randgauss)
+              nsample2[i] = nsample2[i-1] + len(randgauss)
+
+            #Calculate the mean squared error between the estimated density
+            #And the gaussian
+            esq2[i] = average(abs(mygaus(bkernel2.xgrids[0])-bkernel2.fSC)**2 * bkernel2.deltaX[0])
+            #Print the sample size and the error to show that the code is proceeeding
+            print "{}, {}".format(nsample2[i],esq2[i])
+
+          #Plot the distribution
+          P.subplot(2,2,1)
+          P.plot(bkernel2.xgrids[0],bkernel2.fSC,'g-')
+
+          #Plot the ECF
+          P.subplot(2,2,2,xscale="log",yscale="log")
+          P.plot(bkernel2.tgrids[0][1:],abs(bkernel2.ECF[0,1:])**2,'b-')
+
+          #Plot the error-rate change
+          P.subplot(2,2,3)
+          P.loglog(nsample2,esq2,'g-')
+
+          #Plot the difference between the two distributions
+          P.subplot(2,2,4)
+          P.plot(bkernel2.xgrids[0], abs(bkernel.fSC - bkernel2.fSC)*bkernel.deltaX[0])
+
+
+          #Show the plots
+          P.show()
+    else:
+        #Simply do the BP11 density estimate and plot it
+        bkernel = selfConsistentDensityEstimate(randsample,\
+                                                doApproximateECF=True, \
+                                                beVerbose = True)
+        #Plot the optimal distribution
+        P.subplot(2,1,1)
+        fSCmask = ma.masked_less(bkernel.fSC,bkernel.distributionThreshold)
+        P.plot(bkernel.xgrids[0],fSCmask,'b-')
+        #Plot the sample gaussian
+        P.plot(bkernel.xgrids[0],mygaus(bkernel.xgrids[0]),'r-')
+
+        #Plot the transforms
+        P.subplot(2,1,2)
+        P.plot(bkernel.tgrids[0],abs(bkernel.phiSC),'b-')
+        ecfStandard = fft.ifft(mygaus(bkernel.xgrids[0]))
+        ecfStandard /= ecfStandard[0]
+        ecfStandard = fft.fftshift(ecfStandard)
+        P.plot(bkernel.tgrids[0],abs(ecfStandard),'r-')
+
+        P.show()
+
+
+
+
+
+
+
+  doTwoDimensionalTests = False
   if(doTwoDimensionalTests):
     from mpl_toolkits.mplot3d import Axes3D
     import matplotlib.pyplot as plt
@@ -813,13 +770,12 @@ if(__name__ == "__main__"):
           #Do the BP11 density estimate
           bkernel = selfConsistentDensityEstimate(  randsub,  \
                                                 beVerbose=False, \
-                                                doStoreConvolution=False, \
                                                 countThreshold = 1, \
                                                 doSaveMarginals = False)
 
 
 
-        x,y = bkernel.getTransformedAxes()
+        x,y = tuple(bkernel.xgrids)
         x2d,y2d = meshgrid(x,y)
 
         #Calculate the mean squared error between the estimated density
@@ -841,7 +797,6 @@ if(__name__ == "__main__"):
       with Timer(shape(randsample)[1]):
         bkernel = selfConsistentDensityEstimate(  randsample,  \
                                               beVerbose=True, \
-                                              doStoreConvolution=False, \
                                               countThreshold = 1)
 
 
