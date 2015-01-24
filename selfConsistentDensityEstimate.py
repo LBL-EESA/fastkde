@@ -41,6 +41,7 @@ class selfConsistentDensityEstimate:
                 doSaveMarginals = True, \
                 beVerbose = False, \
                 fracContiguousHyperVolumes = 0.01, \
+                numContiguousHyperVolumes = None, \
               ):
     """ 
 
@@ -97,12 +98,16 @@ class selfConsistentDensityEstimate:
                             double precision accuracy; 1 otherwise
 
       doFFT               : flags whether to calculate phiSC and its FFT to obtain
-                            fSC
+                            pdf
 
       doSaveMarginals     : flags whether to calculate and save the marginal distributions
 
-      fracContiguousHyperVolumes :   the number of contiguous hypervolumes of the ECF, that are above
-                                    the ECF threshold, to use in the density estimate
+      fracContiguousHyperVolumes :  the fraction of contiguous hypervolumes of the ECF, that 
+                                    are above the ECF threshold, to use in the density estimate
+
+      numContiguousHyperVolumes : like fracContiguousHyperVolumes, but specify an integer number
+                                  to use.  fracContiguousHyperVolumes will be ignored if this
+                                  is provided as an argument.
 
 
     Returns: a selfConsistentDensityEstimate object
@@ -140,6 +145,9 @@ class selfConsistentDensityEstimate:
       self.dataStandardDeviation = std(data,axis=1)
 
       self.fracContiguousHyperVolumes = fracContiguousHyperVolumes
+
+      if numContiguousHyperVolumes is not None:
+          self.fracContiguousHyperVolumes = numContiguousHyperVolumes
 
       vprint("Operating on data with numVariables = {}, numDataPoints = {}".format(self.numVariables,self.numDataPoints))
 
@@ -355,7 +363,10 @@ class selfConsistentDensityEstimate:
     sortedInds = flood.sortByDistanceFromCenter(contiguousInds,shape(ecfSq))
 
     numVolumes = len(sortedInds)
-    numVolumesToUse = int(self.fracContiguousHyperVolumes*numVolumes)
+    if self.fracContiguousHyperVolumes >= 1:
+        numVolumesToUse = int(self.fracContiguousHyperVolumes)
+    else:
+        numVolumesToUse = int(self.fracContiguousHyperVolumes*numVolumes)
     if numVolumesToUse < 1:
         numVolumesToUse = 1
 
@@ -405,7 +416,7 @@ class selfConsistentDensityEstimate:
   #*****************************************************************************
   def findGoodDistributionInds(self):
     """Find indices of the optimal distribution that are above a specificed threshold"""
-    return where(self.fSC >= self.distributionThreshold)
+    return where(self.pdf >= self.distributionThreshold)
 
   #*****************************************************************************
   #** selfConsistentDensityEstimate: ***********************************************
@@ -414,7 +425,7 @@ class selfConsistentDensityEstimate:
   #*****************************************************************************
   def findBadDistributionInds(self):
     """Find indices of the optimal distribution that are below a specificed threshold"""
-    return where(self.fSC < self.distributionThreshold)
+    return where(self.pdf < self.distributionThreshold)
 
   #*****************************************************************************
   #** selfConsistentDensityEstimate: ***********************************************
@@ -426,23 +437,34 @@ class selfConsistentDensityEstimate:
     frequency space to real space"""
 
     #Transform the PDF estimate to real space
-    fSC = fft.fftshift(real(fft.fftn(fft.ifftshift(self.phiSC))))*prod(self.deltaT)*(1./(2*pi))**self.numVariables
+    pdf = fft.fftshift(real(fft.fftn(fft.ifftshift(self.phiSC))))*prod(self.deltaT)*(1./(2*pi))**self.numVariables
 
     #Unnormalize it
-    fSC /= prod(self.dataStandardDeviation)
+    pdf /= prod(self.dataStandardDeviation)
     
     if(self.beVerbose):
-      normConst = sum(fSC*prod(self.deltaX))
+      normConst = sum(pdf*prod(self.deltaX))
       midPointAccessor = tuple([(tp-1)/2 for tp in self.numTPoints])
-      print "Normalization of fSC = {}. phiSC[0] = {}".format(normConst,self.phiSC[midPointAccessor])
+      print "Normalization of pdf = {}. phiSC[0] = {}".format(normConst,self.phiSC[midPointAccessor])
 
     #transpose the self-consistent density estimate
-    self.fSC = fSC.transpose()
+    self.pdf = pdf.transpose()
+
+    #Set self.fSC for backward compatibility
+    self.fSC = self.pdf
 
     #Take the transform of the self-consistent kernel if flagged
     if(self.doSaveTransformedKernel):
       kSC = fft.fftshift(real(fft.fftn(fft.ifftshift(self.kappaSC))))*prod(self.deltaT)*(1./(2*pi))**self.numVariables
       self.kSC = kSC.transpose()
+
+  def getTransformedPDF():
+      """Returns a copy of the PDF.  This function exists for backward compatibility"""
+      return array(self.pdf)
+
+  def getTransformedAxes():
+      """Returns a copy of the axes.  This function exists for backward compatibility"""
+      return tuple([array(xg) for xg in self.xgrids])
 
   #*****************************************************************************
   #** selfConsistentDensityEstimate: *******************************************
@@ -454,7 +476,7 @@ class selfConsistentDensityEstimate:
 
     #If the data are univariate, simply return the PDF itself
     if(self.dataRank == 1):
-      return self.fSC
+      return self.pdf
 
     #Check if we need to calculate the marginal distributions
     if(not self.doSaveMarginals):
@@ -476,7 +498,7 @@ class selfConsistentDensityEstimate:
     marginals = []
     for obj in marginalObjects:
       #Get a masked version of the PDF
-      m = ma.array(obj.fSC)
+      m = ma.array(obj.pdf)
       #Mask bad values
       m[obj.findBadDistributionInds()] = ma.masked
       #Add the marginal to the list
@@ -485,7 +507,7 @@ class selfConsistentDensityEstimate:
     #Calculate the PDF assuming independent marginals
     independencePDF = ma.prod(meshgrid(*tuple(marginals)),axis=0)
     #Divide off the indepdencnce PDF to calculate the copula
-    actualPDF = ma.array(self.fSC)
+    actualPDF = ma.array(self.pdf)
     actualPDF[self.findBadDistributionInds()] = ma.masked
     copulaPDF = actualPDF/independencePDF
 
@@ -591,16 +613,16 @@ if(__name__ == "__main__"):
 
           #Calculate the mean squared error between the estimated density
           #And the gaussian
-          #esq[i] = average(abs(mygaus(bkernel.x)-bkernel.fSC)**2 *bkernel.deltaX)
-          esq[i] = average(abs(mygaus(bkernel.xgrids[0])-bkernel.fSC[:])**2 *bkernel.deltaX[0])
-          epct[i] = 100*sum(abs(mygaus(bkernel.xgrids[0])-bkernel.fSC[:])*bkernel.deltaX[0])
+          #esq[i] = average(abs(mygaus(bkernel.x)-bkernel.pdf)**2 *bkernel.deltaX)
+          esq[i] = average(abs(mygaus(bkernel.xgrids[0])-bkernel.pdf[:])**2 *bkernel.deltaX[0])
+          epct[i] = 100*sum(abs(mygaus(bkernel.xgrids[0])-bkernel.pdf[:])*bkernel.deltaX[0])
           #Print the sample size and the error to show that the code is proceeeding
           #print "{}, {}%".format(nsample[i],epct[i])
 
           #Plot the optimal distribution
           P.subplot(2,2,1)
-          fSCmask = ma.masked_less(bkernel.fSC,bkernel.distributionThreshold)
-          P.plot(bkernel.xgrids[0],fSCmask,'b-')
+          pdfmask = ma.masked_less(bkernel.pdf,bkernel.distributionThreshold)
+          P.plot(bkernel.xgrids[0],pdfmask,'b-')
 
           #Plot the empirical characteristic function
           P.subplot(2,2,2,xscale="log",yscale="log")
@@ -650,13 +672,13 @@ if(__name__ == "__main__"):
 
             #Calculate the mean squared error between the estimated density
             #And the gaussian
-            esq2[i] = average(abs(mygaus(bkernel2.xgrids[0])-bkernel2.fSC)**2 * bkernel2.deltaX[0])
+            esq2[i] = average(abs(mygaus(bkernel2.xgrids[0])-bkernel2.pdf)**2 * bkernel2.deltaX[0])
             #Print the sample size and the error to show that the code is proceeeding
             print "{}, {}".format(nsample2[i],esq2[i])
 
           #Plot the distribution
           P.subplot(2,2,1)
-          P.plot(bkernel2.xgrids[0],bkernel2.fSC,'g-')
+          P.plot(bkernel2.xgrids[0],bkernel2.pdf,'g-')
 
           #Plot the ECF
           P.subplot(2,2,2,xscale="log",yscale="log")
@@ -668,7 +690,7 @@ if(__name__ == "__main__"):
 
           #Plot the difference between the two distributions
           P.subplot(2,2,4)
-          P.plot(bkernel2.xgrids[0], abs(bkernel.fSC - bkernel2.fSC)*bkernel.deltaX[0])
+          P.plot(bkernel2.xgrids[0], abs(bkernel.pdf - bkernel2.pdf)*bkernel.deltaX[0])
 
 
           #Show the plots
@@ -681,8 +703,8 @@ if(__name__ == "__main__"):
                                                 numPoints = 1025)
         #Plot the optimal distribution
         P.subplot(2,1,1)
-        fSCmask = ma.masked_less(bkernel.fSC,bkernel.distributionThreshold)
-        P.plot(bkernel.xgrids[0],fSCmask,'b-')
+        pdfmask = ma.masked_less(bkernel.pdf,bkernel.distributionThreshold)
+        P.plot(bkernel.xgrids[0],pdfmask,'b-')
         #Plot the sample gaussian
         P.plot(bkernel.xgrids[0],mygaus(bkernel.xgrids[0]),'r-')
 
@@ -697,7 +719,7 @@ if(__name__ == "__main__"):
         ecfStandard = fft.fftshift(ecfStandard)
         P.plot(bkernel.tgrids[0],abs(ecfStandard),'r-')
 
-        mean = sum(bkernel.xgrids[0]*bkernel.fSC*bkernel.deltaX[0])
+        mean = sum(bkernel.xgrids[0]*bkernel.pdf*bkernel.deltaX[0])
         print bkernel.deltaX[0]
         print mean - bkernel.dataAverage[0]
 
@@ -801,9 +823,9 @@ if(__name__ == "__main__"):
 
         #Calculate the mean squared error between the estimated density
         #And the gaussian
-        #esq[z] = average(abs(mygaus(bkernel.x)-bkernel.fSC)**2 *bkernel.deltaX)
+        #esq[z] = average(abs(mygaus(bkernel.x)-bkernel.pdf)**2 *bkernel.deltaX)
         #esq[z] = average(abs(pdfStandard(x2d,y2d)-bkernel.getTransformedPDF())**2 *bkernel.deltaX**2)
-        absdiffsq = abs(pdfStandard(x2d,y2d)-bkernel.fSC)**2
+        absdiffsq = abs(pdfStandard(x2d,y2d)-bkernel.pdf)**2
         dx = x[1] - x[0]
         dy = y[1] - y[0]
         esq[z] = sum(dy*sum(absdiffsq*dx,axis=0))/(len(x)*len(y))
@@ -834,7 +856,7 @@ if(__name__ == "__main__"):
       fig = plt.figure()
       ax1 = fig.add_subplot(121)
       clevs = asarray(range(2,10))/100.
-      ax1.contour(x2d,y2d,bkernel.fSC,levels = clevs)
+      ax1.contour(x2d,y2d,bkernel.pdf,levels = clevs)
       ax1.contour(x2d,y2d,pdfStandard(x2d,y2d),levels=clevs,colors='k')
       #ax1.plot(randsample[0,:],randsample[1,:],'k.',markersize=1)
       plt.xlim([-4,6])
@@ -851,7 +873,7 @@ if(__name__ == "__main__"):
         #plt.ylim([-4,6])
       else:
         ax3 = fig.add_subplot(122)
-        errorStandardSum= sum(abs(pdfStandard(x2d,y2d)-bkernel.fSC)**2,axis=0)
+        errorStandardSum= sum(abs(pdfStandard(x2d,y2d)-bkernel.pdf)**2,axis=0)
         ax3.plot(x,errorStandardSum)
 
 
