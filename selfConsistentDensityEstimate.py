@@ -179,6 +179,8 @@ class selfConsistentDensityEstimate:
         #Get the grid mid-points
         midPoint = 0.5*(self.xMax + self.xMin)
 
+        vprint("Difference between midpoint and average: {}".format(midPoint - self.dataAverage))
+
         forceZeroDataAverage = True
         if forceZeroDataAverage:
             #Shift the edges of the range so that the mid point is also the data average
@@ -197,7 +199,7 @@ class selfConsistentDensityEstimate:
 
         #inflate the range by 5% to ensure that the data all fit within the range
         self.xMin -= 0.05*(self.xMin-self.dataAverage)
-        self.xMax += 0.05*(self.xMax-self.dataAverage)
+        self.xMax -= 0.05*(self.xMax-self.dataAverage)
 
 
         if numPoints is None:
@@ -550,13 +552,13 @@ if(__name__ == "__main__"):
     #print ftnbp11helper.__doc__
 
     mu = -1e3
-    sig = 1e-1
+    sig = 1e2
     #Define a gaussian function for evaluation purposes
     def mygaus(x):
       return (1./(sig*sqrt(2*pi)))*exp(-(x-mu)**2/(2.*sig**2))
     
     #Set the size of the sample to calculate
-    powmax = 15
+    powmax = 19
     npow = asarray(range(powmax)) + 1.0
 
     #Set the maximum sample size
@@ -582,7 +584,7 @@ if(__name__ == "__main__"):
 
           with Timer(nsample[i]):
             #Do the BP11 density estimate
-            bkernel = selfConsistentDensityEstimate(randgauss,doApproximateECF=True,numPoints=1025)
+            bkernel = selfConsistentDensityEstimate(randgauss,doApproximateECF=True,numPoints=2049)
 
           #Calculate the mean squared error between the estimated density
           #And the gaussian
@@ -673,8 +675,7 @@ if(__name__ == "__main__"):
         bkernel = selfConsistentDensityEstimate(randsample,\
                                                 doApproximateECF=True, \
                                                 beVerbose = True, \
-                                                numPoints = 33)
-        print bkernel.fSC
+                                                numPoints = 1025)
         #Plot the optimal distribution
         P.subplot(2,1,1)
         fSCmask = ma.masked_less(bkernel.fSC,bkernel.distributionThreshold)
@@ -682,8 +683,8 @@ if(__name__ == "__main__"):
         #Plot the sample gaussian
         P.plot(bkernel.xgrids[0],mygaus(bkernel.xgrids[0]),'r-')
 
-        for d in randsample:
-            P.plot([d,d],[0,1./len(randsample)],'k-',alpha=0.5)
+        #for d in randsample:
+        #    P.plot([d,d],[0,1./len(randsample)],'k-',alpha=0.5)
 
         #Plot the transforms
         P.subplot(2,1,2)
@@ -692,6 +693,10 @@ if(__name__ == "__main__"):
         ecfStandard /= ecfStandard[0]
         ecfStandard = fft.fftshift(ecfStandard)
         P.plot(bkernel.tgrids[0],abs(ecfStandard),'r-')
+
+        mean = sum(bkernel.xgrids[0]*bkernel.fSC*bkernel.deltaX[0])
+        print bkernel.deltaX[0]
+        print mean - bkernel.dataAverage[0]
 
         P.show()
 
