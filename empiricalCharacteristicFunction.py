@@ -222,10 +222,10 @@ if(__name__ == "__main__"):
 
     tpointgrids = concatenate(2*(tpoints[newaxis,:],),axis=0)
     #Calculate the ECF using the fast method
-    CecfFFT = ECF(xyrand,tpointgrids,useFFTApproximation=True)
+    CecfFFT = ECF(xyrand,tpointgrids,useFFTApproximation=True,beVerbose=True)
     ecfFFT = CecfFFT.ECF
     #Calculate the ECF using the slow method
-    CecfDFT = ECF(xyrand,tpointgrids,useFFTApproximation=False)
+    CecfDFT = ECF(xyrand,tpointgrids,useFFTApproximation=False,beVerbose=True)
     ecfDFT = CecfDFT.ECF
 
     #Use meshgrid to generate 2D arrays of the frequency points
