@@ -123,6 +123,8 @@ class selfConsistentDensityEstimate:
       #If the data are a vector, promote the data to a rank-1 array with only 1 column
       if(dataRank == 1):
           data = array(data[newaxis,:])
+      else:
+          data = array(data)
       if(dataRank > 2):
           raise ValueError,"data must be a rank-2 array of shape [numVariables,numDataPoints]"
 
@@ -211,7 +213,8 @@ class selfConsistentDensityEstimate:
             #Set the number of points for each dimensions
             self.numXPoints = array([nextHighestPowerOfTwo(ns * numPointsPerSigma) + int(addOne) for ns in numSigma])
         else:
-            self.numXPoints = array([self.numVariables*(numPoints,)])
+            self.numXPoints = array(self.numVariables*(numPoints,))
+
 
         #Set the grids for each dimension
         self.xgrids = [ linspace(xmin,xmax,np) for xmin,xmax,np in zip(self.xMin,self.xMax,self.numXPoints)]
@@ -442,16 +445,16 @@ class selfConsistentDensityEstimate:
       self.kSC = kSC.transpose()
 
   #*****************************************************************************
-  #** selfConsistentDensityEstimate: ***********************************************
-  #******************* getTransformedCopula      *******************************
+  #** selfConsistentDensityEstimate: *******************************************
+  #******************* getCopula      ******************************************
   #*****************************************************************************
   #*****************************************************************************
-  def getTransformedCopula(self,data=None):
+  def getCopula(self,data=None):
     """Estimates the copula of the underlying PDF"""
 
     #If the data are univariate, simply return the PDF itself
     if(self.dataRank == 1):
-      return self.getTransformedPDF()
+      return self.fSC
 
     #Check if we need to calculate the marginal distributions
     if(not self.doSaveMarginals):
@@ -472,8 +475,8 @@ class selfConsistentDensityEstimate:
     #Calculate the marginal distributions and mask bad (or zero) values
     marginals = []
     for obj in marginalObjects:
-      #Get the transformed PDF
-      m = ma.array(obj.getTransformedPDF())
+      #Get a masked version of the PDF
+      m = ma.array(obj.fSC)
       #Mask bad values
       m[obj.findBadDistributionInds()] = ma.masked
       #Add the marginal to the list
@@ -482,7 +485,7 @@ class selfConsistentDensityEstimate:
     #Calculate the PDF assuming independent marginals
     independencePDF = ma.prod(meshgrid(*tuple(marginals)),axis=0)
     #Divide off the indepdencnce PDF to calculate the copula
-    actualPDF = ma.array(self.getTransformedPDF())
+    actualPDF = ma.array(self.fSC)
     actualPDF[self.findBadDistributionInds()] = ma.masked
     copulaPDF = actualPDF/independencePDF
 
@@ -544,7 +547,7 @@ if(__name__ == "__main__"):
   #set a seed so that results are repeatable
   random.seed(0)
 
-  doOneDimensionalTests = True
+  doOneDimensionalTests = False
   if(doOneDimensionalTests):
     import pylab as P
     import scipy.stats as stats
@@ -706,7 +709,7 @@ if(__name__ == "__main__"):
 
 
 
-  doTwoDimensionalTests = False
+  doTwoDimensionalTests = True
   if(doTwoDimensionalTests):
     from mpl_toolkits.mplot3d import Axes3D
     import matplotlib.pyplot as plt
@@ -723,7 +726,7 @@ if(__name__ == "__main__"):
       return coef*exp(expArg)
     
     #Set the size of the sample to calculate
-    powmax = 21
+    powmax = 14
     npow = asarray(range(3,powmax))
 
     #Set the maximum sample size
@@ -786,13 +789,12 @@ if(__name__ == "__main__"):
         nsample[z] = shape(randsub)[1]
 
         with Timer(nsample[z]):
-          #Do the BP11 density estimate
-          bkernel = selfConsistentDensityEstimate(  randsub,  \
+            #Do the BP11 density estimate
+            bkernel = selfConsistentDensityEstimate(  randsub,  \
                                                 beVerbose=False, \
                                                 countThreshold = 1, \
-                                                doSaveMarginals = False)
-
-
+                                                doSaveMarginals = False, \
+                                                numPoints=129)
 
         x,y = tuple(bkernel.xgrids)
         x2d,y2d = meshgrid(x,y)
@@ -801,7 +803,7 @@ if(__name__ == "__main__"):
         #And the gaussian
         #esq[z] = average(abs(mygaus(bkernel.x)-bkernel.fSC)**2 *bkernel.deltaX)
         #esq[z] = average(abs(pdfStandard(x2d,y2d)-bkernel.getTransformedPDF())**2 *bkernel.deltaX**2)
-        absdiffsq = abs(pdfStandard(x2d,y2d)-bkernel.getTransformedPDF())**2
+        absdiffsq = abs(pdfStandard(x2d,y2d)-bkernel.fSC)**2
         dx = x[1] - x[0]
         dy = y[1] - y[0]
         esq[z] = sum(dy*sum(absdiffsq*dx,axis=0))/(len(x)*len(y))
@@ -816,7 +818,9 @@ if(__name__ == "__main__"):
       with Timer(shape(randsample)[1]):
         bkernel = selfConsistentDensityEstimate(  randsample,  \
                                               beVerbose=True, \
-                                              countThreshold = 1)
+                                              countThreshold = 1, \
+                                              doSaveMarginals=False, \
+                                              numPoints = 129)
 
 
 
@@ -824,13 +828,13 @@ if(__name__ == "__main__"):
     doPlot = True
     if(doPlot):
 
-      x,y = bkernel.getTransformedAxes()
+      x,y = tuple(bkernel.xgrids)
       x2d,y2d = meshgrid(x,y)
 
       fig = plt.figure()
       ax1 = fig.add_subplot(121)
       clevs = asarray(range(2,10))/100.
-      ax1.contour(x2d,y2d,bkernel.getTransformedPDF(),levels = clevs)
+      ax1.contour(x2d,y2d,bkernel.fSC,levels = clevs)
       ax1.contour(x2d,y2d,pdfStandard(x2d,y2d),levels=clevs,colors='k')
       #ax1.plot(randsample[0,:],randsample[1,:],'k.',markersize=1)
       plt.xlim([-4,6])
@@ -847,7 +851,7 @@ if(__name__ == "__main__"):
         #plt.ylim([-4,6])
       else:
         ax3 = fig.add_subplot(122)
-        errorStandardSum= sum(abs(pdfStandard(x2d,y2d)-bkernel.getTransformedPDF())**2,axis=1)
+        errorStandardSum= sum(abs(pdfStandard(x2d,y2d)-bkernel.fSC)**2,axis=0)
         ax3.plot(x,errorStandardSum)
 
 
