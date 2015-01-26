@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 from numpy import *
 from numpy.random import randn
-import knuthAverage as kn
 import empiricalCharacteristicFunction as ecf
-import ftnbp11 as ftn
 #If numpy's version is less than 1.7, then use the version of arraypad
 #supplied with this code, since pad() doesn't exist in lower numpy versions
 if(float(".".join(__version__.split(".")[:2])) < 1.7):
@@ -578,8 +576,6 @@ if(__name__ == "__main__"):
   if(doOneDimensionalTests):
     import pylab as P
     import scipy.stats as stats
-
-    #print ftnbp11helper.__doc__
 
     mu = -1e3
     sig = 1e2
