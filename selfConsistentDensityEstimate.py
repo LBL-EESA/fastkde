@@ -28,7 +28,7 @@ class selfConsistentDensityEstimate:
 
   def __init__( self,\
                 data = None,\
-                xgrids = None, \
+                axes = None, \
                 numPointsPerSigma = 10, \
                 numPoints=None, \
                 countThreshold = 1, \
@@ -178,7 +178,7 @@ class selfConsistentDensityEstimate:
     #***********************
     # Calculate the x grids
     #***********************
-    if(xgrids is None):
+    if(axes is None):
 
         #Get the range of the data 
         self.xMin = amin(data,1)
@@ -223,31 +223,34 @@ class selfConsistentDensityEstimate:
 
 
         #Set the grids for each dimension
-        self.xgrids = [ linspace(xmin,xmax,np) for xmin,xmax,np in zip(self.xMin,self.xMax,self.numXPoints)]
+        self.axes = [ linspace(xmin,xmax,np) for xmin,xmax,np in zip(self.xMin,self.xMax,self.numXPoints)]
 
         vprint("Grids created with xmin: {}, xmax: {}, npoints: {}".format(self.xMin,self.xMax,self.numXPoints))
     else:
         #Set the xgrid from the function argument
-        self.xgrids = xgrids
-        self.xMin = array([amin(xg) for xg in xgrids])
-        self.xMax = array([amax(xg) for xg in xgrids])
-        self.numXPoints = array([len(xg) for xg in xgrids])
+        self.axes = axes
+        self.xMin = array([amin(xg) for xg in axes])
+        self.xMax = array([amax(xg) for xg in axes])
+        self.numXPoints = array([len(xg) for xg in axes])
         #Get the grid mid-points
         self.midPoint = 0.5*(self.xMax + self.xMin)
 
 
     #Get the grid spacings
-    self.deltaX = array([ xg[1] - xg[0] for xg in self.xgrids])
+    self.deltaX = array([ xg[1] - xg[0] for xg in self.axes])
 
-    #Check that the xgrids are regular and proper powers of two
+    #Save xgrids as axes for backward compatibility
+    self.xgrids = self.axes
+
+    #Check that the axes are regular and proper powers of two
     for v in range(self.numVariables):
-        xg = self.xgrids[v]
+        xg = self.axes[v]
         dx = (xg[1:]-self.dataAverage[v])/self.dataStandardDeviation[v] - (xg[:-1] - self.dataAverage[v])/self.dataStandardDeviation[v]
         dxdiff = dx - self.deltaX[v]/self.dataStandardDeviation[v]
         fTolerance = self.deltaX[v]/(1e4*self.dataStandardDeviation[v])
         #Check that these differences are less than 1/1e6
         if(not all(abs(dxdiff) < fTolerance)):
-            raise ValueError,"All grids in xgrids must be regularly spaced"
+            raise ValueError,"All grids in axes must be regularly spaced"
 
         log2size = log2(len(xg) - addOne)
         if log2size != floor(log2size):
@@ -256,10 +259,10 @@ class selfConsistentDensityEstimate:
             else:
                 extraStr = ""
 
-            raise ValueError,"All grids in xgrids must be powers of 2" + extraStr + ", but got {}".format(len(xg))
+            raise ValueError,"All grids in axes must be powers of 2" + extraStr + ", but got {}".format(len(xg))
 
     #Calculate the frequency point grids (for 0-centered data)
-    self.tgrids = [ calcTfromX((xg-av)/sd) for xg,av,sd in zip(self.xgrids,self.dataAverage,self.dataStandardDeviation) ]
+    self.tgrids = [ calcTfromX((xg-av)/sd) for xg,av,sd in zip(self.axes,self.dataAverage,self.dataStandardDeviation) ]
     self.numTPoints = array([len(tg) for tg in self.tgrids])
     self.deltaT = array([tg[2] - tg[1] for tg in self.tgrids])
 
@@ -325,7 +328,7 @@ class selfConsistentDensityEstimate:
           self.marginalObjects = []
           for i in xrange(self.dataRank):
             self.marginalObjects.append(selfConsistentDensityEstimate(data[i,:], \
-                                          xgrids = self.xgrids, \
+                                          axes = self.axes, \
                                           countThreshold = self.countThreshold, \
                                           doSaveMarginals = False) )
                                                                   
@@ -467,7 +470,7 @@ class selfConsistentDensityEstimate:
 
   def getTransformedAxes(self):
       """Returns a copy of the axes.  This function exists for backward compatibility"""
-      return tuple([array(xg) for xg in self.xgrids])
+      return tuple([array(xg) for xg in self.axes])
 
   #*****************************************************************************
   #** selfConsistentDensityEstimate: *******************************************
@@ -490,7 +493,7 @@ class selfConsistentDensityEstimate:
         marginalObjects = []
         for i in xrange(self.dataRank):
           marginalObjects.append(selfConsistentDensityEstimate(data[i,:], \
-                                      xgrids = self.xgrids, \
+                                      axes = self.axes, \
                                       countThreshold = self.countThreshold, \
                                       doSaveMarginals = False))
     else:
@@ -527,15 +530,15 @@ class selfConsistentDensityEstimate:
         empirical characteristic functions of the two estimates, reapplies
         the BP11 filter, and transforms back to real space.  This is useful
         for parallelized calculation of densities.  Note that this only works
-        if the xgrids are the same for both operands."""
+        if the axes are the same for both operands."""
     #Check for proper typing
     if(not isinstance(rhs,selfConsistentDensityEstimate)):
       raise TypeError, "unsupported operand type(s) for +: {} and {}".format(type(self),type(rhs))
 
-    #Check that the xgrids are the same for both objects
-    for sxg,rxg in zip(self.xgrids,rhs.xgrids):
+    #Check that the axes are the same for both objects
+    for sxg,rxg in zip(self.axes,rhs.axes):
         if not all(isclose(sxg,rxg)):
-            raise NotImplementedError,"addition for operands with different xgrids is not yet implemented."
+            raise NotImplementedError,"addition for operands with different axes is not yet implemented."
 
     retObj = copy.deepcopy(self)
     retObj.phiSC = (0.0+0.0j)*zeros(self.numTPoints)
@@ -615,15 +618,15 @@ if(__name__ == "__main__"):
           #Calculate the mean squared error between the estimated density
           #And the gaussian
           #esq[i] = average(abs(mygaus(bkernel.x)-bkernel.pdf)**2 *bkernel.deltaX)
-          esq[i] = average(abs(mygaus(bkernel.xgrids[0])-bkernel.pdf[:])**2 *bkernel.deltaX[0])
-          epct[i] = 100*sum(abs(mygaus(bkernel.xgrids[0])-bkernel.pdf[:])*bkernel.deltaX[0])
+          esq[i] = average(abs(mygaus(bkernel.axes[0])-bkernel.pdf[:])**2 *bkernel.deltaX[0])
+          epct[i] = 100*sum(abs(mygaus(bkernel.axes[0])-bkernel.pdf[:])*bkernel.deltaX[0])
           #Print the sample size and the error to show that the code is proceeeding
           #print "{}, {}%".format(nsample[i],epct[i])
 
           #Plot the optimal distribution
           P.subplot(2,2,1)
           pdfmask = ma.masked_less(bkernel.pdf,bkernel.distributionThreshold)
-          P.plot(bkernel.xgrids[0],pdfmask,'b-')
+          P.plot(bkernel.axes[0],pdfmask,'b-')
 
           #Plot the empirical characteristic function
           P.subplot(2,2,2,xscale="log",yscale="log")
@@ -631,7 +634,7 @@ if(__name__ == "__main__"):
 
         #Plot the sample gaussian
         P.subplot(2,2,1)
-        P.plot(bkernel.xgrids[0],mygaus(bkernel.xgrids[0]),'r-')
+        P.plot(bkernel.axes[0],mygaus(bkernel.axes[0]),'r-')
 
 
         #Do a simple power law fit to the scaling
@@ -673,13 +676,13 @@ if(__name__ == "__main__"):
 
             #Calculate the mean squared error between the estimated density
             #And the gaussian
-            esq2[i] = average(abs(mygaus(bkernel2.xgrids[0])-bkernel2.pdf)**2 * bkernel2.deltaX[0])
+            esq2[i] = average(abs(mygaus(bkernel2.axes[0])-bkernel2.pdf)**2 * bkernel2.deltaX[0])
             #Print the sample size and the error to show that the code is proceeeding
             print "{}, {}".format(nsample2[i],esq2[i])
 
           #Plot the distribution
           P.subplot(2,2,1)
-          P.plot(bkernel2.xgrids[0],bkernel2.pdf,'g-')
+          P.plot(bkernel2.axes[0],bkernel2.pdf,'g-')
 
           #Plot the ECF
           P.subplot(2,2,2,xscale="log",yscale="log")
@@ -691,7 +694,7 @@ if(__name__ == "__main__"):
 
           #Plot the difference between the two distributions
           P.subplot(2,2,4)
-          P.plot(bkernel2.xgrids[0], abs(bkernel.pdf - bkernel2.pdf)*bkernel.deltaX[0])
+          P.plot(bkernel2.axes[0], abs(bkernel.pdf - bkernel2.pdf)*bkernel.deltaX[0])
 
 
           #Show the plots
@@ -705,9 +708,9 @@ if(__name__ == "__main__"):
         #Plot the optimal distribution
         P.subplot(2,1,1)
         pdfmask = ma.masked_less(bkernel.pdf,bkernel.distributionThreshold)
-        P.plot(bkernel.xgrids[0],pdfmask,'b-')
+        P.plot(bkernel.axes[0],pdfmask,'b-')
         #Plot the sample gaussian
-        P.plot(bkernel.xgrids[0],mygaus(bkernel.xgrids[0]),'r-')
+        P.plot(bkernel.axes[0],mygaus(bkernel.axes[0]),'r-')
 
         #for d in randsample:
         #    P.plot([d,d],[0,1./len(randsample)],'k-',alpha=0.5)
@@ -715,12 +718,12 @@ if(__name__ == "__main__"):
         #Plot the transforms
         P.subplot(2,1,2)
         P.plot(bkernel.tgrids[0],abs(bkernel.phiSC),'b-')
-        ecfStandard = fft.ifft(mygaus(bkernel.xgrids[0]))
+        ecfStandard = fft.ifft(mygaus(bkernel.axes[0]))
         ecfStandard /= ecfStandard[0]
         ecfStandard = fft.fftshift(ecfStandard)
         P.plot(bkernel.tgrids[0],abs(ecfStandard),'r-')
 
-        mean = sum(bkernel.xgrids[0]*bkernel.pdf*bkernel.deltaX[0])
+        mean = sum(bkernel.axes[0]*bkernel.pdf*bkernel.deltaX[0])
         print bkernel.deltaX[0]
         print mean - bkernel.dataAverage[0]
 
@@ -819,7 +822,7 @@ if(__name__ == "__main__"):
                                                 doSaveMarginals = False, \
                                                 numPoints=129)
 
-        x,y = tuple(bkernel.xgrids)
+        x,y = tuple(bkernel.axes)
         x2d,y2d = meshgrid(x,y)
 
         #Calculate the mean squared error between the estimated density
@@ -851,7 +854,7 @@ if(__name__ == "__main__"):
     doPlot = True
     if(doPlot):
 
-      x,y = tuple(bkernel.xgrids)
+      x,y = tuple(bkernel.axes)
       x2d,y2d = meshgrid(x,y)
 
       fig = plt.figure()
