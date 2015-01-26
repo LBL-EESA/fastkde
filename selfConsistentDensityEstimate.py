@@ -397,14 +397,18 @@ class selfConsistentDensityEstimate:
     if(self.doSaveTransformedKernel):
       self.kappaSC = kappaSC
 
+    midPointAccessor = tuple([(tp-1)/2 for tp in self.numTPoints])
     #Calculate the transform of the self-consistent density estimate
     self.phiSC[iCalcPhi] = self.ECF[iCalcPhi]*kappaSC[iCalcPhi]
+
+    if(self.beVerbose):
+        print("Normalization of kappaSC, ECF, and phiSC: {}, {}, {}".format(kappaSC[midPointAccessor],self.ECF[midPointAccessor],self.phiSC[midPointAccessor]))
 
     #Calculate the magnitude of the transformed kernel at the (0,0,0....) point
     #in real space.  It is assumed that this is the peak of the kernel; this is used in
     # findGoodDistributionInds() to estimate the number of kernels contributing to a given
     # point on the self-consistent density estimate.
-    self.kSCMax = real(sum(kappaSC[iCalcPhi])*prod(self.deltaT)*(1./(2*pi))**self.numVariables)
+    self.kSCMax = real(sum(kappaSC[iCalcPhi])*prod(self.deltaT)*(1./(2*pi))**self.numVariables)/prod(self.dataStandardDeviation)
 
     #Calculate the distribution threshold as a multiple of an individual kernelet
     self.distributionThreshold = self.countThreshold*(self.kSCMax/self.numDataPoints)
@@ -456,13 +460,14 @@ class selfConsistentDensityEstimate:
     #Take the transform of the self-consistent kernel if flagged
     if(self.doSaveTransformedKernel):
       kSC = fft.fftshift(real(fft.fftn(fft.ifftshift(self.kappaSC))))*prod(self.deltaT)*(1./(2*pi))**self.numVariables
+      kSC /= prod(self.dataStandardDeviation)
       self.kSC = kSC.transpose()
 
-  def getTransformedPDF():
+  def getTransformedPDF(self):
       """Returns a copy of the PDF.  This function exists for backward compatibility"""
       return array(self.pdf)
 
-  def getTransformedAxes():
+  def getTransformedAxes(self):
       """Returns a copy of the axes.  This function exists for backward compatibility"""
       return tuple([array(xg) for xg in self.xgrids])
 
