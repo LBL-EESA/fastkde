@@ -12,7 +12,7 @@ import pdb
 import time
 import sys
 from nufft import calcTfromX
-import floodFillSearchC as flood
+import floodFillSearch as flood
 
 #A simple timer for comparing ECF calculation methods
 class Timer():

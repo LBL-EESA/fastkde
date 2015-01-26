@@ -1,12 +1,10 @@
-# cython: profile=True
-from numpy import *
+import numpy as np
 cimport numpy as np
-import cProfile
 cimport cython
 
 cdef inline int ravel_shift(   tuple indices, \
                                 int arrayRank, \
-                                np.ndarray[np.int_t,ndim=1] arrayShape, \
+                                np.int_t [:] arrayShape, \
                                 int dimension,  \
                                 int amount,     \
                                 int dimensionWraps):
@@ -67,14 +65,14 @@ cdef inline int ravel_shift(   tuple indices, \
 @cython.boundscheck(False)
 cdef tuple findNeighbors(   int raveledStartIndex, \
                             np.float_t searchThreshold, \
-                            np.ndarray[np.int_t,ndim=1] arrayShape, \
+                            np.int_t [:] arrayShape, \
                             int arrayRank, \
                             list dimensionWraps, \
-                            np.ndarray[np.float_t,ndim=1] inputArray, \
-                            np.ndarray[np.int_t,ndim=1] isNotSearched, \
+                            np.float_t [:] inputArray, \
+                            np.int_t [:] isNotSearched, \
                    ):
     """Does a flood fill algorithim on inputArray in the vicinity of
-    raveledStartIndex to find contiguous areas where raveledStartIndex >= searchThreshold 
+    raveledStartIndex to find contiguous areas where raveledStartIndex > searchThreshold 
     
         input:
         ------
@@ -107,13 +105,12 @@ cdef tuple findNeighbors(   int raveledStartIndex, \
     contiguousIndices = []
 
     #Initialize the search list
-    #itemsToSearch = [list(unravel_index(raveledStartIndex,arrayShape))]
     itemsToSearch = [raveledStartIndex]
 
     while itemsToSearch != []:
 
         #Get the index of the current item
-        itemTuple = unravel_index(itemsToSearch[0],arrayShape)
+        itemTuple = np.unravel_index(itemsToSearch[0],arrayShape)
 
         for r in xrange(arrayRank):
             #Shift the current coordinate to the right by 1 in the r dimension
@@ -166,7 +163,7 @@ cdef tuple findNeighbors(   int raveledStartIndex, \
         contiguousIndices.append(itemsToSearch.pop(0))
 
     #Return the list of contiguous indices (converted to index tuples)
-    return unravel_index(contiguousIndices,arrayShape)
+    return np.unravel_index(contiguousIndices,arrayShape)
 
 cpdef list floodFillSearch( \
                 np.ndarray inputArray, \
@@ -208,9 +205,9 @@ cpdef list floodFillSearch( \
 
     #Determine the rank of inputArray
     try:
-        arrayShape = array(shape(inputArray))
+        arrayShape = np.array(np.shape(inputArray))
         arrayRank = len(arrayShape)
-        numArrayElements = prod(arrayShape)
+        numArrayElements = np.prod(arrayShape)
     except BaseException as e:
         raise ValueError,"inputArray does not appear to be array like.  Error was: {}".format(e)
 
@@ -224,12 +221,12 @@ cpdef list floodFillSearch( \
 
     #Set an array of the same size indicating which elements have been set
     cdef np.ndarray isNotSearched
-    isNotSearched = ones(arrayShape,dtype = 'int')
+    isNotSearched = np.ones(arrayShape,dtype = 'int')
 
     #Set the raveled input array
-    cdef np.ndarray[np.float_t,ndim=1] raveledInputArray = inputArray.ravel()
+    cdef np.float_t [:] raveledInputArray = inputArray.ravel()
     #And ravel the search inidcator array
-    cdef np.ndarray[np.int_t,ndim=1] raveledIsNotSearched = isNotSearched.ravel()
+    cdef np.int_t [:] raveledIsNotSearched = isNotSearched.ravel()
     
     #Set the search list to null
     contiguousAreas = []
@@ -264,7 +261,6 @@ cpdef list floodFillSearch( \
     #Set the list of contiguous area indices
     return contiguousAreas
 
-
 def sortByDistanceFromCenter(inds,varShape):
     """Takes sets of indicies [e.g., from floodFillSearchC.floodFillSearch()] and sorts them by distance from the center of the array from which the indices were taken.
     
@@ -290,19 +286,19 @@ def sortByDistanceFromCenter(inds,varShape):
              
     """
     #Get the center index
-    center = around(array(varShape)/2)
+    center = np.around(np.array(varShape)/2)
     
     #Transform the indices to be center-relative
     centeredInds = [ tuple([ aind - cind] for aind,cind in zip(indTuples,center)) for indTuples in inds ]
     
     #Calculate center-of-mass ffor each contiguous array
-    centersOfMass = [ array([average(aind) for aind in indTuples]) for indTuples in centeredInds]
+    centersOfMass = [ np.array([np.average(aind) for aind in indTuples]) for indTuples in centeredInds]
     
     #Calculate the distance from the origin of each center of mass
-    distances = [ sqrt(sum(indices**2)) for indices in centersOfMass]
+    distances = [ np.sqrt(sum(indices**2)) for indices in centersOfMass]
     
     #Determine the sorting indices that will sort inds by distance from the center
-    isort = list(argsort(distances))
+    isort = list(np.argsort(distances))
     
     #Return the sorted index array
     return [inds[i] for i in isort]
