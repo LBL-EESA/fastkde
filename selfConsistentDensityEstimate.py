@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from numpy import *
 from numpy.random import randn
-from scipy.optimize import brentq,newton
+from scipy.optimize import newton
 import empiricalCharacteristicFunction as ecf
 #If numpy's version is less than 1.7, then use the version of arraypad
 #supplied with this code, since pad() doesn't exist in lower numpy versions
@@ -32,7 +32,6 @@ class selfConsistentDensityEstimate:
                 axes = None, \
                 numPointsPerSigma = 10, \
                 numPoints=None, \
-                countThreshold = 1, \
                 doApproximateECF = True, \
                 ecfPrecision = 1, \
                 doSaveTransformedKernel = False, \
@@ -42,6 +41,7 @@ class selfConsistentDensityEstimate:
                 fracContiguousHyperVolumes = 0.01, \
                 numContiguousHyperVolumes = None, \
                 positiveShift = True, \
+                countThreshold = None, \
               ):
     """ 
 
@@ -111,6 +111,9 @@ class selfConsistentDensityEstimate:
 
       positiveShift     : translate the PDF vertically such that the estimate is positive or
                           0 everywhere
+
+      countThreshold    : this argument does nothing; it has been deprecated.  It is kept as an argument for backward
+                          compatibility.
 
     Returns: a selfConsistentDensityEstimate object
 
@@ -283,9 +286,6 @@ class selfConsistentDensityEstimate:
 
     self.convolvedData = None
 
-    #Calculate the distribution frequency corresponding to the given count threshold
-    self.countThreshold = countThreshold
-
     #Initialize the marginals
     self.marginalObjects = None
 
@@ -335,7 +335,6 @@ class selfConsistentDensityEstimate:
           for i in xrange(self.dataRank):
             self.marginalObjects.append(selfConsistentDensityEstimate(data[i,:], \
                                           axes = self.axes, \
-                                          countThreshold = self.countThreshold, \
                                           doSaveMarginals = False) )
                                                                   
     return
@@ -411,23 +410,14 @@ class selfConsistentDensityEstimate:
     if(self.beVerbose):
         print("Normalization of kappaSC, ECF, and phiSC: {}, {}, {}".format(kappaSC[midPointAccessor],self.ECF[midPointAccessor],self.phiSC[midPointAccessor]))
 
-    #Calculate the magnitude of the transformed kernel at the (0,0,0....) point
-    #in real space.  It is assumed that this is the peak of the kernel; this is used in
-    # findGoodDistributionInds() to estimate the number of kernels contributing to a given
-    # point on the self-consistent density estimate.
-    self.kSCMax = real(sum(kappaSC[iCalcPhi])*prod(self.deltaT)*(1./(2*pi))**self.numVariables)/prod(self.dataStandardDeviation)
-
-    #Calculate the distribution threshold as a multiple of an individual kernelet
-    self.distributionThreshold = self.countThreshold*(self.kSCMax/self.numDataPoints)
-
   #*****************************************************************************
   #** selfConsistentDensityEstimate: ***********************************************
   #******************* findGoodDistributionInds() ******************************
   #*****************************************************************************
   #*****************************************************************************
   def findGoodDistributionInds(self):
-    """Find indices of the optimal distribution that are above a specificed threshold"""
-    return where(self.pdf >= self.distributionThreshold)
+    """Find indices of the optimal distribution that are above 0.0"""
+    return where(self.pdf >= 0.0)
 
   #*****************************************************************************
   #** selfConsistentDensityEstimate: ***********************************************
@@ -435,8 +425,8 @@ class selfConsistentDensityEstimate:
   #*****************************************************************************
   #*****************************************************************************
   def findBadDistributionInds(self):
-    """Find indices of the optimal distribution that are below a specificed threshold"""
-    return where(self.pdf < self.distributionThreshold)
+    """Find indices of the optimal distribution that are below 0.0"""
+    return where(self.pdf < 0.0)
 
   #*****************************************************************************
   #** selfConsistentDensityEstimate: ***********************************************
@@ -466,16 +456,11 @@ class selfConsistentDensityEstimate:
                 """Calculate how far off from normal is the shifted PDF"""
                 ipos = where((self.pdf-delta) >= 0.0)
                 return 1 - sum((self.pdf[ipos]-delta)*prod(self.deltaX))
-            #Set the bounds of the brentq search (at most, it will be the area under the positive
-            #part of the original PDF, and at least it will be some arbitrary negative number)
+            #Set the initial guess for the newton-raphson search
             a = -normFunc(0)
             #Find the zero of the above function; i.e., find delta, such that the shifted PDF is
             #normalized
-            #try:
-            delta = newton(normFunc,a)#,tol=1e-17)
-            #except:
-            #    import pdb
-            #    pdb.set_trace()
+            delta = newton(normFunc,a)
 
             #Shift the PDF
             self.pdf -= delta
@@ -527,7 +512,6 @@ class selfConsistentDensityEstimate:
         for i in xrange(self.dataRank):
           marginalObjects.append(selfConsistentDensityEstimate(data[i,:], \
                                       axes = self.axes, \
-                                      countThreshold = self.countThreshold, \
                                       doSaveMarginals = False))
     else:
       #If not, just use the saved marginals
@@ -970,7 +954,6 @@ if(__name__ == "__main__"):
             #Do the BP11 density estimate
             bkernel = selfConsistentDensityEstimate(  randsub,  \
                                                 beVerbose=False, \
-                                                countThreshold = 1, \
                                                 doSaveMarginals = False, \
                                                 numPoints=129)
 
@@ -996,7 +979,6 @@ if(__name__ == "__main__"):
       with Timer(shape(randsample)[1]):
         bkernel = selfConsistentDensityEstimate(  randsample,  \
                                               beVerbose=True, \
-                                              countThreshold = 1, \
                                               doSaveMarginals=False, \
                                               numPoints = 129)
 

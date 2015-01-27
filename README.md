@@ -18,29 +18,22 @@ Example usage:
 import numpy as np
 import selfConsistentDensityEstimate as sc
 import pylab as P
+
+#Generate two random variables dataset (representing 100000 pairs of datapoints)
+N = 2e5
+var1 = 50*np.random.normal(size=N) + 0.1
+var2 = 0.01*np.random.normal(size=N) - 300
   
-#Generate a 2x100000 random dataset (representing 100000 pairs of datapoints)
-randomdata = np.reshape(np.random.normal(size=[2*100000]),[2,100000])
-
 #Do the self-consistent density estimate
-mysc = sc.selfConsistentDensityEstimate(randomdata)
+myPDF,axes = sc.pdf(var1=var1,var2=var2)
 
-#Get the axis values
-x, y= mysc.getTransformedAxes()
+#Extract the axes from the axis list
+v1,v2 = axes
 
-#Get the PDF
-myPDF2D = mysc.getTransformedPDF()
-
-#Mask distribution indices that have less than 1 kernel contribution
-badInds = mysc.findBadDistributionInds()
-#(note that this is for presentation purposes; it unnormalizes the PDF)
-myPDF2D[badInds] = 0.0
-
-#Convert the x/y values to 2D grids for contouring
-x2d,y2d = np.meshgrid(x,y)
-
-#Plot contours of the PDF (should be a set of concentric circles)
-P.contour(x2d,y2d,myPDF2D)
+#Plot contours of the PDF should be a set of concentric ellipsoids centered on
+#(0.1, -300) Comparitively, the y axis range should be tiny and the x axis range
+#should be large
+P.contour(v1,v2,myPDF)
 P.show()
 
 ```
