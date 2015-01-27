@@ -559,6 +559,124 @@ class selfConsistentDensityEstimate:
     #Return the new object
     return retObj
 
+def pdf(*args,**kwargs):
+    """Estimate the self-consistent kernel density estimate of the input data
+
+        input:
+        ------
+            
+            var1            :   An input variable.
+
+            var2, var3...   :   Additional input varibles whose length
+                                corresponds to the length of var1.  As input
+                                variables are added, the dimensionality of the
+                                resulting PDF increases (e.g., supplying var1
+                                and var2 results in a 2D PDF).
+
+            numPoints       :   The number of points for each axis in the PDF.
+                                By default this is automatically set to an
+                                optimal value for each axis.
+
+        returns:
+        --------
+
+            pdf,axes    :       The pdf and the axes of the PDF (i.e., this is
+                                analogous to hist,bins for a histogram).
+
+                                If there are multiple input variables, the axes
+                                variable is a list of the axes, with each axis
+                                corresponding to an input variable.
+
+
+        NOTE: The computational expense and the memory requirement of this
+        method grows exponentially with the number of input variables.
+    """
+
+    #Try to get var1 from the args or kwargs
+    try:
+        var1 = args[0]
+    except:
+        try:
+            var1 = kwargs['var1']
+        except:
+            raise ValueError,"No input data were provided."
+
+    #Check that var1 is arraylike
+    try:
+        var1Shape = shape(var1)
+    except BaseException as e:
+        print e
+        raise ValueError,"Could not get shape of var1; it does not appear to be array-like."
+
+    #Check that var1 is a vector
+    if len(var1Shape) != 1:
+        raise ValueError,"var1 should be a vector.  If multiple variables are combined in a single array, please use the selfConsistentDensityEstimate class interface instead."
+
+    #Get the length of var1
+    N = var1Shape[0]
+
+    #Check for input varibles provided as key word arguments
+    varArgs = []
+    varKeys = sorted([ v for v in kwargs if "var" in v ])
+    for key in varKeys:
+        #Ignore var1 since this was either provided as an argument 
+        #or was read as a keyword argument above
+        if key != "var1":
+            try:
+                varNum = int(key[3:])
+            except BaseException as e:
+                print e
+                raise ValueError,"Incomprehensible variable-like keyword provided: {}".format(key)
+
+            #Append this variable
+            varArgs.append(kwargs[key])
+
+    #Check if a mixture of keyword and arguments were provided for additional variables
+    if len(varArgs) != 0 and len(args) > 1:
+        raise ValueError,"additional variables were provided as a mixture of arguments and keyword arguments.  They all must be one or the other."
+
+    #Set the additional variables to be the rest of the input arguments
+    #if none were provided as key word arguments
+    if len(args) > 1:
+        varArgs = args[1:]
+
+    #Start preparing the input data for
+    #concatenation
+    inputVariables = array(var1[newaxis,:])
+
+    #Attempt to read additional variables
+    #and concatenate them to the input variable
+    for i in range(len(varArgs)):
+        try:
+            varn = array(varArgs[i][newaxis,:])
+        except BaseException as e:
+            print e
+            raise ValueError,"Could not convert var{} into a numpy arrray".format(i+1)
+            
+        lenN = shape(varn)[1] 
+        if lenN != N:
+            raise ValueError,"len(var{}) is {}, but it should be the same of len(var1) = {}".format(i+1,lenN,N)
+
+        inputVariables = concatenate((inputVariables,varn))
+
+
+    #Read the optional keyword argument numPoints
+    try:
+        numPoints = int(kwargs['numPoints'])
+    except:
+        numPoints = None
+    
+    #Calculate the PDF
+    _pdfobj = selfConsistentDensityEstimate(inputVariables, \
+                                            numPoints = numPoints, \
+                                            doSaveMarginals = False)
+
+    if len(_pdfobj.axes) == 1:
+        return _pdfobj.pdf, _pdfobj.axes[0]
+    else:
+        return _pdfobj.pdf, _pdfobj.axes
+
+
 #*******************************************************************************
 #*******************************************************************************
 #***************************** Unit testing code *******************************
