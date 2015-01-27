@@ -39,7 +39,7 @@ class selfConsistentDensityEstimate:
                 doFFT = True, \
                 doSaveMarginals = True, \
                 beVerbose = False, \
-                fracContiguousHyperVolumes = 1e-3, \
+                fracContiguousHyperVolumes = 0.01, \
                 numContiguousHyperVolumes = None, \
                 positiveShift = True, \
               ):
