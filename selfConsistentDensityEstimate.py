@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from numpy import *
 from numpy.random import randn
+from scipy.optimize import brentq
 import empiricalCharacteristicFunction as ecf
 #If numpy's version is less than 1.7, then use the version of arraypad
 #supplied with this code, since pad() doesn't exist in lower numpy versions
@@ -40,6 +41,7 @@ class selfConsistentDensityEstimate:
                 beVerbose = False, \
                 fracContiguousHyperVolumes = 0.01, \
                 numContiguousHyperVolumes = None, \
+                positiveShift = False, \
               ):
     """ 
 
@@ -107,6 +109,8 @@ class selfConsistentDensityEstimate:
                                   to use.  fracContiguousHyperVolumes will be ignored if this
                                   is provided as an argument.
 
+      positiveShift     : translate the PDF vertically such that the estimate is positive or
+                          0 everywhere
 
     Returns: a selfConsistentDensityEstimate object
 
@@ -174,6 +178,8 @@ class selfConsistentDensityEstimate:
     #initialize the kernel and its transform
     self.kappaSC = None
     self.kSC = None
+
+    self.positiveShift = positiveShift
 
     #***********************
     # Calculate the x grids
@@ -447,13 +453,37 @@ class selfConsistentDensityEstimate:
     #Unnormalize it
     pdf /= prod(self.dataStandardDeviation)
     
+    #transpose the self-consistent density estimate
+    self.pdf = pdf.transpose()
+
+    #Shift the PDF such that the negative areas can be set to 0, while the positive area is
+    #still normalized to 1
+    if self.positiveShift:
+        if len(where(self.pdf < 0)[0]) != 0:
+            #Define a function f(delta), such that f(delta) is how far off self.pdf-delta is
+            #from being normalized; hence, we want to find the zero of this function
+            def normFunc(delta):
+                """Calculate how far off from normal is the shifted PDF"""
+                ipos = where((self.pdf-delta) >= 0.0)
+                return 1 - sum((self.pdf[ipos]-delta)*prod(self.deltaX))
+            #Set the bounds of the brentq search (at most, it will be the area under the positive
+            #part of the original PDF, and at least it will be some arbitrary negative number)
+            a = normFunc(0)
+            b = -a
+            #Find the zero of the above function; i.e., find delta, such that the shifted PDF is
+            #normalized
+            delta = brentq(normFunc,a,b,xtol=1e-17)
+
+            #Shift the PDF
+            self.pdf -= delta
+            #And set the negative values to 0
+            self.pdf[where(self.pdf < 0)] = 0.0
+
     if(self.beVerbose):
       normConst = sum(pdf*prod(self.deltaX))
       midPointAccessor = tuple([(tp-1)/2 for tp in self.numTPoints])
       print "Normalization of pdf = {}. phiSC[0] = {}".format(normConst,self.phiSC[midPointAccessor])
 
-    #transpose the self-consistent density estimate
-    self.pdf = pdf.transpose()
 
     #Set self.fSC for backward compatibility
     self.fSC = self.pdf
@@ -693,19 +723,19 @@ if(__name__ == "__main__"):
   #set a seed so that results are repeatable
   random.seed(0)
 
-  doOneDimensionalTests = False
+  doOneDimensionalTests = True
   if(doOneDimensionalTests):
     import pylab as P
     import scipy.stats as stats
 
     mu = -1e3
-    sig = 1e2
+    sig = 1e-2
     #Define a gaussian function for evaluation purposes
     def mygaus(x):
       return (1./(sig*sqrt(2*pi)))*exp(-(x-mu)**2/(2.*sig**2))
     
     #Set the size of the sample to calculate
-    powmax = 19
+    powmax = 2
     npow = asarray(range(powmax)) + 1.0
 
     #Set the maximum sample size
@@ -825,7 +855,8 @@ if(__name__ == "__main__"):
                                                 numPoints = 1025)
         #Plot the optimal distribution
         P.subplot(2,1,1)
-        pdfmask = ma.masked_less(bkernel.pdf,bkernel.distributionThreshold)
+        #pdfmask = ma.masked_less(bkernel.pdf,bkernel.distributionThreshold)
+        pdfmask = bkernel.pdf
         P.plot(bkernel.axes[0],pdfmask,'b-')
         #Plot the sample gaussian
         P.plot(bkernel.axes[0],mygaus(bkernel.axes[0]),'r-')
@@ -842,8 +873,6 @@ if(__name__ == "__main__"):
         P.plot(bkernel.tgrids[0],abs(ecfStandard),'r-')
 
         mean = sum(bkernel.axes[0]*bkernel.pdf*bkernel.deltaX[0])
-        print bkernel.deltaX[0]
-        print mean - bkernel.dataAverage[0]
 
         P.show()
 
@@ -853,7 +882,7 @@ if(__name__ == "__main__"):
 
 
 
-  doTwoDimensionalTests = True
+  doTwoDimensionalTests = False
   if(doTwoDimensionalTests):
     from mpl_toolkits.mplot3d import Axes3D
     import matplotlib.pyplot as plt
