@@ -25,7 +25,7 @@ var1 = 50*np.random.normal(size=N) + 0.1
 var2 = 0.01*np.random.normal(size=N) - 300
   
 #Do the self-consistent density estimate
-myPDF,axes = sc.pdf(var1=var1,var2=var2)
+myPDF,axes = sc.pdf(var1,var2)
 
 #Extract the axes from the axis list
 v1,v2 = axes
