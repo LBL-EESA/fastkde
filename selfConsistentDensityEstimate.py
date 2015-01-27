@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from numpy import *
+import numpy as npy
 from numpy.random import randn
 from scipy.optimize import newton
 import empiricalCharacteristicFunction as ecf
@@ -57,37 +58,30 @@ class selfConsistentDensityEstimate:
     returned domain.  The width of the domain is set in terms of multiples of
     unit standard deviations of the data; the default is 20-sigma.
 
-    usage: sdensity = selfConsistentDensityEstimate(  data, \
-                                                  x = None, \
-                                                  numSigma = 20, \
-                                                  deltaX = None, \
-                                                  dataAverage = None, \
-                                                  dataStandardDeviation = None, \
-                                                  doApproximateECF = True, \
-                                                  doFFT = True \
-                                                )
+    input:
+    ------
 
-      data (array_like)   : the data from which to estimate the PDF. If data
-                            is multidimensional, the data are flattened first. 
+      data (array_like)   : the data from which to estimate the PDF.  Should be 1-
+                            or 2-dimensional. If 2-dimensional, this flags calculation
+                            of an N-dimensional PDF.  The first index
+                            should refer to each variable and the second index the
+                            observations of the varibles.
 
-      x                   : the x-values of the estimated PDF.  They must be evenly
-                            spaced and they should have an odd length
-
-      numSigma            : the number of unit standard deviations that the PDF
-                            domain should span.
+      axes                : the axis-values of the estimated PDF.  They must be evenly
+                            spaced and they should have a length that is a power of two
+                            plus one (e.g., 33).
 
       numPointsPerSigma   : the number of points on the data grid per standard
-                            deviation; this influences the total size of the x-grid that is
-                            automatically calculated if no aspects of the grid are specified.
+                            deviation; this influences the total size of the axes that are
+                            automatically calculated if no other aspects of the grid are specified.
+
+      numPoints           : the number of points to use for the pdf grid. If provided as a scalar,
+                            each axis will have the same number of points.  Otherwise, it should be an
+                            iterable with a value for each axis length.  Axis lengths should be a power
+                            of two plus one (e.g., 33)
 
       deltaX              : if given, this specifies the spacing between domain
                             values.
-
-      dataAverage         : if given, this specifies the average of the data, to be
-                            subtracted
-
-      dataStandardDeviation : if given, this specifies the standard deviation
-                              of the data
 
       doApproximateECF    : flags whether to approximate the ECF using a (much faster)
                             FFT.  In tests, this is accurate to ~1e-14 over low 
@@ -128,13 +122,16 @@ class selfConsistentDensityEstimate:
     
     if(data is not None):
 
+      #Save the original data for the marginal calculation
+      originalData = array(data)
+
       #First check the rank of the data
       dataRank = len(shape(data))
       #If the data are a vector, promote the data to a rank-1 array with only 1 column
       if(dataRank == 1):
-          data = array(data[newaxis,:])
+          data = array(originalData[newaxis,:],dtype=npy.float)
       else:
-          data = array(data)
+          data = array(originalData,dtype=npy.float)
       if(dataRank > 2):
           raise ValueError,"data must be a rank-2 array of shape [numVariables,numDataPoints]"
 
@@ -164,7 +161,7 @@ class selfConsistentDensityEstimate:
 
     #Save the marginals flag
     self.doSaveMarginals = doSaveMarginals
-    if dataRank == 1:
+    if self.numVariables == 1:
         self.doSaveMarginals = False
 
     #Set whether to approximate the ECF using the FFT method
@@ -228,7 +225,21 @@ class selfConsistentDensityEstimate:
             #Set the number of points for each dimensions
             self.numXPoints = array([nextHighestPowerOfTwo(ns * numPointsPerSigma) + int(addOne) for ns in numSigma])
         else:
-            self.numXPoints = array(self.numVariables*(numPoints,))
+            #If we can iterate through 
+            try:
+                lenNum = len(numPoints)
+                isIterable = True
+            except:
+                isIterable = False
+                lenNum = 1
+
+            if isIterable:
+                if lenNum == self.numVariables:
+                    self.numXPoints = numPoints
+                else:
+                    raise ValueError,"len(numPoints) = {}, but it should match numVariables = {}".format(lenNum,self.numVariables)
+            else:
+                self.numXPoints = array(self.numVariables*(numPoints,))
 
 
         #Set the grids for each dimension
@@ -332,9 +343,11 @@ class selfConsistentDensityEstimate:
         #Calculate and save the marginal distribution objects
         if(self.doSaveMarginals):
           self.marginalObjects = []
-          for i in xrange(self.dataRank):
-            self.marginalObjects.append(selfConsistentDensityEstimate(data[i,:], \
-                                          axes = self.axes, \
+          for i in xrange(self.numVariables):
+            self.marginalObjects.append(selfConsistentDensityEstimate(originalData[i,:], \
+                                          axes = [self.axes[i]], \
+                                          positiveShift = self.positiveShift, \
+                                          fracContiguousHyperVolumes = self.fracContiguousHyperVolumes, \
                                           doSaveMarginals = False) )
                                                                   
     return
@@ -490,6 +503,10 @@ class selfConsistentDensityEstimate:
       """Returns a copy of the axes.  This function exists for backward compatibility"""
       return tuple([array(xg) for xg in self.axes])
 
+  def getTransformedCopula(self,data=None):
+      """A wrapper for getCopula; this function is deprecated."""
+      return self.getCopula(data)
+
   #*****************************************************************************
   #** selfConsistentDensityEstimate: *******************************************
   #******************* getCopula      ******************************************
@@ -499,7 +516,7 @@ class selfConsistentDensityEstimate:
     """Estimates the copula of the underlying PDF"""
 
     #If the data are univariate, simply return the PDF itself
-    if(self.dataRank == 1):
+    if(self.numVariables == 1):
       return self.pdf
 
     #Check if we need to calculate the marginal distributions
@@ -509,9 +526,11 @@ class selfConsistentDensityEstimate:
       else:
         #Estimate the marginal distributions
         marginalObjects = []
-        for i in xrange(self.dataRank):
+        for i in xrange(self.numVariables):
           marginalObjects.append(selfConsistentDensityEstimate(data[i,:], \
-                                      axes = self.axes, \
+                                      axes = [self.axes[i]], \
+                                      positiveShift = self.positiveShift, \
+                                      fracContiguousHyperVolumes = self.fracContiguousHyperVolumes, \
                                       doSaveMarginals = False))
     else:
       #If not, just use the saved marginals
@@ -520,19 +539,19 @@ class selfConsistentDensityEstimate:
     #Calculate the marginal distributions and mask bad (or zero) values
     marginals = []
     for obj in marginalObjects:
-      #Get a masked version of the PDF
-      m = ma.array(obj.pdf)
-      #Mask bad values
-      m[obj.findBadDistributionInds()] = ma.masked
-      #Add the marginal to the list
-      marginals.append(m)
+      #Add the marginal to the list while masking <0 values
+      marginals.append(ma.masked_less_equal(obj.pdf,0))
 
     #Calculate the PDF assuming independent marginals
     independencePDF = ma.prod(meshgrid(*tuple(marginals)),axis=0)
     #Divide off the indepdencnce PDF to calculate the copula
+    #actualPDF = ma.array(self.pdf)
+    #actualPDF[self.findBadDistributionInds()] = ma.masked
     actualPDF = ma.array(self.pdf)
-    actualPDF[self.findBadDistributionInds()] = ma.masked
     copulaPDF = actualPDF/independencePDF
+
+    #Normalize the copula
+    copulaPDF /= sum(copulaPDF*prod(self.deltaX))
 
     return copulaPDF
 
