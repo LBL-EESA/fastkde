@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from numpy import *
 from numpy.random import randn
-from scipy.optimize import brentq
+from scipy.optimize import brentq,newton
 import empiricalCharacteristicFunction as ecf
 #If numpy's version is less than 1.7, then use the version of arraypad
 #supplied with this code, since pad() doesn't exist in lower numpy versions
@@ -39,9 +39,9 @@ class selfConsistentDensityEstimate:
                 doFFT = True, \
                 doSaveMarginals = True, \
                 beVerbose = False, \
-                fracContiguousHyperVolumes = 0.01, \
+                fracContiguousHyperVolumes = 1e-3, \
                 numContiguousHyperVolumes = None, \
-                positiveShift = False, \
+                positiveShift = True, \
               ):
     """ 
 
@@ -468,11 +468,14 @@ class selfConsistentDensityEstimate:
                 return 1 - sum((self.pdf[ipos]-delta)*prod(self.deltaX))
             #Set the bounds of the brentq search (at most, it will be the area under the positive
             #part of the original PDF, and at least it will be some arbitrary negative number)
-            a = normFunc(0)
-            b = -a
+            a = -normFunc(0)
             #Find the zero of the above function; i.e., find delta, such that the shifted PDF is
             #normalized
-            delta = brentq(normFunc,a,b,xtol=1e-17)
+            #try:
+            delta = newton(normFunc,a)#,tol=1e-17)
+            #except:
+            #    import pdb
+            #    pdb.set_trace()
 
             #Shift the PDF
             self.pdf -= delta
@@ -723,7 +726,7 @@ if(__name__ == "__main__"):
   #set a seed so that results are repeatable
   random.seed(0)
 
-  doOneDimensionalTests = True
+  doOneDimensionalTests = False
   if(doOneDimensionalTests):
     import pylab as P
     import scipy.stats as stats
@@ -735,7 +738,7 @@ if(__name__ == "__main__"):
       return (1./(sig*sqrt(2*pi)))*exp(-(x-mu)**2/(2.*sig**2))
     
     #Set the size of the sample to calculate
-    powmax = 2
+    powmax = 19
     npow = asarray(range(powmax)) + 1.0
 
     #Set the maximum sample size
@@ -761,7 +764,7 @@ if(__name__ == "__main__"):
 
           with Timer(nsample[i]):
             #Do the BP11 density estimate
-            bkernel = selfConsistentDensityEstimate(randgauss,doApproximateECF=True,numPoints=2049)
+            bkernel = selfConsistentDensityEstimate(randgauss,doApproximateECF=True,numPoints=513)
 
           #Calculate the mean squared error between the estimated density
           #And the gaussian
@@ -772,8 +775,9 @@ if(__name__ == "__main__"):
           #print "{}, {}%".format(nsample[i],epct[i])
 
           #Plot the optimal distribution
-          P.subplot(2,2,1)
-          pdfmask = ma.masked_less(bkernel.pdf,bkernel.distributionThreshold)
+          P.subplot(2,2,1)#,yscale="log")
+          #pdfmask = ma.masked_less(bkernel.pdf,bkernel.distributionThreshold)
+          pdfmask = bkernel.pdf
           P.plot(bkernel.axes[0],pdfmask,'b-')
 
           #Plot the empirical characteristic function
@@ -781,7 +785,7 @@ if(__name__ == "__main__"):
           P.plot(bkernel.tgrids[0][1:],abs(bkernel.ECF[1:])**2,'b-')
 
         #Plot the sample gaussian
-        P.subplot(2,2,1)
+        P.subplot(2,2,1)#,yscale="log")
         P.plot(bkernel.axes[0],mygaus(bkernel.axes[0]),'r-')
 
 
@@ -848,11 +852,12 @@ if(__name__ == "__main__"):
           #Show the plots
           P.show()
     else:
+        print randsample
         #Simply do the BP11 density estimate and plot it
         bkernel = selfConsistentDensityEstimate(randsample,\
                                                 doApproximateECF=True, \
                                                 beVerbose = True, \
-                                                numPoints = 1025)
+                                                numPoints = 513)
         #Plot the optimal distribution
         P.subplot(2,1,1)
         #pdfmask = ma.masked_less(bkernel.pdf,bkernel.distributionThreshold)
@@ -882,7 +887,7 @@ if(__name__ == "__main__"):
 
 
 
-  doTwoDimensionalTests = False
+  doTwoDimensionalTests = True
   if(doTwoDimensionalTests):
     from mpl_toolkits.mplot3d import Axes3D
     import matplotlib.pyplot as plt
@@ -899,8 +904,8 @@ if(__name__ == "__main__"):
       return coef*exp(expArg)
     
     #Set the size of the sample to calculate
-    powmax = 14
-    npow = asarray(range(3,powmax))
+    powmax = 16
+    npow = asarray(range(1,powmax)) + 1.0
 
     #Set the maximum sample size
     nmax = 2**powmax
