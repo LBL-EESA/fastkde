@@ -25,7 +25,7 @@ var1 = 50*np.random.normal(size=N) + 0.1
 var2 = 0.01*np.random.normal(size=N) - 300
   
 #Do the self-consistent density estimate
-myPDF,axes = sc.pdf(var1=var1,var2=var2)
+myPDF,axes = sc.pdf(var1,var2)
 
 #Extract the axes from the axis list
 v1,v2 = axes
@@ -41,7 +41,8 @@ P.show()
 
 ## How do I get set up? ##
 
-In the present code version, setup consists of (1) downloading the source, (2) building fortran sub-modules, and (3) setting the PYTHONPATH.
+A standard python build:
+```python setup.py install```
 
 ### Download the source ###
 
@@ -52,38 +53,5 @@ This code requires the following software:
   
   * Python >= 2.7.3
   * Numpy  >= 1.7
-  * f2py (should be distributed with numpy)
-  * GNU make
-  
-
-### Building Fortran sub-modules ###
-
-Prior to use, some Fortran-based Python extensions must be built.  Do the
-following from the command line (assuming that the current working directory is
-the base of the repository):
-
-```
-#!bash
-     make
-```
-
-### Set the PYTHONPATH ###
-
-Do the following from the command line (assuming that the current working
-directory is the base of the repository):
-
-(for Bourne shell)
-```
-#!bash
-  export PYTHONPATH=${PYTHONPATH}:${PWD}
-```
-
-(for c-shell)
-```
-#!csh
-  setenv PYTHONPATH ${PYTHONPATH}:${PWD}
-```
-
-For permanent installation, please consider adding similar lines to your
-.bashrc/.bash\_profile or .cshrc files (replacing ${PWD} with the full path of
-the selfConsistentDensityEstimate directory).
+  * scipy
+  * cython
