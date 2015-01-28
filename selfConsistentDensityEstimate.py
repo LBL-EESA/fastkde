@@ -507,6 +507,133 @@ class selfConsistentDensityEstimate:
       """A wrapper for getCopula; this function is deprecated."""
       return self.getCopula(data)
 
+  def estimateConditionals(self,variables,data):
+      """For a multidimensional PDF, estimates the conditional P(x_i | x_j).
+      
+        input:
+        ------
+
+            variables   :   A integer or tuple of array indicies indicating the variables
+                            on which to condition e.g., For a 2D PDF,
+
+                            obj.estimateConditionals(1) estimates
+                            P(x_0 | x_1) from the joint PDF P(x_0,x_1) that is
+                            the result of the self-consistent density estimate.
+
+                            For a 3D PDF:
+
+                            obj.estimateConditionals( (0,2) ) estimates 
+                            P( x_0, x_2 | x_1) from P(x_0,x_1,x_2)
+
+                            If all possible variables are listed, the copula
+                            is returned instead.
+
+                            If negative values are provided, variables are wrapped
+                            (i.e., index -1 indicates the last variable)
+
+            data        :   The data original used to create the
+                            selfConsistentDensityEstimate object.  This is
+                            needed to calculated the various marginals required
+                            in the conditional computation.                            
+
+        output:
+        -------
+
+
+            Returns P( x_i | x_j )
+      
+      """
+
+      #If the data are univariate, simply return the PDF itself
+      if(self.numVariables == 1):
+        return self.pdf
+
+
+      #Check that we can interpret the variables tuple
+      try:
+          len(variables)
+      except: 
+          try:
+              range(variables)
+              variables = (variables,)
+          except:
+              raise ValueError,"variables appears to be neither a tuple or an integer"
+
+      #Check that the variable indices are sane
+      rightSideVariableIndices = []
+      for ind in tuple(variables):
+          if ind > self.numVariables-1:
+              raise ValueError,"out-of-bounds positive index found in 'variables'"
+          if ind < 0:
+              dum = self.numVariables + ind
+              if dum < 0:
+                  raise ValueError,"out-of-bounds negative index found in 'variables'"
+          else:
+              dum = ind
+          rightSideVariableIndices.append(dum)
+
+      #Pull the unique indices and make sure they are sorted
+      rightSideVariableIndices = tuple(sorted(list(set(rightSideVariableIndices))))
+      if len(rightSideVariableIndices) > self.numVariables:
+          raise ValueError,"More indices were provided in 'variables' than there are variables."
+
+      #Check if all variables were provided
+      if len(rightSideVariableIndices) == self.numVariables:
+          return self.getCopula(data)
+
+      #If there are no right side variables, return the PDF
+      if len(rightSideVariableIndices) == 0:
+          return self.pdf
+
+      #Create the list of left-side variable indices
+      leftSideVariableIndices = range(self.numVariables)
+      for ind in rightSideVariableIndices:
+          leftSideVariableIndices.pop(ind)
+
+      #Calculate the marginal PDF
+      marginalObject = selfConsistentDensityEstimate(   data[rightSideVariableIndices,:], \
+                                                        axes = [self.axes[i] for i in rightSideVariableIndices], \
+                                                        positiveShift = self.positiveShift, \
+                                                        fracContiguousHyperVolumes = self.fracContiguousHyperVolumes, \
+                                                        doSaveMarginals = False)
+
+      #Make the shape of the new marginal object match that of the original PDF
+      #(using the magic of the numpy newaxis)
+      conformantSlice = list(self.numVariables*(slice(None,None,None),))
+      #Insert a newaxis for each of the left-side indices
+      sumAxes = []
+      for ind in leftSideVariableIndices:
+          #The PDF object has var0 in its rightmost axis, so transform ind
+          #accordingly (it references as though var0 is the leftmost axis)
+          ip = self.numVariables - ind - 1
+          conformantSlice[ip] = newaxis
+          #Add this index to the list of axes over which to sum for normalization
+          sumAxes.append(ip)
+      conformantSlice = tuple(conformantSlice)
+      #Create and mask the marginal PDF
+      marginalPDF = ma.masked_less_equal(marginalObject.pdf[conformantSlice],0.0)
+
+
+      #Calculate the conditional PDF
+      conditionalPDF = ma.array(self.pdf)/marginalPDF
+
+      #Calculate the normalization matrix
+      normFactor = ma.masked_equal(sum(conditionalPDF*prod(self.deltaX),axis=tuple(sumAxes)),0.0)
+
+      #Normalize the conditional PDF for the leftside variables
+      conditionalPDF /= normFactor[conformantSlice]
+
+      return conditionalPDF
+
+
+
+
+
+
+
+
+
+
   #*****************************************************************************
   #** selfConsistentDensityEstimate: *******************************************
   #******************* getCopula      ******************************************
