@@ -618,7 +618,7 @@ class selfConsistentDensityEstimate:
       conditionalPDF = ma.array(self.pdf)/marginalPDF
 
       #Calculate the normalization matrix
-      normFactor = ma.masked_equal(sum(conditionalPDF*prod(self.deltaX),axis=tuple(sumAxes)),0.0)
+      normFactor = ma.masked_equal(sum(conditionalPDF*prod(self.deltaX[leftSideVariableIndices]),axis=tuple(sumAxes)),0.0)
 
       #Normalize the conditional PDF for the leftside variables
       conditionalPDF /= normFactor[conformantSlice]
