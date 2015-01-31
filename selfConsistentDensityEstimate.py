@@ -41,7 +41,7 @@ class selfConsistentDensityEstimate:
                 beVerbose = False, \
                 fracContiguousHyperVolumes = 0.01, \
                 numContiguousHyperVolumes = None, \
-                positiveShift = True, \
+                positiveShift = False, \
                 countThreshold = None, \
               ):
     """ 
@@ -143,9 +143,6 @@ class selfConsistentDensityEstimate:
       #Set the number of data points
       self.numDataPoints = shape(data)[1]
 
-      self.dataAverage = average(data,axis=1)
-      self.dataStandardDeviation = std(data,axis=1)
-
       self.fracContiguousHyperVolumes = fracContiguousHyperVolumes
 
       if numContiguousHyperVolumes is not None:
@@ -190,37 +187,22 @@ class selfConsistentDensityEstimate:
         self.xMin = amin(data,1)
         self.xMax = amax(data,1)
 
+        vprint("Data stats:")
+        vprint("\tminima: {}".format(self.xMin))
+        vprint("\tmaxima: {}".format(self.xMax))
+
         #Get the grid mid-points
         midPoint = 0.5*(self.xMax + self.xMin)
 
-        vprint("Difference between midpoint and average: {}".format(midPoint - self.dataAverage))
-
-        forceZeroDataAverage = True
-        if forceZeroDataAverage:
-            #Shift the edges of the range so that the mid point is also the data average
-            for v in range(self.numVariables):
-                distance = midPoint[v] - self.dataAverage[v]
-                if distance > 0:
-                    self.xMin[v] -= 2*distance
-                else:
-                    self.xMax[v] -= 2*distance 
-
-                assert isclose(0.5*(self.xMax[v] + self.xMin[v]), self.dataAverage[v])
-
-            self.midPoint = self.dataAverage
-        else:
-            self.midPoint = midPoint
-
         #inflate the range by 5% to ensure that the data all fit within the range
-        self.xMin -= 0.05*(self.xMin-self.dataAverage)
-        self.xMax -= 0.05*(self.xMax-self.dataAverage)
-
+        self.xMin += 0.05*(self.xMin-midPoint)
+        self.xMax += 0.05*(self.xMax-midPoint)
 
         if numPoints is None:
             #Calculate the number of standard deviations there
             # are in the data range
             dataRange = self.xMax - self.xMin
-            numSigma = dataRange/self.dataStandardDeviation
+            numSigma = dataRange/std(data,axis=1)
             
             #Set the number of points for each dimensions
             self.numXPoints = array([nextHighestPowerOfTwo(ns * numPointsPerSigma) + int(addOne) for ns in numSigma])
@@ -256,6 +238,11 @@ class selfConsistentDensityEstimate:
         self.midPoint = 0.5*(self.xMax + self.xMin)
 
 
+    #Set the midpoint of the incoming grid
+    self.dataMid = 0.5*(self.xMax + self.xMin)
+    #Set the range to be +/- pi
+    self.dataNorm = (self.xMax - self.xMin)/pi
+
     #Get the grid spacings
     self.deltaX = array([ xg[1] - xg[0] for xg in self.axes])
 
@@ -265,9 +252,9 @@ class selfConsistentDensityEstimate:
     #Check that the axes are regular and proper powers of two
     for v in range(self.numVariables):
         xg = self.axes[v]
-        dx = (xg[1:]-self.dataAverage[v])/self.dataStandardDeviation[v] - (xg[:-1] - self.dataAverage[v])/self.dataStandardDeviation[v]
-        dxdiff = dx - self.deltaX[v]/self.dataStandardDeviation[v]
-        fTolerance = self.deltaX[v]/(1e4*self.dataStandardDeviation[v])
+        dx = (xg[1:]-self.dataMid[v])/self.dataNorm[v] - (xg[:-1] - self.dataMid[v])/self.dataNorm[v]
+        dxdiff = dx - self.deltaX[v]/self.dataNorm[v]
+        fTolerance = self.deltaX[v]/(1e4*self.dataNorm[v])
         #Check that these differences are less than 1/1e6
         if(not all(abs(dxdiff) < fTolerance)):
             raise ValueError,"All grids in axes must be regularly spaced"
@@ -282,7 +269,7 @@ class selfConsistentDensityEstimate:
             raise ValueError,"All grids in axes must be powers of 2" + extraStr + ", but got {}".format(len(xg))
 
     #Calculate the frequency point grids (for 0-centered data)
-    self.tgrids = [ calcTfromX((xg-av)/sd) for xg,av,sd in zip(self.axes,self.dataAverage,self.dataStandardDeviation) ]
+    self.tgrids = [ calcTfromX((xg-av)/sd) for xg,av,sd in zip(self.axes,self.dataMid,self.dataNorm) ]
     self.numTPoints = array([len(tg) for tg in self.tgrids])
     self.deltaT = array([tg[2] - tg[1] for tg in self.tgrids])
 
@@ -311,7 +298,7 @@ class selfConsistentDensityEstimate:
 
       #Transfrom the data to 0-centered coordinates
       for v in range(self.numVariables):
-          data[v,:] = (data[v,:] - self.dataAverage[v])/self.dataStandardDeviation[v]
+          data[v,:] = (data[v,:] - self.dataMid[v])/self.dataNorm[v]
           
       #Calculate the ECF (see empiricalCharacteristicFunction.py)
       ecfObj = ecf.ECF( inputData = data, \
@@ -454,7 +441,7 @@ class selfConsistentDensityEstimate:
     pdf = fft.fftshift(real(fft.fftn(fft.ifftshift(self.phiSC))))*prod(self.deltaT)*(1./(2*pi))**self.numVariables
 
     #Unnormalize it
-    pdf /= prod(self.dataStandardDeviation)
+    pdf /= prod(self.dataNorm)
     
     #transpose the self-consistent density estimate
     self.pdf = pdf.transpose()
@@ -492,7 +479,7 @@ class selfConsistentDensityEstimate:
     #Take the transform of the self-consistent kernel if flagged
     if(self.doSaveTransformedKernel):
       kSC = fft.fftshift(real(fft.fftn(fft.ifftshift(self.kappaSC))))*prod(self.deltaT)*(1./(2*pi))**self.numVariables
-      kSC /= prod(self.dataStandardDeviation)
+      kSC /= prod(self.dataNorm)
       self.kSC = kSC.transpose()
 
   def getTransformedPDF(self):
@@ -862,7 +849,7 @@ if(__name__ == "__main__"):
     import scipy.stats as stats
 
     mu = -1e3
-    sig = 1e-2
+    sig = 1e3
     #Define a gaussian function for evaluation purposes
     def mygaus(x):
       return (1./(sig*sqrt(2*pi)))*exp(-(x-mu)**2/(2.*sig**2))
