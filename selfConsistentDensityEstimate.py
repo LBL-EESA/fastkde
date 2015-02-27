@@ -613,14 +613,6 @@ class selfConsistentDensityEstimate:
       return conditionalPDF
 
 
-
-
-
-
-
-
-
-
   #*****************************************************************************
   #** selfConsistentDensityEstimate: *******************************************
   #******************* getCopula      ******************************************
@@ -663,9 +655,6 @@ class selfConsistentDensityEstimate:
     #actualPDF[self.findBadDistributionInds()] = ma.masked
     actualPDF = ma.array(self.pdf)
     copulaPDF = actualPDF/independencePDF
-
-    #Normalize the copula
-    copulaPDF /= sum(copulaPDF*prod(self.deltaX))
 
     return copulaPDF
 
