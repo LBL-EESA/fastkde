@@ -497,7 +497,7 @@ class selfConsistentDensityEstimate:
       """A wrapper for getCopula; this function is deprecated."""
       return self.getCopula(data)
 
-  def estimateConditionals(self,variables,data,peakFrac = 0.0,reapplyFilter=False):
+  def estimateConditionals(self,variables,data,peakFrac = 0.0,reApplyFilter=False):
       """For a multidimensional PDF, estimates the conditional P(x_i | x_j).
       
         input:
@@ -660,7 +660,7 @@ class selfConsistentDensityEstimate:
     marginals = []
     for obj in marginalObjects:
       #Add the marginal to the list while masking <0 values
-      marginalThreshold = peakFrac*amax(marginalObject.pdf)
+      marginalThreshold = peakFrac*amax(obj.pdf)
       #Create and mask the marginal PDF
       marginals.append(ma.masked_less_equal(obj.pdf,marginalThreshold))
 
