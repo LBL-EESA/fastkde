@@ -387,6 +387,9 @@ class selfConsistentDensityEstimate:
 
     #Convert iCalcPhi to a list of tuples, such that it is compatible with the output of where()
     iCalcPhi = [ tuple(ii) for ii in iCalcPhi ]
+
+    #Save the filter
+    self.iCalcPhi = iCalcPhi
    
     #If flagged, clear the phiSC array.  This is needed if the same selfConsistentDensityEstimate object
     #is reused for multiple data.
@@ -494,7 +497,7 @@ class selfConsistentDensityEstimate:
       """A wrapper for getCopula; this function is deprecated."""
       return self.getCopula(data)
 
-  def estimateConditionals(self,variables,data):
+  def estimateConditionals(self,variables,data,peakFrac = 0.0,reapplyFilter=False):
       """For a multidimensional PDF, estimates the conditional P(x_i | x_j).
       
         input:
@@ -522,6 +525,12 @@ class selfConsistentDensityEstimate:
                             selfConsistentDensityEstimate object.  This is
                             needed to calculated the various marginals required
                             in the conditional computation.                            
+
+            peakFrac    :   The fractional threshold below which to truncate the
+                            marginal PDF (to avoid divding by small numbers);
+                            this is the fraction of the height of the mode.
+
+            reapplyFilter : Flags whether to reapply the ECF filter to the conditional
 
         output:
         -------
@@ -597,12 +606,17 @@ class selfConsistentDensityEstimate:
           #Add this index to the list of axes over which to sum for normalization
           sumAxes.append(ip)
       conformantSlice = tuple(conformantSlice)
-      #Create and mask the marginal PDF
-      marginalPDF = ma.masked_less_equal(marginalObject.pdf[conformantSlice],0.0)
 
+      marginalThreshold = peakFrac*amax(marginalObject.pdf)
+      #Create and mask the marginal PDF
+      marginalPDF = ma.masked_less_equal(marginalObject.pdf[conformantSlice],marginalThreshold)
 
       #Calculate the conditional PDF
       conditionalPDF = ma.array(self.pdf)/marginalPDF
+
+      #Refilter the conditional
+      if(reApplyFilter):
+          conditionalPDF = ma.masked_less_equal(self.reApplyFilter(conditionalPDF),0.0)
 
       #Calculate the normalization matrix
       normFactor = ma.masked_equal(sum(conditionalPDF*prod(self.deltaX[leftSideVariableIndices]),axis=tuple(sumAxes)),0.0)
@@ -618,7 +632,7 @@ class selfConsistentDensityEstimate:
   #******************* getCopula      ******************************************
   #*****************************************************************************
   #*****************************************************************************
-  def getCopula(self,data=None):
+  def getCopula(self,data=None,peakFrac = 0.0):
     """Estimates the copula of the underlying PDF"""
 
     #If the data are univariate, simply return the PDF itself
@@ -646,7 +660,9 @@ class selfConsistentDensityEstimate:
     marginals = []
     for obj in marginalObjects:
       #Add the marginal to the list while masking <0 values
-      marginals.append(ma.masked_less_equal(obj.pdf,0))
+      marginalThreshold = peakFrac*amax(marginalObject.pdf)
+      #Create and mask the marginal PDF
+      marginals.append(ma.masked_less_equal(obj.pdf,marginalThreshold))
 
     #Calculate the PDF assuming independent marginals
     independencePDF = ma.prod(meshgrid(*tuple(marginals)),axis=0)
@@ -658,6 +674,28 @@ class selfConsistentDensityEstimate:
 
     return copulaPDF
 
+  def reApplyFilter(self,pdf):
+      """Reapplies the filter to a PDF estimate.
+
+      This is used, e.g., to remove high-frequency noise that results from calculting the conditionals.
+      """
+
+      #Transform the PDF to fourier space
+      phiTilde_tmp = fft.fftshift(fft.ifftn(fft.ifftshift(ma.filled(pdf,0.0))))
+      #Normalize the transform
+      midPointAccessor = tuple([(tp-1)/2 for tp in self.numTPoints])
+      phiTilde_tmp /= phiTilde_tmp[midPointAccessor]
+
+      #Reapply the filter
+      phiTilde = (0.0+0.0j)*zeros(shape(phiTilde_tmp))
+      phiTilde[self.iCalcPhi] = phiTilde_tmp[self.iCalcPhi]      
+
+      #Transform back to real space
+      #Transform the PDF estimate to real space
+      pdf = fft.fftshift(real(fft.fftn(fft.ifftshift(phiTilde))))*prod(self.deltaT)*(1./(2*pi))**self.numVariables
+  
+      #Return the transpose of the PDF
+      return pdf.transpose()
 
   #*****************************************************************************
   #** selfConsistentDensityEstimate: ***********************************************
@@ -832,7 +870,7 @@ if(__name__ == "__main__"):
   #set a seed so that results are repeatable
   random.seed(0)
 
-  doOneDimensionalTests = False
+  doOneDimensionalTests = True
   if(doOneDimensionalTests):
     import pylab as P
     import scipy.stats as stats
@@ -986,12 +1024,6 @@ if(__name__ == "__main__"):
         mean = sum(bkernel.axes[0]*bkernel.pdf*bkernel.deltaX[0])
 
         P.show()
-
-
-
-
-
-
 
   doTwoDimensionalTests = True
   if(doTwoDimensionalTests):
