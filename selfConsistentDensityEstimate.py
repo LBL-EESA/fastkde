@@ -460,10 +460,11 @@ class selfConsistentDensityEstimate:
                 ipos = where((self.pdf-delta) >= 0.0)
                 return 1 - sum((self.pdf[ipos]-delta)*prod(self.deltaX))
             #Set the initial guess for the newton-raphson search
-            a = -normFunc(0)
+            #a = -normFunc(0)
+            a = 0.0
             #Find the zero of the above function; i.e., find delta, such that the shifted PDF is
             #normalized
-            delta = newton(normFunc,a)
+            delta = newton(normFunc,a,maxiter=1000)
 
             #Shift the PDF
             self.pdf -= delta
@@ -583,7 +584,7 @@ class selfConsistentDensityEstimate:
 
       #Create the list of left-side variable indices
       leftSideVariableIndices = range(self.numVariables)
-      for ind in rightSideVariableIndices:
+      for ind in sorted(rightSideVariableIndices)[::-1]:
           leftSideVariableIndices.pop(ind)
 
       #Calculate the marginal PDF
