@@ -386,7 +386,8 @@ class selfConsistentDensityEstimate:
             iCalcPhi[n] = concatenate( (iCalcPhi[n],sortedInds[i][n]) )
 
     #Convert iCalcPhi to a list of tuples, such that it is compatible with the output of where()
-    iCalcPhi = [ tuple(ii) for ii in iCalcPhi ]
+    if self.numVariables != 1:
+      iCalcPhi = [ tuple(ii) for ii in iCalcPhi ]
 
     #Save the filter
     self.iCalcPhi = iCalcPhi
