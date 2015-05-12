@@ -90,7 +90,7 @@ extensions = [ \
 
 setup(
             name = 'selfConsistentDensityEstimate', \
-            version = codeVersionID(__file__).ID, \
+            version = str(codeVersionID(__file__).ID), \
             py_modules=['selfConsistentDensityEstimate','empiricalCharacteristicFunction','arraypad'], \
             cmdclass = cmdclass,\
             ext_modules = extensions, \
