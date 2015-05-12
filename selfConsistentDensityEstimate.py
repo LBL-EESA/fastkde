@@ -39,7 +39,7 @@ class selfConsistentDensityEstimate:
                 doFFT = True, \
                 doSaveMarginals = True, \
                 beVerbose = False, \
-                fracContiguousHyperVolumes = 0.01, \
+                fracContiguousHyperVolumes = 1, \
                 numContiguousHyperVolumes = None, \
                 positiveShift = False, \
                 countThreshold = None, \
@@ -465,7 +465,7 @@ class selfConsistentDensityEstimate:
             a = 0.0
             #Find the zero of the above function; i.e., find delta, such that the shifted PDF is
             #normalized
-            delta = newton(normFunc,a,maxiter=1000)
+            delta = newton(normFunc,a,maxiter=10000)
 
             #Shift the PDF
             self.pdf -= delta
@@ -848,7 +848,10 @@ def pdf(*args,**kwargs):
     #Calculate the PDF
     _pdfobj = selfConsistentDensityEstimate(inputVariables, \
                                             numPoints = numPoints, \
-                                            doSaveMarginals = False)
+                                            doSaveMarginals = False, \
+                                            positiveShift=True, \
+                                            )
+                                            
 
     if len(_pdfobj.axes) == 1:
         return _pdfobj.pdf, _pdfobj.axes[0]
