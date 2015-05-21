@@ -1,4 +1,4 @@
-# selfConsistentDensityEstimate #
+# fastKDE #
 
 ## Software Overview ##
 
@@ -16,7 +16,7 @@ Example usage:
 #!python
  
 import numpy as np
-import selfConsistentDensityEstimate as sc
+import fastKDE
 import pylab as P
 
 #Generate two random variables dataset (representing 100000 pairs of datapoints)
@@ -25,7 +25,7 @@ var1 = 50*np.random.normal(size=N) + 0.1
 var2 = 0.01*np.random.normal(size=N) - 300
   
 #Do the self-consistent density estimate
-myPDF,axes = sc.pdf(var1,var2)
+myPDF,axes = fastKDE.pdf(var1,var2)
 
 #Extract the axes from the axis list
 v1,v2 = axes

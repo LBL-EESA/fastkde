@@ -22,7 +22,7 @@ def nextHighestPowerOfTwo(number):
     """Returns the nearest power of two that is greater than or equal to number"""
     return int(2**(ceil(log2(number))))
 
-class selfConsistentDensityEstimate:
+class fastKDE:
 
   def __init__( self,\
                 data = None,\
@@ -105,7 +105,7 @@ class selfConsistentDensityEstimate:
       countThreshold    : this argument does nothing; it has been deprecated.  It is kept as an argument for backward
                           compatibility.
 
-    Returns: a selfConsistentDensityEstimate object
+    Returns: a fastKDE object
 
     """
 
@@ -327,7 +327,7 @@ class selfConsistentDensityEstimate:
         if(self.doSaveMarginals):
           self.marginalObjects = []
           for i in xrange(self.numVariables):
-            self.marginalObjects.append(selfConsistentDensityEstimate(originalData[i,:], \
+            self.marginalObjects.append(fastKDE(originalData[i,:], \
                                           axes = [self.axes[i]], \
                                           positiveShift = self.positiveShift, \
                                           fracContiguousHyperVolumes = self.fracContiguousHyperVolumes, \
@@ -337,7 +337,7 @@ class selfConsistentDensityEstimate:
 
 
   #*****************************************************************************
-  #** selfConsistentDensityEstimate: ***********************************************
+  #** fastKDE: ***********************************************
   #******************* applyBernacchiaFilter() *********************************
   #*****************************************************************************
   #*****************************************************************************
@@ -388,7 +388,7 @@ class selfConsistentDensityEstimate:
     #Save the filter
     self.iCalcPhi = iCalcPhi
    
-    #If flagged, clear the phiSC array.  This is needed if the same selfConsistentDensityEstimate object
+    #If flagged, clear the phiSC array.  This is needed if the same fastKDE object
     #is reused for multiple data.
     if(doFlushArrays):
       self.phiSC[:] = (0.0+0.0j)
@@ -411,7 +411,7 @@ class selfConsistentDensityEstimate:
         print("Normalization of kappaSC, ECF, and phiSC: {}, {}, {}".format(kappaSC[midPointAccessor],self.ECF[midPointAccessor],self.phiSC[midPointAccessor]))
 
   #*****************************************************************************
-  #** selfConsistentDensityEstimate: ***********************************************
+  #** fastKDE: ***********************************************
   #******************* findGoodDistributionInds() ******************************
   #*****************************************************************************
   #*****************************************************************************
@@ -420,7 +420,7 @@ class selfConsistentDensityEstimate:
     return where(self.pdf >= 0.0)
 
   #*****************************************************************************
-  #** selfConsistentDensityEstimate: ***********************************************
+  #** fastKDE: ***********************************************
   #******************* findBadDistributionInds() *******************************
   #*****************************************************************************
   #*****************************************************************************
@@ -429,7 +429,7 @@ class selfConsistentDensityEstimate:
     return where(self.pdf < 0.0)
 
   #*****************************************************************************
-  #** selfConsistentDensityEstimate: ***********************************************
+  #** fastKDE: ***********************************************
   #******************* __transformphiSC__() ************************************
   #*****************************************************************************
   #*****************************************************************************
@@ -520,7 +520,7 @@ class selfConsistentDensityEstimate:
                             (i.e., index -1 indicates the last variable)
 
             data        :   The data original used to create the
-                            selfConsistentDensityEstimate object.  This is
+                            fastKDE object.  This is
                             needed to calculated the various marginals required
                             in the conditional computation.                            
 
@@ -585,7 +585,7 @@ class selfConsistentDensityEstimate:
           leftSideVariableIndices.pop(ind)
 
       #Calculate the marginal PDF
-      marginalObject = selfConsistentDensityEstimate(   data[rightSideVariableIndices,:], \
+      marginalObject = fastKDE(   data[rightSideVariableIndices,:], \
                                                         axes = [self.axes[i] for i in rightSideVariableIndices], \
                                                         positiveShift = self.positiveShift, \
                                                         fracContiguousHyperVolumes = self.fracContiguousHyperVolumes, \
@@ -626,7 +626,7 @@ class selfConsistentDensityEstimate:
 
 
   #*****************************************************************************
-  #** selfConsistentDensityEstimate: *******************************************
+  #** fastKDE: *******************************************
   #******************* getCopula      ******************************************
   #*****************************************************************************
   #*****************************************************************************
@@ -645,7 +645,7 @@ class selfConsistentDensityEstimate:
         #Estimate the marginal distributions
         marginalObjects = []
         for i in xrange(self.numVariables):
-          marginalObjects.append(selfConsistentDensityEstimate(data[i,:], \
+          marginalObjects.append(fastKDE(data[i,:], \
                                       axes = [self.axes[i]], \
                                       positiveShift = self.positiveShift, \
                                       fracContiguousHyperVolumes = self.fracContiguousHyperVolumes, \
@@ -696,18 +696,18 @@ class selfConsistentDensityEstimate:
       return pdf.transpose()
 
   #*****************************************************************************
-  #** selfConsistentDensityEstimate: ***********************************************
+  #** fastKDE: ***********************************************
   #******************* Addition operator __add__ *******************************
   #*****************************************************************************
   #*****************************************************************************
   def __add__(self,rhs):
-    """ Addition operator for the selfConsistentDensityEstimate object.  Adds the
+    """ Addition operator for the fastKDE object.  Adds the
         empirical characteristic functions of the two estimates, reapplies
         the BP11 filter, and transforms back to real space.  This is useful
         for parallelized calculation of densities.  Note that this only works
         if the axes are the same for both operands."""
     #Check for proper typing
-    if(not isinstance(rhs,selfConsistentDensityEstimate)):
+    if(not isinstance(rhs,fastKDE)):
       raise TypeError, "unsupported operand type(s) for +: {} and {}".format(type(self),type(rhs))
 
     #Check that the axes are the same for both objects
@@ -785,7 +785,7 @@ def pdf(*args,**kwargs):
 
     #Check that var1 is a vector
     if len(var1Shape) != 1:
-        raise ValueError,"var1 should be a vector.  If multiple variables are combined in a single array, please use the selfConsistentDensityEstimate class interface instead."
+        raise ValueError,"var1 should be a vector.  If multiple variables are combined in a single array, please use the fastKDE class interface instead."
 
     #Get the length of var1
     N = var1Shape[0]
@@ -842,7 +842,7 @@ def pdf(*args,**kwargs):
         numPoints = None
     
     #Calculate the PDF
-    _pdfobj = selfConsistentDensityEstimate(inputVariables, \
+    _pdfobj = fastKDE(inputVariables, \
                                             numPoints = numPoints, \
                                             doSaveMarginals = False, \
                                             positiveShift=True, \
@@ -909,7 +909,7 @@ if(__name__ == "__main__"):
 
           with Timer(nsample[i]):
             #Do the BP11 density estimate
-            bkernel = selfConsistentDensityEstimate(randgauss,doApproximateECF=True,numPoints=513)
+            bkernel = fastKDE(randgauss,doApproximateECF=True,numPoints=513)
 
           #Calculate the mean squared error between the estimated density
           #And the gaussian
@@ -951,7 +951,7 @@ if(__name__ == "__main__"):
           P.show() 
         else:
           #*********************************************************************
-          # Demonstrate the capability to sum selfConsistentDensityEstimate objects
+          # Demonstrate the capability to sum fastKDE objects
           #*********************************************************************
 
           nsamp = 512
@@ -965,10 +965,10 @@ if(__name__ == "__main__"):
           for i in range(nloop):
             randgauss = randsample[i*nsamp:(i+1)*nsamp]
             if(i == 0):
-              bkernel2 = selfConsistentDensityEstimate(randgauss)
+              bkernel2 = fastKDE(randgauss)
               nsample2[i] = len(randgauss)
             else:
-              bkernel2 += selfConsistentDensityEstimate(randgauss)
+              bkernel2 += fastKDE(randgauss)
               nsample2[i] = nsample2[i-1] + len(randgauss)
 
             #Calculate the mean squared error between the estimated density
@@ -999,7 +999,7 @@ if(__name__ == "__main__"):
     else:
         print randsample
         #Simply do the BP11 density estimate and plot it
-        bkernel = selfConsistentDensityEstimate(randsample,\
+        bkernel = fastKDE(randsample,\
                                                 doApproximateECF=True, \
                                                 beVerbose = True, \
                                                 numPoints = 513)
@@ -1107,7 +1107,7 @@ if(__name__ == "__main__"):
 
         with Timer(nsample[z]):
             #Do the BP11 density estimate
-            bkernel = selfConsistentDensityEstimate(  randsub,  \
+            bkernel = fastKDE(  randsub,  \
                                                 beVerbose=False, \
                                                 doSaveMarginals = False, \
                                                 numPoints=129)
@@ -1132,10 +1132,10 @@ if(__name__ == "__main__"):
       print "Error scales ~ N**{}".format(m)
     else:
       with Timer(shape(randsample)[1]):
-        bkernel = selfConsistentDensityEstimate(  randsample,  \
-                                              beVerbose=True, \
-                                              doSaveMarginals=False, \
-                                              numPoints = 129)
+        bkernel = fastKDE(  randsample,  \
+                            beVerbose=True, \
+                            doSaveMarginals=False, \
+                            numPoints = 129)
 
 
 

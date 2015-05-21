@@ -89,9 +89,9 @@ extensions = [ \
                 ]
 
 setup(
-            name = 'selfConsistentDensityEstimate', \
+            name = 'fastKDE', \
             version = str(codeVersionID(__file__).ID), \
-            py_modules=['selfConsistentDensityEstimate','empiricalCharacteristicFunction','arraypad'], \
+            py_modules=['fastKDE','empiricalCharacteristicFunction'], \
             cmdclass = cmdclass,\
             ext_modules = extensions, \
             )
