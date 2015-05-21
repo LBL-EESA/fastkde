@@ -4,10 +4,6 @@ import numpy as npy
 from numpy.random import randn
 from scipy.optimize import newton
 import empiricalCharacteristicFunction as ecf
-#If numpy's version is less than 1.7, then use the version of arraypad
-#supplied with this code, since pad() doesn't exist in lower numpy versions
-if(float(".".join(__version__.split(".")[:2])) < 1.7):
-  from arraypad import pad
 import copy
 from types import *
 import pdb
