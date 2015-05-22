@@ -27,6 +27,7 @@ class fastKDE:
   def __init__( self,\
                 data = None,\
                 axes = None, \
+                logAxes = False, \
                 numPointsPerSigma = 10, \
                 numPoints=None, \
                 doApproximateECF = True, \
@@ -66,6 +67,13 @@ class fastKDE:
       axes                : the axis-values of the estimated PDF.  They must be evenly
                             spaced and they should have a length that is a power of two
                             plus one (e.g., 33).
+
+      logAxes             : Flags whether axes should be log spaced (i.e., the PDF is calculated
+                            based on log(data) and then transformed back to sample space).  Should
+                            be a logical value (True or False) or a list of logical values with an item
+                            for each variable (i.e, len(logAxes) == shape(data)[0]) specifying which
+                            axes should use log spacing.  If only True or False is given, that value
+                            is used for all variables.
 
       numPointsPerSigma   : the number of points on the data grid per standard
                             deviation; this influences the total size of the axes that are
@@ -120,6 +128,7 @@ class fastKDE:
 
       #Save the original data for the marginal calculation
       originalData = array(data)
+      data = array(data)
 
       #First check the rank of the data
       dataRank = len(shape(data))
@@ -139,6 +148,27 @@ class fastKDE:
       #Set the number of data points
       self.numDataPoints = shape(data)[1]
 
+      #Check if we need log axes for any variables
+      try:
+          #Check if an iterable was provided for logAxes
+          logAxes[0]
+      except:
+          #Otherwise set the array to be a list filled with the same value
+          logAxes = self.numVariables*[logAxes]
+
+      #Save the logAxes variable
+      self.logAxes = logAxes
+
+      #Loop over variables and take the logarithm of any with log axes
+      for v in range(self.numVariables):
+          #Take the logarithm of the given variable
+          if logAxes[v]:
+              #Check wheter all the data are positive
+              if(amin(data[v,:]) <= 0):
+                  raise ValueError,"logarithmic axes were specified for variable {}, but that variable contains values less than 0: min = {}".format(v,amin(data[v,:]))
+              data[v,:] = log(data[v,:])
+
+
       self.fracContiguousHyperVolumes = fracContiguousHyperVolumes
 
       if numContiguousHyperVolumes is not None:
@@ -148,6 +178,10 @@ class fastKDE:
 
     else:
       self.numDataPoints = 0
+
+    #Create a variable to hold the original PDF and axes
+    self.originalPDF = None
+    self.originalAxes = None
 
     #Store the doFFT flag
     self.doFFT = doFFT
@@ -328,9 +362,10 @@ class fastKDE:
           self.marginalObjects = []
           for i in xrange(self.numVariables):
             self.marginalObjects.append(fastKDE(originalData[i,:], \
-                                          axes = [self.axes[i]], \
+                                          axes = [self.originalAxes[i]], \
                                           positiveShift = self.positiveShift, \
                                           fracContiguousHyperVolumes = self.fracContiguousHyperVolumes, \
+                                          logAxes = self.logAxes[i], \
                                           doSaveMarginals = False) )
                                                                   
     return
@@ -474,6 +509,19 @@ class fastKDE:
       print "Normalization of pdf = {}. phiSC[0] = {}".format(normConst,self.phiSC[midPointAccessor])
 
 
+    #Save the original PDF and axes
+    self.originalPDF = array(self.pdf)
+    self.originalAxes = list(self.axes)
+
+    #Check if any variables need to be transformed due to use
+    #of logarithmic axes
+    for v in range(self.numVariables):
+        if self.logAxes[v]:
+            #Transform the axis back to data space
+            self.axes[v] = exp(self.axes[v])
+            #Transform the PDF
+            self.pdf /= self.axes[v]
+
     #Set self.fSC for backward compatibility
     self.fSC = self.pdf
 
@@ -538,6 +586,8 @@ class fastKDE:
       
       """
 
+      data = array(data)
+
       #If the data are univariate, simply return the PDF itself
       if(self.numVariables == 1):
         return self.pdf
@@ -586,10 +636,11 @@ class fastKDE:
 
       #Calculate the marginal PDF
       marginalObject = fastKDE(   data[rightSideVariableIndices,:], \
-                                                        axes = [self.axes[i] for i in rightSideVariableIndices], \
-                                                        positiveShift = self.positiveShift, \
-                                                        fracContiguousHyperVolumes = self.fracContiguousHyperVolumes, \
-                                                        doSaveMarginals = False)
+                                                axes = [self.originalAxes[i] for i in rightSideVariableIndices], \
+                                                positiveShift = self.positiveShift, \
+                                                fracContiguousHyperVolumes = self.fracContiguousHyperVolumes, \
+                                                logAxes = [ self.logAxes[i] for i in rightSideVariableIndices], \
+                                                doSaveMarginals = False)
 
       #Make the shape of the new marginal object match that of the original PDF
       #(using the magic of the numpy newaxis)
@@ -646,9 +697,10 @@ class fastKDE:
         marginalObjects = []
         for i in xrange(self.numVariables):
           marginalObjects.append(fastKDE(data[i,:], \
-                                      axes = [self.axes[i]], \
+                                      axes = [self.originalAxes[i]], \
                                       positiveShift = self.positiveShift, \
                                       fracContiguousHyperVolumes = self.fracContiguousHyperVolumes, \
+                                      logAxes = self.logAxes[i], \
                                       doSaveMarginals = False))
     else:
       #If not, just use the saved marginals
@@ -748,9 +800,9 @@ def pdf(*args,**kwargs):
                                 resulting PDF increases (e.g., supplying var1
                                 and var2 results in a 2D PDF).
 
-            numPoints       :   The number of points for each axis in the PDF.
-                                By default this is automatically set to an
-                                optimal value for each axis.
+            **kwargs        :   Any additional keyword arguments get passed directly to
+                                fastKDE.fastKDE();  see the docstring of fastKDE.fastKDE() for
+                                details of kwargs.
 
         returns:
         --------
@@ -815,6 +867,10 @@ def pdf(*args,**kwargs):
     if len(args) > 1:
         varArgs = args[1:]
 
+    #Remove the variables from kwargs
+    for key in list(varKeys):
+        del(kwargs[key])
+
     #Start preparing the input data for
     #concatenation
     inputVariables = array(var1[newaxis,:])
@@ -835,17 +891,18 @@ def pdf(*args,**kwargs):
         inputVariables = concatenate((inputVariables,varn))
 
 
-    #Read the optional keyword argument numPoints
+    #Remove the doSaveMarginals keyword argument
     try:
-        numPoints = int(kwargs['numPoints'])
+        doSaveMarginals = kwargs['doSaveMarginals']
+        del(kwargs['doSaveMarginals'])
     except:
-        numPoints = None
+        pass
+
     
     #Calculate the PDF
     _pdfobj = fastKDE(inputVariables, \
-                                            numPoints = numPoints, \
                                             doSaveMarginals = False, \
-                                            positiveShift=True, \
+                                            **kwargs
                                             )
                                             
 
