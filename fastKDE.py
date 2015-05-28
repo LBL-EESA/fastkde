@@ -528,10 +528,11 @@ class fastKDE:
         if self.logAxes[v]:
             #Transform the axis back to data space
             self.axes[v] = exp(self.axes[v])
+            #Generate a slice to help the axis conform in shape to the PDF
+            conformSlice = self.numVariables*[newaxis]
+            conformSlice[v] = slice(None,None,None)
             #Transform the PDF
-            conformanceSlice = self.numVariables*[newaxis]
-            conformanceSlice[v] = slice(None,None,None)
-            self.pdf /= self.axes[v][conformanceSlice[::-1]]
+            self.pdf /= self.axes[v][conformSlice[::-1]]
 
     #Set self.fSC for backward compatibility
     self.fSC = self.pdf
@@ -679,7 +680,18 @@ class fastKDE:
           conditionalPDF = ma.masked_less_equal(self.reApplyFilter(conditionalPDF),0.0)
 
       #Calculate the normalization matrix
-      normFactor = ma.masked_equal(sum(conditionalPDF*prod(self.deltaX[leftSideVariableIndices]),axis=tuple(sumAxes)),0.0)
+      dxs = [diff(self.axes[i]) for i in leftSideVariableIndices]
+      dxs = [concatenate((dx,[dx[-1]])) for dx in dxs]
+      if len(dxs) == 1:
+          dxProd = array(dxs[0])
+      else:
+          dxProd = prod(meshgrid(*dxs),axis=0)
+      cslice = self.numVariables*[newaxis]
+      for i in leftSideVariableIndices:
+          cslice[i] = slice(None,None,None)
+      dxProd = dxProd[cslice[::-1]]
+
+      normFactor = ma.masked_equal(sum(conditionalPDF*dxProd,axis=tuple(sumAxes)),0.0)
 
       #Normalize the conditional PDF for the leftside variables
       conditionalPDF /= normFactor[conformantSlice]
