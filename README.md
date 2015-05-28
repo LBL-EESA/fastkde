@@ -42,7 +42,7 @@ P.show()
 
 ###For a conditional PDF
 
-**The following code generates samples from a non-trivial joint distribution**
+The following code generates samples from a non-trivial joint distribution
 ```python
 from numpy import *
 
@@ -79,6 +79,40 @@ pOfYGivenX,axes = fastKDE.conditional(y,x)
 ```
 
 The following plot shows the results:
+```python
+#***************************
+# Plot the conditional
+#***************************
+fig,axs = PP.subplots(1,2,figsize=(10,5))
+
+#Plot a scatter plot of the incoming data
+axs[0].plot(x,y,'k.',alpha=0.1)
+axs[0].set_title('Original (x,y) data')
+
+#Set axis labels
+for i in (0,1):
+    axs[i].set_xlabel('x')
+    axs[i].set_ylabel('y')
+
+#Draw a contour plot of the conditional
+axs[1].contourf(axes[0],axes[1],pOfYGivenX,64)
+#Overplot the original underlying relationship
+axs[1].plot(axes[0],underlyingFunction(axes[0]),linewidth=3,linestyle='--',alpha=0.5)
+axs[1].set_title('P(y|x)')
+
+#Set axis limits to be the same
+xlim = [amin(axes[0]),amax(axes[0])]
+ylim = [amin(axes[1]),amax(axes[1])]
+axs[1].set_xlim(xlim)
+axs[1].set_ylim(ylim)
+axs[0].set_xlim(xlim)
+axs[0].set_ylim(ylim)
+
+fig.tight_layout()
+
+PP.savefig('conditional_demo.png')
+PP.show()
+```
 ![Conditional PDF](conditional_demo.png)
 
 ## How do I get set up? ##
