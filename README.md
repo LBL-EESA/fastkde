@@ -12,6 +12,8 @@ Royal Statistical Society C, doi:10.1111/j.1467-9868.2011.00772.x)
 
 Example usage:
 
+###For a standard PDF
+
 ```
 #!python
  
@@ -38,6 +40,46 @@ P.show()
 
 ```
 
+###For a conditional PDF
+
+**The following code generates samples from a non-trivial joint distribution**
+```python
+from numpy import *
+
+#***************************
+# Generate random samples
+#***************************
+# Stochastically sample from the function underlyingFunction() (a sigmoid):
+# sample the absicissa values from a gamma distribution
+# relate the ordinate values to the sample absicissa values and add
+# noise from a normal distribution
+
+#Set the number of samples
+numSamples = int(1e6)
+
+#Define a sigmoid function
+def underlyingFunction(x,x0=305,y0=200,yrange=4):
+return (yrange/2)*tanh(x-x0) + y0
+
+xp1,xp2,xmid = 5,2,305  #Set gamma distribution parameters
+yp1,yp2 = 0,12          #Set normal distribution parameters (mean and std)
+
+#Generate random samples of X from the gamma distribution
+x = -(random.gamma(xp1,xp2,int(numSamples))-xp1*xp2) + xmid
+#Generate random samples of y from x and add normally distributed noise
+y = underlyingFunction(x) + random.normal(loc=yp1,scale=yp2,size=numSamples)
+```
+
+**Now that we have the x,y samples, the following code calcuates the conditional**
+```python
+#***************************
+# Calculate the conditional
+#***************************
+pOfYGivenX,axes = fastKDE.conditional(y,x)
+```
+
+The following plot shows the results:
+![Conditional PDF](conditional_demo.png)
 
 ## How do I get set up? ##
 

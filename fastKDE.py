@@ -915,12 +915,129 @@ def pdf(*args,**kwargs):
                                             doSaveMarginals = False, \
                                             **kwargs
                                             )
-                                            
-
     if len(_pdfobj.axes) == 1:
         return _pdfobj.pdf, _pdfobj.axes[0]
     else:
         return _pdfobj.pdf, _pdfobj.axes
+
+
+def conditional( \
+                inputVars, \
+                conditioningVars, \
+                **kwargs\
+                ):
+    """Estimates the conditional PDF of `inputVars` given `conditioningVars`
+
+        inputVars           : A vector of input values, or a list of such vectors
+
+        conditioningVars    : A vector of conditioning values, or a list of such vectors
+
+        **kwargs            : Any additional keyword arguments get passed directly to
+                              fastKDE.fastKDE() or fastKDE.estimateConditionals();  see 
+                              the docstrings of fastKDE.fastKDE() and fastKDE.estimateConditionals() 
+                              for details of kwargs.
+                              
+                              Note the following two arguments have different default values here:
+                                  positiveShift=True by default, and
+                                  peakFrac = 0.01 by default.
+
+        :returns: (cPDF, axes) \
+                where cPDF is the PDF(inputVars | conditioningVars), and axes is a list
+                of axis vectors giving the points at which cPDF is defined.
+
+                If N conditioningVars were provided, then axes[0:N-1]
+                corresponds to the variables provided in conditioningVars, in
+                the order they were provided; axes[N:M-1] corresponds to the M
+                inputVars provided, in the order provided.
+
+                Ex:
+
+        ```python
+
+        import pylab as PP
+        from numpy import *
+
+        #***************************
+        # Generate random samples
+        #***************************
+        # Stochastically sample from the function underlyingFunction() (a sigmoid):
+        # sample the absicissa values from a gamma distribution
+        # relate the ordinate values to the sample absicissa values and add
+        # noise from a normal distribution
+
+        #Set the number of samples
+        numSamples = int(1e6)
+
+        #Define a sigmoid function
+        def underlyingFunction(x,x0=305,y0=200,yrange=4):
+            return (yrange/2)*tanh(x-x0) + y0
+
+        xp1,xp2,xmid = 5,2,305  #Set gamma distribution parameters
+        yp1,yp2 = 0,12          #Set normal distribution parameters (mean and std)
+
+        #Generate random samples of X from the gamma distribution
+        x = -(random.gamma(xp1,xp2,int(numSamples))-xp1*xp2) + xmid
+        #Generate random samples of y from x and add normally distributed noise
+        y = underlyingFunction(x) + random.normal(loc=yp1,scale=yp2,size=numSamples)
+
+        #***************************
+        # Calculate the conditional
+        #***************************
+        pOfYGivenX,axes = fastKDE.conditional(y,x)
+
+        ```
+
+    """
+
+    #Check whether inputVars is an iterable of vectors or a single vector;
+    #ensure it is an iterable
+    try:
+        ivarLengths = [len(v) for v in inputVars]
+    except:
+        inputVars = [inputVars]
+        ivarLengths = [len(v) for v in inputVars]
+
+    #Check whether conditioningVars is an iterable of vectors or a single vector;
+    #ensure it is an iterable
+    try:
+        cvarLengths = [len(v) for v in conditioningVars]
+    except:
+        conditioningVars = [conditioningVars]
+        cvarLengths = [len(v) for v in conditioningVars]
+
+    #Create a list of all variables
+    fullVarList = conditioningVars + inputVars
+
+    #Check that all input variable lengths are the same
+    if not all(array([len(v) for v in fullVarList]) == ivarLengths[0]):
+        raise ValueError,"inputVars and conditioningVars all must be the same length.  Got {} for inputVars and {} for conditioningVars".format(ivarLengths,cvarLengths)
+
+    #Extract the peakFrac argument
+    if 'peakFrac' in kwargs:
+        peakFrac = kwargs['peakFrac']
+        del(kwargs['peakFrac'])
+    else:
+        peakFrac = 0.01
+
+    #Default to positiveShift=True
+    if 'positiveShift' in kwargs:
+        positiveShift = kwargs['positiveShift']
+        del(kwargs['positiveShift'])
+    else:
+        positiveShift = True
+
+    #Estimate the full joint PDF
+    _pdf = fastKDE(array(fullVarList),positiveShift=positiveShift,**kwargs)
+
+    #Set the indices of the conditional variables
+    cvarInds = range(len(conditioningVars))
+
+    #Estimate the conditional
+    cpdf = _pdf.estimateConditionals(cvarInds,array(fullVarList),peakFrac = peakFrac)
+
+    #Return the conditional and the axes
+    return cpdf,_pdf.axes
+
 
 
 #*******************************************************************************
