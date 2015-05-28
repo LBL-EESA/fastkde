@@ -59,7 +59,7 @@ numSamples = int(1e6)
 
 #Define a sigmoid function
 def underlyingFunction(x,x0=305,y0=200,yrange=4):
-return (yrange/2)*tanh(x-x0) + y0
+     return (yrange/2)*tanh(x-x0) + y0
 
 xp1,xp2,xmid = 5,2,305  #Set gamma distribution parameters
 yp1,yp2 = 0,12          #Set normal distribution parameters (mean and std)
