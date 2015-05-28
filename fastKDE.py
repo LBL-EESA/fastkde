@@ -496,12 +496,21 @@ class fastKDE:
             a = 0.0
             #Find the zero of the above function; i.e., find delta, such that the shifted PDF is
             #normalized
-            delta = newton(normFunc,a,maxiter=10000)
+            try:
+                delta = newton(normFunc,a,maxiter=10000)
+            except:
+                delta = 0.0
 
-            #Shift the PDF
-            self.pdf -= delta
-            #And set the negative values to 0
-            self.pdf[where(self.pdf < 0)] = 0.0
+            #Check if the positive shift method failed
+            if not isfinite(delta):
+                delta = 0.0
+
+            #If a shift is provided, do the shift
+            if delta != 0.0:
+                #Shift the PDF
+                self.pdf -= delta
+                #And set the negative values to 0
+                self.pdf[where(self.pdf < 0)] = 0.0
 
     if(self.beVerbose):
       normConst = sum(pdf*prod(self.deltaX))
