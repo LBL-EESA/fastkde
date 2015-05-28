@@ -520,7 +520,9 @@ class fastKDE:
             #Transform the axis back to data space
             self.axes[v] = exp(self.axes[v])
             #Transform the PDF
-            self.pdf /= self.axes[v]
+            conformanceSlice = self.numVariables*[newaxis]
+            conformanceSlice[v] = slice(None,None,None)
+            self.pdf /= self.axes[v][conformanceSlice[::-1]]
 
     #Set self.fSC for backward compatibility
     self.fSC = self.pdf
