@@ -16,7 +16,7 @@ import floodFillSearch as flood
 class Timer():
    def __init__(self,n=None): self.n = n
    def __enter__(self): self.start = time.time()
-   def __exit__(self, *args): print "N = {}, t = {} seconds".format(self.n,time.time() - self.start)
+   def __exit__(self, *args): print("N = {}, t = {} seconds".format(self.n,time.time() - self.start))
 
 def nextHighestPowerOfTwo(number):
     """Returns the nearest power of two that is greater than or equal to number"""
@@ -138,7 +138,7 @@ class fastKDE:
       else:
           data = array(originalData,dtype=npy.float)
       if(dataRank > 2):
-          raise ValueError,"data must be a rank-2 array of shape [numVariables,numDataPoints]"
+          raise ValueError("data must be a rank-2 array of shape [numVariables,numDataPoints]")
 
       #Set the rank of the data
       self.dataRank = dataRank
@@ -165,7 +165,7 @@ class fastKDE:
           if logAxes[v]:
               #Check wheter all the data are positive
               if(amin(data[v,:]) <= 0):
-                  raise ValueError,"logarithmic axes were specified for variable {}, but that variable contains values less than 0: min = {}".format(v,amin(data[v,:]))
+                  raise ValueError("logarithmic axes were specified for variable {}, but that variable contains values less than 0: min = {}".format(v,amin(data[v,:])))
               data[v,:] = log(data[v,:])
 
 
@@ -249,7 +249,7 @@ class fastKDE:
                 if lenNum == self.numVariables:
                     self.numXPoints = numPoints
                 else:
-                    raise ValueError,"len(numPoints) = {}, but it should match numVariables = {}".format(lenNum,self.numVariables)
+                    raise ValueError("len(numPoints) = {}, but it should match numVariables = {}".format(lenNum,self.numVariables))
             else:
                 self.numXPoints = array(self.numVariables*(numPoints,))
 
@@ -287,7 +287,7 @@ class fastKDE:
         fTolerance = self.deltaX[v]/(1e4*self.dataNorm[v])
         #Check that these differences are less than 1/1e6
         if(not all(abs(dxdiff) < fTolerance)):
-            raise ValueError,"All grids in axes must be regularly spaced"
+            raise ValueError("All grids in axes must be regularly spaced")
 
         log2size = log2(len(xg) - addOne)
         if log2size != floor(log2size):
@@ -296,7 +296,7 @@ class fastKDE:
             else:
                 extraStr = ""
 
-            raise ValueError,"All grids in axes must be powers of 2" + extraStr + ", but got {}".format(len(xg))
+            raise ValueError("All grids in axes must be powers of 2" + extraStr + ", but got {}".format(len(xg)))
 
     #Calculate the frequency point grids (for 0-centered data)
     self.tgrids = [ calcTfromX((xg-av)/sd) for xg,av,sd in zip(self.axes,self.dataMid,self.dataNorm) ]
@@ -394,7 +394,7 @@ class fastKDE:
     contiguousInds = flood.floodFillSearch(ecfSq,searchThreshold = self.ecfThreshold)
 
     if contiguousInds == []:
-        raise RuntimeError,"No ECF values found above the ECF threshold.  max(ecfSq) = {}, ecfThresh = {}".format(amax(ecfSq),ecfThresh)
+        raise RuntimeError("No ECF values found above the ECF threshold.  max(ecfSq) = {}, ecfThresh = {}".format(amax(ecfSq),ecfThresh))
 
     #Sort them by distance from the center
     sortedInds = flood.sortByDistanceFromCenter(contiguousInds,shape(ecfSq))
@@ -515,7 +515,7 @@ class fastKDE:
     if(self.beVerbose):
       normConst = sum(pdf*prod(self.deltaX))
       midPointAccessor = tuple([(tp-1)/2 for tp in self.numTPoints])
-      print "Normalization of pdf = {}. phiSC[0] = {}".format(normConst,self.phiSC[midPointAccessor])
+      print("Normalization of pdf = {}. phiSC[0] = {}".format(normConst,self.phiSC[midPointAccessor]))
 
 
     #Save the original PDF and axes
@@ -613,17 +613,17 @@ class fastKDE:
               range(variables)
               variables = (variables,)
           except:
-              raise ValueError,"variables appears to be neither a tuple or an integer"
+              raise ValueError("variables appears to be neither a tuple or an integer")
 
       #Check that the variable indices are sane
       rightSideVariableIndices = []
       for ind in tuple(variables):
           if ind > self.numVariables-1:
-              raise ValueError,"out-of-bounds positive index found in 'variables'"
+              raise ValueError("out-of-bounds positive index found in 'variables'")
           if ind < 0:
               dum = self.numVariables + ind
               if dum < 0:
-                  raise ValueError,"out-of-bounds negative index found in 'variables'"
+                  raise ValueError("out-of-bounds negative index found in 'variables'")
           else:
               dum = ind
           rightSideVariableIndices.append(dum)
@@ -631,7 +631,7 @@ class fastKDE:
       #Pull the unique indices and make sure they are sorted
       rightSideVariableIndices = tuple(sorted(list(set(rightSideVariableIndices))))
       if len(rightSideVariableIndices) > self.numVariables:
-          raise ValueError,"More indices were provided in 'variables' than there are variables."
+          raise ValueError("More indices were provided in 'variables' than there are variables.")
 
       #Check if all variables were provided
       if len(rightSideVariableIndices) == self.numVariables:
@@ -714,7 +714,7 @@ class fastKDE:
     #Check if we need to calculate the marginal distributions
     if(not self.doSaveMarginals):
       if(data is None):
-        raise ValueError,"the data must be provided as argument 'data', if doSaveMarginals=False when the original PDF was calculated"
+        raise ValueError("the data must be provided as argument 'data', if doSaveMarginals=False when the original PDF was calculated")
       else:
         #Estimate the marginal distributions
         marginalObjects = []
@@ -783,12 +783,12 @@ class fastKDE:
         if the axes are the same for both operands."""
     #Check for proper typing
     if(not isinstance(rhs,fastKDE)):
-      raise TypeError, "unsupported operand type(s) for +: {} and {}".format(type(self),type(rhs))
+      raise TypeError("unsupported operand type(s) for +: {} and {}".format(type(self),type(rhs)))
 
     #Check that the axes are the same for both objects
     for sxg,rxg in zip(self.axes,rhs.axes):
         if not all(isclose(sxg,rxg)):
-            raise NotImplementedError,"addition for operands with different axes is not yet implemented."
+            raise NotImplementedError("addition for operands with different axes is not yet implemented.")
 
     retObj = copy.deepcopy(self)
     retObj.phiSC = (0.0+0.0j)*zeros(self.numTPoints)
@@ -849,18 +849,18 @@ def pdf(*args,**kwargs):
         try:
             var1 = kwargs['var1']
         except:
-            raise ValueError,"No input data were provided."
+            raise ValueError("No input data were provided.")
 
     #Check that var1 is arraylike
     try:
         var1Shape = shape(var1)
     except BaseException as e:
-        print e
-        raise ValueError,"Could not get shape of var1; it does not appear to be array-like."
+        print(e)
+        raise ValueError("Could not get shape of var1; it does not appear to be array-like.")
 
     #Check that var1 is a vector
     if len(var1Shape) != 1:
-        raise ValueError,"var1 should be a vector.  If multiple variables are combined in a single array, please use the fastKDE class interface instead."
+        raise ValueError("var1 should be a vector.  If multiple variables are combined in a single array, please use the fastKDE class interface instead.")
 
     #Get the length of var1
     N = var1Shape[0]
@@ -875,15 +875,15 @@ def pdf(*args,**kwargs):
             try:
                 varNum = int(key[3:])
             except BaseException as e:
-                print e
-                raise ValueError,"Incomprehensible variable-like keyword provided: {}".format(key)
+                print(e)
+                raise ValueError("Incomprehensible variable-like keyword provided: {}".format(key))
 
             #Append this variable
             varArgs.append(kwargs[key])
 
     #Check if a mixture of keyword and arguments were provided for additional variables
     if len(varArgs) != 0 and len(args) > 1:
-        raise ValueError,"additional variables were provided as a mixture of arguments and keyword arguments.  They all must be one or the other."
+        raise ValueError("additional variables were provided as a mixture of arguments and keyword arguments.  They all must be one or the other.")
 
     #Set the additional variables to be the rest of the input arguments
     #if none were provided as key word arguments
@@ -904,12 +904,12 @@ def pdf(*args,**kwargs):
         try:
             varn = array(varArgs[i][newaxis,:])
         except BaseException as e:
-            print e
-            raise ValueError,"Could not convert var{} into a numpy arrray".format(i+1)
+            print(e)
+            raise ValueError("Could not convert var{} into a numpy arrray".format(i+1))
             
         lenN = shape(varn)[1] 
         if lenN != N:
-            raise ValueError,"len(var{}) is {}, but it should be the same of len(var1) = {}".format(i+1,lenN,N)
+            raise ValueError("len(var{}) is {}, but it should be the same of len(var1) = {}".format(i+1,lenN,N))
 
         inputVariables = concatenate((inputVariables,varn))
 
@@ -1022,7 +1022,7 @@ def conditional( \
 
     #Check that all input variable lengths are the same
     if not all(array([len(v) for v in fullVarList]) == ivarLengths[0]):
-        raise ValueError,"inputVars and conditioningVars all must be the same length.  Got {} for inputVars and {} for conditioningVars".format(ivarLengths,cvarLengths)
+        raise ValueError("inputVars and conditioningVars all must be the same length.  Got {} for inputVars and {} for conditioningVars".format(ivarLengths,cvarLengths))
 
     #Extract the peakFrac argument
     if 'peakFrac' in kwargs:
@@ -1134,14 +1134,14 @@ if(__name__ == "__main__"):
         #Do a simple power law fit to the scaling
         [m,b,_,_,_] = stats.linregress(log(nsample),log(esq))
         #Print the error scaling (following BP11, this is expected to be m ~ -1)
-        print "Error scales ~ N**{}".format(m)
+        print("Error scales ~ N**{}".format(m))
 
         #Plot the error vs sample size on a log-log curve
         P.subplot(2,2,3)
         P.loglog(nsample,esq)
         P.plot(nsample,exp(b)*nsample**m,'r-')
 
-        print ""
+        print("")
 
         bDemoSum = False
         if(not bDemoSum):
@@ -1172,7 +1172,7 @@ if(__name__ == "__main__"):
             #And the gaussian
             esq2[i] = average(abs(mygaus(bkernel2.axes[0])-bkernel2.pdf)**2 * bkernel2.deltaX[0])
             #Print the sample size and the error to show that the code is proceeeding
-            print "{}, {}".format(nsample2[i],esq2[i])
+            print("{}, {}".format(nsample2[i],esq2[i]))
 
           #Plot the distribution
           P.subplot(2,2,1)
@@ -1194,7 +1194,7 @@ if(__name__ == "__main__"):
           #Show the plots
           P.show()
     else:
-        print randsample
+        print(randsample)
         #Simply do the BP11 density estimate and plot it
         bkernel = fastKDE(randsample,\
                                                 doApproximateECF=True, \
@@ -1326,7 +1326,7 @@ if(__name__ == "__main__"):
       #Do a simple power law fit to the scaling
       [m,b,_,_,_] = stats.linregress(log(nsample),log(esq))
       #Print the error scaling (following BP11, this is expected to be m ~ -1)
-      print "Error scales ~ N**{}".format(m)
+      print("Error scales ~ N**{}".format(m))
     else:
       with Timer(shape(randsample)[1]):
         bkernel = fastKDE(  randsample,  \
