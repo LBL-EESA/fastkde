@@ -4,7 +4,7 @@ import ftnbp11helper as ftn
 
 random.seed(0)
 
-print ftn.calculateecfdirect.__doc__
+print(ftn.calculateecfdirect.__doc__)
 
 def mySTDGaus1D(x):
   return 1./sqrt(2*pi) * exp(-x**2/2)
@@ -41,7 +41,7 @@ if(doOneDimensionalTest):
   gausFuncCF = fft.ihfft(fft.ifftshift(gausFunc),len(gausFunc))
   gausFuncCF /= gausFuncCF[0]
 
-  print ecf[0],gausFuncCF[0]
+  print(ecf[0],gausFuncCF[0])
 
   P.subplot(211,xscale = "log",yscale="log")
   P.plot(tpoints,abs(ecf)**2,'r-')
@@ -87,7 +87,7 @@ ecf = reshape(ecf,nvariables*[len(tpoints)])
 
 tp2d,wp2d = meshgrid(tpoints,tpoints)
 
-print ecf[0,0],mygauscf[0,0]
+print(ecf[0,0],mygauscf[0,0])
 
 fig = plt.figure()
 ax = fig.add_subplot(211,projection='3d')
