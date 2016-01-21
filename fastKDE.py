@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+
+from builtins import range  # Python 2.7/3.x compatibility
+
 from numpy import *
 import numpy as npy
 from numpy.random import randn
@@ -360,7 +363,7 @@ class fastKDE:
         #Calculate and save the marginal distribution objects
         if(self.doSaveMarginals):
           self.marginalObjects = []
-          for i in xrange(self.numVariables):
+          for i in range(self.numVariables):
             self.marginalObjects.append(fastKDE(originalData[i,:], \
                                           axes = [self.originalAxes[i]], \
                                           positiveShift = self.positiveShift, \
@@ -412,8 +415,8 @@ class fastKDE:
 
     #Pull out fracContiguousHyperVolumes of contiguous hyper volumes, in order of distance from
     #the origin
-    for i in xrange(numVolumesToUse):
-        for n in xrange(self.numVariables):
+    for i in range(numVolumesToUse):
+        for n in range(self.numVariables):
             iCalcPhi[n] = concatenate( (iCalcPhi[n],sortedInds[i][n]) )
 
     #Convert iCalcPhi to a list of tuples, such that it is compatible with the output of where()
@@ -642,7 +645,7 @@ class fastKDE:
           return self.pdf
 
       #Create the list of left-side variable indices
-      leftSideVariableIndices = range(self.numVariables)
+      leftSideVariableIndices = list(range(self.numVariables))
       for ind in sorted(rightSideVariableIndices)[::-1]:
           leftSideVariableIndices.pop(ind)
 
@@ -718,7 +721,7 @@ class fastKDE:
       else:
         #Estimate the marginal distributions
         marginalObjects = []
-        for i in xrange(self.numVariables):
+        for i in range(self.numVariables):
           marginalObjects.append(fastKDE(data[i,:], \
                                       axes = [self.originalAxes[i]], \
                                       positiveShift = self.positiveShift, \
@@ -1042,7 +1045,7 @@ def conditional( \
     _pdf = fastKDE(array(fullVarList),positiveShift=positiveShift,**kwargs)
 
     #Set the indices of the conditional variables
-    cvarInds = range(len(conditioningVars))
+    cvarInds = list(range(len(conditioningVars)))
 
     #Estimate the conditional
     cpdf = _pdf.estimateConditionals(cvarInds,array(fullVarList),peakFrac = peakFrac)

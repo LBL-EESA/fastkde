@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+
+from builtins import range  # Python 2.7/3.x compatibility
+
 from numpy import *
 import nufft
 
