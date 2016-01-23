@@ -3,7 +3,7 @@ from numpy import *
 
 #Create an array that starts at 128 and decreases
 #linearly as indices increase
-testVec = range(8,1,-1)
+testVec = list(range(8,1,-1))
 t1,t2 = meshgrid(testVec,testVec)
 testArray = t1**2 + t2**2 
 veclenhalf = len(testVec)/2 + 1
@@ -44,10 +44,10 @@ aa = asarray(meshgrid(*tuple(numDims*[a])))
 c = sum(aa**2,axis=0)
 firstHalfSlice = tuple(numDims*[slice(0,lenhalf)])
 d = fft.ifftshift(c)[firstHalfSlice]
-print c
-print d
+print(c)
+print(d)
 
 padSequence = numDims*[tuple([lenhalf-1,0])]
 cRemade = pad(d,padSequence,'reflect')
-print array_equiv(cRemade,c)
+print(array_equiv(cRemade,c))
 

@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+
+from builtins import range  # Python 2.7/3.x compatibility
+
 from numpy import *
 import nufft
 
@@ -47,7 +50,7 @@ class ECF:
     dshape = shape(inputData)
     rank = len(dshape)
     if(rank != 2):
-      raise ValueError,"inputData must be a rank-2 array of shape [nvariables,ndatapoints]; got rank = {}".format(rank)
+      raise ValueError("inputData must be a rank-2 array of shape [nvariables,ndatapoints]; got rank = {}".format(rank))
     #Extract the number of variables
     self.nvariables = dshape[0]
     #Extract the number of data points
@@ -60,10 +63,10 @@ class ECF:
     try:
         gridRank = len(self.tgrids)
     except:
-        raise ValueError,"Could not determine the number of tgrids"
+        raise ValueError("Could not determine the number of tgrids")
 
     if  gridRank != self.nvariables:
-        raise ValueError,"The rank of tgrids should be {}.  It is {}".format(gridRank,self.nvariables)
+        raise ValueError("The rank of tgrids should be {}.  It is {}".format(gridRank,self.nvariables))
 
     #Check for regularity if we are doing nuFFT
     if(self.useFFTApproximation):
@@ -80,7 +83,7 @@ class ECF:
           fTolerance = dt/1e6
           #Check that all these differences are less than 1/1e6
           if(not all(abs(deltaTdiff < fTolerance))):
-            raise ValueError,"All grids in tgrids must be regularly spaced if useFFTApproximation is True"
+            raise ValueError("All grids in tgrids must be regularly spaced if useFFTApproximation is True")
 
     #Set verbosity
     self.beVerbose = beVerbose
@@ -126,7 +129,7 @@ class ECF:
         #Save the ECF in the object
         self.ECF = myECF/myECF[midPointAccessor]
     else:
-        raise RuntimeError,"Midpoint of ECF is 0.0.  min(ECF) = {}, max(ECF) = {}".format(amin(myECF),amax(myECF))
+        raise RuntimeError("Midpoint of ECF is 0.0.  min(ECF) = {}, max(ECF) = {}".format(amin(myECF),amax(myECF)))
 
 
     return
@@ -175,7 +178,7 @@ if(__name__ == "__main__"):
     ecfDFT = ECF(xyrand,tpoints[newaxis,:],useFFTApproximation=False).ECF
 
     #Print the 0-frequencies (should be 1 for all)
-    print ecfFFT[nh],ecfDFT[nh],mygauscf[nh]
+    print(ecfFFT[nh],ecfDFT[nh],mygauscf[nh])
 
     P.subplot(121,xscale="log",yscale="log")
     #Plot the magnitude of the fast and slow ECFs
@@ -247,7 +250,7 @@ if(__name__ == "__main__"):
 
 
     #Print the normalization constants (should be 1)
-    print ecfFFT[midPointAccessor],ecfDFT[midPointAccessor],mygauscf[midPointAccessor]
+    print(ecfFFT[midPointAccessor],ecfDFT[midPointAccessor],mygauscf[midPointAccessor])
 
     #plot the magnitudes of the fast and slow ECFs along
     #an aribtrary slice (they should overlap except in the high frequency range)

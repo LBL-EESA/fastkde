@@ -51,7 +51,7 @@ if(doOneDimensionalTest):
   gausFuncCF = fft.ihfft(fft.ifftshift(gausFunc),len(gausFunc))
   gausFuncCF /= gausFuncCF[0]
 
-  print ecf[0],gausFuncCF[0]
+  print(ecf[0],gausFuncCF[0])
 
   P.subplot(211,xscale = "log",yscale="log")
   P.plot(tpoints,abs(ecf)**2,'r-')
@@ -92,7 +92,7 @@ if(doTwoDimensionalTest):
   myecf = ECF.ECF(xyrand,tpoints)
   ecf = myecf.ECF
 
-  print ecf[0,0],mygauscf[0,0]
+  print(ecf[0,0],mygauscf[0,0])
 
   tp2d,wp2d = meshgrid(tpoints,tpoints)
 
