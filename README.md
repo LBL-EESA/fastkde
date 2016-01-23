@@ -3,7 +3,9 @@
 ## Software Overview ##
 
 Calculates a self-consistent probability density estimate of arbitrarily
-dimensioned data. By default, this imlementation uses a multidimensional
+dimensioned data. The method is described by 
+[O'Brien et al. (in review for Computational Statistics and Data Analysis)](https://www.dropbox.com/s/1kerkdjy7jyb9zr/fast_nd_kde_831dbd60.pdf?dl=0).
+This implementation uses a multidimensional
 version of the nuFFT-based Empirical Characteristic Function calculation
 described by O'Brien et al. (2014; Computational Statistics and Data Analysis,
 doi:10.1016/j.csda.2014.06.002), which improves the speed of the
