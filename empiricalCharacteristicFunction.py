@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
-from builtins import range  # Python 2.7/3.x compatibility
+try:
+    from builtins import range  # Python 2.7/3.x compatibility
+except:
+    from __builtin__ import range
 
 from numpy import *
 import nufft
