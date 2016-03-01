@@ -2,15 +2,12 @@
 
 ## Software Overview ##
 
-Calculates a self-consistent probability density estimate of arbitrarily
-dimensioned data. The method is described by 
-[O'Brien et al. (in review for Computational Statistics and Data Analysis)](https://www.dropbox.com/s/1kerkdjy7jyb9zr/fast_nd_kde_831dbd60.pdf?dl=0).
-This implementation uses a multidimensional
-version of the nuFFT-based Empirical Characteristic Function calculation
-described by O'Brien et al. (2014; Computational Statistics and Data Analysis,
-doi:10.1016/j.csda.2014.06.002), which improves the speed of the
-self-consistent density esimate described by Bernacchia and Pigolotti (2011; J.
-Royal Statistical Society C, doi:10.1111/j.1467-9868.2011.00772.x)
+fastKDE calculates a kernel density estimate of arbitrarily
+dimensioned data; it does so rapidly and robustly using recently developed KDE techniques.  It does so with statistical skill that is as good as state-of-the-science 'R' KDE packages, and it does so 10,000 times faster for bivariate data (even better improvements for higher dimensionality).
+
+*Please cite [O'Brien et al. (2014, 
+doi:10.1016/j.csda.2014.06.002)](http://dx.doi.org/10.1016/j.csda.2014.06.002) and 
+[O'Brien et al. (2016, doi:10.1016/j.csda.2016.02.014)](https://drive.google.com/open?id=0BwQSHzCLsSi7Z01zWlNpSlpTejQ) when using this method*.
 
 Example usage:
 
@@ -21,7 +18,7 @@ Example usage:
  
 import numpy as np
 import fastKDE
-import pylab as P
+import pylab as PP
 
 #Generate two random variables dataset (representing 100000 pairs of datapoints)
 N = 2e5
@@ -37,8 +34,8 @@ v1,v2 = axes
 #Plot contours of the PDF should be a set of concentric ellipsoids centered on
 #(0.1, -300) Comparitively, the y axis range should be tiny and the x axis range
 #should be large
-P.contour(v1,v2,myPDF)
-P.show()
+PP.contour(v1,v2,myPDF)
+PP.show()
 
 ```
 
@@ -46,6 +43,8 @@ P.show()
 
 The following code generates samples from a non-trivial joint distribution
 ```python
+import fastKDE
+import pylab as PP
 from numpy import *
 
 #***************************
