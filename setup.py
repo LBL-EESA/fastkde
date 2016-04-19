@@ -29,7 +29,7 @@ setup(
             author = "Travis A. O'Brien", \
             author_email = "TAOBrien@lbl.gov", \
             url = "https://bitbucket.org/lbl-cascade/fastkde", \
-            download_url = "https://bitbucket.org/lbl-cascade/fastkde/tarball/{}".format(revision), \
+            download_url = "https://bitbucket.org/lbl-cascade/fastkde/get/v{}.tar.gz".format(revision), \
             keywords = ['statistics','probability','KDE','kernel density estimation'], \
             py_modules=['fastKDE','empiricalCharacteristicFunction'], \
             classifiers = [], \
