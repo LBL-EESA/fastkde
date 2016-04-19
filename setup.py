@@ -22,7 +22,7 @@ extensions = [ \
 revision = open('REVISION','r').read().rstrip()
 
 # read the long description
-long_description = open('README.rst','r').read()
+long_description = open('README','r').read()
 
 setup(
             name = 'fastkde', \
