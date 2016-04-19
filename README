@@ -11,11 +11,11 @@ state-of-the-science 'R' KDE packages, and it does so 10,000 times
 faster for bivariate data (even better improvements for higher
 dimensionality).
 
-*Please cite `O'Brien et al. (2014,
-doi:10.1016/j.csda.2014.06.002) <http://dx.doi.org/10.1016/j.csda.2014.06.002>`__
-and `O'Brien et al. (2016,
-doi:10.1016/j.csda.2016.02.014) <https://drive.google.com/open?id=0BwQSHzCLsSi7Z01zWlNpSlpTejQ>`__
-when using this method*.
+*Please cite the following papers when using this method:*
+
+  `O’Brien, T. A., Kashinath, K., Cavanaugh, N. R., Collins, W. D. & O’Brien, J. P. A fast and objective multidimensional kernel density estimation method: fastKDE. Comput. Stat. Data Anal. 101, 148–160 (2016). <http://dx.doi.org/10.1016/j.csda.2016.02.014>`__
+
+  `O’Brien, T. A., Collins, W. D., Rauscher, S. A. & Ringler, T. D. Reducing the computational cost of the ECF using a nuFFT: A fast and objective probability density estimation method. Comput. Stat. Data Anal. 79, 222–234 (2014). <http://dx.doi.org/10.1016/j.csda.2014.06.002>`__
 
 Example usage:
 
@@ -46,6 +46,8 @@ For a standard PDF
     #should be large
     PP.contour(v1,v2,myPDF)
     PP.show()
+
+
 
 For a conditional PDF
 ~~~~~~~~~~~~~~~~~~~~~
@@ -133,6 +135,7 @@ The following plot shows the results:
    :alt: Conditional PDF
 
    Conditional PDF
+
 How do I get set up?
 --------------------
 
@@ -226,3 +229,5 @@ Copyright Information
     derivative works, distribute copies to the public, perform publicly and
     display publicly, and to permit others to do so.
     ****************************
+
+
