@@ -21,11 +21,15 @@ extensions = [ \
 # get revision information
 revision = open('REVISION','r').read().rstrip()
 
+# read the long description
+long_description = open('README.rst','r').read()
+
 setup(
             name = 'fastkde', \
             packages = ['fastkde'], \
             version = revision, \
             description = 'Tools for fast and robust univariate and multivariate kernel density estimation', \
+            long_description = long_description, \
             author = "Travis A. O'Brien", \
             author_email = "TAOBrien@lbl.gov", \
             url = "https://bitbucket.org/lbl-cascade/fastkde", \
