@@ -17,7 +17,7 @@ Example usage:
 #!python
  
 import numpy as np
-import fastKDE
+from fastkde import fastKDE
 import pylab as PP
 
 #Generate two random variables dataset (representing 100000 pairs of datapoints)
@@ -120,6 +120,10 @@ PP.show()
 
 A standard python build:
 ```python setup.py install```
+
+or
+
+```pip install fastkde```
 
 ### Download the source ###
 
