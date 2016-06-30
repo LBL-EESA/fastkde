@@ -7,9 +7,17 @@ import cython.parallel as cpy
 cdef extern from "math.h" nogil:
     double floor(double x)
     double exp(double x)
+    double cos(double x)
+    double sin(double x)
 
-cdef extern from "complex.h" nogil:
-    double complex cexp(double complex x)
+cdef double complex cexp(double complex x) nogil:
+    cdef double complex result
+    cdef double re
+    cdef double im
+    re = x.real
+    im = x.imag
+    result = exp(re)*(cos(im) + 1.0j*sin(im))
+    return result
 
 #*******************************************************************************
 #*******************************************************************************
