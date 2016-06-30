@@ -4,7 +4,7 @@ cimport cython
 
 cdef inline int ravel_shift(   tuple indices, \
                                 int arrayRank, \
-                                np.int_t [:] arrayShape, \
+                                np.intp_t [:] arrayShape, \
                                 int dimension,  \
                                 int amount,     \
                                 int dimensionWraps):
@@ -65,7 +65,7 @@ cdef inline int ravel_shift(   tuple indices, \
 @cython.boundscheck(False)
 cdef tuple findNeighbors(   int raveledStartIndex, \
                             np.float_t searchThreshold, \
-                            np.int_t [:] arrayShape, \
+                            np.intp_t [:] arrayShape, \
                             int arrayRank, \
                             list dimensionWraps, \
                             np.float_t [:] inputArray, \
@@ -195,7 +195,7 @@ cpdef list floodFillSearch( \
             area.
 
     """
-    cdef np.ndarray[np.int_t,ndim=1] arrayShape
+    cdef np.ndarray[np.intp_t,ndim=1] arrayShape
     cdef int arrayRank
     cdef int numArrayElements
     cdef list dimensionWraps
