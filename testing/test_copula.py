@@ -18,7 +18,7 @@ x,y = scobj.getTransformedAxes()
 xx,yy = meshgrid(x,y)
 pdf = scobj.getTransformedPDF()
 copdf = scobj.getTransformedCopula()
-print amin(copdf),amax(copdf)
+print(amin(copdf),amax(copdf))
 
 norm = where(copdf == copdf,1.0,0.0)
 
