@@ -38,8 +38,9 @@ class fastKDE:
                 beVerbose = False, \
                 fracContiguousHyperVolumes = 1, \
                 numContiguousHyperVolumes = None, \
-                positiveShift = False, \
+                positiveShift = True, \
                 countThreshold = None, \
+                axisExpansionFactor = 1.0, \
               ):
     """ 
 
@@ -112,6 +113,11 @@ class fastKDE:
 
       countThreshold    : this argument does nothing; it has been deprecated.  It is kept as an argument for backward
                           compatibility.
+
+      axisExpansionFactor : sets the amount by which the KDE grid will be expanded relative to the original min-max
+                            spread for each variable: 1.0 means a 100% (2x) expansion in the range.  Such an expansion
+                            is necessary to avoid kernel power from one end of the grid leaking into the opposite end
+                            due to the perioidicity of the Fourier transform.
 
     Returns: a fastKDE object
 
@@ -224,9 +230,10 @@ class fastKDE:
         #Get the grid mid-points
         midPoint = 0.5*(self.xMax + self.xMin)
 
-        #inflate the range by 5% to ensure that the data all fit within the range
-        self.xMin += 0.05*(self.xMin-midPoint)
-        self.xMax += 0.05*(self.xMax-midPoint)
+        #inflate the range by axisExpansionFactor to ensure that KDE power doesn't leak through
+        #the periodic axis boundary
+        self.xMin += axisExpansionFactor*(self.xMin-midPoint)
+        self.xMax += axisExpansionFactor*(self.xMax-midPoint)
 
         if numPoints is None:
             #Calculate the number of standard deviations there
@@ -399,6 +406,7 @@ class fastKDE:
     #Sort them by distance from the center
     sortedInds = flood.sortByDistanceFromCenter(contiguousInds,shape(ecfSq))
 
+    #Convert the fraction of hypervolumes to a number if needbe
     numVolumes = len(sortedInds)
     if self.fracContiguousHyperVolumes >= 1:
         numVolumesToUse = int(self.fracContiguousHyperVolumes)
@@ -406,6 +414,10 @@ class fastKDE:
         numVolumesToUse = int(self.fracContiguousHyperVolumes*numVolumes)
     if numVolumesToUse < 1:
         numVolumesToUse = 1
+
+    #Check that we don't exceed the number of provided volumes
+    if numVolumesToUse > numVolumes:
+        numVolumesToUse = numVolumes
 
     #Initialize the filtered value list
     iCalcPhi = self.numVariables*[array([],dtype='int')]
@@ -502,7 +514,9 @@ class fastKDE:
                 delta = 0.0
 
             #Check if the positive shift method failed
-            if not isfinite(delta):
+            if not isfinite(delta) or delta < 0 or delta >= amax(self.pdf):
+                if self.beVerbose:
+                    print 'positiveShift algorithm failure: defaulting to no shift'
                 delta = 0.0
 
             #If a shift is provided, do the shift
