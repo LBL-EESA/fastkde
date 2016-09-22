@@ -20,7 +20,7 @@ SOFILES := $(addsuffix .so, $(basename $(SRC)))
 all: main
 
 main: $(SRC)
-	${PYTHON} setup.py build_ext --inplace
+	cd .. && ${PYTHON} setup.py build_ext --inplace
 
 clean:
 	-rm -f ${OBJ} ${CSRC}

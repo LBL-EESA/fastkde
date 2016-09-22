@@ -6,7 +6,12 @@ except:
     from __builtin__ import range
 
 from numpy import *
-import nufft
+
+# Python 2.7/3.x compatibility
+try:
+    import nufft
+except:
+    from . import nufft
 
 class ECF:
 
@@ -127,7 +132,7 @@ class ECF:
                         missingFreqVal = fillValue)
 
     #Ensure that the ECF is normalized
-    midPointAccessor = tuple( [ (len(tgrid) - 1)/2 for tgrid in tgrids ])
+    midPointAccessor = tuple( [ int((len(tgrid) - 1)/2) for tgrid in tgrids ])
     if myECF[midPointAccessor] > 0.0:
         #Save the ECF in the object
         self.ECF = myECF/myECF[midPointAccessor]

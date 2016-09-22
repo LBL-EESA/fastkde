@@ -10,14 +10,24 @@ from numpy import *
 import numpy as npy
 from numpy.random import randn
 from scipy.optimize import newton
-import empiricalCharacteristicFunction as ecf
+try:
+    import empiricalCharacteristicFunction as ecf
+except:
+    from . import empiricalCharacteristicFunction as ecf
 import copy
 from types import *
 import pdb
 import time
 import sys
-from nufft import calcTfromX
-import floodFillSearch as flood
+try:
+    from nufft import calcTfromX
+except:
+    from .nufft import calcTfromX
+
+try:
+    import floodFillSearch as flood
+except:
+    from . import floodFillSearch as flood
 
 #A simple timer for comparing ECF calculation methods
 class Timer():
@@ -523,7 +533,7 @@ class fastKDE:
             #Check if the positive shift method failed
             if not isfinite(delta) or delta < 0 or delta >= amax(self.pdf):
                 if self.beVerbose:
-                    print 'positiveShift algorithm failure: defaulting to no shift'
+                    print('positiveShift algorithm failure: defaulting to no shift')
                 delta = 0.0
 
             #If a shift is provided, do the shift
