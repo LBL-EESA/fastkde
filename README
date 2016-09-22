@@ -57,32 +57,32 @@ distribution
 
 .. code:: python
 
-    import fastKDE
-    import pylab as PP
-    from numpy import *
+	from fastkde import fastKDE
+	import pylab as PP
+	import numpy as np
 
-    #***************************
-    # Generate random samples
-    #***************************
-    # Stochastically sample from the function underlyingFunction() (a sigmoid):
-    # sample the absicissa values from a gamma distribution
-    # relate the ordinate values to the sample absicissa values and add
-    # noise from a normal distribution
+	#***************************
+	# Generate random samples
+	#***************************
+	# Stochastically sample from the function underlyingFunction() (a sigmoid):
+	# sample the absicissa values from a gamma distribution
+	# relate the ordinate values to the sample absicissa values and add
+	# noise from a normal distribution
 
-    #Set the number of samples
-    numSamples = int(1e6)
+	#Set the number of samples
+	numSamples = int(1e6)
 
-    #Define a sigmoid function
-    def underlyingFunction(x,x0=305,y0=200,yrange=4):
-         return (yrange/2)*tanh(x-x0) + y0
+	#Define a sigmoid function
+	def underlyingFunction(x,x0=305,y0=200,yrange=4):
+	     return (yrange/2)*np.tanh(x-x0) + y0
 
-    xp1,xp2,xmid = 5,2,305  #Set gamma distribution parameters
-    yp1,yp2 = 0,12          #Set normal distribution parameters (mean and std)
+	xp1,xp2,xmid = 5,2,305  #Set gamma distribution parameters
+	yp1,yp2 = 0,12          #Set normal distribution parameters (mean and std)
 
-    #Generate random samples of X from the gamma distribution
-    x = -(random.gamma(xp1,xp2,int(numSamples))-xp1*xp2) + xmid
-    #Generate random samples of y from x and add normally distributed noise
-    y = underlyingFunction(x) + random.normal(loc=yp1,scale=yp2,size=numSamples)
+	#Generate random samples of X from the gamma distribution
+	x = -(np.random.gamma(xp1,xp2,int(numSamples))-xp1*xp2) + xmid
+	#Generate random samples of y from x and add normally distributed noise
+	y = underlyingFunction(x) + np.random.normal(loc=yp1,scale=yp2,size=numSamples)
 
 **Now that we have the x,y samples, the following code calcuates the
 conditional**
@@ -119,8 +119,8 @@ The following plot shows the results:
     axs[1].set_title('P(y|x)')
 
     #Set axis limits to be the same
-    xlim = [amin(axes[0]),amax(axes[0])]
-    ylim = [amin(axes[1]),amax(axes[1])]
+    xlim = [np.amin(axes[0]),np.amax(axes[0])]
+    ylim = [np.amin(axes[1]),np.amax(axes[1])]
     axs[1].set_xlim(xlim)
     axs[1].set_ylim(ylim)
     axs[0].set_xlim(xlim)
