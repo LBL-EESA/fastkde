@@ -2,22 +2,22 @@ import numpy as np
 cimport numpy as np
 cimport cython
 
-cdef inline int ravel_shift(   tuple indices, \
-                                int arrayRank, \
-                                np.intp_t [:] arrayShape, \
-                                int dimension,  \
-                                int amount,     \
-                                int dimensionWraps):
+cdef inline np.int64_t ravel_shift(   tuple indices, \
+                                np.int64_t arrayRank, \
+                                np.int64_t [:] arrayShape, \
+                                np.int64_t dimension,  \
+                                np.int64_t amount,     \
+                                np.int64_t dimensionWraps):
     """Return the raveled index of a shifted version of indices, where a
     specific dimension has been shifted by a certain amount.  If wrapping is
     not flagged and the shift is out of bounds, returns -1"""
 
 
-    cdef int runningProduct
-    cdef int n
-    cdef int i
-    cdef int np
-    cdef int thisIndex
+    cdef np.int64_t runningProduct
+    cdef np.int64_t n
+    cdef np.int64_t i
+    cdef np.int64_t npp
+    cdef np.int64_t thisIndex
 
     runningProduct = 1
     i = 0
@@ -31,8 +31,8 @@ cdef inline int ravel_shift(   tuple indices, \
         #Set the current index
         thisIndex = indices[n-1]
 
-        np = n-1
-        if(np == dimension):
+        npp = n-1
+        if(npp == dimension):
             #If this is the shifting dimension,
             #increment it
             thisIndex += amount
@@ -41,13 +41,13 @@ cdef inline int ravel_shift(   tuple indices, \
             #wrap around dimension
             if(dimensionWraps):
                 if(thisIndex < 0):
-                    thisIndex += arrayShape[np]
-                if(thisIndex >= arrayShape[np]):
-                    thisIndex -= arrayShape[np]
+                    thisIndex += arrayShape[npp]
+                if(thisIndex >= arrayShape[npp]):
+                    thisIndex -= arrayShape[npp]
 
             #Check if the current index is out of bounds;
             #return -1 if so
-            if(thisIndex < 0 or thisIndex >= arrayShape[np]):
+            if(thisIndex < 0 or thisIndex >= arrayShape[npp]):
                 i = -1
                 break
 
@@ -63,10 +63,10 @@ cdef inline int ravel_shift(   tuple indices, \
     return i
 
 @cython.boundscheck(False)
-cdef tuple findNeighbors(   int raveledStartIndex, \
+cdef tuple findNeighbors(   np.int64_t raveledStartIndex, \
                             np.float_t searchThreshold, \
-                            np.intp_t [:] arrayShape, \
-                            int arrayRank, \
+                            np.int64_t [:] arrayShape, \
+                            np.int64_t arrayRank, \
                             list dimensionWraps, \
                             np.float_t [:] inputArray, \
                             np.int_t [:] isNotSearched, \
@@ -90,16 +90,16 @@ cdef tuple findNeighbors(   int raveledStartIndex, \
     
     cdef list itemsToSearch #Running item search list
     cdef list contiguousIndices #A list of indices
-    cdef int r #Current array dimension
-    cdef int testIndexLeft # A test index
-    cdef int testIndexRight # A test index
+    cdef np.int64_t r #Current array dimension
+    cdef np.int64_t testIndexLeft # A test index
+    cdef np.int64_t testIndexRight # A test index
     cdef tuple contiguousArray #A tuple of contiguous indices
     cdef np.ndarray contiguousIndexArray #An array of contiguous indices
-    cdef int testInd #The raveled index of the test point
+    cdef np.int64_t testInd #The raveled index of the test point
 
     cdef tuple itemTuple #The tuple index of the current search item
 
-    cdef int shiftAmount
+    cdef np.int64_t shiftAmount
 
     #Initialize the contiguous index list
     contiguousIndices = []
@@ -195,9 +195,9 @@ cpdef list floodFillSearch( \
             area.
 
     """
-    cdef np.ndarray[np.intp_t,ndim=1] arrayShape
-    cdef int arrayRank
-    cdef int numArrayElements
+    cdef np.ndarray[np.int64_t,ndim=1] arrayShape
+    cdef np.int64_t arrayRank
+    cdef np.int64_t numArrayElements
     cdef list dimensionWraps
     cdef list contiguousAreas
 
@@ -231,7 +231,7 @@ cpdef list floodFillSearch( \
     #Set the search list to null
     contiguousAreas = []
 
-    cdef int i
+    cdef np.int64_t i
     #Loop over the array
     for i in xrange(numArrayElements):
         #print "{}/{}".format(i,numArrayElements)
