@@ -205,7 +205,7 @@ cpdef list floodFillSearch( \
 
     #Determine the rank of inputArray
     try:
-        arrayShape = np.array(np.shape(inputArray))
+        arrayShape = np.array(np.shape(inputArray),dtype=np.int64)
         arrayRank = len(arrayShape)
         numArrayElements = np.prod(arrayShape)
     except BaseException as e:
