@@ -295,7 +295,7 @@ class fastKDE:
     #Set the midpoint of the incoming grid
     self.dataMid = 0.5*(self.xMax + self.xMin)
     #Set the range to be +/- pi
-    self.dataNorm = (self.xMax - self.xMin)/pi
+    self.dataNorm = (self.xMax - self.xMin)/(2.*pi)
 
     #Get the grid spacings
     self.deltaX = array([ xg[1] - xg[0] for xg in self.axes])

@@ -1,0 +1,8 @@
+*.swp
+*.c
+*.so
+*.dylib
+*/__pycache__/*
+build/
+dist/
+MANIFEST
