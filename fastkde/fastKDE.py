@@ -19,10 +19,11 @@ from types import *
 import pdb
 import time
 import sys
+import warnings
 try:
-    from nufft import calcTfromX
+    from nufft import calcTfromX, dft_points
 except:
-    from .nufft import calcTfromX
+    from .nufft import calcTfromX, dft_points
 
 try:
     import floodFillSearch as flood
@@ -574,6 +575,38 @@ class fastKDE:
       kSC /= prod(self.dataNorm)
       self.kSC = kSC.transpose()
 
+  #*****************************************************************************
+  #** fastKDE: ***********************************************
+  #******************* __transformphiSC_points__() ************************************
+  #*****************************************************************************
+  #*****************************************************************************
+  def __transformphiSC_points__(self,list_of_points):
+    """ Transform the self-consistent estimate of the distribution from
+    frequency space to a set of points in real space"""
+
+    # transform the PDF estimate to real space
+    #pdf = dft_points(array(self.tgrids,dtype=float),self.phiSC,list_of_points)*prod(self.deltaT)*(1./(2*pi))**self.numVariables
+
+    #Transfrom the point to 0-centered coordinates
+    list_of_points = array(list_of_points,copy=True)
+    for v in range(self.numVariables):
+        list_of_points[v,:] = (list_of_points[v,:] - self.dataMid[v])/self.dataNorm[v]
+
+    # create a grid of frequency points
+    frequencyGrid = array(meshgrid(*self.tgrids),dtype=float).reshape([self.numVariables,-1])
+
+    # do the inverse direct Fourier transform
+    pdf = dft_points(frequencyGrid,self.phiSC.ravel(),list_of_points)*prod(self.deltaT)*(1./(2*pi))**self.numVariables
+
+    # unstandarize the PDF 
+    pdf /= prod(self.dataNorm)
+    
+    # TODO: implement positiveShift for point-based PDF estimates
+    # TODO: implement logAxes for point-based PDF estimates
+
+    return pdf
+
+
   def getTransformedPDF(self):
       """Returns a copy of the PDF.  This function exists for backward compatibility"""
       return array(self.pdf)
@@ -1080,6 +1113,194 @@ def conditional( \
 
     #Return the conditional and the axes
     return cpdf,_pdf.axes
+
+
+def pdf_at_points(*args,**kwargs):
+    """Estimate the self-consistent kernel density estimate of the input data at a fixed set of points.
+
+        input:
+        ------
+            
+            var1            :   An input variable.
+
+            var2, var3...   :   Additional input varibles whose length
+                                corresponds to the length of var1.  As input
+                                variables are added, the dimensionality of the
+                                resulting PDF increases (e.g., supplying var1
+                                and var2 results in a 2D PDF).
+
+            list_of_points  :   Points at which the PDF should be estimated. 
+                                Points should be provided as a list of tuples,
+                                where each tuple contains a point at which the
+                                PDF should be estimated.  If not provided, the 
+                                input data points will be used by default. 
+
+            **kwargs        :   Any additional keyword arguments get passed directly to
+                                fastKDE.fastKDE();  see the docstring of fastKDE.fastKDE() for
+                                details of kwargs.
+
+        returns:
+        --------
+
+            pdf             :   The pdf evaluated at list_of_points (or at the 
+                                input data points if list_of_points was not
+                                provided)
+
+
+
+        NOTE: The computational expense and the memory requirement of this
+        method grows exponentially with the number of input variables.
+
+        NOTE: `pdf_at_points()` is potentially slow relative to `pdf()` becuase
+        it does not take advantage of the inverse FFT for transforming from
+        Fourier space to data space.  However, if few input points are
+        requested, it may actually be faster.
+
+    """
+
+    #Try to get var1 from the args or kwargs
+    try:
+        var1 = args[0]
+    except:
+        try:
+            var1 = kwargs['var1']
+        except:
+            raise ValueError("No input data were provided.")
+
+    #Check that var1 is arraylike
+    try:
+        var1Shape = shape(var1)
+    except BaseException as e:
+        print(e)
+        raise ValueError("Could not get shape of var1; it does not appear to be array-like.")
+
+    #Check that var1 is a vector
+    if len(var1Shape) != 1:
+        raise ValueError("var1 should be a vector.  If multiple variables are combined in a single array, please use the fastKDE class interface instead.")
+
+    #Get the length of var1
+    N = var1Shape[0]
+
+    #Check for input varibles provided as key word arguments
+    varArgs = []
+    varKeys = sorted([ v for v in kwargs if "var" in v ])
+    for key in varKeys:
+        #Ignore var1 since this was either provided as an argument 
+        #or was read as a keyword argument above
+        if key != "var1":
+            try:
+                varNum = int(key[3:])
+            except BaseException as e:
+                print(e)
+                raise ValueError("Incomprehensible variable-like keyword provided: {}".format(key))
+
+            #Append this variable
+            varArgs.append(kwargs[key])
+
+    #Check if a mixture of keyword and arguments were provided for additional variables
+    if len(varArgs) != 0 and len(args) > 1:
+        raise ValueError("additional variables were provided as a mixture of arguments and keyword arguments.  They all must be one or the other.")
+
+    #Set the additional variables to be the rest of the input arguments
+    #if none were provided as key word arguments
+    if len(args) > 1:
+        varArgs = args[1:]
+
+    #Remove the variables from kwargs
+    for key in list(varKeys):
+        del(kwargs[key])
+
+    #Start preparing the input data for
+    #concatenation
+    inputVariables = array(var1[newaxis,:])
+
+    #Attempt to read additional variables
+    #and concatenate them to the input variable
+    for i in range(len(varArgs)):
+        try:
+            varn = array(varArgs[i][newaxis,:])
+        except BaseException as e:
+            print(e)
+            raise ValueError("Could not convert var{} into a numpy arrray".format(i+1))
+            
+        lenN = shape(varn)[1] 
+        if lenN != N:
+            raise ValueError("len(var{}) is {}, but it should be the same of len(var1) = {}".format(i+1,lenN,N))
+
+        inputVariables = concatenate((inputVariables,varn))
+
+    # check if list_of_points was provided
+    list_of_points_provided_in_kwargs = False
+    try:
+        # extract the list of points
+        list_of_points = kwargs["list_of_points"]
+        # delete it from the keyword argument dictionary
+        del(kwargs["list_of_points"])
+        # flag that this argument was provided
+        list_of_points_provided_in_kwargs = True
+    except:
+        # default to using the input points as the list of points
+        list_of_points = inputVariables
+
+    # make sure list_of_points is in the expected format
+    if list_of_points_provided_in_kwargs:
+        try:
+            list_of_points = array(list_of_points,copy=True,dtype=npy.float).T
+        except:
+            raise RuntimeError("Could not convert list_of_points to a numpy array.")
+
+        # check the rank of the input data points
+        dataRank = len(shape(list_of_points))
+        #If the data are a vector, promote the data to a rank-1 array with only 1 column
+        if(dataRank == 1):
+            list_of_points = array(list_of_points[newaxis,:],dtype=npy.float)
+
+        if(dataRank > 2):
+            # raise an error indicating the proper shape for list_of_points
+            raise ValueError("list_of_points must be able to be broadcast to a rank-2 array of shape [numDataPoints,numVariables]")
+
+
+    #Remove the doSaveMarginals keyword argument
+    try:
+        _ = kwargs['doSaveMarginals']
+        del(kwargs['doSaveMarginals'])
+    except:
+        pass
+
+    #Remove the logAxes argument
+    try:
+        _ = kwargs['logAxes']
+        del(kwargs['logAxes'])
+        warnings.warn("fastKDE.pdf_at_points() does not currently support the logAxes option; it will be ignored.")
+    except:
+        pass
+
+    #Remove the positiveShift argument
+    try:
+        _ = kwargs['positiveShift']
+        del(kwargs['positiveShift'])
+        warnings.warn("fastKDE.pdf_at_points() does not currently support the positiveShift option; it will be ignored.")
+    except:
+        pass
+
+    #Calculate the PDF in Fourier space
+    _pdfobj = fastKDE(inputVariables, \
+                      doSaveMarginals = False, \
+                      doFFT = False, \
+                      positiveShift = False, \
+                      logAxes = False, \
+                      **kwargs, \
+                      )
+
+    # complete the Fourier-space calculation of the PDF
+    _pdfobj.applyBernacchiaFilter()
+
+    # calculate the PDF at the requested points
+    pdf = _pdfobj.__transformphiSC_points__(list_of_points)
+
+
+    # return the pdf
+    return pdf
 
 
 

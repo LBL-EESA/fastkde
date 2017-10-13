@@ -65,7 +65,7 @@ cpdef np.ndarray[double complex] nuifft( \
 
             The DFT of abscissa/ordinate pairs.  Calculated in one dimension as:
 
-            DFT[t] = sum( [ a[i] * exp(-j * x[i] * t ) for i in range(N) ] ) 
+            DFT[t] = sum( [ a[i] * exp(j * x[i] * t ) for i in range(N) ] ) 
 
             for each of the t points in frequencyGrids (and where j = sqrt(-1)).
     
@@ -305,7 +305,7 @@ cpdef np.ndarray[double complex] idft( \
 
             The DFT of abscissa/ordinate pairs.  Calculated in one dimension as:
 
-            DFT[t] = sum( [ a[i] * exp(-j * x[i] * t ) for i in range(N) ] ) 
+            DFT[t] = sum( [ a[i] * exp(j * x[i] * t ) for i in range(N) ] ) 
 
             for each of the t points in frequencyGrids (and where j = sqrt(-1)).
     
@@ -374,12 +374,12 @@ cpdef np.ndarray[double complex] idft( \
 
     cdef int i,k
 
+    #Pre declare a dimension index vector
     cdef np.int_t [:] dimInds = np.zeros([numDimensions],dtype=np.int)
 
     cdef double complex myDFT
     cdef double expArg
 
-    #cdef double complex dftConst = -2.0j * <double complex> np.pi
     cdef double complex dftConst = 1.0j #* <double complex> np.pi
 
 
@@ -483,3 +483,109 @@ def vprint(msg,beVerbose):
         print(msg)
 
 
+#*******************************************************************************
+#*******************************************************************************
+#************************** dft_points *****************************************
+#*******************************************************************************
+#*******************************************************************************
+@cython.boundscheck(False)
+cpdef np.ndarray[double complex] dft_points( \
+                            np.float_t [:,:] abscissas, \
+                            np.complex128_t [:] ordinates, \
+                            np.float_t [:,:] outputPoints, \
+                            beVerbose = False):
+    """Calculates the unnormalized direct inverse Fourier transform of abscissa, ordinate pairs
+        
+        input:
+        ------
+
+            abscissas   : abscissa values.
+                          A numpy array of shape (ndimensions,npoints)
+                          (assumed to be real)
+
+            ordinates   : ordinates values.
+                          A numpy array of shape (npoints)
+
+            outputPoints :  The real-space points at which to calcualte the DFT
+                             A masked numpy array of shape (ndimensions,noutputpoints). 
+
+
+            beVerbose   : Flags whether to print to STDOUT as the method progresses
+                          (int 0=don't print 1=print)
+        output:
+        -------
+
+            The iDFT of abscissa/ordinate pairs.  Calculated in one dimension as:
+
+            iDFT[x] = sum( [ a[i] * exp(-j * x * t[i] ) for i in range(N) ] ) 
+
+            for each of the x points in output_points (and where j = sqrt(-1)).
+    
+    """
+
+    cdef int numDimensions
+    cdef int numDataPoints
+    cdef int numOutputPoints
+
+    #*******************************
+    # Get variable dimensionalities
+    # and do consistency checks
+    #*******************************
+    #Get the shape of abscissas 
+    vprint("Checking dimensionalities and arguments",beVerbose)
+    try:
+        numDimensions = np.shape(abscissas)[0]
+        numDataPoints = np.shape(abscissas)[1]
+    except:
+        raise ValueError,"Could not determine shape of abscissas"
+
+    #Check ordinates
+    try:
+        ordShape = np.shape(ordinates)[0]
+    except:
+        raise ValueError,"Could not determine shape of ordinates"
+        
+    if ordShape != numDataPoints:
+            raise ValueError, "Incompatible shapes for ordinates and abscissas"
+
+    #Check outputPoints
+    try:
+        outputShape = np.shape(outputPoints)
+    except:
+        raise ValueError,"Could not determine shape of outputPoints"
+
+    if outputShape[0] != numDimensions:
+            raise ValueError, "Incompatible shapes for abscissas and outputPoints"
+
+    #Get the number output data points
+    numOutputPoints = outputShape[1]
+
+    #Pre-declare and allocate the iDFT
+    cdef np.float_t [:] iDFT = np.zeros([numOutputPoints],dtype=float)
+
+    cdef int i,k,n
+
+    cdef double myiDFT
+    cdef double expArg
+
+    cdef double complex idftConst = -1.0j
+
+
+    vprint("Calculating the DFT",beVerbose)
+    with nogil:
+        for i in range(numOutputPoints):
+            myiDFT = 0.0 
+
+
+            for j in range(numDataPoints):
+                expArg = 0.0
+
+                for k in range(numDimensions):
+                    expArg = expArg +(abscissas[k,j] * outputPoints[k,i])
+
+                #Calculate the flattened array index of the current point
+                myiDFT = myiDFT + (ordinates[j]*cexp(idftConst * <double complex> expArg)).real
+
+            iDFT[i] = myiDFT
+
+    return np.array(iDFT,copy=True)
