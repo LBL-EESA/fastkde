@@ -450,6 +450,9 @@ class fastKDE:
     if self.numVariables != 1:
       iCalcPhi = [ tuple(ii) for ii in iCalcPhi ]
 
+    # convert to a tuple, to avoid a numpy warning
+    iCalcPhi = tuple(iCalcPhi)
+
     #Save the filter
     self.iCalcPhi = iCalcPhi
    

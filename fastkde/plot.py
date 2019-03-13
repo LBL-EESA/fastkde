@@ -121,7 +121,7 @@ def calculate_probability_contour(pdf,axes,pvals,axis=0):
     # broadcast the dxgrid to the shape of the PDF
     broadcast_shape = len(axes)*[slice(None,None,None)]
     broadcast_shape[axis] = np.newaxis
-    dxgrid = dxgrid[broadcast_shape[::-1]]
+    dxgrid = dxgrid[tuple(broadcast_shape[::-1])]
     
     # multiply the pdf by dx
     pdf_dx = dxgrid*pdf
@@ -300,7 +300,7 @@ def pair_plot(var_list, \
                         levels = None
                     else:
                         levels = np.sort([calculate_probability_contour(  bivariate_pdfs[n1,n2][...,np.newaxis],\
-                                                                           [[0],marginal_vals[n2],marginal_vals[n1]],\
+                                                                           [[0],marginal_vals[n1],marginal_vals[n2]],\
                                                                            c) 
                                            for c in cdf_levels])
                     
