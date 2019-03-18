@@ -35,7 +35,7 @@ setup(
             url = "https://bitbucket.org/lbl-cascade/fastkde", \
             download_url = "https://bitbucket.org/lbl-cascade/fastkde/get/v{}.tar.gz".format(revision), \
             keywords = ['statistics','probability','KDE','kernel density estimation'], \
-            py_modules=['fastkde.fastKDE','fastkde.empiricalCharacteristicFunction'], \
+            py_modules=['fastkde.fastKDE','fastkde.empiricalCharacteristicFunction', 'fastkde.plot'], \
             classifiers = [], \
             cmdclass = cmdclass,\
             ext_modules = extensions, \
