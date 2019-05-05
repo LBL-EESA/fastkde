@@ -7,16 +7,24 @@ import os
 inc_dirs = []
 inc_dirs.append(numpy.get_include())
 lib_dirs = []
-#lib_dirs.append(numpy.get_lib())
+# lib_dirs.append(numpy.get_lib())
 libs = []
 
 cmdclass = {'build_ext': build_ext}
 
 # set commands to build the Cython assistance modules
 extensions = [
-    Extension("fastkde.floodFillSearch",["fastkde/floodFillSearch.pyx"],libraries=libs,library_dirs=lib_dirs,include_dirs=inc_dirs,runtime_library_dirs=lib_dirs),
-    Extension("fastkde.nufft",["fastkde/nufft.pyx"],libraries=libs,library_dirs=lib_dirs,include_dirs=inc_dirs,runtime_library_dirs=lib_dirs),
-                ]
+    Extension("fastkde.floodFillSearch", ["fastkde/floodFillSearch.pyx"],
+              libraries=libs,
+              library_dirs=lib_dirs,
+              include_dirs=inc_dirs,
+              runtime_library_dirs=lib_dirs),
+    Extension("fastkde.nufft", ["fastkde/nufft.pyx"],
+              libraries=libs,
+              library_dirs=lib_dirs,
+              include_dirs=inc_dirs,
+              runtime_library_dirs=lib_dirs),
+]
 
 # get revision information
 revision = open('REVISION','r').read().rstrip()
