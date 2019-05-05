@@ -13,9 +13,9 @@ libs = []
 cmdclass = {'build_ext': build_ext}
 
 # set commands to build the Cython assistance modules
-extensions = [ \
-    Extension("fastkde.floodFillSearch",["fastkde/floodFillSearch.pyx"],libraries=libs,library_dirs=lib_dirs,include_dirs=inc_dirs,runtime_library_dirs=lib_dirs),\
-    Extension("fastkde.nufft",["fastkde/nufft.pyx"],libraries=libs,library_dirs=lib_dirs,include_dirs=inc_dirs,runtime_library_dirs=lib_dirs),\
+extensions = [
+    Extension("fastkde.floodFillSearch",["fastkde/floodFillSearch.pyx"],libraries=libs,library_dirs=lib_dirs,include_dirs=inc_dirs,runtime_library_dirs=lib_dirs),
+    Extension("fastkde.nufft",["fastkde/nufft.pyx"],libraries=libs,library_dirs=lib_dirs,include_dirs=inc_dirs,runtime_library_dirs=lib_dirs),
                 ]
 
 # get revision information
@@ -25,18 +25,18 @@ revision = open('REVISION','r').read().rstrip()
 long_description = open('README','r').read()
 
 setup(
-            name = 'fastkde', \
-            packages = ['fastkde'], \
-            version = revision, \
-            description = 'Tools for fast and robust univariate and multivariate kernel density estimation', \
-            long_description = long_description, \
-            author = "Travis A. O'Brien", \
-            author_email = "TAOBrien@lbl.gov", \
-            url = "https://bitbucket.org/lbl-cascade/fastkde", \
-            download_url = "https://bitbucket.org/lbl-cascade/fastkde/get/v{}.tar.gz".format(revision), \
-            keywords = ['statistics','probability','KDE','kernel density estimation'], \
-            py_modules=['fastkde.fastKDE','fastkde.empiricalCharacteristicFunction', 'fastkde.plot'], \
-            classifiers = [], \
-            cmdclass = cmdclass,\
-            ext_modules = extensions, \
+            name = 'fastkde',
+            packages = ['fastkde'],
+            version = revision,
+            description = 'Tools for fast and robust univariate and multivariate kernel density estimation',
+            long_description = long_description,
+            author = "Travis A. O'Brien",
+            author_email = "TAOBrien@lbl.gov",
+            url = "https://bitbucket.org/lbl-cascade/fastkde",
+            download_url = "https://bitbucket.org/lbl-cascade/fastkde/get/v{}.tar.gz".format(revision),
+            keywords = ['statistics','probability','KDE','kernel density estimation'],
+            py_modules=['fastkde.fastKDE','fastkde.empiricalCharacteristicFunction', 'fastkde.plot'],
+            classifiers = [],
+            cmdclass = cmdclass,
+            ext_modules = extensions,
             )
