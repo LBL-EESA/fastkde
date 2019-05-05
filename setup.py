@@ -34,6 +34,9 @@ with open('REVISION', 'r') as fin:
 with open('README', 'r') as fin:
     long_description = fin.read()
 
+with open('requirements.txt', 'r') as fin:
+    install_requires = fin.read().split()
+
 setup(
     name='fastkde',
     packages=['fastkde'],
@@ -51,4 +54,5 @@ setup(
     classifiers=[],
     cmdclass=cmdclass,
     ext_modules=extensions,
+    install_requires=install_requires,
 )
