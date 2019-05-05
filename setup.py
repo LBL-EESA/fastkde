@@ -27,10 +27,12 @@ extensions = [
 ]
 
 # get revision information
-revision = open('REVISION','r').read().rstrip()
+with open('REVISION', 'r') as fin:
+    revision = fin.read().rstrip()
 
 # read the long description
-long_description = open('README','r').read()
+with open('README', 'r') as fin:
+    long_description = fin.read()
 
 setup(
             name = 'fastkde',
