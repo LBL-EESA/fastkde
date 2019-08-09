@@ -566,6 +566,7 @@ class fastKDE:
             #Generate a slice to help the axis conform in shape to the PDF
             conformSlice = self.numVariables*[newaxis]
             conformSlice[v] = slice(None,None,None)
+            conformSlice = tuple(conformSlice)
             #Transform the PDF
             self.pdf /= self.axes[v][conformSlice[::-1]]
 
