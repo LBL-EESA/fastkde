@@ -490,16 +490,17 @@ def vprint(msg,beVerbose):
 #*******************************************************************************
 @cython.boundscheck(False)
 cpdef np.ndarray[double complex] dft_points( \
-                            np.float_t [:,:] abscissas, \
+                            np.float_t [:,:] frequencyGrids, \
                             np.complex128_t [:] ordinates, \
                             np.float_t [:,:] outputPoints, \
+                            np.float_t missingFreqVal = -1e20, \
                             beVerbose = False):
     """Calculates the unnormalized direct inverse Fourier transform of abscissa, ordinate pairs
         
         input:
         ------
 
-            abscissas   : abscissa values.
+            frequencyGrids   : abscissa values.
                           A numpy array of shape (ndimensions,npoints)
                           (assumed to be real)
 
@@ -531,13 +532,12 @@ cpdef np.ndarray[double complex] dft_points( \
     # Get variable dimensionalities
     # and do consistency checks
     #*******************************
-    #Get the shape of abscissas 
+    #Get the shape of frequencyGrids 
     vprint("Checking dimensionalities and arguments",beVerbose)
     try:
-        numDimensions = np.shape(abscissas)[0]
-        numDataPoints = np.shape(abscissas)[1]
+        numDimensions = np.shape(frequencyGrids)[0]
     except:
-        raise ValueError,"Could not determine shape of abscissas"
+        raise ValueError,"Could not determine shape of frequencyGrids"
 
     #Check ordinates
     try:
@@ -545,9 +545,6 @@ cpdef np.ndarray[double complex] dft_points( \
     except:
         raise ValueError,"Could not determine shape of ordinates"
         
-    if ordShape != numDataPoints:
-            raise ValueError, "Incompatible shapes for ordinates and abscissas"
-
     #Check outputPoints
     try:
         outputShape = np.shape(outputPoints)
@@ -555,7 +552,7 @@ cpdef np.ndarray[double complex] dft_points( \
         raise ValueError,"Could not determine shape of outputPoints"
 
     if outputShape[0] != numDimensions:
-            raise ValueError, "Incompatible shapes for abscissas and outputPoints"
+            raise ValueError, "Incompatible shapes for frequencyGrids and outputPoints"
 
     #Get the number output data points
     numOutputPoints = outputShape[1]
@@ -571,17 +568,49 @@ cpdef np.ndarray[double complex] dft_points( \
     cdef double complex idftConst = -1.0j
 
 
+    #Get the max number of frequency points
+    cdef int ntMax
+    ntMax = np.shape(frequencyGrids)[1]
+
+    #********************************************
+    # Calculate the size of the frequency spaces
+    #********************************************
+    vprint("Getting the size of the frequency spaces",beVerbose)
+    cdef int t,iNotMissing
+    cdef np.int_t [:] frequencySizes = np.zeros([numDimensions],dtype=np.int)
+
+    for n in range(numDimensions):
+        iNotMissing = 0
+        for t in range(ntMax):
+            if frequencyGrids[n,t] != missingFreqVal:
+                iNotMissing += 1
+        if iNotMissing != 0:
+            frequencySizes[n] = <np.int_t>iNotMissing
+        else:
+            raise ValueError,"Some frequencies in frequencyGrids have no valid points"
+
+    #Get the total size of the frequency space
+    cdef np.int_t freqSpaceSize = np.prod(frequencySizes)
+
+    #Pre-declare and allocate a raveled form of the DFT
+    cdef double complex [:] DFT = np.zeros([freqSpaceSize],dtype=np.complex128)
+
+    #Pre declare a dimension index vector
+    cdef np.int_t [:] dimInds = np.zeros([numDimensions],dtype=np.int)
+
     vprint("Calculating the DFT",beVerbose)
     with nogil:
         for i in range(numOutputPoints):
             myiDFT = 0.0 
 
 
-            for j in range(numDataPoints):
+            for j in range(freqSpaceSize):
+                unravelIndex(j,frequencySizes,dimInds,numDimensions)
                 expArg = 0.0
 
                 for k in range(numDimensions):
-                    expArg = expArg +(abscissas[k,j] * outputPoints[k,i])
+
+                    expArg = expArg +(frequencyGrids[k,dimInds[k]] * outputPoints[k,i])
 
                 #Calculate the flattened array index of the current point
                 myiDFT = myiDFT + (ordinates[j]*cexp(idftConst * <double complex> expArg)).real
