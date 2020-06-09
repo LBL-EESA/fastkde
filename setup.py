@@ -39,4 +39,5 @@ setup(
             classifiers = [], \
             cmdclass = cmdclass,\
             ext_modules = extensions, \
+            install_requires = ['numpy', 'scipy', 'cython'], \
             )
