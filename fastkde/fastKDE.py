@@ -566,6 +566,7 @@ class fastKDE:
             #Generate a slice to help the axis conform in shape to the PDF
             conformSlice = self.numVariables*[newaxis]
             conformSlice[v] = slice(None,None,None)
+            conformSlice = tuple(conformSlice)
             #Transform the PDF
             self.pdf /= self.axes[v][conformSlice[::-1]]
 
@@ -595,11 +596,26 @@ class fastKDE:
     for v in range(self.numVariables):
         list_of_points[v,:] = (list_of_points[v,:] - self.dataMid[v])/self.dataNorm[v]
 
-    # create a grid of frequency points
-    frequencyGrid = array(meshgrid(*self.tgrids),dtype=float).reshape([self.numVariables,-1])
+    #Set the fill value for the frequency grids
+    fillValue = -1e20
+
+
+    #Get the maximum frequency grid length
+    tgrids = self.tgrids
+    ntmax = amax([len(tgrid) for tgrid in tgrids])
+    #Create the frequency grids array
+    frequencyGrids = fillValue*ones([self.numVariables,ntmax])
+    #Fill the frequency grids array
+    for v in range(self.numVariables):
+        frequencyGrids[v,:len(tgrids[v])] = tgrids[v]
+
 
     # do the inverse direct Fourier transform
-    pdf = dft_points(frequencyGrid,self.phiSC.ravel(),list_of_points)*prod(self.deltaT)*(1./(2*pi))**self.numVariables
+    pdf = dft_points(frequencyGrids,
+                     self.phiSC.ravel(),
+                     list_of_points,
+                     missingFreqVal = fillValue) * \
+                             prod(self.deltaT)*(1./(2*pi))**self.numVariables
 
     # unstandarize the PDF 
     pdf /= prod(self.dataNorm)

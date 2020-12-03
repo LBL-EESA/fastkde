@@ -299,10 +299,10 @@ def pair_plot(var_list, \
                     if cdf_levels is None:
                         levels = None
                     else:
-                        levels = np.sort([calculate_probability_contour(  bivariate_pdfs[n1,n2][...,np.newaxis],\
+                        levels = np.sort(np.array([calculate_probability_contour(  bivariate_pdfs[n1,n2][...,np.newaxis],\
                                                                            [[0],marginal_vals[n1],marginal_vals[n2]],\
                                                                            c) 
-                                           for c in cdf_levels])
+                                                   for c in cdf_levels])).squeeze()
                     
                     # plot the PDF
                     pdf_to_plot = bivariate_pdfs[n1,n2]
@@ -315,6 +315,7 @@ def pair_plot(var_list, \
                     # mask CDF parts that don't normalize to something close to 1
                     pdf_to_plot = np.ma.masked_where(np.logical_not(np.isclose(np.ma.ones(pdf_to_plot.shape)*pdf_to_plot[-1,:][np.newaxis,:],1.0)),pdf_to_plot)
 
+                
                 axs[n2,n1].contour(marginal_vals[n1],marginal_vals[n2],pdf_to_plot,levels=levels)
                     
                 if log_scale[n1]:
