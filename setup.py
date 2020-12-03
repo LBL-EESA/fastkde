@@ -1,4 +1,4 @@
-from distutils.core import setup,Extension
+from setuptools import setup,Extension
 from Cython.Build import cythonize
 from Cython.Distutils import build_ext
 import numpy
@@ -31,7 +31,7 @@ with open('REVISION', 'r') as fin:
     revision = fin.read().rstrip()
 
 # read the long description
-with open('README', 'r') as fin:
+with open('README.rst', 'r') as fin:
     long_description = fin.read()
 
 with open('requirements.txt', 'r') as fin:
