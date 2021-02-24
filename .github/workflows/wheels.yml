@@ -22,7 +22,7 @@ env:
   CIBW_ENVIRONMENT: "PIP_ONLY_BINARY=numpy SETUPTOOLS_SCM_PRETEND_VERSION=${{ github.event.inputs.overrideVersion }}"
   CIBW_TEST_EXTRAS: test
   CIBW_TEST_COMMAND: "pytest {project}/tests"
-  CIBW_TEST_SKIP: "pp*macos* pp*win* pp27-* *universal2:arm64"
+  CIBW_TEST_SKIP: "*universal2:arm64"
 
 jobs:
   build_sdist:
@@ -89,24 +89,20 @@ jobs:
         include:
           - os: ubuntu-latest
             arch: auto
-            build: "cp3* pp*"
+            build: "cp{35,36,37,38,39}-*"
             CIBW_MANYLINUX_X86_64_IMAGE: manylinux2010
             CIBW_MANYLINUX_I686_IMAGE: manylinux2010
 
           - os: ubuntu-latest
             type: ManyLinux1
             arch: auto
-            build: "cp{27,35,36,37,38}-*"
+            build: "cp{35,36,37,38,39}-*"
             CIBW_MANYLINUX_X86_64_IMAGE: skhep/manylinuxgcc-x86_64
             CIBW_MANYLINUX_I686_IMAGE: skhep/manylinuxgcc-i686
 
           - os: macos-latest
             arch: universal2
-            build: "*"
-
-          - os: windows-latest
-            arch: auto32
-            build: "*"
+            build: "cp{35,36,37,38,39}-*"
 
     steps:
     - uses: actions/checkout@v1
