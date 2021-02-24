@@ -11,4 +11,4 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
-write_to = "fastkde/versgit ion.py"
+write_to = "fastkde/version.py"
