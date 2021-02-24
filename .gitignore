@@ -10,6 +10,8 @@ MANIFEST
 .ipynb_checkpoints/
 */.ipynb_checkpoints/
 
+fastkde/version.py
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
