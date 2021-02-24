@@ -45,7 +45,7 @@ extras["all"] = sum(extras.values(), [])
 extras["dev"] += extras["test"]
 
 setup(
-    name='psyneulink-fastkde',
+    name='fastkde',
     packages=['fastkde'],
     version=revision,
     description='Tools for fast and robust univariate and multivariate kernel density estimation',
