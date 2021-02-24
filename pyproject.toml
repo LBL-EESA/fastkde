@@ -1,2 +1,14 @@
 [build-system]
-requires = ["setuptools", "wheel", "cython", "numpy"]
+requires = [
+    "setuptools>=42",
+    "wheel",
+    "toml",
+    "setuptools_scm>=4.1.2",
+    "numpy",
+    "cython"
+]
+
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+write_to = "fastkde/versgit ion.py"
