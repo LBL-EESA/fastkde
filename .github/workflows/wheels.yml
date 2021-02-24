@@ -84,7 +84,7 @@ jobs:
       matrix:
         os: [windows-latest, macos-latest]
         arch: [auto64]
-        build: ["*"]
+        build: ["cp{35,36,37,38,39}-*"]
 
         include:
           - os: ubuntu-latest
