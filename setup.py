@@ -37,6 +37,13 @@ with open('README.rst', 'r') as fin:
 with open('requirements.txt', 'r') as fin:
     install_requires = fin.read().split()
 
+extras = {
+    "test": ["pytest"],
+    "dev": [],
+}
+extras["all"] = sum(extras.values(), [])
+extras["dev"] += extras["test"]
+
 setup(
     name='fastkde',
     packages=['fastkde'],
@@ -55,4 +62,5 @@ setup(
     cmdclass=cmdclass,
     ext_modules=extensions,
     install_requires=install_requires,
+    extras_require=extras
 )
