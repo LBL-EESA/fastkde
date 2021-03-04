@@ -5,7 +5,7 @@ requires = [
     "toml",
     "setuptools_scm>=4.1.2",
     "numpy==1.13.3; python_version<'3.5'",
-    "oldest-supported-numpy; python_version>='3.5'"
+    "oldest-supported-numpy; python_version>='3.5'",
     "cython"
 ]
 
