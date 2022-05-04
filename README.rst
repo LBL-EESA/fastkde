@@ -22,10 +22,8 @@ Example usage:
 For a standard PDF
 ~~~~~~~~~~~~~~~~~~
 
-::
+.. code:: python
 
-    #!python
-     
     import numpy as np
     from fastkde import fastKDE
     import pylab as PP
@@ -34,7 +32,7 @@ For a standard PDF
     N = 2e5
     var1 = 50*np.random.normal(size=N) + 0.1
     var2 = 0.01*np.random.normal(size=N) - 300
-      
+
     #Do the self-consistent density estimate
     myPDF,axes = fastKDE.pdf(var1,var2)
 
@@ -84,7 +82,7 @@ distribution
 	#Generate random samples of y from x and add normally distributed noise
 	y = underlyingFunction(x) + np.random.normal(loc=yp1,scale=yp2,size=numSamples)
 
-**Now that we have the x,y samples, the following code calcuates the
+**Now that we have the x,y samples, the following code calculates the
 conditional**
 
 .. code:: python
@@ -136,6 +134,27 @@ The following plot shows the results:
 
    Conditional PDF
 
+
+Kernel Density Estimate for Specific Points
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To see the KDE values at specified points (not necessarily those that were used to generate the KDE):
+
+.. code:: python
+
+    import numpy as np
+    from fastkde import fastKDE
+
+    train_x = 50*np.random.normal(size=100) + 0.1
+    train_y = 0.01*np.random.normal(size=100) - 300
+
+    test_x = 50*np.random.normal(size=100) + 0.1
+    test_y = 0.01*np.random.normal(size=100) - 300
+
+    test_points = list(zip(test_x, test_y))
+    test_point_pdf_values = fastKDE.pdf_at_points(train_x, train_y, list_of_points = test_points)
+
+
 How do I get set up?
 --------------------
 
@@ -168,26 +187,26 @@ Copyright Information
 
     LAWRENCE BERKELEY NATIONAL LABORATORY
     RESEARCH & DEVELOPMENT, NON-COMMERCIAL USE ONLY, LICENSE
-     
+
     Copyright (c) 2015, The Regents of the University of California, through
     Lawrence Berkeley National Laboratory (subject to receipt of any required
     approvals from the U.S. Dept. of Energy).  All rights reserved.
-     
+
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions are met:
-     
+
     (1) Redistributions of source code must retain the above copyright notice,
     this list of conditions and the following disclaimer.
-     
+
     (2) Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in the
     documentation and/or other materials provided with the distribution.
-     
+
     (3) Neither the name of the University of California, Lawrence Berkeley
     National Laboratory, U.S. Dept. of Energy nor the names of its contributors
     may be used to endorse or promote products derived from this software
     without specific prior written permission.
-     
+
     (4) Use of the software, in source or binary form is FOR RESEARCH
     & DEVELOPMENT, NON-COMMERCIAL USE, PURPOSES ONLY. All commercial use rights
     for the software are hereby reserved. A separate commercial use license is
