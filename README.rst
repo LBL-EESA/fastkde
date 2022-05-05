@@ -154,6 +154,7 @@ To see the KDE values at specified points (not necessarily those that were used 
     test_points = list(zip(test_x, test_y))
     test_point_pdf_values = fastKDE.pdf_at_points(train_x, train_y, list_of_points = test_points)
 
+Note that this method can be significantly slower than calls to `fastkde.pdf()` since it does not benefit from using a fast Fourier transform during the final stage in which the PDF estimate is transformed from spectral space into data space, whereas `fastkde.pdf()` does.
 
 How do I get set up?
 --------------------
