@@ -471,7 +471,7 @@ class fastKDE:
     if(self.doSaveTransformedKernel):
       self.kappaSC = kappaSC
 
-    midPointAccessor = tuple([(tp-1)/2 for tp in self.numTPoints])
+    midPointAccessor = tuple([(tp-1)//2 for tp in self.numTPoints])
     #Calculate the transform of the self-consistent density estimate
     self.phiSC[iCalcPhi] = self.ECF[iCalcPhi]*kappaSC[iCalcPhi]
 
@@ -549,7 +549,7 @@ class fastKDE:
 
     if(self.beVerbose):
       normConst = sum(pdf*prod(self.deltaX))
-      midPointAccessor = tuple([(tp-1)/2 for tp in self.numTPoints])
+      midPointAccessor = tuple([(tp-1)//2 for tp in self.numTPoints])
       print("Normalization of pdf = {}. phiSC[0] = {}".format(normConst,self.phiSC[midPointAccessor]))
 
 
@@ -839,7 +839,7 @@ class fastKDE:
       #Transform the PDF to fourier space
       phiTilde_tmp = fft.fftshift(fft.ifftn(fft.ifftshift(ma.filled(pdf,0.0))))
       #Normalize the transform
-      midPointAccessor = tuple([(tp-1)/2 for tp in self.numTPoints])
+      midPointAccessor = tuple([(tp-1)//2 for tp in self.numTPoints])
       phiTilde_tmp /= phiTilde_tmp[midPointAccessor]
 
       #Reapply the filter
