@@ -158,9 +158,9 @@ class fastKDE:
       dataRank = len(shape(data))
       #If the data are a vector, promote the data to a rank-1 array with only 1 column
       if(dataRank == 1):
-          data = array(originalData[newaxis,:],dtype=npy.float)
+          data = array(originalData[newaxis,:],dtype=npy.float_)
       else:
-          data = array(originalData,dtype=npy.float)
+          data = array(originalData,dtype=npy.float_)
       if(dataRank > 2):
           raise ValueError("data must be a rank-2 array of shape [numVariables,numDataPoints]")
 
