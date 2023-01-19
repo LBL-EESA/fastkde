@@ -1264,7 +1264,7 @@ def pdf_at_points(*args,**kwargs):
     # make sure list_of_points is in the expected format
     if list_of_points_provided_in_kwargs:
         try:
-            list_of_points = array(list_of_points,copy=True,dtype=npy.float).T
+            list_of_points = array(list_of_points,copy=True,dtype=npy.float_).T
         except:
             raise RuntimeError("Could not convert list_of_points to a numpy array.")
 
@@ -1272,7 +1272,7 @@ def pdf_at_points(*args,**kwargs):
         dataRank = len(shape(list_of_points))
         #If the data are a vector, promote the data to a rank-1 array with only 1 column
         if(dataRank == 1):
-            list_of_points = array(list_of_points[newaxis,:],dtype=npy.float)
+            list_of_points = array(list_of_points[newaxis,:],dtype=npy.float_)
 
         if(dataRank > 2):
             # raise an error indicating the proper shape for list_of_points
