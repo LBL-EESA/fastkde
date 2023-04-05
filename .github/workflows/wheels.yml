@@ -1,5 +1,6 @@
 # Based heavily off of scikit-hep's boost_histogram package's wheels workflow
 # https://github.com/scikit-hep/boost-histogram/blob/develop/.github/workflows/wheels.yml
+# Removed 32-bit builds.
 
 name: Wheels
 
@@ -103,14 +104,8 @@ jobs:
         arch: [auto64]
 
         include:
-          - os: ubuntu-latest
-            arch: auto32
-
           - os: macos-latest
             arch: universal2
-
-          - os: windows-2019
-            arch: auto32
 
     steps:
     - uses: actions/checkout@v3
