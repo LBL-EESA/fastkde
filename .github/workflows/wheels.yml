@@ -1,6 +1,5 @@
 # Based heavily off of scikit-hep's boost_histogram package's wheels workflow
 # https://github.com/scikit-hep/boost-histogram/blob/develop/.github/workflows/wheels.yml
-# Modified to not build Python 2.7 or 32-bit stuff.
 
 name: Wheels
 
@@ -9,13 +8,25 @@ on:
     inputs:
       overrideVersion:
         description: Manually force a version
-  release:
-    types:
-      - published
+  pull_request:
+    branches:
+      - master
+      - main
+    push:
+      branches:
+        - master
+        - main
+    release:
+      types:
+        - published
+
+concurrency:
+  group: wheels-${{ github.head_ref }}
+  cancel-in-progress: true
 
 env:
   SETUPTOOLS_SCM_PRETEND_VERSION: ${{ github.event.inputs.overrideVersion }}
-  CIBW_ENVIRONMENT: "PIP_ONLY_BINARY=numpy SETUPTOOLS_SCM_PRETEND_VERSION=${{ github.event.inputs.overrideVersion }}"
+  CIBW_ENVIRONMENT: "PIP_PREFER_BINARY=1"
   CIBW_TEST_EXTRAS: test
   CIBW_TEST_COMMAND: "pytest {project}/tests"
   CIBW_TEST_SKIP: "*universal2:arm64"
@@ -23,43 +34,54 @@ env:
 jobs:
   build_sdist:
     name: Build SDist
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
       with:
+        fetch-depth: 0
         submodules: true
 
+    - name: Set version if needed
+      if: github.event.inputs.overrideVersion
+      run: echo "SETUPTOOLS_SCM_PRETEND_VERSION=${{ github.event.inputs.overrideVersion }}" >> $GITHUB_ENV
+
     - name: Build SDist
-      run: pipx run --spec build pyproject-build --sdist
+      run: pipx run build --sdist
 
     - name: Check metadata
-      run: pipx run twine check dist/*
+      run: pipx run twine check --strict dist/*
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         path: dist/*.tar.gz
 
 
   build_arch_wheels:
     name: ${{ matrix.python }} on ${{ matrix.arch }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        python: [36, 37, 38, 39]
+        python: [37, 38, 39, 310, 311]
         arch: [aarch64]
     steps:
 
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
       with:
+        fetch-depth: 0
         submodules: true
 
-    - uses: docker/setup-qemu-action@v1
+    - name: Set version if needed
+      if: github.event.inputs.overrideVersion
+      shell: bash
+      run: echo "SETUPTOOLS_SCM_PRETEND_VERSION=${{ github.event.inputs.overrideVersion }}" >> $GITHUB_ENV
+
+    - uses: docker/setup-qemu-action@v2.1.0
       with:
         platforms: all
 
-    - uses: joerick/cibuildwheel@v1.9.0
+    - uses: pypa/cibuildwheel@v2.12.1
       env:
-        CIBW_BUILD: cp${{ matrix.python }}-*
+        CIBW_BUILD: cp${{ matrix.python }}-manylinux_*
         CIBW_ARCHS: ${{ matrix.arch }}
 
     - name: Verify clean directory
@@ -67,10 +89,9 @@ jobs:
       shell: bash
 
     - name: Upload wheels
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         path: wheelhouse/*.whl
-
 
   build_wheels:
     name: ${{ matrix.type }} ${{ matrix.arch }} on ${{ matrix.os }}
@@ -78,37 +99,33 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest]
+        os: [windows-2019, macos-latest, ubuntu-latest]
         arch: [auto64]
-        build: ["cp{35,36,37,38,39}-*"]
 
         include:
           - os: ubuntu-latest
-            arch: auto
-            build: "cp{35,36,37,38,39}-*"
-            CIBW_MANYLINUX_X86_64_IMAGE: manylinux2010
-            CIBW_MANYLINUX_I686_IMAGE: manylinux2010
-
-          - os: ubuntu-latest
-            type: ManyLinux1
-            arch: auto
-            build: "cp{35,36,37,38,39}-*"
-            CIBW_MANYLINUX_X86_64_IMAGE: skhep/manylinuxgcc-x86_64
-            CIBW_MANYLINUX_I686_IMAGE: skhep/manylinuxgcc-i686
+            arch: auto32
 
           - os: macos-latest
             arch: universal2
-            build: "cp{35,36,37,38,39}-*"
+
+          - os: windows-2019
+            arch: auto32
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
       with:
+        fetch-depth: 0
         submodules: true
 
-    - uses: joerick/cibuildwheel@v1.9.0
+    - name: Set version if needed
+      if: github.event.inputs.overrideVersion
+      shell: bash
+      run: echo "SETUPTOOLS_SCM_PRETEND_VERSION=${{ github.event.inputs.overrideVersion }}" >> $GITHUB_ENV
+
+    - uses: pypa/cibuildwheel@v2.12.1
       env:
         CIBW_BUILD: ${{ matrix.build }}
-        CIBW_SKIP: cp27-win* pp27-win*
         CIBW_MANYLINUX_I686_IMAGE: ${{ matrix.CIBW_MANYLINUX_I686_IMAGE }}
         CIBW_MANYLINUX_X86_64_IMAGE: ${{ matrix.CIBW_MANYLINUX_X86_64_IMAGE }}
         CIBW_ARCHS: ${{ matrix.arch }}
@@ -118,7 +135,7 @@ jobs:
       shell: bash
 
     - name: Upload wheels
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         path: wheelhouse/*.whl
 
@@ -126,15 +143,17 @@ jobs:
     name: Upload if release
     needs: [build_wheels, build_arch_wheels, build_sdist]
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && github.event.action == 'published'
 
     steps:
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v3
       with:
         name: artifact
         path: dist
 
-    - uses: pypa/gh-action-pypi-publish@v1.4.2
+    - name: List all files
+      run: ls -lh dist
+
+    - uses: pypa/gh-action-pypi-publish@v1.8.3
+      if: github.event_name == 'release' && github.event.action == 'published'
       with:
-        user: __token__
         password: ${{ secrets.pypi_password }}
