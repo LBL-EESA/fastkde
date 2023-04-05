@@ -45,7 +45,7 @@ extras["all"] = sum(extras.values(), [])
 extras["dev"] += extras["test"]
 
 setup(
-    name='psyneulink-fastkde',
+    name='fastkde',
     packages=['fastkde'],
     version=revision,
     description='Tools for fast and robust univariate and multivariate kernel density estimation',
@@ -53,7 +53,7 @@ setup(
     author="Travis A. O'Brien",
     author_email="obrienta@iu.edu",
     url="https://github.com/LBL-EESA/fastkde",
-    download_url="https://github.com/LBL-EESA/fastkde/archive/v{}tar.gz".format(revision),
+    download_url="https://github.com/LBL-EESA/fastkde/archive/v{}.tar.gz".format(revision),
     keywords=['statistics', 'probability', 'KDE', 'kernel density estimation'],
     py_modules=['fastkde.fastKDE',
                 'fastkde.empiricalCharacteristicFunction',

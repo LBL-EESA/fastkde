@@ -1,3 +1,7 @@
+# Based heavily off of scikit-hep's boost_histogram package's wheels workflow
+# https://github.com/scikit-hep/boost-histogram/blob/develop/.github/workflows/wheels.yml
+# Modified to not build Python 2.7 or 32-bit stuff.
+
 name: Wheels
 
 on:
@@ -5,14 +9,6 @@ on:
     inputs:
       overrideVersion:
         description: Manually force a version
-  pull_request:
-    branches:
-      - master
-      - main
-  push:
-    branches:
-      - master
-      - main
   release:
     types:
       - published

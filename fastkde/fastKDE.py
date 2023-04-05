@@ -158,9 +158,9 @@ class fastKDE:
       dataRank = len(shape(data))
       #If the data are a vector, promote the data to a rank-1 array with only 1 column
       if(dataRank == 1):
-          data = array(originalData[newaxis,:],dtype=npy.float)
+          data = array(originalData[newaxis,:],dtype=npy.float_)
       else:
-          data = array(originalData,dtype=npy.float)
+          data = array(originalData,dtype=npy.float_)
       if(dataRank > 2):
           raise ValueError("data must be a rank-2 array of shape [numVariables,numDataPoints]")
 
@@ -471,7 +471,7 @@ class fastKDE:
     if(self.doSaveTransformedKernel):
       self.kappaSC = kappaSC
 
-    midPointAccessor = tuple([(tp-1)/2 for tp in self.numTPoints])
+    midPointAccessor = tuple([(tp-1)//2 for tp in self.numTPoints])
     #Calculate the transform of the self-consistent density estimate
     self.phiSC[iCalcPhi] = self.ECF[iCalcPhi]*kappaSC[iCalcPhi]
 
@@ -549,7 +549,7 @@ class fastKDE:
 
     if(self.beVerbose):
       normConst = sum(pdf*prod(self.deltaX))
-      midPointAccessor = tuple([(tp-1)/2 for tp in self.numTPoints])
+      midPointAccessor = tuple([(tp-1)//2 for tp in self.numTPoints])
       print("Normalization of pdf = {}. phiSC[0] = {}".format(normConst,self.phiSC[midPointAccessor]))
 
 
@@ -839,7 +839,7 @@ class fastKDE:
       #Transform the PDF to fourier space
       phiTilde_tmp = fft.fftshift(fft.ifftn(fft.ifftshift(ma.filled(pdf,0.0))))
       #Normalize the transform
-      midPointAccessor = tuple([(tp-1)/2 for tp in self.numTPoints])
+      midPointAccessor = tuple([(tp-1)//2 for tp in self.numTPoints])
       phiTilde_tmp /= phiTilde_tmp[midPointAccessor]
 
       #Reapply the filter
@@ -1264,7 +1264,7 @@ def pdf_at_points(*args,**kwargs):
     # make sure list_of_points is in the expected format
     if list_of_points_provided_in_kwargs:
         try:
-            list_of_points = array(list_of_points,copy=True,dtype=npy.float).T
+            list_of_points = array(list_of_points,copy=True,dtype=npy.float_).T
         except:
             raise RuntimeError("Could not convert list_of_points to a numpy array.")
 
@@ -1272,7 +1272,7 @@ def pdf_at_points(*args,**kwargs):
         dataRank = len(shape(list_of_points))
         #If the data are a vector, promote the data to a rank-1 array with only 1 column
         if(dataRank == 1):
-            list_of_points = array(list_of_points[newaxis,:],dtype=npy.float)
+            list_of_points = array(list_of_points[newaxis,:],dtype=npy.float_)
 
         if(dataRank > 2):
             # raise an error indicating the proper shape for list_of_points
