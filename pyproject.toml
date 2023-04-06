@@ -12,12 +12,3 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
 write_to = "fastkde/version.py"
-
-[tool.cibuildwheel]
-test-extras = "test"
-test-command = "pytest {project}/tests"
-test-skip = ["pp*", "*universal2:arm64", "*musllinux*"]
-skip = ["pp*-manylinux_i686"] # not supported by NumPy
-manylinux-x86_64-image = "manylinux2014"
-manylinux-i686-image = "manylinux2014"
-environment-pass = ["SETUPTOOLS_SCM_PRETEND_VERSION"]
