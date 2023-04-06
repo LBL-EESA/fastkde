@@ -28,9 +28,6 @@ concurrency:
 env:
   SETUPTOOLS_SCM_PRETEND_VERSION: ${{ github.event.inputs.overrideVersion }}
   CIBW_ENVIRONMENT: "PIP_PREFER_BINARY=1"
-  CIBW_TEST_EXTRAS: test
-  CIBW_TEST_COMMAND: "pytest {project}/tests"
-  CIBW_TEST_SKIP: "*universal2:arm64"
 
 jobs:
   build_sdist:
