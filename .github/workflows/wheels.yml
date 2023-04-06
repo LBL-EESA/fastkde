@@ -31,7 +31,7 @@ env:
   CIBW_TEST_EXTRAS: test
   CIBW_TEST_COMMAND: "pytest {project}/tests"
   CIBW_TEST_SKIP: "pp* *universal2:arm64 *musllinux*"
-  CIBW_SKIP: "pp*-manylinux_i686"
+  CIBW_SKIP: "pp*"
 
 jobs:
   build_sdist:
