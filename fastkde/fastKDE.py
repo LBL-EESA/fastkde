@@ -772,6 +772,7 @@ class fastKDE:
       cslice = self.numVariables*[newaxis]
       for i in leftSideVariableIndices:
           cslice[i] = slice(None,None,None)
+      cslice = tuple(cslice)
       dxProd = dxProd[cslice[::-1]]
 
       normFactor = ma.masked_equal(sum(conditionalPDF*dxProd,axis=tuple(sumAxes)),0.0)
