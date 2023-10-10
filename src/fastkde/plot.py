@@ -65,6 +65,7 @@ def cumulative_integral(pdf, axes, integration_axes=None, reverse_axes=None):
         # broadcast dx to the ~same shape as cpdf
         broadcast_tuple = len(cpdf.shape)*[np.newaxis]
         broadcast_tuple[iprime] = slice(None,None,None)
+        broadcast_tuple = tuple(broadcast_tuple)
         dx = dx[broadcast_tuple]
 
         
