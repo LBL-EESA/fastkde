@@ -26,7 +26,7 @@ with open('REVISION', 'r') as fin:
     revision = fin.read().rstrip()
 
 # read the long description
-with open('README.rst', 'r') as fin:
+with open('README.md', 'r') as fin:
     long_description = fin.read()
 
 with open('requirements.txt', 'r') as fin:
