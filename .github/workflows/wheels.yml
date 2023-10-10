@@ -63,7 +63,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        python: [37, 38, 39, 310, 311]
+        python: [37, 38, 39, 310, 311, 312]
         arch: [aarch64]
     steps:
 
@@ -101,7 +101,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2019, macos-latest, ubuntu-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
         arch: [auto64]
 
         include:
