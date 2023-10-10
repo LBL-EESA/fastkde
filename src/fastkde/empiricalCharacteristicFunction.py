@@ -1,26 +1,15 @@
 #!/usr/bin/env python
-
-try:
-    from builtins import range  # Python 2.7/3.x compatibility
-except:
-    from __builtin__ import range
-
-from numpy import *
-
-# Python 2.7/3.x compatibility
-try:
-    import nufft
-except:
-    from . import nufft
+import numpy as npy
+import fastkde.nufft as nufft
 
 class ECF:
 
   def __init__( self,\
-                inputData, \
+                input_data, \
                 tgrids, \
                 precision = 2, \
-                useFFTApproximation = True, \
-                beVerbose = False):
+                use_fft_approximation = True, \
+                be_verbose = False):
     """
     Calculates the empirical characteristic function of arbitrary sets of
     variables.
@@ -33,15 +22,15 @@ class ECF:
         input:
         ------
 
-            inputData   : The input data. 
+            input_data   : The input data. 
                           Array like with shape = (nvariables,npoints).
 
             tgrids      : The frequency-space grids to which to transform the data
                           A list of frequency arrays for each variable dimension.
 
-            useFFTApproximation : Flag whether to use the nuFFT approximation to the DFT
+            use_fft_approximation : Flag whether to use the nuFFT approximation to the DFT
 
-            beVerbose : Flags whether to be verbose
+            be_verbose : Flags whether to be verbose
 
 
         output:
@@ -52,13 +41,13 @@ class ECF:
     """
 
     #Set whether we use the nuFFT approximation
-    self.useFFTApproximation = useFFTApproximation
+    self.use_fft_approximation = use_fft_approximation
 
     #Get the data shape (nvariables,ndatapoints)
-    dshape = shape(inputData)
+    dshape = npy.shape(input_data)
     rank = len(dshape)
     if(rank != 2):
-      raise ValueError("inputData must be a rank-2 array of shape [nvariables,ndatapoints]; got rank = {}".format(rank))
+      raise ValueError("input_data must be a rank-2 array of shape [nvariables,ndatapoints]; got rank = {}".format(rank))
     #Extract the number of variables
     self.nvariables = dshape[0]
     #Extract the number of data points
@@ -77,7 +66,7 @@ class ECF:
         raise ValueError("The rank of tgrids should be {}.  It is {}".format(gridRank,self.nvariables))
 
     #Check for regularity if we are doing nuFFT
-    if(self.useFFTApproximation):
+    if(self.use_fft_approximation):
       
       for n in range(self.nvariables):
           tpoints = tgrids[n]
@@ -87,57 +76,57 @@ class ECF:
           #Get the spacing of all points
           deltaT = tpoints[1:] - tpoints[:-1]
           #Get the difference between these spacings
-          deltaTdiff = deltaT - dt
-          fTolerance = dt/1e6
+          deltaT_diff = deltaT - dt
+          tolerance = dt/1e6
           #Check that all these differences are less than 1/1e6
-          if(not all(abs(deltaTdiff < fTolerance))):
-            raise ValueError("All grids in tgrids must be regularly spaced if useFFTApproximation is True")
+          if(not all(abs(deltaT_diff < tolerance))):
+            raise ValueError("All grids in tgrids must be regularly spaced if use_fft_approximation is True")
 
     #Set verbosity
-    self.beVerbose = beVerbose
+    self.be_verbose = be_verbose
 
     #Set the precision
     self.precision = precision
 
     #Set the fill value for the frequency grids
-    fillValue = -1e20
+    fill_value = -1e20
 
     #Get the maximum frequency grid length
-    ntmax = amax([len(tgrid) for tgrid in tgrids])
+    ntmax = npy.amax([len(tgrid) for tgrid in tgrids])
     #Create the frequency grids array
-    frequencyGrids = fillValue*ones([self.nvariables,ntmax])
+    frequency_grids = fill_value*npy.ones([self.nvariables,ntmax])
     #Fill the frequency grids array
     for v in range(self.nvariables):
-        frequencyGrids[v,:len(tgrids[v])] = tgrids[v]
+        frequency_grids[v,:len(tgrids[v])] = tgrids[v]
 
     #Simply pass in the input data as provided
-    preparedInputData = inputData
+    preparedInputData = input_data
 
     #Calculate the ECF
-    if(self.useFFTApproximation):
+    if(self.use_fft_approximation):
       #Calculate the ECF using the fast method
       myECF = nufft.nuifft( \
-                        abscissas = inputData, \
-                        ordinates = ones([inputData.shape[1]],dtype=complex128), \
-                        frequencyGrids = frequencyGrids, \
-                        missingFreqVal = fillValue, \
+                        abscissas = input_data, \
+                        ordinates = npy.ones([input_data.shape[1]],dtype=npy.complex128), \
+                        frequency_grids = frequency_grids, \
+                        missing_freq_val = fill_value, \
                         precision = precision, \
-                        beVerbose = int(beVerbose))
+                        be_verbose = int(be_verbose))
     else:
       #Calculate the ECF using the slow (direct, but exact) method
       myECF = nufft.idft( \
-                        abscissas = inputData, \
-                        ordinates = ones([inputData.shape[1]],dtype=complex128), \
-                        frequencyGrids = frequencyGrids, \
-                        missingFreqVal = fillValue)
+                        abscissas = input_data, \
+                        ordinates = npy.ones([input_data.shape[1]],dtype=npy.complex128), \
+                        frequency_grids = frequency_grids, \
+                        missing_freq_val = fill_value)
 
     #Ensure that the ECF is normalized
-    midPointAccessor = tuple( [ int((len(tgrid) - 1)/2) for tgrid in tgrids ])
-    if myECF[midPointAccessor] > 0.0:
+    mid_point_accessor = tuple( [ int((len(tgrid) - 1)/2) for tgrid in tgrids ])
+    if myECF[mid_point_accessor] > 0.0:
         #Save the ECF in the object
-        self.ECF = myECF/myECF[midPointAccessor]
+        self.ECF = myECF/myECF[mid_point_accessor]
     else:
-        raise RuntimeError("Midpoint of ECF is 0.0.  min(ECF) = {}, max(ECF) = {}".format(amin(myECF),amax(myECF)))
+        raise RuntimeError("Midpoint of ECF is 0.0.  min(ECF) = {}, max(ECF) = {}".format(npy.amin(myECF),npy.amax(myECF)))
 
 
     return
@@ -151,24 +140,24 @@ if(__name__ == "__main__"):
 
 
   #Set the random seed to 0 so the results are repetable
-  random.seed(0)
+  npy.random.seed(0)
 
   #Flag whether to do the 1-D test
   doOneDimensionalTest = False
   if(doOneDimensionalTest):
-    import pylab as P
+    import matplotlib.pyplot as plt
     def mySTDGaus1D(x):
-      return 1./sqrt(2*pi) * exp(-x**2/2)
+      return 1./npy.sqrt(2*npy.pi) * npy.exp(-x**2/2)
 
     #Set the real-space/frequency points (Hermitian FFT-friendly)
     numXPoints = 513
-    xpoints = linspace(-20,20,numXPoints)
+    xpoints = npy.linspace(-20,20,numXPoints)
     tpoints = nufft.calcTfromX(xpoints)
 
     #Calculate the FFT of an actual gaussian; use
     #this as the empirical characteristic function standard
     mygaus1d = mySTDGaus1D(xpoints)
-    mygauscf = fft.fftshift(fft.ifftn(fft.ifftshift(mygaus1d)))
+    mygauscf = npy.fft.fftshift(npy.fft.ifftn(npy.fft.ifftshift(mygaus1d)))
     nh = (len(tpoints)-1)/2
     mygauscf /= mygauscf[nh]
 
@@ -178,69 +167,68 @@ if(__name__ == "__main__"):
     #Set the number of variables
     nvariables = 1
     #Randomly sample from a normal distribution
-    xyrand = random.normal(loc=0.0,scale=1.0,size=[nvariables,ndatapoints])
+    xyrand = npy.random.normal(loc=0.0,scale=1.0,size=[nvariables,ndatapoints])
 
     #Calculat the ECF using the fast method
-    ecfFFT = ECF(xyrand,tpoints[newaxis,:],useFFTApproximation=True).ECF
+    ecfFFT = ECF(xyrand,tpoints[npy.newaxis,:],use_fft_approximation=True).ECF
     #Calculat the ECF using the slow method
-    ecfDFT = ECF(xyrand,tpoints[newaxis,:],useFFTApproximation=False).ECF
+    ecfDFT = ECF(xyrand,tpoints[npy.newaxis,:],use_fft_approximation=False).ECF
 
     #Print the 0-frequencies (should be 1 for all)
     print(ecfFFT[nh],ecfDFT[nh],mygauscf[nh])
 
-    P.subplot(121,xscale="log",yscale="log")
+    plt.subplot(121,xscale="log",yscale="log")
     #Plot the magnitude of the fast and slow ECFs
     #(these should overlap for all but the highest half of the frequencies)
-    P.plot(tpoints,abs(ecfFFT),'r-')
-    P.plot(tpoints,abs(ecfDFT),'b-')
+    plt.plot(tpoints,abs(ecfFFT),'r-')
+    plt.plot(tpoints,abs(ecfDFT),'b-')
     #Plot the gaussian characteristic function standard
-    P.plot(tpoints,abs(mygauscf),'k-')
+    plt.plot(tpoints,abs(mygauscf),'k-')
 
-    P.subplot(122,xscale="log",yscale="log")
+    plt.subplot(122,xscale="log",yscale="log")
 
     ihalf = len(ecfDFT)/2
     ithreequarters = ihalf + ihalf/2
     sh = slice(ihalf,ithreequarters)
-    P.plot(tpoints[sh],abs(ecfDFT[sh]-ecfFFT[sh]),'k-')
-    P.show()
+    plt.plot(tpoints[sh],abs(ecfDFT[sh]-ecfFFT[sh]),'k-')
+    plt.show()
     
   doTwoDimensionalTest = True #Flag whether to do 2D tests
   if(doTwoDimensionalTest):
-    from mpl_toolkits.mplot3d import Axes3D
     import matplotlib.pyplot as plt
-    def mySTDGaus2D(x,y):
-      return 1./(2*pi) * exp(-(x**2 + y**2)/2)
+    def std_norm_2d(x,y):
+      return 1./(2*npy.pi) * npy.exp(-(x**2 + y**2)/2)
 
     #Set the frequency points (Hermitian FFT-friendly)
     numXPoints = 127
-    xpoints = linspace(-20,20,numXPoints)
+    xpoints = npy.linspace(-20,20,numXPoints)
     tpoints = nufft.calcTfromX(xpoints)
 
     #Calculate points from a 2D gaussian, and take their 2D FFT
     #to estimate the characteristic function standard
-    xp2d,yp2d = meshgrid(xpoints,xpoints)
-    mygaus2d = mySTDGaus2D(xp2d,yp2d)
-    mygauscf = fft.fftshift(fft.ifftn(fft.ifftshift(mygaus2d)))
+    xp2d,yp2d = npy.meshgrid(xpoints,xpoints)
+    mygaus2d = std_norm_2d(xp2d,yp2d)
+    mygauscf = npy.fft.fftshift(npy.fft.ifftn(npy.fft.ifftshift(mygaus2d)))
     nh = (len(tpoints)-1)/2
-    midPointAccessor = tuple(2*[nh])
-    mygauscf /= mygauscf[midPointAccessor]
+    mid_point_accessor = tuple(2*[nh])
+    mygauscf /= mygauscf[mid_point_accessor]
 
 
     #Sample points from a gaussian distribution
     ndatapoints = 2**5
     nvariables = 2
-    xyrand = random.normal(loc=0.0,scale=1.0,size=[nvariables,ndatapoints])
+    xyrand = npy.random.normal(loc=0.0,scale=1.0,size=[nvariables,ndatapoints])
 
-    tpointgrids = concatenate(2*(tpoints[newaxis,:],),axis=0)
+    tpointgrids = npy.concatenate(2*(tpoints[npy.newaxis,:],),axis=0)
     #Calculate the ECF using the fast method
-    CecfFFT = ECF(xyrand,tpointgrids,useFFTApproximation=True,beVerbose=True)
+    CecfFFT = ECF(xyrand,tpointgrids,use_fft_approximation=True,be_verbose=True)
     ecfFFT = CecfFFT.ECF
     #Calculate the ECF using the slow method
-    CecfDFT = ECF(xyrand,tpointgrids,useFFTApproximation=False,beVerbose=True)
+    CecfDFT = ECF(xyrand,tpointgrids,use_fft_approximation=False,be_verbose=True)
     ecfDFT = CecfDFT.ECF
 
     #Use meshgrid to generate 2D arrays of the frequency points
-    tp2d,wp2d = meshgrid(tpoints,tpoints)
+    tp2d,wp2d = npy.meshgrid(tpoints,tpoints)
 
     #Create a figure
     fig = plt.figure()
@@ -258,7 +246,7 @@ if(__name__ == "__main__"):
 
 
     #Print the normalization constants (should be 1)
-    print(ecfFFT[midPointAccessor],ecfDFT[midPointAccessor],mygauscf[midPointAccessor])
+    print(ecfFFT[mid_point_accessor],ecfDFT[mid_point_accessor],mygauscf[mid_point_accessor])
 
     #plot the magnitudes of the fast and slow ECFs along
     #an aribtrary slice (they should overlap except in the high frequency range)
@@ -270,7 +258,7 @@ if(__name__ == "__main__"):
     #Plot the average difference between the slow and fast ECFs
     #(will be relatively high because I use a coarse X grid, so that
     # the slow calculation will finish in my lifetime)
-    errorK = average(abs(ecfFFT-ecfDFT),0)
+    errorK = npy.average(abs(ecfFFT-ecfDFT),0)
     ax3 = fig.add_subplot(223,xscale="log",yscale="log")
     ax3.plot(tpoints[len(tpoints)/2:3*len(tpoints)/4],errorK[len(tpoints)/2:3*len(tpoints)/4],'k-')
 

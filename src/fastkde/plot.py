@@ -1,6 +1,6 @@
 import numpy as np
 import pylab as PP
-from . import fastKDE
+import fastkde.fastKDE as fastKDE
 
 def cumulative_integral(pdf, axes, integration_axes=None, reverse_axes=None):
 
