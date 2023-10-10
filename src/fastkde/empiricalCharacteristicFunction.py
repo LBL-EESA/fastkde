@@ -25,11 +25,14 @@ class ECF:
             input_data   : The input data. 
                           Array like with shape = (nvariables,npoints).
 
-            tgrids      : The frequency-space grids to which to transform the data
+            tgrids      : The frequency-space grids to which to transform the
+                          data
+                          
                           A list of frequency arrays for each variable dimension.
 
-            use_fft_approximation : Flag whether to use the nuFFT approximation to the DFT
-
+            use_fft_approximation : Flag whether to use the nuFFT approximation
+                                    to the DFT
+                                    
             be_verbose : Flags whether to be verbose
 
 
@@ -47,7 +50,10 @@ class ECF:
     dshape = npy.shape(input_data)
     rank = len(dshape)
     if(rank != 2):
-      raise ValueError("input_data must be a rank-2 array of shape [nvariables,ndatapoints]; got rank = {}".format(rank))
+      raise ValueError(\
+        "input_data must be a rank-2 array of shape [nvariables,ndatapoints]; "
+        "got rank = {}".format(rank)
+        )
     #Extract the number of variables
     self.nvariables = dshape[0]
     #Extract the number of data points
@@ -59,11 +65,15 @@ class ECF:
 
     try:
         gridRank = len(self.tgrids)
-    except:
+    except TypeError:
         raise ValueError("Could not determine the number of tgrids")
 
     if  gridRank != self.nvariables:
-        raise ValueError("The rank of tgrids should be {}.  It is {}".format(gridRank,self.nvariables))
+        raise ValueError(
+          "The rank of tgrids should be {}.  It is {}".format(
+            gridRank,self.nvariables
+            )
+          )
 
     #Check for regularity if we are doing nuFFT
     if(self.use_fft_approximation):
@@ -80,7 +90,10 @@ class ECF:
           tolerance = dt/1e6
           #Check that all these differences are less than 1/1e6
           if(not all(abs(deltaT_diff < tolerance))):
-            raise ValueError("All grids in tgrids must be regularly spaced if use_fft_approximation is True")
+            raise ValueError(
+              "All grids in tgrids must be regularly spaced if "
+              "use_fft_approximation is True"
+              )
 
     #Set verbosity
     self.be_verbose = be_verbose
@@ -100,14 +113,14 @@ class ECF:
         frequency_grids[v,:len(tgrids[v])] = tgrids[v]
 
     #Simply pass in the input data as provided
-    preparedInputData = input_data
 
     #Calculate the ECF
     if(self.use_fft_approximation):
       #Calculate the ECF using the fast method
       myECF = nufft.nuifft( \
                         abscissas = input_data, \
-                        ordinates = npy.ones([input_data.shape[1]],dtype=npy.complex128), \
+                        ordinates = npy.ones(\
+                          [input_data.shape[1]],dtype=npy.complex128), \
                         frequency_grids = frequency_grids, \
                         missing_freq_val = fill_value, \
                         precision = precision, \
@@ -116,7 +129,8 @@ class ECF:
       #Calculate the ECF using the slow (direct, but exact) method
       myECF = nufft.idft( \
                         abscissas = input_data, \
-                        ordinates = npy.ones([input_data.shape[1]],dtype=npy.complex128), \
+                        ordinates = npy.ones(\
+                          [input_data.shape[1]],dtype=npy.complex128), \
                         frequency_grids = frequency_grids, \
                         missing_freq_val = fill_value)
 
@@ -126,7 +140,11 @@ class ECF:
         #Save the ECF in the object
         self.ECF = myECF/myECF[mid_point_accessor]
     else:
-        raise RuntimeError("Midpoint of ECF is 0.0.  min(ECF) = {}, max(ECF) = {}".format(npy.amin(myECF),npy.amax(myECF)))
+        raise RuntimeError(\
+          "Midpoint of ECF is 0.0.  min(ECF) = {}, max(ECF) = {}".format(\
+            npy.amin(myECF),npy.amax(myECF)
+            )
+          )
 
 
     return
