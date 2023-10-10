@@ -1,6 +1,4 @@
-<a target="_blank" href="https://colab.research.google.com/github/LBL-EESA/fastkde/blob/main/testing/readme_test.ipynb">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
-</a>
+<a target="_blank" href="https://colab.research.google.com/github/LBL-EESA/fastkde/blob/main/testing/readme_test.ipynb"> <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/> </a>
 
 # fastKDE
 
@@ -13,11 +11,10 @@ state-of-the-science 'R' KDE packages, and it does so 10,000 times
 faster for bivariate data (even better improvements for higher
 dimensionality).
 
-*Please cite the following papers when using this method:*
+**Please cite the following papers when using this method:**
 
-  `O’Brien, T. A., Kashinath, K., Cavanaugh, N. R., Collins, W. D. & O’Brien, J. P. A fast and objective multidimensional kernel density estimation method: fastKDE. Comput. Stat. Data Anal. 101, 148–160 (2016). <http://dx.doi.org/10.1016/j.csda.2016.02.014>`__
-
-  `O’Brien, T. A., Collins, W. D., Rauscher, S. A. & Ringler, T. D. Reducing the computational cost of the ECF using a nuFFT: A fast and objective probability density estimation method. Comput. Stat. Data Anal. 79, 222–234 (2014). <http://dx.doi.org/10.1016/j.csda.2014.06.002>`__
+* O’Brien, T. A., Kashinath, K., Cavanaugh, N. R., Collins, W. D. & O’Brien, J. P. *A fast and objective multidimensional kernel density estimation method: fastKDE.* Comput. Stat. Data Anal. 101, 148–160 (2016). [http://dx.doi.org/10.1016/j.csda.2016.02.014](http://dx.doi.org/10.1016/j.csda.2016.02.014)
+* O’Brien, T. A., Collins, W. D., Rauscher, S. A. & Ringler, T. D. *Reducing the computational cost of the ECF using a nuFFT: A fast and objective probability density estimation method.* Comput. Stat. Data Anal. 79, 222–234 (2014). [http://dx.doi.org/10.1016/j.csda.2014.06.002](http://dx.doi.org/10.1016/j.csda.2014.06.002)
 
 ### Example usage:
 
@@ -90,7 +87,6 @@ pOfYGivenX, values = fastKDE.conditional(y,x)
 The following plot shows the results:
 
 ```python
-
 #***************************
 # Plot the conditional
 #***************************

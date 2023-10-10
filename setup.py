@@ -45,6 +45,7 @@ setup(
     version=revision,
     description='Tools for fast and robust univariate and multivariate kernel density estimation',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     author="Travis A. O'Brien",
     author_email="obrienta@iu.edu",
     url="https://github.com/LBL-EESA/fastkde",

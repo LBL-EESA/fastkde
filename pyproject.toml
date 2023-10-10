@@ -1,6 +1,6 @@
 [project]
 name = "fastkde"
-dynamic = ["dependencies", "version"]
+dynamic = ["dependencies", "version", "optional-dependencies", "description", "readme", "authors", "keywords"]
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
