@@ -9,12 +9,12 @@ libs = []
 
 # set commands to build the c assistance modules
 extensions = [
-    Extension("fastkde.floodFillSearch", ["fastkde/floodFillSearch.pyx"],
+    Extension("fastkde.floodFillSearch", ["src/fastkde/floodFillSearch.pyx"],
               libraries=libs,
               library_dirs=lib_dirs,
               include_dirs=inc_dirs,
               runtime_library_dirs=lib_dirs),
-    Extension("fastkde.nufft", ["fastkde/nufft.pyx"],
+    Extension("fastkde.nufft", ["src/fastkde/nufft.pyx"],
               libraries=libs,
               library_dirs=lib_dirs,
               include_dirs=inc_dirs,
@@ -56,5 +56,6 @@ setup(
     classifiers=[],
     ext_modules=extensions,
     install_requires=install_requires,
-    extras_require=extras
+    extras_require=extras,
+    where='src',
 )

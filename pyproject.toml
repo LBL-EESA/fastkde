@@ -1,3 +1,15 @@
+[project]
+name = "fastkde"
+dynamic = ["dependencies", "version"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+version = {file = ["REVISION"]}
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
 [build-system]
 requires = [
     "setuptools>=45",
