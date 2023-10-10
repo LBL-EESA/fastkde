@@ -12,7 +12,7 @@ cdef extern from "math.h" nogil:
     double cos(double x)
     double sin(double x)
 
-cdef double complex cexp(double complex x) nogil:
+cdef double complex cexp(double complex x) noexcept nogil:
     cdef double complex result
     cdef double re
     cdef double im
