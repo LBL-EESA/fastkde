@@ -1,18 +1,13 @@
 from setuptools import setup,Extension
-from Cython.Build import cythonize
-from Cython.Distutils import build_ext
 import numpy
 import os
 
 inc_dirs = []
 inc_dirs.append(numpy.get_include())
 lib_dirs = []
-# lib_dirs.append(numpy.get_lib())
 libs = []
 
-cmdclass = {'build_ext': build_ext}
-
-# set commands to build the Cython assistance modules
+# set commands to build the c assistance modules
 extensions = [
     Extension("fastkde.floodFillSearch", ["fastkde/floodFillSearch.pyx"],
               libraries=libs,
@@ -59,7 +54,6 @@ setup(
                 'fastkde.empiricalCharacteristicFunction',
                 'fastkde.plot'],
     classifiers=[],
-    cmdclass=cmdclass,
     ext_modules=extensions,
     install_requires=install_requires,
     extras_require=extras

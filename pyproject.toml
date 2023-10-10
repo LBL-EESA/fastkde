@@ -5,7 +5,6 @@ requires = [
     "toml",
     "setuptools_scm>=4.1.2",
     "oldest-supported-numpy; python_version>='3.5'",
-    "cython"
 ]
 
 build-backend = "setuptools.build_meta"

@@ -1,6 +1,5 @@
 *.pyc
 *.swp
-*.c
 *.so
 *.dylib
 */__pycache__/*
