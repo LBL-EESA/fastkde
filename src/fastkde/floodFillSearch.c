@@ -1176,7 +1176,7 @@ static CYTHON_INLINE float __PYX_NAN() {
 #include <string.h>
 #include <stdio.h>
 
-    /* Using NumPy API declarations from "Cython/Includes/numpy/" */
+    /* Using NumPy API declarations from "numpy/__init__.cython-30.pxd" */
     
 #include "numpy/arrayobject.h"
 #include "numpy/ndarrayobject.h"
@@ -1474,7 +1474,7 @@ static const char *__pyx_filename;
 static const char *__pyx_f[] = {
   "floodFillSearch.pyx",
   "<stringsource>",
-  "__init__.pxd",
+  "__init__.cython-30.pxd",
   "type.pxd",
 };
 /* #### Code section: utility_code_proto_before_types ### */
@@ -1621,7 +1621,7 @@ typedef struct {
 
 /* #### Code section: numeric_typedefs ### */
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":736
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":730
  * # in Cython to enable them only on the right systems.
  * 
  * ctypedef npy_int8       int8_t             # <<<<<<<<<<<<<<
@@ -1630,7 +1630,7 @@ typedef struct {
  */
 typedef npy_int8 __pyx_t_5numpy_int8_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":737
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":731
  * 
  * ctypedef npy_int8       int8_t
  * ctypedef npy_int16      int16_t             # <<<<<<<<<<<<<<
@@ -1639,7 +1639,7 @@ typedef npy_int8 __pyx_t_5numpy_int8_t;
  */
 typedef npy_int16 __pyx_t_5numpy_int16_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":738
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":732
  * ctypedef npy_int8       int8_t
  * ctypedef npy_int16      int16_t
  * ctypedef npy_int32      int32_t             # <<<<<<<<<<<<<<
@@ -1648,7 +1648,7 @@ typedef npy_int16 __pyx_t_5numpy_int16_t;
  */
 typedef npy_int32 __pyx_t_5numpy_int32_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":739
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":733
  * ctypedef npy_int16      int16_t
  * ctypedef npy_int32      int32_t
  * ctypedef npy_int64      int64_t             # <<<<<<<<<<<<<<
@@ -1657,7 +1657,7 @@ typedef npy_int32 __pyx_t_5numpy_int32_t;
  */
 typedef npy_int64 __pyx_t_5numpy_int64_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":743
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":737
  * #ctypedef npy_int128     int128_t
  * 
  * ctypedef npy_uint8      uint8_t             # <<<<<<<<<<<<<<
@@ -1666,7 +1666,7 @@ typedef npy_int64 __pyx_t_5numpy_int64_t;
  */
 typedef npy_uint8 __pyx_t_5numpy_uint8_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":744
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":738
  * 
  * ctypedef npy_uint8      uint8_t
  * ctypedef npy_uint16     uint16_t             # <<<<<<<<<<<<<<
@@ -1675,7 +1675,7 @@ typedef npy_uint8 __pyx_t_5numpy_uint8_t;
  */
 typedef npy_uint16 __pyx_t_5numpy_uint16_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":745
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":739
  * ctypedef npy_uint8      uint8_t
  * ctypedef npy_uint16     uint16_t
  * ctypedef npy_uint32     uint32_t             # <<<<<<<<<<<<<<
@@ -1684,7 +1684,7 @@ typedef npy_uint16 __pyx_t_5numpy_uint16_t;
  */
 typedef npy_uint32 __pyx_t_5numpy_uint32_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":746
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":740
  * ctypedef npy_uint16     uint16_t
  * ctypedef npy_uint32     uint32_t
  * ctypedef npy_uint64     uint64_t             # <<<<<<<<<<<<<<
@@ -1693,7 +1693,7 @@ typedef npy_uint32 __pyx_t_5numpy_uint32_t;
  */
 typedef npy_uint64 __pyx_t_5numpy_uint64_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":750
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":744
  * #ctypedef npy_uint128    uint128_t
  * 
  * ctypedef npy_float32    float32_t             # <<<<<<<<<<<<<<
@@ -1702,7 +1702,7 @@ typedef npy_uint64 __pyx_t_5numpy_uint64_t;
  */
 typedef npy_float32 __pyx_t_5numpy_float32_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":751
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":745
  * 
  * ctypedef npy_float32    float32_t
  * ctypedef npy_float64    float64_t             # <<<<<<<<<<<<<<
@@ -1711,7 +1711,7 @@ typedef npy_float32 __pyx_t_5numpy_float32_t;
  */
 typedef npy_float64 __pyx_t_5numpy_float64_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":760
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":754
  * # The int types are mapped a bit surprising --
  * # numpy.int corresponds to 'l' and numpy.long to 'q'
  * ctypedef npy_long       int_t             # <<<<<<<<<<<<<<
@@ -1720,7 +1720,7 @@ typedef npy_float64 __pyx_t_5numpy_float64_t;
  */
 typedef npy_long __pyx_t_5numpy_int_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":761
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":755
  * # numpy.int corresponds to 'l' and numpy.long to 'q'
  * ctypedef npy_long       int_t
  * ctypedef npy_longlong   longlong_t             # <<<<<<<<<<<<<<
@@ -1729,7 +1729,7 @@ typedef npy_long __pyx_t_5numpy_int_t;
  */
 typedef npy_longlong __pyx_t_5numpy_longlong_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":763
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":757
  * ctypedef npy_longlong   longlong_t
  * 
  * ctypedef npy_ulong      uint_t             # <<<<<<<<<<<<<<
@@ -1738,7 +1738,7 @@ typedef npy_longlong __pyx_t_5numpy_longlong_t;
  */
 typedef npy_ulong __pyx_t_5numpy_uint_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":764
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":758
  * 
  * ctypedef npy_ulong      uint_t
  * ctypedef npy_ulonglong  ulonglong_t             # <<<<<<<<<<<<<<
@@ -1747,7 +1747,7 @@ typedef npy_ulong __pyx_t_5numpy_uint_t;
  */
 typedef npy_ulonglong __pyx_t_5numpy_ulonglong_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":766
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":760
  * ctypedef npy_ulonglong  ulonglong_t
  * 
  * ctypedef npy_intp       intp_t             # <<<<<<<<<<<<<<
@@ -1756,7 +1756,7 @@ typedef npy_ulonglong __pyx_t_5numpy_ulonglong_t;
  */
 typedef npy_intp __pyx_t_5numpy_intp_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":767
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":761
  * 
  * ctypedef npy_intp       intp_t
  * ctypedef npy_uintp      uintp_t             # <<<<<<<<<<<<<<
@@ -1765,7 +1765,7 @@ typedef npy_intp __pyx_t_5numpy_intp_t;
  */
 typedef npy_uintp __pyx_t_5numpy_uintp_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":769
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":763
  * ctypedef npy_uintp      uintp_t
  * 
  * ctypedef npy_double     float_t             # <<<<<<<<<<<<<<
@@ -1774,7 +1774,7 @@ typedef npy_uintp __pyx_t_5numpy_uintp_t;
  */
 typedef npy_double __pyx_t_5numpy_float_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":770
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":764
  * 
  * ctypedef npy_double     float_t
  * ctypedef npy_double     double_t             # <<<<<<<<<<<<<<
@@ -1783,7 +1783,7 @@ typedef npy_double __pyx_t_5numpy_float_t;
  */
 typedef npy_double __pyx_t_5numpy_double_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":771
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":765
  * ctypedef npy_double     float_t
  * ctypedef npy_double     double_t
  * ctypedef npy_longdouble longdouble_t             # <<<<<<<<<<<<<<
@@ -1825,7 +1825,7 @@ struct __pyx_MemviewEnum_obj;
 struct __pyx_memoryview_obj;
 struct __pyx_memoryviewslice_obj;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":773
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":767
  * ctypedef npy_longdouble longdouble_t
  * 
  * ctypedef npy_cfloat      cfloat_t             # <<<<<<<<<<<<<<
@@ -1834,7 +1834,7 @@ struct __pyx_memoryviewslice_obj;
  */
 typedef npy_cfloat __pyx_t_5numpy_cfloat_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":774
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":768
  * 
  * ctypedef npy_cfloat      cfloat_t
  * ctypedef npy_cdouble     cdouble_t             # <<<<<<<<<<<<<<
@@ -1843,7 +1843,7 @@ typedef npy_cfloat __pyx_t_5numpy_cfloat_t;
  */
 typedef npy_cdouble __pyx_t_5numpy_cdouble_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":775
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":769
  * ctypedef npy_cfloat      cfloat_t
  * ctypedef npy_cdouble     cdouble_t
  * ctypedef npy_clongdouble clongdouble_t             # <<<<<<<<<<<<<<
@@ -1852,7 +1852,7 @@ typedef npy_cdouble __pyx_t_5numpy_cdouble_t;
  */
 typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":777
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":771
  * ctypedef npy_clongdouble clongdouble_t
  * 
  * ctypedef npy_cdouble     complex_t             # <<<<<<<<<<<<<<
@@ -1860,22 +1860,22 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  * cdef inline object PyArray_MultiIterNew1(a):
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
-struct __pyx_opt_args_7fastkde_15floodFillSearch_floodFillSearch;
+struct __pyx_opt_args_7fastkde_15floodFillSearch_flood_fill_search;
 
-/* "fastkde/floodFillSearch.pyx":170
- *     return np.unravel_index(contiguousIndices,arrayShape)
+/* "fastkde/floodFillSearch.pyx":163
+ *     return np.unravel_index(contiguous_indices,array_shape)
  * 
- * cpdef list floodFillSearch( \             # <<<<<<<<<<<<<<
- *                 np.ndarray inputArray, \
- *                 np.float_t searchThreshold = 0.0, \
+ * cpdef list flood_fill_search( \             # <<<<<<<<<<<<<<
+ *                 np.ndarray input_array, \
+ *                 np.float_t search_threshold = 0.0, \
  */
-struct __pyx_opt_args_7fastkde_15floodFillSearch_floodFillSearch {
+struct __pyx_opt_args_7fastkde_15floodFillSearch_flood_fill_search {
   int __pyx_n;
-  __pyx_t_5numpy_float_t searchThreshold;
-  PyObject *wrapDimensions;
+  __pyx_t_5numpy_float_t search_threshold;
+  PyObject *wrap_dimensions;
 };
 
-/* "fastkde/floodFillSearch.pyx":294
+/* "fastkde/floodFillSearch.pyx":286
  * 
  *     #Transform the indices to be center-relative
  *     centeredInds = [ tuple([ aind - cind] for aind,cind in zip(indTuples,center)) for indTuples in inds ]             # <<<<<<<<<<<<<<
@@ -3282,7 +3282,7 @@ static int __pyx_memoryview_thread_locks_used;
 static PyThread_type_lock __pyx_memoryview_thread_locks[8];
 static CYTHON_INLINE __pyx_t_5numpy_int64_t __pyx_f_7fastkde_15floodFillSearch_ravel_shift(PyObject *, __pyx_t_5numpy_int64_t, __Pyx_memviewslice, __pyx_t_5numpy_int64_t, __pyx_t_5numpy_int64_t, __pyx_t_5numpy_int64_t); /*proto*/
 static PyObject *__pyx_f_7fastkde_15floodFillSearch_findNeighbors(__pyx_t_5numpy_int64_t, __pyx_t_5numpy_float_t, __Pyx_memviewslice, __pyx_t_5numpy_int64_t, PyObject *, __Pyx_memviewslice, __Pyx_memviewslice); /*proto*/
-static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObject *, int __pyx_skip_dispatch, struct __pyx_opt_args_7fastkde_15floodFillSearch_floodFillSearch *__pyx_optional_args); /*proto*/
+static PyObject *__pyx_f_7fastkde_15floodFillSearch_flood_fill_search(PyArrayObject *, int __pyx_skip_dispatch, struct __pyx_opt_args_7fastkde_15floodFillSearch_flood_fill_search *__pyx_optional_args); /*proto*/
 static int __pyx_array_allocate_buffer(struct __pyx_array_obj *); /*proto*/
 static struct __pyx_array_obj *__pyx_array_new(PyObject *, Py_ssize_t, char *, char *, char *); /*proto*/
 static PyObject *__pyx_memoryview_new(PyObject *, int, int, __Pyx_TypeInfo *); /*proto*/
@@ -3328,7 +3328,7 @@ int __pyx_module_is_main_fastkde__floodFillSearch = 0;
 
 /* Implementation of "fastkde.floodFillSearch" */
 /* #### Code section: global_var ### */
-static PyObject *__pyx_builtin_xrange;
+static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin_BaseException;
 static PyObject *__pyx_builtin_ValueError;
 static PyObject *__pyx_builtin_sum;
@@ -3337,7 +3337,6 @@ static PyObject *__pyx_builtin___import__;
 static PyObject *__pyx_builtin_MemoryError;
 static PyObject *__pyx_builtin_enumerate;
 static PyObject *__pyx_builtin_TypeError;
-static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin_AssertionError;
 static PyObject *__pyx_builtin_Ellipsis;
 static PyObject *__pyx_builtin_id;
@@ -3414,7 +3413,6 @@ static const char __pyx_k_reduce[] = "__reduce__";
 static const char __pyx_k_struct[] = "struct";
 static const char __pyx_k_unpack[] = "unpack";
 static const char __pyx_k_update[] = "update";
-static const char __pyx_k_xrange[] = "xrange";
 static const char __pyx_k_argsort[] = "argsort";
 static const char __pyx_k_average[] = "average";
 static const char __pyx_k_disable[] = "disable";
@@ -3429,7 +3427,6 @@ static const char __pyx_k_itemsize[] = "itemsize";
 static const char __pyx_k_pyx_type[] = "__pyx_type";
 static const char __pyx_k_register[] = "register";
 static const char __pyx_k_setstate[] = "__setstate__";
-static const char __pyx_k_varShape[] = "varShape";
 static const char __pyx_k_TypeError[] = "TypeError";
 static const char __pyx_k_distances[] = "distances";
 static const char __pyx_k_enumerate[] = "enumerate";
@@ -3437,15 +3434,16 @@ static const char __pyx_k_indTuples[] = "indTuples";
 static const char __pyx_k_isenabled[] = "isenabled";
 static const char __pyx_k_pyx_state[] = "__pyx_state";
 static const char __pyx_k_reduce_ex[] = "__reduce_ex__";
+static const char __pyx_k_var_shape[] = "var_shape";
 static const char __pyx_k_IndexError[] = "IndexError";
 static const char __pyx_k_ValueError[] = "ValueError";
-static const char __pyx_k_inputArray[] = "inputArray";
 static const char __pyx_k_pyx_result[] = "__pyx_result";
 static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
 static const char __pyx_k_ImportError[] = "ImportError";
 static const char __pyx_k_MemoryError[] = "MemoryError";
 static const char __pyx_k_PickleError[] = "PickleError";
 static const char __pyx_k_collections[] = "collections";
+static const char __pyx_k_input_array[] = "input_array";
 static const char __pyx_k_centeredInds[] = "centeredInds";
 static const char __pyx_k_initializing[] = "_initializing";
 static const char __pyx_k_is_coroutine[] = "_is_coroutine";
@@ -3458,15 +3456,15 @@ static const char __pyx_k_class_getitem[] = "__class_getitem__";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
 static const char __pyx_k_unravel_index[] = "unravel_index";
 static const char __pyx_k_AssertionError[] = "AssertionError";
-static const char __pyx_k_wrapDimensions[] = "wrapDimensions";
 static const char __pyx_k_View_MemoryView[] = "View.MemoryView";
 static const char __pyx_k_allocate_buffer[] = "allocate_buffer";
 static const char __pyx_k_collections_abc[] = "collections.abc";
 static const char __pyx_k_dtype_is_object[] = "dtype_is_object";
-static const char __pyx_k_floodFillSearch[] = "floodFillSearch";
 static const char __pyx_k_pyx_PickleError[] = "__pyx_PickleError";
-static const char __pyx_k_searchThreshold[] = "searchThreshold";
 static const char __pyx_k_setstate_cython[] = "__setstate_cython__";
+static const char __pyx_k_wrap_dimensions[] = "wrap_dimensions";
+static const char __pyx_k_search_threshold[] = "search_threshold";
+static const char __pyx_k_flood_fill_search[] = "flood_fill_search";
 static const char __pyx_k_pyx_unpickle_Enum[] = "__pyx_unpickle_Enum";
 static const char __pyx_k_asyncio_coroutines[] = "asyncio.coroutines";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
@@ -3480,15 +3478,14 @@ static const char __pyx_k_MemoryView_of_r_object[] = "<MemoryView of %r object>"
 static const char __pyx_k_MemoryView_of_r_at_0x_x[] = "<MemoryView of %r at 0x%x>";
 static const char __pyx_k_contiguous_and_indirect[] = "<contiguous and indirect>";
 static const char __pyx_k_fastkde_floodFillSearch[] = "fastkde.floodFillSearch";
-static const char __pyx_k_sortByDistanceFromCenter[] = "sortByDistanceFromCenter";
 static const char __pyx_k_Dimension_d_is_not_direct[] = "Dimension %d is not direct";
 static const char __pyx_k_Index_out_of_bounds_axis_d[] = "Index out of bounds (axis %d)";
 static const char __pyx_k_Step_may_not_be_zero_axis_d[] = "Step may not be zero (axis %d)";
 static const char __pyx_k_itemsize_0_for_cython_array[] = "itemsize <= 0 for cython.array";
+static const char __pyx_k_sort_by_distance_from_center[] = "sort_by_distance_from_center";
 static const char __pyx_k_unable_to_allocate_array_data[] = "unable to allocate array data.";
 static const char __pyx_k_strided_and_direct_or_indirect[] = "<strided and direct or indirect>";
 static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
-static const char __pyx_k_sortByDistanceFromCenter_locals[] = "sortByDistanceFromCenter.<locals>.genexpr";
 static const char __pyx_k_All_dimensions_preceding_dimensi[] = "All dimensions preceding dimension %d must be indexed and not sliced";
 static const char __pyx_k_Buffer_view_does_not_expose_stri[] = "Buffer view does not expose strides";
 static const char __pyx_k_Can_only_create_a_buffer_that_is[] = "Can only create a buffer that is contiguous in memory.";
@@ -3502,11 +3499,12 @@ static const char __pyx_k_Invalid_mode_expected_c_or_fortr[] = "Invalid mode, ex
 static const char __pyx_k_Out_of_bounds_on_buffer_access_a[] = "Out of bounds on buffer access (axis ";
 static const char __pyx_k_Unable_to_convert_item_to_object[] = "Unable to convert item to object";
 static const char __pyx_k_got_differing_extents_in_dimensi[] = "got differing extents in dimension ";
-static const char __pyx_k_inputArray_does_not_appear_to_be[] = "inputArray does not appear to be array like.  Error was: {}";
+static const char __pyx_k_input_array_does_not_appear_to_b[] = "input_array does not appear to be array like.  Error was: {}";
 static const char __pyx_k_no_default___reduce___due_to_non[] = "no default __reduce__ due to non-trivial __cinit__";
 static const char __pyx_k_numpy_core_umath_failed_to_impor[] = "numpy.core.umath failed to import";
+static const char __pyx_k_sort_by_distance_from_center_loc[] = "sort_by_distance_from_center.<locals>.genexpr";
 static const char __pyx_k_unable_to_allocate_shape_and_str[] = "unable to allocate shape and strides.";
-static const char __pyx_k_wrapDimensions_must_be_a_list_of[] = "wrapDimensions must be a list of valid dimensions for inputArray. Original error was: {}";
+static const char __pyx_k_wrap_dimensions_must_be_a_list_o[] = "wrap_dimensions must be a list of valid dimensions for input_array. Original error was: {}";
 /* #### Code section: decls ### */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __pyx_array_obj *__pyx_v_self, PyObject *__pyx_v_shape, Py_ssize_t __pyx_v_itemsize, PyObject *__pyx_v_format, PyObject *__pyx_v_mode, int __pyx_v_allocate_buffer); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array_2__getbuffer__(struct __pyx_array_obj *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
@@ -3549,9 +3547,9 @@ static void __pyx_memoryviewslice___pyx_pf_15View_dot_MemoryView_16_memoryviewsl
 static PyObject *__pyx_pf___pyx_memoryviewslice___reduce_cython__(CYTHON_UNUSED struct __pyx_memoryviewslice_obj *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf___pyx_memoryviewslice_2__setstate_cython__(CYTHON_UNUSED struct __pyx_memoryviewslice_obj *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_15View_dot_MemoryView___pyx_unpickle_Enum(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v___pyx_type, long __pyx_v___pyx_checksum, PyObject *__pyx_v___pyx_state); /* proto */
-static PyObject *__pyx_pf_7fastkde_15floodFillSearch_floodFillSearch(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_inputArray, __pyx_t_5numpy_float_t __pyx_v_searchThreshold, PyObject *__pyx_v_wrapDimensions); /* proto */
-static PyObject *__pyx_pf_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_genexpr(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_genexpr_arg_0); /* proto */
-static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_inds, PyObject *__pyx_v_varShape); /* proto */
+static PyObject *__pyx_pf_7fastkde_15floodFillSearch_flood_fill_search(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_input_array, __pyx_t_5numpy_float_t __pyx_v_search_threshold, PyObject *__pyx_v_wrap_dimensions); /* proto */
+static PyObject *__pyx_pf_7fastkde_15floodFillSearch_28sort_by_distance_from_center_genexpr(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_genexpr_arg_0); /* proto */
+static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sort_by_distance_from_center(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_inds, PyObject *__pyx_v_var_shape); /* proto */
 static PyObject *__pyx_tp_new_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_array(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_Enum(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
@@ -3710,8 +3708,8 @@ typedef struct {
   PyObject *__pyx_n_s_error;
   PyObject *__pyx_n_s_fastkde_floodFillSearch;
   PyObject *__pyx_n_s_flags;
-  PyObject *__pyx_n_s_floodFillSearch;
   PyObject *__pyx_kp_s_floodFillSearch_pyx;
+  PyObject *__pyx_n_s_flood_fill_search;
   PyObject *__pyx_n_s_format;
   PyObject *__pyx_n_s_fortran;
   PyObject *__pyx_n_u_fortran;
@@ -3728,8 +3726,8 @@ typedef struct {
   PyObject *__pyx_n_s_indices;
   PyObject *__pyx_n_s_inds;
   PyObject *__pyx_n_s_initializing;
-  PyObject *__pyx_n_s_inputArray;
-  PyObject *__pyx_kp_s_inputArray_does_not_appear_to_be;
+  PyObject *__pyx_n_s_input_array;
+  PyObject *__pyx_kp_s_input_array_does_not_appear_to_b;
   PyObject *__pyx_n_s_int;
   PyObject *__pyx_n_s_int64;
   PyObject *__pyx_n_s_is_coroutine;
@@ -3768,14 +3766,14 @@ typedef struct {
   PyObject *__pyx_n_s_reduce_cython;
   PyObject *__pyx_n_s_reduce_ex;
   PyObject *__pyx_n_s_register;
-  PyObject *__pyx_n_s_searchThreshold;
+  PyObject *__pyx_n_s_search_threshold;
   PyObject *__pyx_n_s_send;
   PyObject *__pyx_n_s_setstate;
   PyObject *__pyx_n_s_setstate_cython;
   PyObject *__pyx_n_s_shape;
   PyObject *__pyx_n_s_size;
-  PyObject *__pyx_n_s_sortByDistanceFromCenter;
-  PyObject *__pyx_n_s_sortByDistanceFromCenter_locals;
+  PyObject *__pyx_n_s_sort_by_distance_from_center;
+  PyObject *__pyx_n_s_sort_by_distance_from_center_loc;
   PyObject *__pyx_n_s_spec;
   PyObject *__pyx_n_s_sqrt;
   PyObject *__pyx_n_s_start;
@@ -3795,11 +3793,10 @@ typedef struct {
   PyObject *__pyx_n_s_unpack;
   PyObject *__pyx_n_s_unravel_index;
   PyObject *__pyx_n_s_update;
-  PyObject *__pyx_n_s_varShape;
+  PyObject *__pyx_n_s_var_shape;
   PyObject *__pyx_n_s_version_info;
-  PyObject *__pyx_n_s_wrapDimensions;
-  PyObject *__pyx_kp_s_wrapDimensions_must_be_a_list_of;
-  PyObject *__pyx_n_s_xrange;
+  PyObject *__pyx_n_s_wrap_dimensions;
+  PyObject *__pyx_kp_s_wrap_dimensions_must_be_a_list_o;
   PyObject *__pyx_n_s_zip;
   PyObject *__pyx_float_0_0;
   PyObject *__pyx_int_0;
@@ -3973,8 +3970,8 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_error);
   Py_CLEAR(clear_module_state->__pyx_n_s_fastkde_floodFillSearch);
   Py_CLEAR(clear_module_state->__pyx_n_s_flags);
-  Py_CLEAR(clear_module_state->__pyx_n_s_floodFillSearch);
   Py_CLEAR(clear_module_state->__pyx_kp_s_floodFillSearch_pyx);
+  Py_CLEAR(clear_module_state->__pyx_n_s_flood_fill_search);
   Py_CLEAR(clear_module_state->__pyx_n_s_format);
   Py_CLEAR(clear_module_state->__pyx_n_s_fortran);
   Py_CLEAR(clear_module_state->__pyx_n_u_fortran);
@@ -3991,8 +3988,8 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_indices);
   Py_CLEAR(clear_module_state->__pyx_n_s_inds);
   Py_CLEAR(clear_module_state->__pyx_n_s_initializing);
-  Py_CLEAR(clear_module_state->__pyx_n_s_inputArray);
-  Py_CLEAR(clear_module_state->__pyx_kp_s_inputArray_does_not_appear_to_be);
+  Py_CLEAR(clear_module_state->__pyx_n_s_input_array);
+  Py_CLEAR(clear_module_state->__pyx_kp_s_input_array_does_not_appear_to_b);
   Py_CLEAR(clear_module_state->__pyx_n_s_int);
   Py_CLEAR(clear_module_state->__pyx_n_s_int64);
   Py_CLEAR(clear_module_state->__pyx_n_s_is_coroutine);
@@ -4031,14 +4028,14 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_reduce_cython);
   Py_CLEAR(clear_module_state->__pyx_n_s_reduce_ex);
   Py_CLEAR(clear_module_state->__pyx_n_s_register);
-  Py_CLEAR(clear_module_state->__pyx_n_s_searchThreshold);
+  Py_CLEAR(clear_module_state->__pyx_n_s_search_threshold);
   Py_CLEAR(clear_module_state->__pyx_n_s_send);
   Py_CLEAR(clear_module_state->__pyx_n_s_setstate);
   Py_CLEAR(clear_module_state->__pyx_n_s_setstate_cython);
   Py_CLEAR(clear_module_state->__pyx_n_s_shape);
   Py_CLEAR(clear_module_state->__pyx_n_s_size);
-  Py_CLEAR(clear_module_state->__pyx_n_s_sortByDistanceFromCenter);
-  Py_CLEAR(clear_module_state->__pyx_n_s_sortByDistanceFromCenter_locals);
+  Py_CLEAR(clear_module_state->__pyx_n_s_sort_by_distance_from_center);
+  Py_CLEAR(clear_module_state->__pyx_n_s_sort_by_distance_from_center_loc);
   Py_CLEAR(clear_module_state->__pyx_n_s_spec);
   Py_CLEAR(clear_module_state->__pyx_n_s_sqrt);
   Py_CLEAR(clear_module_state->__pyx_n_s_start);
@@ -4058,11 +4055,10 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_unpack);
   Py_CLEAR(clear_module_state->__pyx_n_s_unravel_index);
   Py_CLEAR(clear_module_state->__pyx_n_s_update);
-  Py_CLEAR(clear_module_state->__pyx_n_s_varShape);
+  Py_CLEAR(clear_module_state->__pyx_n_s_var_shape);
   Py_CLEAR(clear_module_state->__pyx_n_s_version_info);
-  Py_CLEAR(clear_module_state->__pyx_n_s_wrapDimensions);
-  Py_CLEAR(clear_module_state->__pyx_kp_s_wrapDimensions_must_be_a_list_of);
-  Py_CLEAR(clear_module_state->__pyx_n_s_xrange);
+  Py_CLEAR(clear_module_state->__pyx_n_s_wrap_dimensions);
+  Py_CLEAR(clear_module_state->__pyx_kp_s_wrap_dimensions_must_be_a_list_o);
   Py_CLEAR(clear_module_state->__pyx_n_s_zip);
   Py_CLEAR(clear_module_state->__pyx_float_0_0);
   Py_CLEAR(clear_module_state->__pyx_int_0);
@@ -4214,8 +4210,8 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_error);
   Py_VISIT(traverse_module_state->__pyx_n_s_fastkde_floodFillSearch);
   Py_VISIT(traverse_module_state->__pyx_n_s_flags);
-  Py_VISIT(traverse_module_state->__pyx_n_s_floodFillSearch);
   Py_VISIT(traverse_module_state->__pyx_kp_s_floodFillSearch_pyx);
+  Py_VISIT(traverse_module_state->__pyx_n_s_flood_fill_search);
   Py_VISIT(traverse_module_state->__pyx_n_s_format);
   Py_VISIT(traverse_module_state->__pyx_n_s_fortran);
   Py_VISIT(traverse_module_state->__pyx_n_u_fortran);
@@ -4232,8 +4228,8 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_indices);
   Py_VISIT(traverse_module_state->__pyx_n_s_inds);
   Py_VISIT(traverse_module_state->__pyx_n_s_initializing);
-  Py_VISIT(traverse_module_state->__pyx_n_s_inputArray);
-  Py_VISIT(traverse_module_state->__pyx_kp_s_inputArray_does_not_appear_to_be);
+  Py_VISIT(traverse_module_state->__pyx_n_s_input_array);
+  Py_VISIT(traverse_module_state->__pyx_kp_s_input_array_does_not_appear_to_b);
   Py_VISIT(traverse_module_state->__pyx_n_s_int);
   Py_VISIT(traverse_module_state->__pyx_n_s_int64);
   Py_VISIT(traverse_module_state->__pyx_n_s_is_coroutine);
@@ -4272,14 +4268,14 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_reduce_cython);
   Py_VISIT(traverse_module_state->__pyx_n_s_reduce_ex);
   Py_VISIT(traverse_module_state->__pyx_n_s_register);
-  Py_VISIT(traverse_module_state->__pyx_n_s_searchThreshold);
+  Py_VISIT(traverse_module_state->__pyx_n_s_search_threshold);
   Py_VISIT(traverse_module_state->__pyx_n_s_send);
   Py_VISIT(traverse_module_state->__pyx_n_s_setstate);
   Py_VISIT(traverse_module_state->__pyx_n_s_setstate_cython);
   Py_VISIT(traverse_module_state->__pyx_n_s_shape);
   Py_VISIT(traverse_module_state->__pyx_n_s_size);
-  Py_VISIT(traverse_module_state->__pyx_n_s_sortByDistanceFromCenter);
-  Py_VISIT(traverse_module_state->__pyx_n_s_sortByDistanceFromCenter_locals);
+  Py_VISIT(traverse_module_state->__pyx_n_s_sort_by_distance_from_center);
+  Py_VISIT(traverse_module_state->__pyx_n_s_sort_by_distance_from_center_loc);
   Py_VISIT(traverse_module_state->__pyx_n_s_spec);
   Py_VISIT(traverse_module_state->__pyx_n_s_sqrt);
   Py_VISIT(traverse_module_state->__pyx_n_s_start);
@@ -4299,11 +4295,10 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_unpack);
   Py_VISIT(traverse_module_state->__pyx_n_s_unravel_index);
   Py_VISIT(traverse_module_state->__pyx_n_s_update);
-  Py_VISIT(traverse_module_state->__pyx_n_s_varShape);
+  Py_VISIT(traverse_module_state->__pyx_n_s_var_shape);
   Py_VISIT(traverse_module_state->__pyx_n_s_version_info);
-  Py_VISIT(traverse_module_state->__pyx_n_s_wrapDimensions);
-  Py_VISIT(traverse_module_state->__pyx_kp_s_wrapDimensions_must_be_a_list_of);
-  Py_VISIT(traverse_module_state->__pyx_n_s_xrange);
+  Py_VISIT(traverse_module_state->__pyx_n_s_wrap_dimensions);
+  Py_VISIT(traverse_module_state->__pyx_kp_s_wrap_dimensions_must_be_a_list_o);
   Py_VISIT(traverse_module_state->__pyx_n_s_zip);
   Py_VISIT(traverse_module_state->__pyx_float_0_0);
   Py_VISIT(traverse_module_state->__pyx_int_0);
@@ -4489,8 +4484,8 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_error __pyx_mstate_global->__pyx_n_s_error
 #define __pyx_n_s_fastkde_floodFillSearch __pyx_mstate_global->__pyx_n_s_fastkde_floodFillSearch
 #define __pyx_n_s_flags __pyx_mstate_global->__pyx_n_s_flags
-#define __pyx_n_s_floodFillSearch __pyx_mstate_global->__pyx_n_s_floodFillSearch
 #define __pyx_kp_s_floodFillSearch_pyx __pyx_mstate_global->__pyx_kp_s_floodFillSearch_pyx
+#define __pyx_n_s_flood_fill_search __pyx_mstate_global->__pyx_n_s_flood_fill_search
 #define __pyx_n_s_format __pyx_mstate_global->__pyx_n_s_format
 #define __pyx_n_s_fortran __pyx_mstate_global->__pyx_n_s_fortran
 #define __pyx_n_u_fortran __pyx_mstate_global->__pyx_n_u_fortran
@@ -4507,8 +4502,8 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_indices __pyx_mstate_global->__pyx_n_s_indices
 #define __pyx_n_s_inds __pyx_mstate_global->__pyx_n_s_inds
 #define __pyx_n_s_initializing __pyx_mstate_global->__pyx_n_s_initializing
-#define __pyx_n_s_inputArray __pyx_mstate_global->__pyx_n_s_inputArray
-#define __pyx_kp_s_inputArray_does_not_appear_to_be __pyx_mstate_global->__pyx_kp_s_inputArray_does_not_appear_to_be
+#define __pyx_n_s_input_array __pyx_mstate_global->__pyx_n_s_input_array
+#define __pyx_kp_s_input_array_does_not_appear_to_b __pyx_mstate_global->__pyx_kp_s_input_array_does_not_appear_to_b
 #define __pyx_n_s_int __pyx_mstate_global->__pyx_n_s_int
 #define __pyx_n_s_int64 __pyx_mstate_global->__pyx_n_s_int64
 #define __pyx_n_s_is_coroutine __pyx_mstate_global->__pyx_n_s_is_coroutine
@@ -4547,14 +4542,14 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_reduce_cython __pyx_mstate_global->__pyx_n_s_reduce_cython
 #define __pyx_n_s_reduce_ex __pyx_mstate_global->__pyx_n_s_reduce_ex
 #define __pyx_n_s_register __pyx_mstate_global->__pyx_n_s_register
-#define __pyx_n_s_searchThreshold __pyx_mstate_global->__pyx_n_s_searchThreshold
+#define __pyx_n_s_search_threshold __pyx_mstate_global->__pyx_n_s_search_threshold
 #define __pyx_n_s_send __pyx_mstate_global->__pyx_n_s_send
 #define __pyx_n_s_setstate __pyx_mstate_global->__pyx_n_s_setstate
 #define __pyx_n_s_setstate_cython __pyx_mstate_global->__pyx_n_s_setstate_cython
 #define __pyx_n_s_shape __pyx_mstate_global->__pyx_n_s_shape
 #define __pyx_n_s_size __pyx_mstate_global->__pyx_n_s_size
-#define __pyx_n_s_sortByDistanceFromCenter __pyx_mstate_global->__pyx_n_s_sortByDistanceFromCenter
-#define __pyx_n_s_sortByDistanceFromCenter_locals __pyx_mstate_global->__pyx_n_s_sortByDistanceFromCenter_locals
+#define __pyx_n_s_sort_by_distance_from_center __pyx_mstate_global->__pyx_n_s_sort_by_distance_from_center
+#define __pyx_n_s_sort_by_distance_from_center_loc __pyx_mstate_global->__pyx_n_s_sort_by_distance_from_center_loc
 #define __pyx_n_s_spec __pyx_mstate_global->__pyx_n_s_spec
 #define __pyx_n_s_sqrt __pyx_mstate_global->__pyx_n_s_sqrt
 #define __pyx_n_s_start __pyx_mstate_global->__pyx_n_s_start
@@ -4574,11 +4569,10 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_unpack __pyx_mstate_global->__pyx_n_s_unpack
 #define __pyx_n_s_unravel_index __pyx_mstate_global->__pyx_n_s_unravel_index
 #define __pyx_n_s_update __pyx_mstate_global->__pyx_n_s_update
-#define __pyx_n_s_varShape __pyx_mstate_global->__pyx_n_s_varShape
+#define __pyx_n_s_var_shape __pyx_mstate_global->__pyx_n_s_var_shape
 #define __pyx_n_s_version_info __pyx_mstate_global->__pyx_n_s_version_info
-#define __pyx_n_s_wrapDimensions __pyx_mstate_global->__pyx_n_s_wrapDimensions
-#define __pyx_kp_s_wrapDimensions_must_be_a_list_of __pyx_mstate_global->__pyx_kp_s_wrapDimensions_must_be_a_list_of
-#define __pyx_n_s_xrange __pyx_mstate_global->__pyx_n_s_xrange
+#define __pyx_n_s_wrap_dimensions __pyx_mstate_global->__pyx_n_s_wrap_dimensions
+#define __pyx_kp_s_wrap_dimensions_must_be_a_list_o __pyx_mstate_global->__pyx_kp_s_wrap_dimensions_must_be_a_list_o
 #define __pyx_n_s_zip __pyx_mstate_global->__pyx_n_s_zip
 #define __pyx_float_0_0 __pyx_mstate_global->__pyx_float_0_0
 #define __pyx_int_0 __pyx_mstate_global->__pyx_int_0
@@ -18238,7 +18232,7 @@ static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *__
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":250
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":245
  * 
  *         @property
  *         cdef inline PyObject* base(self) nogil:             # <<<<<<<<<<<<<<
@@ -18249,7 +18243,7 @@ static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *__
 static CYTHON_INLINE PyObject *__pyx_f_5numpy_7ndarray_4base_base(PyArrayObject *__pyx_v_self) {
   PyObject *__pyx_r;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":253
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":248
  *             """Returns a borrowed reference to the object owning the data/memory.
  *             """
  *             return PyArray_BASE(self)             # <<<<<<<<<<<<<<
@@ -18259,7 +18253,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_7ndarray_4base_base(PyArrayObject 
   __pyx_r = PyArray_BASE(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":250
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":245
  * 
  *         @property
  *         cdef inline PyObject* base(self) nogil:             # <<<<<<<<<<<<<<
@@ -18272,7 +18266,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_7ndarray_4base_base(PyArrayObject 
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":256
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":251
  * 
  *         @property
  *         cdef inline dtype descr(self):             # <<<<<<<<<<<<<<
@@ -18286,7 +18280,7 @@ static CYTHON_INLINE PyArray_Descr *__pyx_f_5numpy_7ndarray_5descr_descr(PyArray
   PyArray_Descr *__pyx_t_1;
   __Pyx_RefNannySetupContext("descr", 1);
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":259
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":254
  *             """Returns an owned reference to the dtype of the array.
  *             """
  *             return <dtype>PyArray_DESCR(self)             # <<<<<<<<<<<<<<
@@ -18299,7 +18293,7 @@ static CYTHON_INLINE PyArray_Descr *__pyx_f_5numpy_7ndarray_5descr_descr(PyArray
   __pyx_r = ((PyArray_Descr *)__pyx_t_1);
   goto __pyx_L0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":256
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":251
  * 
  *         @property
  *         cdef inline dtype descr(self):             # <<<<<<<<<<<<<<
@@ -18314,7 +18308,7 @@ static CYTHON_INLINE PyArray_Descr *__pyx_f_5numpy_7ndarray_5descr_descr(PyArray
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":262
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":257
  * 
  *         @property
  *         cdef inline int ndim(self) nogil:             # <<<<<<<<<<<<<<
@@ -18325,7 +18319,7 @@ static CYTHON_INLINE PyArray_Descr *__pyx_f_5numpy_7ndarray_5descr_descr(PyArray
 static CYTHON_INLINE int __pyx_f_5numpy_7ndarray_4ndim_ndim(PyArrayObject *__pyx_v_self) {
   int __pyx_r;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":265
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":260
  *             """Returns the number of dimensions in the array.
  *             """
  *             return PyArray_NDIM(self)             # <<<<<<<<<<<<<<
@@ -18335,7 +18329,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_7ndarray_4ndim_ndim(PyArrayObject *__pyx
   __pyx_r = PyArray_NDIM(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":262
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":257
  * 
  *         @property
  *         cdef inline int ndim(self) nogil:             # <<<<<<<<<<<<<<
@@ -18348,7 +18342,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_7ndarray_4ndim_ndim(PyArrayObject *__pyx
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":268
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":263
  * 
  *         @property
  *         cdef inline npy_intp *shape(self) nogil:             # <<<<<<<<<<<<<<
@@ -18359,7 +18353,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_7ndarray_4ndim_ndim(PyArrayObject *__pyx
 static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_5shape_shape(PyArrayObject *__pyx_v_self) {
   npy_intp *__pyx_r;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":273
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":268
  *             Can return NULL for 0-dimensional arrays.
  *             """
  *             return PyArray_DIMS(self)             # <<<<<<<<<<<<<<
@@ -18369,7 +18363,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_5shape_shape(PyArrayObjec
   __pyx_r = PyArray_DIMS(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":268
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":263
  * 
  *         @property
  *         cdef inline npy_intp *shape(self) nogil:             # <<<<<<<<<<<<<<
@@ -18382,7 +18376,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_5shape_shape(PyArrayObjec
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":276
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":271
  * 
  *         @property
  *         cdef inline npy_intp *strides(self) nogil:             # <<<<<<<<<<<<<<
@@ -18393,7 +18387,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_5shape_shape(PyArrayObjec
 static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_7strides_strides(PyArrayObject *__pyx_v_self) {
   npy_intp *__pyx_r;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":280
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":275
  *             The number of elements matches the number of dimensions of the array (ndim).
  *             """
  *             return PyArray_STRIDES(self)             # <<<<<<<<<<<<<<
@@ -18403,7 +18397,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_7strides_strides(PyArrayO
   __pyx_r = PyArray_STRIDES(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":276
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":271
  * 
  *         @property
  *         cdef inline npy_intp *strides(self) nogil:             # <<<<<<<<<<<<<<
@@ -18416,7 +18410,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_7strides_strides(PyArrayO
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":283
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":278
  * 
  *         @property
  *         cdef inline npy_intp size(self) nogil:             # <<<<<<<<<<<<<<
@@ -18427,7 +18421,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_7strides_strides(PyArrayO
 static CYTHON_INLINE npy_intp __pyx_f_5numpy_7ndarray_4size_size(PyArrayObject *__pyx_v_self) {
   npy_intp __pyx_r;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":286
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":281
  *             """Returns the total size (in number of elements) of the array.
  *             """
  *             return PyArray_SIZE(self)             # <<<<<<<<<<<<<<
@@ -18437,7 +18431,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_7ndarray_4size_size(PyArrayObject *
   __pyx_r = PyArray_SIZE(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":283
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":278
  * 
  *         @property
  *         cdef inline npy_intp size(self) nogil:             # <<<<<<<<<<<<<<
@@ -18450,7 +18444,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_7ndarray_4size_size(PyArrayObject *
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":289
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":284
  * 
  *         @property
  *         cdef inline char* data(self) nogil:             # <<<<<<<<<<<<<<
@@ -18461,7 +18455,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_7ndarray_4size_size(PyArrayObject *
 static CYTHON_INLINE char *__pyx_f_5numpy_7ndarray_4data_data(PyArrayObject *__pyx_v_self) {
   char *__pyx_r;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":295
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":290
  *             of `PyArray_DATA()` instead, which returns a 'void*'.
  *             """
  *             return PyArray_BYTES(self)             # <<<<<<<<<<<<<<
@@ -18471,7 +18465,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy_7ndarray_4data_data(PyArrayObject *__p
   __pyx_r = PyArray_BYTES(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":289
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":284
  * 
  *         @property
  *         cdef inline char* data(self) nogil:             # <<<<<<<<<<<<<<
@@ -18484,7 +18478,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy_7ndarray_4data_data(PyArrayObject *__p
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":779
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":773
  * ctypedef npy_cdouble     complex_t
  * 
  * cdef inline object PyArray_MultiIterNew1(a):             # <<<<<<<<<<<<<<
@@ -18501,7 +18495,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew1", 1);
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":780
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":774
  * 
  * cdef inline object PyArray_MultiIterNew1(a):
  *     return PyArray_MultiIterNew(1, <void*>a)             # <<<<<<<<<<<<<<
@@ -18509,13 +18503,13 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
  * cdef inline object PyArray_MultiIterNew2(a, b):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyArray_MultiIterNew(1, ((void *)__pyx_v_a)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 780, __pyx_L1_error)
+  __pyx_t_1 = PyArray_MultiIterNew(1, ((void *)__pyx_v_a)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 774, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":779
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":773
  * ctypedef npy_cdouble     complex_t
  * 
  * cdef inline object PyArray_MultiIterNew1(a):             # <<<<<<<<<<<<<<
@@ -18534,7 +18528,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":782
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":776
  *     return PyArray_MultiIterNew(1, <void*>a)
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):             # <<<<<<<<<<<<<<
@@ -18551,7 +18545,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew2", 1);
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":783
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":777
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)             # <<<<<<<<<<<<<<
@@ -18559,13 +18553,13 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
  * cdef inline object PyArray_MultiIterNew3(a, b, c):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyArray_MultiIterNew(2, ((void *)__pyx_v_a), ((void *)__pyx_v_b)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 783, __pyx_L1_error)
+  __pyx_t_1 = PyArray_MultiIterNew(2, ((void *)__pyx_v_a), ((void *)__pyx_v_b)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 777, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":782
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":776
  *     return PyArray_MultiIterNew(1, <void*>a)
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):             # <<<<<<<<<<<<<<
@@ -18584,7 +18578,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":785
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":779
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):             # <<<<<<<<<<<<<<
@@ -18601,7 +18595,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew3", 1);
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":786
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":780
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)             # <<<<<<<<<<<<<<
@@ -18609,13 +18603,13 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyArray_MultiIterNew(3, ((void *)__pyx_v_a), ((void *)__pyx_v_b), ((void *)__pyx_v_c)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 786, __pyx_L1_error)
+  __pyx_t_1 = PyArray_MultiIterNew(3, ((void *)__pyx_v_a), ((void *)__pyx_v_b), ((void *)__pyx_v_c)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 780, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":785
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":779
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):             # <<<<<<<<<<<<<<
@@ -18634,7 +18628,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":788
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":782
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):             # <<<<<<<<<<<<<<
@@ -18651,7 +18645,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew4", 1);
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":789
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":783
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)             # <<<<<<<<<<<<<<
@@ -18659,13 +18653,13 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyArray_MultiIterNew(4, ((void *)__pyx_v_a), ((void *)__pyx_v_b), ((void *)__pyx_v_c), ((void *)__pyx_v_d)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 789, __pyx_L1_error)
+  __pyx_t_1 = PyArray_MultiIterNew(4, ((void *)__pyx_v_a), ((void *)__pyx_v_b), ((void *)__pyx_v_c), ((void *)__pyx_v_d)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 783, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":788
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":782
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):             # <<<<<<<<<<<<<<
@@ -18684,7 +18678,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":791
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":785
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):             # <<<<<<<<<<<<<<
@@ -18701,7 +18695,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew5", 1);
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":792
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":786
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)             # <<<<<<<<<<<<<<
@@ -18709,13 +18703,13 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyArray_MultiIterNew(5, ((void *)__pyx_v_a), ((void *)__pyx_v_b), ((void *)__pyx_v_c), ((void *)__pyx_v_d), ((void *)__pyx_v_e)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 792, __pyx_L1_error)
+  __pyx_t_1 = PyArray_MultiIterNew(5, ((void *)__pyx_v_a), ((void *)__pyx_v_b), ((void *)__pyx_v_c), ((void *)__pyx_v_d), ((void *)__pyx_v_e)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 786, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":791
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":785
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):             # <<<<<<<<<<<<<<
@@ -18734,7 +18728,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":794
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":788
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):             # <<<<<<<<<<<<<<
@@ -18748,7 +18742,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("PyDataType_SHAPE", 1);
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":795
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":789
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):             # <<<<<<<<<<<<<<
@@ -18758,7 +18752,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   __pyx_t_1 = PyDataType_HASSUBARRAY(__pyx_v_d);
   if (__pyx_t_1) {
 
-    /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":796
+    /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":790
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):
  *         return <tuple>d.subarray.shape             # <<<<<<<<<<<<<<
@@ -18770,7 +18764,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
     __pyx_r = ((PyObject*)__pyx_v_d->subarray->shape);
     goto __pyx_L0;
 
-    /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":795
+    /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":789
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):             # <<<<<<<<<<<<<<
@@ -18779,7 +18773,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
  */
   }
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":798
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":792
  *         return <tuple>d.subarray.shape
  *     else:
  *         return ()             # <<<<<<<<<<<<<<
@@ -18793,7 +18787,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
     goto __pyx_L0;
   }
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":794
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":788
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):             # <<<<<<<<<<<<<<
@@ -18808,7 +18802,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":975
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":967
  *     int _import_umath() except -1
  * 
  * cdef inline void set_array_base(ndarray arr, object base):             # <<<<<<<<<<<<<<
@@ -18817,8 +18811,12 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
  */
 
 static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_arr, PyObject *__pyx_v_base) {
+  int __pyx_t_1;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":976
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":968
  * 
  * cdef inline void set_array_base(ndarray arr, object base):
  *     Py_INCREF(base) # important to do this before stealing the reference below!             # <<<<<<<<<<<<<<
@@ -18827,16 +18825,16 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
  */
   Py_INCREF(__pyx_v_base);
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":977
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":969
  * cdef inline void set_array_base(ndarray arr, object base):
  *     Py_INCREF(base) # important to do this before stealing the reference below!
  *     PyArray_SetBaseObject(arr, base)             # <<<<<<<<<<<<<<
  * 
  * cdef inline object get_array_base(ndarray arr):
  */
-  (void)(PyArray_SetBaseObject(__pyx_v_arr, __pyx_v_base));
+  __pyx_t_1 = PyArray_SetBaseObject(__pyx_v_arr, __pyx_v_base); if (unlikely(__pyx_t_1 == ((int)-1))) __PYX_ERR(2, 969, __pyx_L1_error)
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":975
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":967
  *     int _import_umath() except -1
  * 
  * cdef inline void set_array_base(ndarray arr, object base):             # <<<<<<<<<<<<<<
@@ -18845,9 +18843,13 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
  */
 
   /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("numpy.set_array_base", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_L0:;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":979
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":971
  *     PyArray_SetBaseObject(arr, base)
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -18862,7 +18864,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("get_array_base", 1);
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":980
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":972
  * 
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)             # <<<<<<<<<<<<<<
@@ -18871,7 +18873,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
  */
   __pyx_v_base = PyArray_BASE(__pyx_v_arr);
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":981
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":973
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)
  *     if base is NULL:             # <<<<<<<<<<<<<<
@@ -18881,7 +18883,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   __pyx_t_1 = (__pyx_v_base == NULL);
   if (__pyx_t_1) {
 
-    /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":982
+    /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":974
  *     base = PyArray_BASE(arr)
  *     if base is NULL:
  *         return None             # <<<<<<<<<<<<<<
@@ -18892,7 +18894,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":981
+    /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":973
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)
  *     if base is NULL:             # <<<<<<<<<<<<<<
@@ -18901,7 +18903,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
  */
   }
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":983
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":975
  *     if base is NULL:
  *         return None
  *     return <object>base             # <<<<<<<<<<<<<<
@@ -18913,7 +18915,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   __pyx_r = ((PyObject *)__pyx_v_base);
   goto __pyx_L0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":979
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":971
  *     PyArray_SetBaseObject(arr, base)
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -18928,7 +18930,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":987
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":979
  * # Versions of the import_* functions which are more suitable for
  * # Cython code.
  * cdef inline int import_array() except -1:             # <<<<<<<<<<<<<<
@@ -18952,7 +18954,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("import_array", 1);
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":988
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":980
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -18968,16 +18970,16 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":989
+      /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":981
  * cdef inline int import_array() except -1:
  *     try:
  *         __pyx_import_array()             # <<<<<<<<<<<<<<
  *     except Exception:
  *         raise ImportError("numpy.core.multiarray failed to import")
  */
-      __pyx_t_4 = _import_array(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(2, 989, __pyx_L3_error)
+      __pyx_t_4 = _import_array(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(2, 981, __pyx_L3_error)
 
-      /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":988
+      /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":980
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -18991,7 +18993,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":990
+    /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":982
  *     try:
  *         __pyx_import_array()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -19001,27 +19003,27 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     __pyx_t_4 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])));
     if (__pyx_t_4) {
       __Pyx_AddTraceback("numpy.import_array", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_6, &__pyx_t_7) < 0) __PYX_ERR(2, 990, __pyx_L5_except_error)
+      if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_6, &__pyx_t_7) < 0) __PYX_ERR(2, 982, __pyx_L5_except_error)
       __Pyx_XGOTREF(__pyx_t_5);
       __Pyx_XGOTREF(__pyx_t_6);
       __Pyx_XGOTREF(__pyx_t_7);
 
-      /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":991
+      /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":983
  *         __pyx_import_array()
  *     except Exception:
  *         raise ImportError("numpy.core.multiarray failed to import")             # <<<<<<<<<<<<<<
  * 
  * cdef inline int import_umath() except -1:
  */
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 991, __pyx_L5_except_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 983, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_Raise(__pyx_t_8, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __PYX_ERR(2, 991, __pyx_L5_except_error)
+      __PYX_ERR(2, 983, __pyx_L5_except_error)
     }
     goto __pyx_L5_except_error;
 
-    /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":988
+    /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":980
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -19037,7 +19039,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":987
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":979
  * # Versions of the import_* functions which are more suitable for
  * # Cython code.
  * cdef inline int import_array() except -1:             # <<<<<<<<<<<<<<
@@ -19060,7 +19062,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":993
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":985
  *         raise ImportError("numpy.core.multiarray failed to import")
  * 
  * cdef inline int import_umath() except -1:             # <<<<<<<<<<<<<<
@@ -19084,7 +19086,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("import_umath", 1);
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":994
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":986
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -19100,16 +19102,16 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":995
+      /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":987
  * cdef inline int import_umath() except -1:
  *     try:
  *         _import_umath()             # <<<<<<<<<<<<<<
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")
  */
-      __pyx_t_4 = _import_umath(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(2, 995, __pyx_L3_error)
+      __pyx_t_4 = _import_umath(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(2, 987, __pyx_L3_error)
 
-      /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":994
+      /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":986
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -19123,7 +19125,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":996
+    /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":988
  *     try:
  *         _import_umath()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -19133,27 +19135,27 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     __pyx_t_4 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])));
     if (__pyx_t_4) {
       __Pyx_AddTraceback("numpy.import_umath", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_6, &__pyx_t_7) < 0) __PYX_ERR(2, 996, __pyx_L5_except_error)
+      if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_6, &__pyx_t_7) < 0) __PYX_ERR(2, 988, __pyx_L5_except_error)
       __Pyx_XGOTREF(__pyx_t_5);
       __Pyx_XGOTREF(__pyx_t_6);
       __Pyx_XGOTREF(__pyx_t_7);
 
-      /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":997
+      /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":989
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
  * 
  * cdef inline int import_ufunc() except -1:
  */
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 997, __pyx_L5_except_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 989, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_Raise(__pyx_t_8, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __PYX_ERR(2, 997, __pyx_L5_except_error)
+      __PYX_ERR(2, 989, __pyx_L5_except_error)
     }
     goto __pyx_L5_except_error;
 
-    /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":994
+    /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":986
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -19169,7 +19171,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":993
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":985
  *         raise ImportError("numpy.core.multiarray failed to import")
  * 
  * cdef inline int import_umath() except -1:             # <<<<<<<<<<<<<<
@@ -19192,7 +19194,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":999
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":991
  *         raise ImportError("numpy.core.umath failed to import")
  * 
  * cdef inline int import_ufunc() except -1:             # <<<<<<<<<<<<<<
@@ -19216,7 +19218,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("import_ufunc", 1);
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1000
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":992
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -19232,16 +19234,16 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1001
+      /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":993
  * cdef inline int import_ufunc() except -1:
  *     try:
  *         _import_umath()             # <<<<<<<<<<<<<<
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")
  */
-      __pyx_t_4 = _import_umath(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(2, 1001, __pyx_L3_error)
+      __pyx_t_4 = _import_umath(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(2, 993, __pyx_L3_error)
 
-      /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1000
+      /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":992
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -19255,7 +19257,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1002
+    /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":994
  *     try:
  *         _import_umath()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -19265,27 +19267,27 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     __pyx_t_4 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])));
     if (__pyx_t_4) {
       __Pyx_AddTraceback("numpy.import_ufunc", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_6, &__pyx_t_7) < 0) __PYX_ERR(2, 1002, __pyx_L5_except_error)
+      if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_6, &__pyx_t_7) < 0) __PYX_ERR(2, 994, __pyx_L5_except_error)
       __Pyx_XGOTREF(__pyx_t_5);
       __Pyx_XGOTREF(__pyx_t_6);
       __Pyx_XGOTREF(__pyx_t_7);
 
-      /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1003
+      /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":995
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
  * 
  * 
  */
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 1003, __pyx_L5_except_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 995, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_Raise(__pyx_t_8, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __PYX_ERR(2, 1003, __pyx_L5_except_error)
+      __PYX_ERR(2, 995, __pyx_L5_except_error)
     }
     goto __pyx_L5_except_error;
 
-    /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1000
+    /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":992
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -19301,7 +19303,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":999
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":991
  *         raise ImportError("numpy.core.umath failed to import")
  * 
  * cdef inline int import_ufunc() except -1:             # <<<<<<<<<<<<<<
@@ -19324,7 +19326,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1006
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":998
  * 
  * 
  * cdef inline bint is_timedelta64_object(object obj):             # <<<<<<<<<<<<<<
@@ -19335,7 +19337,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
 static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_obj) {
   int __pyx_r;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1018
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1010
  *     bool
  *     """
  *     return PyObject_TypeCheck(obj, &PyTimedeltaArrType_Type)             # <<<<<<<<<<<<<<
@@ -19345,7 +19347,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_
   __pyx_r = PyObject_TypeCheck(__pyx_v_obj, (&PyTimedeltaArrType_Type));
   goto __pyx_L0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1006
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":998
  * 
  * 
  * cdef inline bint is_timedelta64_object(object obj):             # <<<<<<<<<<<<<<
@@ -19358,7 +19360,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1021
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1013
  * 
  * 
  * cdef inline bint is_datetime64_object(object obj):             # <<<<<<<<<<<<<<
@@ -19369,7 +19371,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_
 static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_obj) {
   int __pyx_r;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1033
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1025
  *     bool
  *     """
  *     return PyObject_TypeCheck(obj, &PyDatetimeArrType_Type)             # <<<<<<<<<<<<<<
@@ -19379,7 +19381,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
   __pyx_r = PyObject_TypeCheck(__pyx_v_obj, (&PyDatetimeArrType_Type));
   goto __pyx_L0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1021
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1013
  * 
  * 
  * cdef inline bint is_datetime64_object(object obj):             # <<<<<<<<<<<<<<
@@ -19392,7 +19394,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1036
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1028
  * 
  * 
  * cdef inline npy_datetime get_datetime64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -19403,7 +19405,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
 static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *__pyx_v_obj) {
   npy_datetime __pyx_r;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1043
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1035
  *     also needed.  That can be found using `get_datetime64_unit`.
  *     """
  *     return (<PyDatetimeScalarObject*>obj).obval             # <<<<<<<<<<<<<<
@@ -19413,7 +19415,7 @@ static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *
   __pyx_r = ((PyDatetimeScalarObject *)__pyx_v_obj)->obval;
   goto __pyx_L0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1036
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1028
  * 
  * 
  * cdef inline npy_datetime get_datetime64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -19426,7 +19428,7 @@ static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1046
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1038
  * 
  * 
  * cdef inline npy_timedelta get_timedelta64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -19437,7 +19439,7 @@ static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *
 static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject *__pyx_v_obj) {
   npy_timedelta __pyx_r;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1050
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1042
  *     returns the int64 value underlying scalar numpy timedelta64 object
  *     """
  *     return (<PyTimedeltaScalarObject*>obj).obval             # <<<<<<<<<<<<<<
@@ -19447,7 +19449,7 @@ static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject
   __pyx_r = ((PyTimedeltaScalarObject *)__pyx_v_obj)->obval;
   goto __pyx_L0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1046
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1038
  * 
  * 
  * cdef inline npy_timedelta get_timedelta64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -19460,7 +19462,7 @@ static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject
   return __pyx_r;
 }
 
-/* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1053
+/* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1045
  * 
  * 
  * cdef inline NPY_DATETIMEUNIT get_datetime64_unit(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -19471,7 +19473,7 @@ static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject
 static CYTHON_INLINE NPY_DATETIMEUNIT __pyx_f_5numpy_get_datetime64_unit(PyObject *__pyx_v_obj) {
   NPY_DATETIMEUNIT __pyx_r;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1057
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1049
  *     returns the unit part of the dtype for a numpy datetime64 object.
  *     """
  *     return <NPY_DATETIMEUNIT>(<PyDatetimeScalarObject*>obj).obmeta.base             # <<<<<<<<<<<<<<
@@ -19479,7 +19481,7 @@ static CYTHON_INLINE NPY_DATETIMEUNIT __pyx_f_5numpy_get_datetime64_unit(PyObjec
   __pyx_r = ((NPY_DATETIMEUNIT)((PyDatetimeScalarObject *)__pyx_v_obj)->obmeta.base);
   goto __pyx_L0;
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":1053
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1045
  * 
  * 
  * cdef inline NPY_DATETIMEUNIT get_datetime64_unit(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -19496,16 +19498,16 @@ static CYTHON_INLINE NPY_DATETIMEUNIT __pyx_f_5numpy_get_datetime64_unit(PyObjec
  * cimport cython
  * 
  * cdef inline np.int64_t ravel_shift(   tuple indices, \             # <<<<<<<<<<<<<<
- *                                 np.int64_t arrayRank, \
- *                                 np.int64_t [:] arrayShape, \
+ *                                 np.int64_t array_rank, \
+ *                                 np.int64_t [:] array_shape, \
  */
 
-static CYTHON_INLINE __pyx_t_5numpy_int64_t __pyx_f_7fastkde_15floodFillSearch_ravel_shift(PyObject *__pyx_v_indices, __pyx_t_5numpy_int64_t __pyx_v_arrayRank, __Pyx_memviewslice __pyx_v_arrayShape, __pyx_t_5numpy_int64_t __pyx_v_dimension, __pyx_t_5numpy_int64_t __pyx_v_amount, __pyx_t_5numpy_int64_t __pyx_v_dimensionWraps) {
-  __pyx_t_5numpy_int64_t __pyx_v_runningProduct;
+static CYTHON_INLINE __pyx_t_5numpy_int64_t __pyx_f_7fastkde_15floodFillSearch_ravel_shift(PyObject *__pyx_v_indices, __pyx_t_5numpy_int64_t __pyx_v_array_rank, __Pyx_memviewslice __pyx_v_array_shape, __pyx_t_5numpy_int64_t __pyx_v_dimension, __pyx_t_5numpy_int64_t __pyx_v_amount, __pyx_t_5numpy_int64_t __pyx_v_dimension_wraps) {
+  __pyx_t_5numpy_int64_t __pyx_v_running_product;
   __pyx_t_5numpy_int64_t __pyx_v_n;
   __pyx_t_5numpy_int64_t __pyx_v_i;
   __pyx_t_5numpy_int64_t __pyx_v_npp;
-  __pyx_t_5numpy_int64_t __pyx_v_thisIndex;
+  __pyx_t_5numpy_int64_t __pyx_v_this_index;
   __pyx_t_5numpy_int64_t __pyx_r;
   __Pyx_RefNannyDeclarations
   __pyx_t_5numpy_int64_t __pyx_t_1;
@@ -19521,17 +19523,17 @@ static CYTHON_INLINE __pyx_t_5numpy_int64_t __pyx_f_7fastkde_15floodFillSearch_r
   __Pyx_RefNannySetupContext("ravel_shift", 1);
 
   /* "fastkde/floodFillSearch.pyx":24
- *     cdef np.int64_t thisIndex
+ *     cdef np.int64_t this_index
  * 
- *     runningProduct = 1             # <<<<<<<<<<<<<<
+ *     running_product = 1             # <<<<<<<<<<<<<<
  *     i = 0
  * 
  */
-  __pyx_v_runningProduct = 1;
+  __pyx_v_running_product = 1;
 
   /* "fastkde/floodFillSearch.pyx":25
  * 
- *     runningProduct = 1
+ *     running_product = 1
  *     i = 0             # <<<<<<<<<<<<<<
  * 
  *     #Loop over dimensions, starting at the rightmost dimension
@@ -19541,47 +19543,47 @@ static CYTHON_INLINE __pyx_t_5numpy_int64_t __pyx_f_7fastkde_15floodFillSearch_r
   /* "fastkde/floodFillSearch.pyx":28
  * 
  *     #Loop over dimensions, starting at the rightmost dimension
- *     for n in xrange(arrayRank,0,-1):             # <<<<<<<<<<<<<<
+ *     for n in range(array_rank,0,-1):             # <<<<<<<<<<<<<<
  *         #Calculate the running product of dimension sizes
- *         if( n != arrayRank):
+ *         if( n != array_rank):
  */
-  for (__pyx_t_1 = __pyx_v_arrayRank; __pyx_t_1 > 0; __pyx_t_1-=1) {
+  for (__pyx_t_1 = __pyx_v_array_rank; __pyx_t_1 > 0; __pyx_t_1-=1) {
     __pyx_v_n = __pyx_t_1;
 
     /* "fastkde/floodFillSearch.pyx":30
- *     for n in xrange(arrayRank,0,-1):
+ *     for n in range(array_rank,0,-1):
  *         #Calculate the running product of dimension sizes
- *         if( n != arrayRank):             # <<<<<<<<<<<<<<
- *             runningProduct *= arrayShape[n]
+ *         if( n != array_rank):             # <<<<<<<<<<<<<<
+ *             running_product *= array_shape[n]
  * 
  */
-    __pyx_t_2 = (__pyx_v_n != __pyx_v_arrayRank);
+    __pyx_t_2 = (__pyx_v_n != __pyx_v_array_rank);
     if (__pyx_t_2) {
 
       /* "fastkde/floodFillSearch.pyx":31
  *         #Calculate the running product of dimension sizes
- *         if( n != arrayRank):
- *             runningProduct *= arrayShape[n]             # <<<<<<<<<<<<<<
+ *         if( n != array_rank):
+ *             running_product *= array_shape[n]             # <<<<<<<<<<<<<<
  * 
  *         #Set the current index
  */
       __pyx_t_3 = __pyx_v_n;
       __pyx_t_4 = -1;
       if (__pyx_t_3 < 0) {
-        __pyx_t_3 += __pyx_v_arrayShape.shape[0];
+        __pyx_t_3 += __pyx_v_array_shape.shape[0];
         if (unlikely(__pyx_t_3 < 0)) __pyx_t_4 = 0;
-      } else if (unlikely(__pyx_t_3 >= __pyx_v_arrayShape.shape[0])) __pyx_t_4 = 0;
+      } else if (unlikely(__pyx_t_3 >= __pyx_v_array_shape.shape[0])) __pyx_t_4 = 0;
       if (unlikely(__pyx_t_4 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_4);
         __PYX_ERR(0, 31, __pyx_L1_error)
       }
-      __pyx_v_runningProduct = (__pyx_v_runningProduct * (*((__pyx_t_5numpy_int64_t *) ( /* dim=0 */ (__pyx_v_arrayShape.data + __pyx_t_3 * __pyx_v_arrayShape.strides[0]) ))));
+      __pyx_v_running_product = (__pyx_v_running_product * (*((__pyx_t_5numpy_int64_t *) ( /* dim=0 */ (__pyx_v_array_shape.data + __pyx_t_3 * __pyx_v_array_shape.strides[0]) ))));
 
       /* "fastkde/floodFillSearch.pyx":30
- *     for n in xrange(arrayRank,0,-1):
+ *     for n in range(array_rank,0,-1):
  *         #Calculate the running product of dimension sizes
- *         if( n != arrayRank):             # <<<<<<<<<<<<<<
- *             runningProduct *= arrayShape[n]
+ *         if( n != array_rank):             # <<<<<<<<<<<<<<
+ *             running_product *= array_shape[n]
  * 
  */
     }
@@ -19589,7 +19591,7 @@ static CYTHON_INLINE __pyx_t_5numpy_int64_t __pyx_f_7fastkde_15floodFillSearch_r
     /* "fastkde/floodFillSearch.pyx":34
  * 
  *         #Set the current index
- *         thisIndex = indices[n-1]             # <<<<<<<<<<<<<<
+ *         this_index = indices[n-1]             # <<<<<<<<<<<<<<
  * 
  *         npp = n-1
  */
@@ -19602,10 +19604,10 @@ static CYTHON_INLINE __pyx_t_5numpy_int64_t __pyx_f_7fastkde_15floodFillSearch_r
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_3 = __Pyx_PyInt_As_npy_int64(__pyx_t_5); if (unlikely((__pyx_t_3 == ((npy_int64)-1)) && PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_v_thisIndex = __pyx_t_3;
+    __pyx_v_this_index = __pyx_t_3;
 
     /* "fastkde/floodFillSearch.pyx":36
- *         thisIndex = indices[n-1]
+ *         this_index = indices[n-1]
  * 
  *         npp = n-1             # <<<<<<<<<<<<<<
  *         if(npp == dimension):
@@ -19626,104 +19628,104 @@ static CYTHON_INLINE __pyx_t_5numpy_int64_t __pyx_f_7fastkde_15floodFillSearch_r
       /* "fastkde/floodFillSearch.pyx":40
  *             #If this is the shifting dimension,
  *             #increment it
- *             thisIndex += amount             # <<<<<<<<<<<<<<
+ *             this_index += amount             # <<<<<<<<<<<<<<
  * 
  *             #Check if we need to deal with a
  */
-      __pyx_v_thisIndex = (__pyx_v_thisIndex + __pyx_v_amount);
+      __pyx_v_this_index = (__pyx_v_this_index + __pyx_v_amount);
 
       /* "fastkde/floodFillSearch.pyx":44
  *             #Check if we need to deal with a
  *             #wrap around dimension
- *             if(dimensionWraps):             # <<<<<<<<<<<<<<
- *                 if(thisIndex < 0):
- *                     thisIndex += arrayShape[npp]
+ *             if(dimension_wraps):             # <<<<<<<<<<<<<<
+ *                 if(this_index < 0):
+ *                     this_index += array_shape[npp]
  */
-      __pyx_t_2 = (__pyx_v_dimensionWraps != 0);
+      __pyx_t_2 = (__pyx_v_dimension_wraps != 0);
       if (__pyx_t_2) {
 
         /* "fastkde/floodFillSearch.pyx":45
  *             #wrap around dimension
- *             if(dimensionWraps):
- *                 if(thisIndex < 0):             # <<<<<<<<<<<<<<
- *                     thisIndex += arrayShape[npp]
- *                 if(thisIndex >= arrayShape[npp]):
+ *             if(dimension_wraps):
+ *                 if(this_index < 0):             # <<<<<<<<<<<<<<
+ *                     this_index += array_shape[npp]
+ *                 if(this_index >= array_shape[npp]):
  */
-        __pyx_t_2 = (__pyx_v_thisIndex < 0);
+        __pyx_t_2 = (__pyx_v_this_index < 0);
         if (__pyx_t_2) {
 
           /* "fastkde/floodFillSearch.pyx":46
- *             if(dimensionWraps):
- *                 if(thisIndex < 0):
- *                     thisIndex += arrayShape[npp]             # <<<<<<<<<<<<<<
- *                 if(thisIndex >= arrayShape[npp]):
- *                     thisIndex -= arrayShape[npp]
+ *             if(dimension_wraps):
+ *                 if(this_index < 0):
+ *                     this_index += array_shape[npp]             # <<<<<<<<<<<<<<
+ *                 if(this_index >= array_shape[npp]):
+ *                     this_index -= array_shape[npp]
  */
           __pyx_t_3 = __pyx_v_npp;
           __pyx_t_4 = -1;
           if (__pyx_t_3 < 0) {
-            __pyx_t_3 += __pyx_v_arrayShape.shape[0];
+            __pyx_t_3 += __pyx_v_array_shape.shape[0];
             if (unlikely(__pyx_t_3 < 0)) __pyx_t_4 = 0;
-          } else if (unlikely(__pyx_t_3 >= __pyx_v_arrayShape.shape[0])) __pyx_t_4 = 0;
+          } else if (unlikely(__pyx_t_3 >= __pyx_v_array_shape.shape[0])) __pyx_t_4 = 0;
           if (unlikely(__pyx_t_4 != -1)) {
             __Pyx_RaiseBufferIndexError(__pyx_t_4);
             __PYX_ERR(0, 46, __pyx_L1_error)
           }
-          __pyx_v_thisIndex = (__pyx_v_thisIndex + (*((__pyx_t_5numpy_int64_t *) ( /* dim=0 */ (__pyx_v_arrayShape.data + __pyx_t_3 * __pyx_v_arrayShape.strides[0]) ))));
+          __pyx_v_this_index = (__pyx_v_this_index + (*((__pyx_t_5numpy_int64_t *) ( /* dim=0 */ (__pyx_v_array_shape.data + __pyx_t_3 * __pyx_v_array_shape.strides[0]) ))));
 
           /* "fastkde/floodFillSearch.pyx":45
  *             #wrap around dimension
- *             if(dimensionWraps):
- *                 if(thisIndex < 0):             # <<<<<<<<<<<<<<
- *                     thisIndex += arrayShape[npp]
- *                 if(thisIndex >= arrayShape[npp]):
+ *             if(dimension_wraps):
+ *                 if(this_index < 0):             # <<<<<<<<<<<<<<
+ *                     this_index += array_shape[npp]
+ *                 if(this_index >= array_shape[npp]):
  */
         }
 
         /* "fastkde/floodFillSearch.pyx":47
- *                 if(thisIndex < 0):
- *                     thisIndex += arrayShape[npp]
- *                 if(thisIndex >= arrayShape[npp]):             # <<<<<<<<<<<<<<
- *                     thisIndex -= arrayShape[npp]
+ *                 if(this_index < 0):
+ *                     this_index += array_shape[npp]
+ *                 if(this_index >= array_shape[npp]):             # <<<<<<<<<<<<<<
+ *                     this_index -= array_shape[npp]
  * 
  */
         __pyx_t_3 = __pyx_v_npp;
         __pyx_t_4 = -1;
         if (__pyx_t_3 < 0) {
-          __pyx_t_3 += __pyx_v_arrayShape.shape[0];
+          __pyx_t_3 += __pyx_v_array_shape.shape[0];
           if (unlikely(__pyx_t_3 < 0)) __pyx_t_4 = 0;
-        } else if (unlikely(__pyx_t_3 >= __pyx_v_arrayShape.shape[0])) __pyx_t_4 = 0;
+        } else if (unlikely(__pyx_t_3 >= __pyx_v_array_shape.shape[0])) __pyx_t_4 = 0;
         if (unlikely(__pyx_t_4 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_4);
           __PYX_ERR(0, 47, __pyx_L1_error)
         }
-        __pyx_t_2 = (__pyx_v_thisIndex >= (*((__pyx_t_5numpy_int64_t *) ( /* dim=0 */ (__pyx_v_arrayShape.data + __pyx_t_3 * __pyx_v_arrayShape.strides[0]) ))));
+        __pyx_t_2 = (__pyx_v_this_index >= (*((__pyx_t_5numpy_int64_t *) ( /* dim=0 */ (__pyx_v_array_shape.data + __pyx_t_3 * __pyx_v_array_shape.strides[0]) ))));
         if (__pyx_t_2) {
 
           /* "fastkde/floodFillSearch.pyx":48
- *                     thisIndex += arrayShape[npp]
- *                 if(thisIndex >= arrayShape[npp]):
- *                     thisIndex -= arrayShape[npp]             # <<<<<<<<<<<<<<
+ *                     this_index += array_shape[npp]
+ *                 if(this_index >= array_shape[npp]):
+ *                     this_index -= array_shape[npp]             # <<<<<<<<<<<<<<
  * 
  *             #Check if the current index is out of bounds;
  */
           __pyx_t_3 = __pyx_v_npp;
           __pyx_t_4 = -1;
           if (__pyx_t_3 < 0) {
-            __pyx_t_3 += __pyx_v_arrayShape.shape[0];
+            __pyx_t_3 += __pyx_v_array_shape.shape[0];
             if (unlikely(__pyx_t_3 < 0)) __pyx_t_4 = 0;
-          } else if (unlikely(__pyx_t_3 >= __pyx_v_arrayShape.shape[0])) __pyx_t_4 = 0;
+          } else if (unlikely(__pyx_t_3 >= __pyx_v_array_shape.shape[0])) __pyx_t_4 = 0;
           if (unlikely(__pyx_t_4 != -1)) {
             __Pyx_RaiseBufferIndexError(__pyx_t_4);
             __PYX_ERR(0, 48, __pyx_L1_error)
           }
-          __pyx_v_thisIndex = (__pyx_v_thisIndex - (*((__pyx_t_5numpy_int64_t *) ( /* dim=0 */ (__pyx_v_arrayShape.data + __pyx_t_3 * __pyx_v_arrayShape.strides[0]) ))));
+          __pyx_v_this_index = (__pyx_v_this_index - (*((__pyx_t_5numpy_int64_t *) ( /* dim=0 */ (__pyx_v_array_shape.data + __pyx_t_3 * __pyx_v_array_shape.strides[0]) ))));
 
           /* "fastkde/floodFillSearch.pyx":47
- *                 if(thisIndex < 0):
- *                     thisIndex += arrayShape[npp]
- *                 if(thisIndex >= arrayShape[npp]):             # <<<<<<<<<<<<<<
- *                     thisIndex -= arrayShape[npp]
+ *                 if(this_index < 0):
+ *                     this_index += array_shape[npp]
+ *                 if(this_index >= array_shape[npp]):             # <<<<<<<<<<<<<<
+ *                     this_index -= array_shape[npp]
  * 
  */
         }
@@ -19731,20 +19733,20 @@ static CYTHON_INLINE __pyx_t_5numpy_int64_t __pyx_f_7fastkde_15floodFillSearch_r
         /* "fastkde/floodFillSearch.pyx":44
  *             #Check if we need to deal with a
  *             #wrap around dimension
- *             if(dimensionWraps):             # <<<<<<<<<<<<<<
- *                 if(thisIndex < 0):
- *                     thisIndex += arrayShape[npp]
+ *             if(dimension_wraps):             # <<<<<<<<<<<<<<
+ *                 if(this_index < 0):
+ *                     this_index += array_shape[npp]
  */
       }
 
       /* "fastkde/floodFillSearch.pyx":52
  *             #Check if the current index is out of bounds;
  *             #return -1 if so
- *             if(thisIndex < 0 or thisIndex >= arrayShape[npp]):             # <<<<<<<<<<<<<<
+ *             if(this_index < 0 or this_index >= array_shape[npp]):             # <<<<<<<<<<<<<<
  *                 i = -1
  *                 break
  */
-      __pyx_t_6 = (__pyx_v_thisIndex < 0);
+      __pyx_t_6 = (__pyx_v_this_index < 0);
       if (!__pyx_t_6) {
       } else {
         __pyx_t_2 = __pyx_t_6;
@@ -19753,21 +19755,21 @@ static CYTHON_INLINE __pyx_t_5numpy_int64_t __pyx_f_7fastkde_15floodFillSearch_r
       __pyx_t_3 = __pyx_v_npp;
       __pyx_t_4 = -1;
       if (__pyx_t_3 < 0) {
-        __pyx_t_3 += __pyx_v_arrayShape.shape[0];
+        __pyx_t_3 += __pyx_v_array_shape.shape[0];
         if (unlikely(__pyx_t_3 < 0)) __pyx_t_4 = 0;
-      } else if (unlikely(__pyx_t_3 >= __pyx_v_arrayShape.shape[0])) __pyx_t_4 = 0;
+      } else if (unlikely(__pyx_t_3 >= __pyx_v_array_shape.shape[0])) __pyx_t_4 = 0;
       if (unlikely(__pyx_t_4 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_4);
         __PYX_ERR(0, 52, __pyx_L1_error)
       }
-      __pyx_t_6 = (__pyx_v_thisIndex >= (*((__pyx_t_5numpy_int64_t *) ( /* dim=0 */ (__pyx_v_arrayShape.data + __pyx_t_3 * __pyx_v_arrayShape.strides[0]) ))));
+      __pyx_t_6 = (__pyx_v_this_index >= (*((__pyx_t_5numpy_int64_t *) ( /* dim=0 */ (__pyx_v_array_shape.data + __pyx_t_3 * __pyx_v_array_shape.strides[0]) ))));
       __pyx_t_2 = __pyx_t_6;
       __pyx_L11_bool_binop_done:;
       if (__pyx_t_2) {
 
         /* "fastkde/floodFillSearch.pyx":53
  *             #return -1 if so
- *             if(thisIndex < 0 or thisIndex >= arrayShape[npp]):
+ *             if(this_index < 0 or this_index >= array_shape[npp]):
  *                 i = -1             # <<<<<<<<<<<<<<
  *                 break
  * 
@@ -19775,7 +19777,7 @@ static CYTHON_INLINE __pyx_t_5numpy_int64_t __pyx_f_7fastkde_15floodFillSearch_r
         __pyx_v_i = -1LL;
 
         /* "fastkde/floodFillSearch.pyx":54
- *             if(thisIndex < 0 or thisIndex >= arrayShape[npp]):
+ *             if(this_index < 0 or this_index >= array_shape[npp]):
  *                 i = -1
  *                 break             # <<<<<<<<<<<<<<
  * 
@@ -19786,7 +19788,7 @@ static CYTHON_INLINE __pyx_t_5numpy_int64_t __pyx_f_7fastkde_15floodFillSearch_r
         /* "fastkde/floodFillSearch.pyx":52
  *             #Check if the current index is out of bounds;
  *             #return -1 if so
- *             if(thisIndex < 0 or thisIndex >= arrayShape[npp]):             # <<<<<<<<<<<<<<
+ *             if(this_index < 0 or this_index >= array_shape[npp]):             # <<<<<<<<<<<<<<
  *                 i = -1
  *                 break
  */
@@ -19804,41 +19806,41 @@ static CYTHON_INLINE __pyx_t_5numpy_int64_t __pyx_f_7fastkde_15floodFillSearch_r
     /* "fastkde/floodFillSearch.pyx":57
  * 
  *         #increment the counter
- *         i += runningProduct*thisIndex             # <<<<<<<<<<<<<<
+ *         i += running_product*this_index             # <<<<<<<<<<<<<<
  * 
  *     #Check whether the index is within the memory bounds of the array
  */
-    __pyx_v_i = (__pyx_v_i + (__pyx_v_runningProduct * __pyx_v_thisIndex));
+    __pyx_v_i = (__pyx_v_i + (__pyx_v_running_product * __pyx_v_this_index));
   }
   __pyx_L4_break:;
 
   /* "fastkde/floodFillSearch.pyx":61
  *     #Check whether the index is within the memory bounds of the array
  *     #return the -1 flag if not
- *     runningProduct *= arrayShape[0]             # <<<<<<<<<<<<<<
- *     if(i >= runningProduct or i < 0):
+ *     running_product *= array_shape[0]             # <<<<<<<<<<<<<<
+ *     if(i >= running_product or i < 0):
  *         i = -1
  */
   __pyx_t_7 = 0;
   __pyx_t_4 = -1;
   if (__pyx_t_7 < 0) {
-    __pyx_t_7 += __pyx_v_arrayShape.shape[0];
+    __pyx_t_7 += __pyx_v_array_shape.shape[0];
     if (unlikely(__pyx_t_7 < 0)) __pyx_t_4 = 0;
-  } else if (unlikely(__pyx_t_7 >= __pyx_v_arrayShape.shape[0])) __pyx_t_4 = 0;
+  } else if (unlikely(__pyx_t_7 >= __pyx_v_array_shape.shape[0])) __pyx_t_4 = 0;
   if (unlikely(__pyx_t_4 != -1)) {
     __Pyx_RaiseBufferIndexError(__pyx_t_4);
     __PYX_ERR(0, 61, __pyx_L1_error)
   }
-  __pyx_v_runningProduct = (__pyx_v_runningProduct * (*((__pyx_t_5numpy_int64_t *) ( /* dim=0 */ (__pyx_v_arrayShape.data + __pyx_t_7 * __pyx_v_arrayShape.strides[0]) ))));
+  __pyx_v_running_product = (__pyx_v_running_product * (*((__pyx_t_5numpy_int64_t *) ( /* dim=0 */ (__pyx_v_array_shape.data + __pyx_t_7 * __pyx_v_array_shape.strides[0]) ))));
 
   /* "fastkde/floodFillSearch.pyx":62
  *     #return the -1 flag if not
- *     runningProduct *= arrayShape[0]
- *     if(i >= runningProduct or i < 0):             # <<<<<<<<<<<<<<
+ *     running_product *= array_shape[0]
+ *     if(i >= running_product or i < 0):             # <<<<<<<<<<<<<<
  *         i = -1
  * 
  */
-  __pyx_t_6 = (__pyx_v_i >= __pyx_v_runningProduct);
+  __pyx_t_6 = (__pyx_v_i >= __pyx_v_running_product);
   if (!__pyx_t_6) {
   } else {
     __pyx_t_2 = __pyx_t_6;
@@ -19850,8 +19852,8 @@ static CYTHON_INLINE __pyx_t_5numpy_int64_t __pyx_f_7fastkde_15floodFillSearch_r
   if (__pyx_t_2) {
 
     /* "fastkde/floodFillSearch.pyx":63
- *     runningProduct *= arrayShape[0]
- *     if(i >= runningProduct or i < 0):
+ *     running_product *= array_shape[0]
+ *     if(i >= running_product or i < 0):
  *         i = -1             # <<<<<<<<<<<<<<
  * 
  *     return i
@@ -19860,8 +19862,8 @@ static CYTHON_INLINE __pyx_t_5numpy_int64_t __pyx_f_7fastkde_15floodFillSearch_r
 
     /* "fastkde/floodFillSearch.pyx":62
  *     #return the -1 flag if not
- *     runningProduct *= arrayShape[0]
- *     if(i >= runningProduct or i < 0):             # <<<<<<<<<<<<<<
+ *     running_product *= array_shape[0]
+ *     if(i >= running_product or i < 0):             # <<<<<<<<<<<<<<
  *         i = -1
  * 
  */
@@ -19881,8 +19883,8 @@ static CYTHON_INLINE __pyx_t_5numpy_int64_t __pyx_f_7fastkde_15floodFillSearch_r
  * cimport cython
  * 
  * cdef inline np.int64_t ravel_shift(   tuple indices, \             # <<<<<<<<<<<<<<
- *                                 np.int64_t arrayRank, \
- *                                 np.int64_t [:] arrayShape, \
+ *                                 np.int64_t array_rank, \
+ *                                 np.int64_t [:] array_shape, \
  */
 
   /* function exit code */
@@ -19898,19 +19900,19 @@ static CYTHON_INLINE __pyx_t_5numpy_int64_t __pyx_f_7fastkde_15floodFillSearch_r
 /* "fastkde/floodFillSearch.pyx":68
  * 
  * @cython.boundscheck(False)
- * cdef tuple findNeighbors(   np.int64_t raveledStartIndex, \             # <<<<<<<<<<<<<<
- *                             np.float_t searchThreshold, \
- *                             np.int64_t [:] arrayShape, \
+ * cdef tuple findNeighbors(   np.int64_t raveled_start_index, \             # <<<<<<<<<<<<<<
+ *                             np.float_t search_threshold, \
+ *                             np.int64_t [:] array_shape, \
  */
 
-static PyObject *__pyx_f_7fastkde_15floodFillSearch_findNeighbors(__pyx_t_5numpy_int64_t __pyx_v_raveledStartIndex, __pyx_t_5numpy_float_t __pyx_v_searchThreshold, __Pyx_memviewslice __pyx_v_arrayShape, __pyx_t_5numpy_int64_t __pyx_v_arrayRank, PyObject *__pyx_v_dimensionWraps, __Pyx_memviewslice __pyx_v_inputArray, __Pyx_memviewslice __pyx_v_isNotSearched) {
-  PyObject *__pyx_v_itemsToSearch = 0;
-  PyObject *__pyx_v_contiguousIndices = 0;
+static PyObject *__pyx_f_7fastkde_15floodFillSearch_findNeighbors(__pyx_t_5numpy_int64_t __pyx_v_raveled_start_index, __pyx_t_5numpy_float_t __pyx_v_search_threshold, __Pyx_memviewslice __pyx_v_array_shape, __pyx_t_5numpy_int64_t __pyx_v_array_rank, PyObject *__pyx_v_dimension_wraps, __Pyx_memviewslice __pyx_v_input_array, __Pyx_memviewslice __pyx_v_is_not_searched) {
+  PyObject *__pyx_v_items_to_search = 0;
+  PyObject *__pyx_v_contiguous_indices = 0;
   __pyx_t_5numpy_int64_t __pyx_v_r;
-  __pyx_t_5numpy_int64_t __pyx_v_testIndexLeft;
-  __pyx_t_5numpy_int64_t __pyx_v_testIndexRight;
-  PyObject *__pyx_v_itemTuple = 0;
-  __pyx_t_5numpy_int64_t __pyx_v_shiftAmount;
+  __pyx_t_5numpy_int64_t __pyx_v_test_index_left;
+  __pyx_t_5numpy_int64_t __pyx_v_test_index_right;
+  PyObject *__pyx_v_item_tuple = 0;
+  __pyx_t_5numpy_int64_t __pyx_v_shift_amount;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -19931,64 +19933,64 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_findNeighbors(__pyx_t_5numpy
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("findNeighbors", 1);
 
-  /* "fastkde/floodFillSearch.pyx":107
+  /* "fastkde/floodFillSearch.pyx":100
  * 
  *     #Initialize the contiguous index list
- *     contiguousIndices = []             # <<<<<<<<<<<<<<
+ *     contiguous_indices = []             # <<<<<<<<<<<<<<
  * 
  *     #Initialize the search list
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 107, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_v_contiguousIndices = ((PyObject*)__pyx_t_1);
+  __pyx_v_contiguous_indices = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "fastkde/floodFillSearch.pyx":110
+  /* "fastkde/floodFillSearch.pyx":103
  * 
  *     #Initialize the search list
- *     itemsToSearch = [raveledStartIndex]             # <<<<<<<<<<<<<<
+ *     items_to_search = [raveled_start_index]             # <<<<<<<<<<<<<<
  * 
- *     while itemsToSearch != []:
+ *     while items_to_search != []:
  */
-  __pyx_t_1 = __Pyx_PyInt_From_npy_int64(__pyx_v_raveledStartIndex); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 110, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_npy_int64(__pyx_v_raveled_start_index); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 103, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 110, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 103, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_1);
-  if (__Pyx_PyList_SET_ITEM(__pyx_t_2, 0, __pyx_t_1)) __PYX_ERR(0, 110, __pyx_L1_error);
+  if (__Pyx_PyList_SET_ITEM(__pyx_t_2, 0, __pyx_t_1)) __PYX_ERR(0, 103, __pyx_L1_error);
   __pyx_t_1 = 0;
-  __pyx_v_itemsToSearch = ((PyObject*)__pyx_t_2);
+  __pyx_v_items_to_search = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "fastkde/floodFillSearch.pyx":112
- *     itemsToSearch = [raveledStartIndex]
+  /* "fastkde/floodFillSearch.pyx":105
+ *     items_to_search = [raveled_start_index]
  * 
- *     while itemsToSearch != []:             # <<<<<<<<<<<<<<
+ *     while items_to_search != []:             # <<<<<<<<<<<<<<
  * 
  *         #Get the index of the current item
  */
   while (1) {
-    __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 112, __pyx_L1_error)
+    __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 105, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = PyObject_RichCompare(__pyx_v_itemsToSearch, __pyx_t_2, Py_NE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 112, __pyx_L1_error)
+    __pyx_t_1 = PyObject_RichCompare(__pyx_v_items_to_search, __pyx_t_2, Py_NE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 105, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_3 < 0))) __PYX_ERR(0, 112, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely((__pyx_t_3 < 0))) __PYX_ERR(0, 105, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (!__pyx_t_3) break;
 
-    /* "fastkde/floodFillSearch.pyx":115
+    /* "fastkde/floodFillSearch.pyx":108
  * 
  *         #Get the index of the current item
- *         itemTuple = np.unravel_index(itemsToSearch[0],arrayShape)             # <<<<<<<<<<<<<<
+ *         item_tuple = np.unravel_index(items_to_search[0],array_shape)             # <<<<<<<<<<<<<<
  * 
- *         for r in xrange(arrayRank):
+ *         for r in range(array_rank):
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 115, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 108, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_unravel_index); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 115, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_unravel_index); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 108, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __pyx_memoryview_fromslice(__pyx_v_arrayShape, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn___pyx_t_5numpy_int64_t, (int (*)(char *, PyObject *)) __pyx_memview_set_nn___pyx_t_5numpy_int64_t, 0);; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 115, __pyx_L1_error)
+    __pyx_t_2 = __pyx_memoryview_fromslice(__pyx_v_array_shape, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn___pyx_t_5numpy_int64_t, (int (*)(char *, PyObject *)) __pyx_memview_set_nn___pyx_t_5numpy_int64_t, 0);; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 108, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_5 = NULL;
     __pyx_t_6 = 0;
@@ -20005,306 +20007,306 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_findNeighbors(__pyx_t_5numpy
     }
     #endif
     {
-      PyObject *__pyx_callargs[3] = {__pyx_t_5, PyList_GET_ITEM(__pyx_v_itemsToSearch, 0), __pyx_t_2};
+      PyObject *__pyx_callargs[3] = {__pyx_t_5, PyList_GET_ITEM(__pyx_v_items_to_search, 0), __pyx_t_2};
       __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_4, __pyx_callargs+1-__pyx_t_6, 2+__pyx_t_6);
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 115, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 108, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     }
-    if (!(likely(PyTuple_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None) || __Pyx_RaiseUnexpectedTypeError("tuple", __pyx_t_1))) __PYX_ERR(0, 115, __pyx_L1_error)
-    __Pyx_XDECREF_SET(__pyx_v_itemTuple, ((PyObject*)__pyx_t_1));
+    if (!(likely(PyTuple_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None) || __Pyx_RaiseUnexpectedTypeError("tuple", __pyx_t_1))) __PYX_ERR(0, 108, __pyx_L1_error)
+    __Pyx_XDECREF_SET(__pyx_v_item_tuple, ((PyObject*)__pyx_t_1));
     __pyx_t_1 = 0;
 
-    /* "fastkde/floodFillSearch.pyx":117
- *         itemTuple = np.unravel_index(itemsToSearch[0],arrayShape)
+    /* "fastkde/floodFillSearch.pyx":110
+ *         item_tuple = np.unravel_index(items_to_search[0],array_shape)
  * 
- *         for r in xrange(arrayRank):             # <<<<<<<<<<<<<<
+ *         for r in range(array_rank):             # <<<<<<<<<<<<<<
  *             #Shift the current coordinate to the right by 1 in the r dimension
- *             shiftAmount = 1
+ *             shift_amount = 1
  */
-    __pyx_t_7 = __pyx_v_arrayRank;
+    __pyx_t_7 = __pyx_v_array_rank;
     __pyx_t_8 = __pyx_t_7;
     for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
       __pyx_v_r = __pyx_t_9;
 
-      /* "fastkde/floodFillSearch.pyx":119
- *         for r in xrange(arrayRank):
+      /* "fastkde/floodFillSearch.pyx":112
+ *         for r in range(array_rank):
  *             #Shift the current coordinate to the right by 1 in the r dimension
- *             shiftAmount = 1             # <<<<<<<<<<<<<<
- *             testIndexRight = ravel_shift( \
- *                                         itemTuple, \
+ *             shift_amount = 1             # <<<<<<<<<<<<<<
+ *             test_index_right = ravel_shift( \
+ *                                         item_tuple, \
  */
-      __pyx_v_shiftAmount = 1;
+      __pyx_v_shift_amount = 1;
 
-      /* "fastkde/floodFillSearch.pyx":126
+      /* "fastkde/floodFillSearch.pyx":119
  *                                         r, \
- *                                         shiftAmount,
- *                                         dimensionWraps[r])             # <<<<<<<<<<<<<<
+ *                                         shift_amount,
+ *                                         dimension_wraps[r])             # <<<<<<<<<<<<<<
  * 
  *             #Check that this coordinate is still within bounds
  */
-      if (unlikely(__pyx_v_dimensionWraps == Py_None)) {
+      if (unlikely(__pyx_v_dimension_wraps == Py_None)) {
         PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-        __PYX_ERR(0, 126, __pyx_L1_error)
+        __PYX_ERR(0, 119, __pyx_L1_error)
       }
-      __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_dimensionWraps, __pyx_v_r, __pyx_t_5numpy_int64_t, 1, __Pyx_PyInt_From_npy_int64, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 126, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_dimension_wraps, __pyx_v_r, __pyx_t_5numpy_int64_t, 1, __Pyx_PyInt_From_npy_int64, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 119, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_10 = __Pyx_PyInt_As_npy_int64(__pyx_t_1); if (unlikely((__pyx_t_10 == ((npy_int64)-1)) && PyErr_Occurred())) __PYX_ERR(0, 126, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_PyInt_As_npy_int64(__pyx_t_1); if (unlikely((__pyx_t_10 == ((npy_int64)-1)) && PyErr_Occurred())) __PYX_ERR(0, 119, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "fastkde/floodFillSearch.pyx":120
+      /* "fastkde/floodFillSearch.pyx":113
  *             #Shift the current coordinate to the right by 1 in the r dimension
- *             shiftAmount = 1
- *             testIndexRight = ravel_shift( \             # <<<<<<<<<<<<<<
- *                                         itemTuple, \
- *                                         arrayRank, \
+ *             shift_amount = 1
+ *             test_index_right = ravel_shift( \             # <<<<<<<<<<<<<<
+ *                                         item_tuple, \
+ *                                         array_rank, \
  */
-      __pyx_t_11 = __pyx_f_7fastkde_15floodFillSearch_ravel_shift(__pyx_v_itemTuple, __pyx_v_arrayRank, __pyx_v_arrayShape, __pyx_v_r, __pyx_v_shiftAmount, __pyx_t_10); if (unlikely(__pyx_t_11 == ((__pyx_t_5numpy_int64_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 120, __pyx_L1_error)
-      __pyx_v_testIndexRight = __pyx_t_11;
+      __pyx_t_11 = __pyx_f_7fastkde_15floodFillSearch_ravel_shift(__pyx_v_item_tuple, __pyx_v_array_rank, __pyx_v_array_shape, __pyx_v_r, __pyx_v_shift_amount, __pyx_t_10); if (unlikely(__pyx_t_11 == ((__pyx_t_5numpy_int64_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 113, __pyx_L1_error)
+      __pyx_v_test_index_right = __pyx_t_11;
 
-      /* "fastkde/floodFillSearch.pyx":129
+      /* "fastkde/floodFillSearch.pyx":122
  * 
  *             #Check that this coordinate is still within bounds
- *             if(testIndexRight >= 0):             # <<<<<<<<<<<<<<
+ *             if(test_index_right >= 0):             # <<<<<<<<<<<<<<
  *                 #Check if this index satisfies the search condition
- *                 if(inputArray[testIndexRight] > searchThreshold and \
+ *                 if(input_array[test_index_right] > search_threshold and \
  */
-      __pyx_t_3 = (__pyx_v_testIndexRight >= 0);
+      __pyx_t_3 = (__pyx_v_test_index_right >= 0);
       if (__pyx_t_3) {
 
-        /* "fastkde/floodFillSearch.pyx":131
- *             if(testIndexRight >= 0):
+        /* "fastkde/floodFillSearch.pyx":124
+ *             if(test_index_right >= 0):
  *                 #Check if this index satisfies the search condition
- *                 if(inputArray[testIndexRight] > searchThreshold and \             # <<<<<<<<<<<<<<
- *                         isNotSearched[testIndexRight] == 1):
+ *                 if(input_array[test_index_right] > search_threshold and \             # <<<<<<<<<<<<<<
+ *                         is_not_searched[test_index_right] == 1):
  *                     #Append it to the search list if so
  */
-        __pyx_t_11 = __pyx_v_testIndexRight;
-        if (__pyx_t_11 < 0) __pyx_t_11 += __pyx_v_inputArray.shape[0];
-        __pyx_t_12 = ((*((__pyx_t_5numpy_float_t *) ( /* dim=0 */ (__pyx_v_inputArray.data + __pyx_t_11 * __pyx_v_inputArray.strides[0]) ))) > __pyx_v_searchThreshold);
+        __pyx_t_11 = __pyx_v_test_index_right;
+        if (__pyx_t_11 < 0) __pyx_t_11 += __pyx_v_input_array.shape[0];
+        __pyx_t_12 = ((*((__pyx_t_5numpy_float_t *) ( /* dim=0 */ (__pyx_v_input_array.data + __pyx_t_11 * __pyx_v_input_array.strides[0]) ))) > __pyx_v_search_threshold);
         if (__pyx_t_12) {
         } else {
           __pyx_t_3 = __pyx_t_12;
           goto __pyx_L9_bool_binop_done;
         }
 
-        /* "fastkde/floodFillSearch.pyx":132
+        /* "fastkde/floodFillSearch.pyx":125
  *                 #Check if this index satisfies the search condition
- *                 if(inputArray[testIndexRight] > searchThreshold and \
- *                         isNotSearched[testIndexRight] == 1):             # <<<<<<<<<<<<<<
+ *                 if(input_array[test_index_right] > search_threshold and \
+ *                         is_not_searched[test_index_right] == 1):             # <<<<<<<<<<<<<<
  *                     #Append it to the search list if so
- *                     itemsToSearch.append(testIndexRight)
+ *                     items_to_search.append(test_index_right)
  */
-        __pyx_t_11 = __pyx_v_testIndexRight;
-        if (__pyx_t_11 < 0) __pyx_t_11 += __pyx_v_isNotSearched.shape[0];
-        __pyx_t_12 = ((*((__pyx_t_5numpy_int_t *) ( /* dim=0 */ (__pyx_v_isNotSearched.data + __pyx_t_11 * __pyx_v_isNotSearched.strides[0]) ))) == 1);
+        __pyx_t_11 = __pyx_v_test_index_right;
+        if (__pyx_t_11 < 0) __pyx_t_11 += __pyx_v_is_not_searched.shape[0];
+        __pyx_t_12 = ((*((__pyx_t_5numpy_int_t *) ( /* dim=0 */ (__pyx_v_is_not_searched.data + __pyx_t_11 * __pyx_v_is_not_searched.strides[0]) ))) == 1);
         __pyx_t_3 = __pyx_t_12;
         __pyx_L9_bool_binop_done:;
 
-        /* "fastkde/floodFillSearch.pyx":131
- *             if(testIndexRight >= 0):
+        /* "fastkde/floodFillSearch.pyx":124
+ *             if(test_index_right >= 0):
  *                 #Check if this index satisfies the search condition
- *                 if(inputArray[testIndexRight] > searchThreshold and \             # <<<<<<<<<<<<<<
- *                         isNotSearched[testIndexRight] == 1):
+ *                 if(input_array[test_index_right] > search_threshold and \             # <<<<<<<<<<<<<<
+ *                         is_not_searched[test_index_right] == 1):
  *                     #Append it to the search list if so
  */
         if (__pyx_t_3) {
 
-          /* "fastkde/floodFillSearch.pyx":134
- *                         isNotSearched[testIndexRight] == 1):
+          /* "fastkde/floodFillSearch.pyx":127
+ *                         is_not_searched[test_index_right] == 1):
  *                     #Append it to the search list if so
- *                     itemsToSearch.append(testIndexRight)             # <<<<<<<<<<<<<<
+ *                     items_to_search.append(test_index_right)             # <<<<<<<<<<<<<<
  *                     #Flags that this cell has been searched
- *                     isNotSearched[testIndexRight] = 0
+ *                     is_not_searched[test_index_right] = 0
  */
-          __pyx_t_1 = __Pyx_PyInt_From_npy_int64(__pyx_v_testIndexRight); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 134, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyInt_From_npy_int64(__pyx_v_test_index_right); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 127, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_13 = __Pyx_PyList_Append(__pyx_v_itemsToSearch, __pyx_t_1); if (unlikely(__pyx_t_13 == ((int)-1))) __PYX_ERR(0, 134, __pyx_L1_error)
+          __pyx_t_13 = __Pyx_PyList_Append(__pyx_v_items_to_search, __pyx_t_1); if (unlikely(__pyx_t_13 == ((int)-1))) __PYX_ERR(0, 127, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-          /* "fastkde/floodFillSearch.pyx":136
- *                     itemsToSearch.append(testIndexRight)
+          /* "fastkde/floodFillSearch.pyx":129
+ *                     items_to_search.append(test_index_right)
  *                     #Flags that this cell has been searched
- *                     isNotSearched[testIndexRight] = 0             # <<<<<<<<<<<<<<
+ *                     is_not_searched[test_index_right] = 0             # <<<<<<<<<<<<<<
  * 
  * 
  */
-          __pyx_t_11 = __pyx_v_testIndexRight;
-          if (__pyx_t_11 < 0) __pyx_t_11 += __pyx_v_isNotSearched.shape[0];
-          *((__pyx_t_5numpy_int_t *) ( /* dim=0 */ (__pyx_v_isNotSearched.data + __pyx_t_11 * __pyx_v_isNotSearched.strides[0]) )) = 0;
+          __pyx_t_11 = __pyx_v_test_index_right;
+          if (__pyx_t_11 < 0) __pyx_t_11 += __pyx_v_is_not_searched.shape[0];
+          *((__pyx_t_5numpy_int_t *) ( /* dim=0 */ (__pyx_v_is_not_searched.data + __pyx_t_11 * __pyx_v_is_not_searched.strides[0]) )) = 0;
 
-          /* "fastkde/floodFillSearch.pyx":131
- *             if(testIndexRight >= 0):
+          /* "fastkde/floodFillSearch.pyx":124
+ *             if(test_index_right >= 0):
  *                 #Check if this index satisfies the search condition
- *                 if(inputArray[testIndexRight] > searchThreshold and \             # <<<<<<<<<<<<<<
- *                         isNotSearched[testIndexRight] == 1):
+ *                 if(input_array[test_index_right] > search_threshold and \             # <<<<<<<<<<<<<<
+ *                         is_not_searched[test_index_right] == 1):
  *                     #Append it to the search list if so
  */
         }
 
-        /* "fastkde/floodFillSearch.pyx":129
+        /* "fastkde/floodFillSearch.pyx":122
  * 
  *             #Check that this coordinate is still within bounds
- *             if(testIndexRight >= 0):             # <<<<<<<<<<<<<<
+ *             if(test_index_right >= 0):             # <<<<<<<<<<<<<<
  *                 #Check if this index satisfies the search condition
- *                 if(inputArray[testIndexRight] > searchThreshold and \
+ *                 if(input_array[test_index_right] > search_threshold and \
  */
       }
+
+      /* "fastkde/floodFillSearch.pyx":133
+ * 
+ *             #Shift the current coordinate to the right by 1 in the r dimension
+ *             shift_amount = -1             # <<<<<<<<<<<<<<
+ *             test_index_left = ravel_shift( \
+ *                                         item_tuple, \
+ */
+      __pyx_v_shift_amount = -1LL;
 
       /* "fastkde/floodFillSearch.pyx":140
- * 
- *             #Shift the current coordinate to the right by 1 in the r dimension
- *             shiftAmount = -1             # <<<<<<<<<<<<<<
- *             testIndexLeft = ravel_shift( \
- *                                         itemTuple, \
- */
-      __pyx_v_shiftAmount = -1LL;
-
-      /* "fastkde/floodFillSearch.pyx":147
  *                                         r, \
- *                                         shiftAmount,
- *                                         dimensionWraps[r])             # <<<<<<<<<<<<<<
+ *                                         shift_amount,
+ *                                         dimension_wraps[r])             # <<<<<<<<<<<<<<
  * 
  *             #Check that this coordinate is still within bounds
  */
-      if (unlikely(__pyx_v_dimensionWraps == Py_None)) {
+      if (unlikely(__pyx_v_dimension_wraps == Py_None)) {
         PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-        __PYX_ERR(0, 147, __pyx_L1_error)
+        __PYX_ERR(0, 140, __pyx_L1_error)
       }
-      __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_dimensionWraps, __pyx_v_r, __pyx_t_5numpy_int64_t, 1, __Pyx_PyInt_From_npy_int64, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 147, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_dimension_wraps, __pyx_v_r, __pyx_t_5numpy_int64_t, 1, __Pyx_PyInt_From_npy_int64, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 140, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_11 = __Pyx_PyInt_As_npy_int64(__pyx_t_1); if (unlikely((__pyx_t_11 == ((npy_int64)-1)) && PyErr_Occurred())) __PYX_ERR(0, 147, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyInt_As_npy_int64(__pyx_t_1); if (unlikely((__pyx_t_11 == ((npy_int64)-1)) && PyErr_Occurred())) __PYX_ERR(0, 140, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "fastkde/floodFillSearch.pyx":141
+      /* "fastkde/floodFillSearch.pyx":134
  *             #Shift the current coordinate to the right by 1 in the r dimension
- *             shiftAmount = -1
- *             testIndexLeft = ravel_shift( \             # <<<<<<<<<<<<<<
- *                                         itemTuple, \
- *                                         arrayRank, \
+ *             shift_amount = -1
+ *             test_index_left = ravel_shift( \             # <<<<<<<<<<<<<<
+ *                                         item_tuple, \
+ *                                         array_rank, \
  */
-      __pyx_t_10 = __pyx_f_7fastkde_15floodFillSearch_ravel_shift(__pyx_v_itemTuple, __pyx_v_arrayRank, __pyx_v_arrayShape, __pyx_v_r, __pyx_v_shiftAmount, __pyx_t_11); if (unlikely(__pyx_t_10 == ((__pyx_t_5numpy_int64_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 141, __pyx_L1_error)
-      __pyx_v_testIndexLeft = __pyx_t_10;
+      __pyx_t_10 = __pyx_f_7fastkde_15floodFillSearch_ravel_shift(__pyx_v_item_tuple, __pyx_v_array_rank, __pyx_v_array_shape, __pyx_v_r, __pyx_v_shift_amount, __pyx_t_11); if (unlikely(__pyx_t_10 == ((__pyx_t_5numpy_int64_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 134, __pyx_L1_error)
+      __pyx_v_test_index_left = __pyx_t_10;
 
-      /* "fastkde/floodFillSearch.pyx":150
+      /* "fastkde/floodFillSearch.pyx":143
  * 
  *             #Check that this coordinate is still within bounds
- *             if(testIndexLeft > 0):             # <<<<<<<<<<<<<<
+ *             if(test_index_left > 0):             # <<<<<<<<<<<<<<
  *                 #Check if this index satisfies the search condition
- *                 if(inputArray[testIndexLeft] > searchThreshold and \
+ *                 if(input_array[test_index_left] > search_threshold and \
  */
-      __pyx_t_3 = (__pyx_v_testIndexLeft > 0);
+      __pyx_t_3 = (__pyx_v_test_index_left > 0);
       if (__pyx_t_3) {
 
-        /* "fastkde/floodFillSearch.pyx":152
- *             if(testIndexLeft > 0):
+        /* "fastkde/floodFillSearch.pyx":145
+ *             if(test_index_left > 0):
  *                 #Check if this index satisfies the search condition
- *                 if(inputArray[testIndexLeft] > searchThreshold and \             # <<<<<<<<<<<<<<
- *                         isNotSearched[testIndexLeft] == 1 ):
+ *                 if(input_array[test_index_left] > search_threshold and \             # <<<<<<<<<<<<<<
+ *                         is_not_searched[test_index_left] == 1 ):
  *                     #Append it to the search list if so
  */
-        __pyx_t_10 = __pyx_v_testIndexLeft;
-        if (__pyx_t_10 < 0) __pyx_t_10 += __pyx_v_inputArray.shape[0];
-        __pyx_t_12 = ((*((__pyx_t_5numpy_float_t *) ( /* dim=0 */ (__pyx_v_inputArray.data + __pyx_t_10 * __pyx_v_inputArray.strides[0]) ))) > __pyx_v_searchThreshold);
+        __pyx_t_10 = __pyx_v_test_index_left;
+        if (__pyx_t_10 < 0) __pyx_t_10 += __pyx_v_input_array.shape[0];
+        __pyx_t_12 = ((*((__pyx_t_5numpy_float_t *) ( /* dim=0 */ (__pyx_v_input_array.data + __pyx_t_10 * __pyx_v_input_array.strides[0]) ))) > __pyx_v_search_threshold);
         if (__pyx_t_12) {
         } else {
           __pyx_t_3 = __pyx_t_12;
           goto __pyx_L13_bool_binop_done;
         }
 
-        /* "fastkde/floodFillSearch.pyx":153
+        /* "fastkde/floodFillSearch.pyx":146
  *                 #Check if this index satisfies the search condition
- *                 if(inputArray[testIndexLeft] > searchThreshold and \
- *                         isNotSearched[testIndexLeft] == 1 ):             # <<<<<<<<<<<<<<
+ *                 if(input_array[test_index_left] > search_threshold and \
+ *                         is_not_searched[test_index_left] == 1 ):             # <<<<<<<<<<<<<<
  *                     #Append it to the search list if so
- *                     itemsToSearch.append(testIndexLeft)
+ *                     items_to_search.append(test_index_left)
  */
-        __pyx_t_10 = __pyx_v_testIndexLeft;
-        if (__pyx_t_10 < 0) __pyx_t_10 += __pyx_v_isNotSearched.shape[0];
-        __pyx_t_12 = ((*((__pyx_t_5numpy_int_t *) ( /* dim=0 */ (__pyx_v_isNotSearched.data + __pyx_t_10 * __pyx_v_isNotSearched.strides[0]) ))) == 1);
+        __pyx_t_10 = __pyx_v_test_index_left;
+        if (__pyx_t_10 < 0) __pyx_t_10 += __pyx_v_is_not_searched.shape[0];
+        __pyx_t_12 = ((*((__pyx_t_5numpy_int_t *) ( /* dim=0 */ (__pyx_v_is_not_searched.data + __pyx_t_10 * __pyx_v_is_not_searched.strides[0]) ))) == 1);
         __pyx_t_3 = __pyx_t_12;
         __pyx_L13_bool_binop_done:;
 
-        /* "fastkde/floodFillSearch.pyx":152
- *             if(testIndexLeft > 0):
+        /* "fastkde/floodFillSearch.pyx":145
+ *             if(test_index_left > 0):
  *                 #Check if this index satisfies the search condition
- *                 if(inputArray[testIndexLeft] > searchThreshold and \             # <<<<<<<<<<<<<<
- *                         isNotSearched[testIndexLeft] == 1 ):
+ *                 if(input_array[test_index_left] > search_threshold and \             # <<<<<<<<<<<<<<
+ *                         is_not_searched[test_index_left] == 1 ):
  *                     #Append it to the search list if so
  */
         if (__pyx_t_3) {
 
-          /* "fastkde/floodFillSearch.pyx":155
- *                         isNotSearched[testIndexLeft] == 1 ):
+          /* "fastkde/floodFillSearch.pyx":148
+ *                         is_not_searched[test_index_left] == 1 ):
  *                     #Append it to the search list if so
- *                     itemsToSearch.append(testIndexLeft)             # <<<<<<<<<<<<<<
+ *                     items_to_search.append(test_index_left)             # <<<<<<<<<<<<<<
  *                     #Flags that this cell has been searched
- *                     isNotSearched[testIndexLeft] = 0
+ *                     is_not_searched[test_index_left] = 0
  */
-          __pyx_t_1 = __Pyx_PyInt_From_npy_int64(__pyx_v_testIndexLeft); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 155, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyInt_From_npy_int64(__pyx_v_test_index_left); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 148, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_13 = __Pyx_PyList_Append(__pyx_v_itemsToSearch, __pyx_t_1); if (unlikely(__pyx_t_13 == ((int)-1))) __PYX_ERR(0, 155, __pyx_L1_error)
+          __pyx_t_13 = __Pyx_PyList_Append(__pyx_v_items_to_search, __pyx_t_1); if (unlikely(__pyx_t_13 == ((int)-1))) __PYX_ERR(0, 148, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-          /* "fastkde/floodFillSearch.pyx":157
- *                     itemsToSearch.append(testIndexLeft)
+          /* "fastkde/floodFillSearch.pyx":150
+ *                     items_to_search.append(test_index_left)
  *                     #Flags that this cell has been searched
- *                     isNotSearched[testIndexLeft] = 0             # <<<<<<<<<<<<<<
+ *                     is_not_searched[test_index_left] = 0             # <<<<<<<<<<<<<<
  * 
  * 
  */
-          __pyx_t_10 = __pyx_v_testIndexLeft;
-          if (__pyx_t_10 < 0) __pyx_t_10 += __pyx_v_isNotSearched.shape[0];
-          *((__pyx_t_5numpy_int_t *) ( /* dim=0 */ (__pyx_v_isNotSearched.data + __pyx_t_10 * __pyx_v_isNotSearched.strides[0]) )) = 0;
+          __pyx_t_10 = __pyx_v_test_index_left;
+          if (__pyx_t_10 < 0) __pyx_t_10 += __pyx_v_is_not_searched.shape[0];
+          *((__pyx_t_5numpy_int_t *) ( /* dim=0 */ (__pyx_v_is_not_searched.data + __pyx_t_10 * __pyx_v_is_not_searched.strides[0]) )) = 0;
 
-          /* "fastkde/floodFillSearch.pyx":152
- *             if(testIndexLeft > 0):
+          /* "fastkde/floodFillSearch.pyx":145
+ *             if(test_index_left > 0):
  *                 #Check if this index satisfies the search condition
- *                 if(inputArray[testIndexLeft] > searchThreshold and \             # <<<<<<<<<<<<<<
- *                         isNotSearched[testIndexLeft] == 1 ):
+ *                 if(input_array[test_index_left] > search_threshold and \             # <<<<<<<<<<<<<<
+ *                         is_not_searched[test_index_left] == 1 ):
  *                     #Append it to the search list if so
  */
         }
 
-        /* "fastkde/floodFillSearch.pyx":150
+        /* "fastkde/floodFillSearch.pyx":143
  * 
  *             #Check that this coordinate is still within bounds
- *             if(testIndexLeft > 0):             # <<<<<<<<<<<<<<
+ *             if(test_index_left > 0):             # <<<<<<<<<<<<<<
  *                 #Check if this index satisfies the search condition
- *                 if(inputArray[testIndexLeft] > searchThreshold and \
+ *                 if(input_array[test_index_left] > search_threshold and \
  */
       }
     }
 
-    /* "fastkde/floodFillSearch.pyx":165
+    /* "fastkde/floodFillSearch.pyx":158
  *         #Now that the neighbors of the first item in the list have been tested,
  *         #remove it from the list and put it in the list of contiguous values
- *         contiguousIndices.append(itemsToSearch.pop(0))             # <<<<<<<<<<<<<<
+ *         contiguous_indices.append(items_to_search.pop(0))             # <<<<<<<<<<<<<<
  * 
  *     #Return the list of contiguous indices (converted to index tuples)
  */
-    __pyx_t_1 = __Pyx_PyList_PopIndex(__pyx_v_itemsToSearch, __pyx_int_0, 0, 1, Py_ssize_t, PyInt_FromSsize_t); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 165, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyList_PopIndex(__pyx_v_items_to_search, __pyx_int_0, 0, 1, Py_ssize_t, PyInt_FromSsize_t); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 158, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_13 = __Pyx_PyList_Append(__pyx_v_contiguousIndices, __pyx_t_1); if (unlikely(__pyx_t_13 == ((int)-1))) __PYX_ERR(0, 165, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyList_Append(__pyx_v_contiguous_indices, __pyx_t_1); if (unlikely(__pyx_t_13 == ((int)-1))) __PYX_ERR(0, 158, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "fastkde/floodFillSearch.pyx":168
+  /* "fastkde/floodFillSearch.pyx":161
  * 
  *     #Return the list of contiguous indices (converted to index tuples)
- *     return np.unravel_index(contiguousIndices,arrayShape)             # <<<<<<<<<<<<<<
+ *     return np.unravel_index(contiguous_indices,array_shape)             # <<<<<<<<<<<<<<
  * 
- * cpdef list floodFillSearch( \
+ * cpdef list flood_fill_search( \
  */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 168, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 161, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_unravel_index); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 168, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_unravel_index); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 161, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_v_arrayShape, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn___pyx_t_5numpy_int64_t, (int (*)(char *, PyObject *)) __pyx_memview_set_nn___pyx_t_5numpy_int64_t, 0);; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 168, __pyx_L1_error)
+  __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_v_array_shape, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn___pyx_t_5numpy_int64_t, (int (*)(char *, PyObject *)) __pyx_memview_set_nn___pyx_t_5numpy_int64_t, 0);; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 161, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = NULL;
   __pyx_t_6 = 0;
@@ -20321,15 +20323,15 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_findNeighbors(__pyx_t_5numpy
   }
   #endif
   {
-    PyObject *__pyx_callargs[3] = {__pyx_t_5, __pyx_v_contiguousIndices, __pyx_t_4};
+    PyObject *__pyx_callargs[3] = {__pyx_t_5, __pyx_v_contiguous_indices, __pyx_t_4};
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_2, __pyx_callargs+1-__pyx_t_6, 2+__pyx_t_6);
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 168, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 161, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
-  if (!(likely(PyTuple_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None) || __Pyx_RaiseUnexpectedTypeError("tuple", __pyx_t_1))) __PYX_ERR(0, 168, __pyx_L1_error)
+  if (!(likely(PyTuple_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None) || __Pyx_RaiseUnexpectedTypeError("tuple", __pyx_t_1))) __PYX_ERR(0, 161, __pyx_L1_error)
   __pyx_r = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
   goto __pyx_L0;
@@ -20337,9 +20339,9 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_findNeighbors(__pyx_t_5numpy
   /* "fastkde/floodFillSearch.pyx":68
  * 
  * @cython.boundscheck(False)
- * cdef tuple findNeighbors(   np.int64_t raveledStartIndex, \             # <<<<<<<<<<<<<<
- *                             np.float_t searchThreshold, \
- *                             np.int64_t [:] arrayShape, \
+ * cdef tuple findNeighbors(   np.int64_t raveled_start_index, \             # <<<<<<<<<<<<<<
+ *                             np.float_t search_threshold, \
+ *                             np.int64_t [:] array_shape, \
  */
 
   /* function exit code */
@@ -20351,52 +20353,52 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_findNeighbors(__pyx_t_5numpy
   __Pyx_AddTraceback("fastkde.floodFillSearch.findNeighbors", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
-  __Pyx_XDECREF(__pyx_v_itemsToSearch);
-  __Pyx_XDECREF(__pyx_v_contiguousIndices);
-  __Pyx_XDECREF(__pyx_v_itemTuple);
+  __Pyx_XDECREF(__pyx_v_items_to_search);
+  __Pyx_XDECREF(__pyx_v_contiguous_indices);
+  __Pyx_XDECREF(__pyx_v_item_tuple);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "fastkde/floodFillSearch.pyx":170
- *     return np.unravel_index(contiguousIndices,arrayShape)
+/* "fastkde/floodFillSearch.pyx":163
+ *     return np.unravel_index(contiguous_indices,array_shape)
  * 
- * cpdef list floodFillSearch( \             # <<<<<<<<<<<<<<
- *                 np.ndarray inputArray, \
- *                 np.float_t searchThreshold = 0.0, \
+ * cpdef list flood_fill_search( \             # <<<<<<<<<<<<<<
+ *                 np.ndarray input_array, \
+ *                 np.float_t search_threshold = 0.0, \
  */
 
-static PyObject *__pyx_pw_7fastkde_15floodFillSearch_1floodFillSearch(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_7fastkde_15floodFillSearch_1flood_fill_search(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObject *__pyx_v_inputArray, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_7fastkde_15floodFillSearch_floodFillSearch *__pyx_optional_args) {
-  __pyx_t_5numpy_float_t __pyx_v_searchThreshold = ((__pyx_t_5numpy_float_t)0.0);
+static PyObject *__pyx_f_7fastkde_15floodFillSearch_flood_fill_search(PyArrayObject *__pyx_v_input_array, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_7fastkde_15floodFillSearch_flood_fill_search *__pyx_optional_args) {
+  __pyx_t_5numpy_float_t __pyx_v_search_threshold = ((__pyx_t_5numpy_float_t)0.0);
 
-  /* "fastkde/floodFillSearch.pyx":173
- *                 np.ndarray inputArray, \
- *                 np.float_t searchThreshold = 0.0, \
- *                 wrapDimensions = None):             # <<<<<<<<<<<<<<
+  /* "fastkde/floodFillSearch.pyx":166
+ *                 np.ndarray input_array, \
+ *                 np.float_t search_threshold = 0.0, \
+ *                 wrap_dimensions = None):             # <<<<<<<<<<<<<<
  *     """Given an N-dimensional array, find contiguous areas of the array
  *     satisfiying a given condition and return a list of contiguous indices
  */
-  PyObject *__pyx_v_wrapDimensions = ((PyObject *)Py_None);
-  PyArrayObject *__pyx_v_arrayShape = 0;
-  __pyx_t_5numpy_int64_t __pyx_v_arrayRank;
-  __pyx_t_5numpy_int64_t __pyx_v_numArrayElements;
-  PyObject *__pyx_v_dimensionWraps = 0;
-  PyObject *__pyx_v_contiguousAreas = 0;
+  PyObject *__pyx_v_wrap_dimensions = ((PyObject *)Py_None);
+  PyArrayObject *__pyx_v_array_shape = 0;
+  __pyx_t_5numpy_int64_t __pyx_v_array_rank;
+  __pyx_t_5numpy_int64_t __pyx_v_num_array_elements;
+  PyObject *__pyx_v_dimension_wraps = 0;
+  PyObject *__pyx_v_contiguous_areas = 0;
   PyObject *__pyx_v_e = NULL;
-  PyArrayObject *__pyx_v_isNotSearched = 0;
+  PyArrayObject *__pyx_v_is_not_searched = 0;
   __Pyx_memviewslice __pyx_v_raveledInputArray = { 0, 0, { 0 }, { 0 }, { 0 } };
   __Pyx_memviewslice __pyx_v_raveledIsNotSearched = { 0, 0, { 0 }, { 0 }, { 0 } };
   __pyx_t_5numpy_int64_t __pyx_v_i;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_arrayShape;
-  __Pyx_Buffer __pyx_pybuffer_arrayShape;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_array_shape;
+  __Pyx_Buffer __pyx_pybuffer_array_shape;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -20427,26 +20429,26 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("floodFillSearch", 1);
+  __Pyx_RefNannySetupContext("flood_fill_search", 1);
   if (__pyx_optional_args) {
     if (__pyx_optional_args->__pyx_n > 0) {
-      __pyx_v_searchThreshold = __pyx_optional_args->searchThreshold;
+      __pyx_v_search_threshold = __pyx_optional_args->search_threshold;
       if (__pyx_optional_args->__pyx_n > 1) {
-        __pyx_v_wrapDimensions = __pyx_optional_args->wrapDimensions;
+        __pyx_v_wrap_dimensions = __pyx_optional_args->wrap_dimensions;
       }
     }
   }
-  __pyx_pybuffer_arrayShape.pybuffer.buf = NULL;
-  __pyx_pybuffer_arrayShape.refcount = 0;
-  __pyx_pybuffernd_arrayShape.data = NULL;
-  __pyx_pybuffernd_arrayShape.rcbuffer = &__pyx_pybuffer_arrayShape;
+  __pyx_pybuffer_array_shape.pybuffer.buf = NULL;
+  __pyx_pybuffer_array_shape.refcount = 0;
+  __pyx_pybuffernd_array_shape.data = NULL;
+  __pyx_pybuffernd_array_shape.rcbuffer = &__pyx_pybuffer_array_shape;
 
-  /* "fastkde/floodFillSearch.pyx":209
+  /* "fastkde/floodFillSearch.pyx":201
  * 
- *     #Determine the rank of inputArray
+ *     #Determine the rank of input_array
  *     try:             # <<<<<<<<<<<<<<
- *         arrayShape = np.array(np.shape(inputArray),dtype=np.int64)
- *         arrayRank = len(arrayShape)
+ *         array_shape = np.array(np.shape(input_array),dtype=np.int64)
+ *         array_rank = len(array_shape)
  */
   {
     __Pyx_PyThreadState_declare
@@ -20457,21 +20459,21 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "fastkde/floodFillSearch.pyx":210
- *     #Determine the rank of inputArray
+      /* "fastkde/floodFillSearch.pyx":202
+ *     #Determine the rank of input_array
  *     try:
- *         arrayShape = np.array(np.shape(inputArray),dtype=np.int64)             # <<<<<<<<<<<<<<
- *         arrayRank = len(arrayShape)
- *         numArrayElements = np.prod(arrayShape)
+ *         array_shape = np.array(np.shape(input_array),dtype=np.int64)             # <<<<<<<<<<<<<<
+ *         array_rank = len(array_shape)
+ *         num_array_elements = np.prod(array_shape)
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 210, __pyx_L3_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 202, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_array); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 210, __pyx_L3_error)
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_array); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 202, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 210, __pyx_L3_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 202, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_shape); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 210, __pyx_L3_error)
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_shape); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 202, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __pyx_t_6 = NULL;
@@ -20489,41 +20491,41 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
       }
       #endif
       {
-        PyObject *__pyx_callargs[2] = {__pyx_t_6, ((PyObject *)__pyx_v_inputArray)};
+        PyObject *__pyx_callargs[2] = {__pyx_t_6, ((PyObject *)__pyx_v_input_array)};
         __pyx_t_4 = __Pyx_PyObject_FastCall(__pyx_t_7, __pyx_callargs+1-__pyx_t_8, 1+__pyx_t_8);
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 210, __pyx_L3_error)
+        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 202, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
-      __pyx_t_7 = PyTuple_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 210, __pyx_L3_error)
+      __pyx_t_7 = PyTuple_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 202, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_GIVEREF(__pyx_t_4);
-      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_4)) __PYX_ERR(0, 210, __pyx_L3_error);
+      if (__Pyx_PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_4)) __PYX_ERR(0, 202, __pyx_L3_error);
       __pyx_t_4 = 0;
-      __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 210, __pyx_L3_error)
+      __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 202, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 210, __pyx_L3_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 202, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_int64); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 210, __pyx_L3_error)
+      __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_int64); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 202, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_9);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, __pyx_t_9) < 0) __PYX_ERR(0, 210, __pyx_L3_error)
+      if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, __pyx_t_9) < 0) __PYX_ERR(0, 202, __pyx_L3_error)
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_7, __pyx_t_4); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 210, __pyx_L3_error)
+      __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_7, __pyx_t_4); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 202, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_9);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (!(likely(((__pyx_t_9) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_9, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 210, __pyx_L3_error)
+      if (!(likely(((__pyx_t_9) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_9, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 202, __pyx_L3_error)
       __pyx_t_10 = ((PyArrayObject *)__pyx_t_9);
       {
         __Pyx_BufFmt_StackElem __pyx_stack[1];
-        __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_arrayShape.rcbuffer->pybuffer);
-        __pyx_t_8 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_arrayShape.rcbuffer->pybuffer, (PyObject*)__pyx_t_10, &__Pyx_TypeInfo_nn___pyx_t_5numpy_int64_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack);
+        __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_array_shape.rcbuffer->pybuffer);
+        __pyx_t_8 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_array_shape.rcbuffer->pybuffer, (PyObject*)__pyx_t_10, &__Pyx_TypeInfo_nn___pyx_t_5numpy_int64_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack);
         if (unlikely(__pyx_t_8 < 0)) {
           PyErr_Fetch(&__pyx_t_11, &__pyx_t_12, &__pyx_t_13);
-          if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_arrayShape.rcbuffer->pybuffer, (PyObject*)__pyx_v_arrayShape, &__Pyx_TypeInfo_nn___pyx_t_5numpy_int64_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {
+          if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_array_shape.rcbuffer->pybuffer, (PyObject*)__pyx_v_array_shape, &__Pyx_TypeInfo_nn___pyx_t_5numpy_int64_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {
             Py_XDECREF(__pyx_t_11); Py_XDECREF(__pyx_t_12); Py_XDECREF(__pyx_t_13);
             __Pyx_RaiseBufferFallbackError();
           } else {
@@ -20531,33 +20533,33 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
           }
           __pyx_t_11 = __pyx_t_12 = __pyx_t_13 = 0;
         }
-        __pyx_pybuffernd_arrayShape.diminfo[0].strides = __pyx_pybuffernd_arrayShape.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_arrayShape.diminfo[0].shape = __pyx_pybuffernd_arrayShape.rcbuffer->pybuffer.shape[0];
-        if (unlikely((__pyx_t_8 < 0))) __PYX_ERR(0, 210, __pyx_L3_error)
+        __pyx_pybuffernd_array_shape.diminfo[0].strides = __pyx_pybuffernd_array_shape.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_array_shape.diminfo[0].shape = __pyx_pybuffernd_array_shape.rcbuffer->pybuffer.shape[0];
+        if (unlikely((__pyx_t_8 < 0))) __PYX_ERR(0, 202, __pyx_L3_error)
       }
       __pyx_t_10 = 0;
-      __pyx_v_arrayShape = ((PyArrayObject *)__pyx_t_9);
+      __pyx_v_array_shape = ((PyArrayObject *)__pyx_t_9);
       __pyx_t_9 = 0;
 
-      /* "fastkde/floodFillSearch.pyx":211
+      /* "fastkde/floodFillSearch.pyx":203
  *     try:
- *         arrayShape = np.array(np.shape(inputArray),dtype=np.int64)
- *         arrayRank = len(arrayShape)             # <<<<<<<<<<<<<<
- *         numArrayElements = np.prod(arrayShape)
+ *         array_shape = np.array(np.shape(input_array),dtype=np.int64)
+ *         array_rank = len(array_shape)             # <<<<<<<<<<<<<<
+ *         num_array_elements = np.prod(array_shape)
  *     except BaseException as e:
  */
-      __pyx_t_14 = PyObject_Length(((PyObject *)__pyx_v_arrayShape)); if (unlikely(__pyx_t_14 == ((Py_ssize_t)-1))) __PYX_ERR(0, 211, __pyx_L3_error)
-      __pyx_v_arrayRank = __pyx_t_14;
+      __pyx_t_14 = PyObject_Length(((PyObject *)__pyx_v_array_shape)); if (unlikely(__pyx_t_14 == ((Py_ssize_t)-1))) __PYX_ERR(0, 203, __pyx_L3_error)
+      __pyx_v_array_rank = __pyx_t_14;
 
-      /* "fastkde/floodFillSearch.pyx":212
- *         arrayShape = np.array(np.shape(inputArray),dtype=np.int64)
- *         arrayRank = len(arrayShape)
- *         numArrayElements = np.prod(arrayShape)             # <<<<<<<<<<<<<<
+      /* "fastkde/floodFillSearch.pyx":204
+ *         array_shape = np.array(np.shape(input_array),dtype=np.int64)
+ *         array_rank = len(array_shape)
+ *         num_array_elements = np.prod(array_shape)             # <<<<<<<<<<<<<<
  *     except BaseException as e:
- *         raise ValueError,"inputArray does not appear to be array like.  Error was: {}".format(e)
+ *         raise ValueError("input_array does not appear to be array like.  Error was: {}".format(e))
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 212, __pyx_L3_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 204, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_prod); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 212, __pyx_L3_error)
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_prod); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 204, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_t_4 = NULL;
@@ -20575,23 +20577,23 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
       }
       #endif
       {
-        PyObject *__pyx_callargs[2] = {__pyx_t_4, ((PyObject *)__pyx_v_arrayShape)};
+        PyObject *__pyx_callargs[2] = {__pyx_t_4, ((PyObject *)__pyx_v_array_shape)};
         __pyx_t_9 = __Pyx_PyObject_FastCall(__pyx_t_7, __pyx_callargs+1-__pyx_t_8, 1+__pyx_t_8);
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 212, __pyx_L3_error)
+        if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 204, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_9);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
-      __pyx_t_15 = __Pyx_PyInt_As_npy_int64(__pyx_t_9); if (unlikely((__pyx_t_15 == ((npy_int64)-1)) && PyErr_Occurred())) __PYX_ERR(0, 212, __pyx_L3_error)
+      __pyx_t_15 = __Pyx_PyInt_As_npy_int64(__pyx_t_9); if (unlikely((__pyx_t_15 == ((npy_int64)-1)) && PyErr_Occurred())) __PYX_ERR(0, 204, __pyx_L3_error)
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      __pyx_v_numArrayElements = __pyx_t_15;
+      __pyx_v_num_array_elements = __pyx_t_15;
 
-      /* "fastkde/floodFillSearch.pyx":209
+      /* "fastkde/floodFillSearch.pyx":201
  * 
- *     #Determine the rank of inputArray
+ *     #Determine the rank of input_array
  *     try:             # <<<<<<<<<<<<<<
- *         arrayShape = np.array(np.shape(inputArray),dtype=np.int64)
- *         arrayRank = len(arrayShape)
+ *         array_shape = np.array(np.shape(input_array),dtype=np.int64)
+ *         array_rank = len(array_shape)
  */
     }
     __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -20605,31 +20607,31 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
     __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-    /* "fastkde/floodFillSearch.pyx":213
- *         arrayRank = len(arrayShape)
- *         numArrayElements = np.prod(arrayShape)
+    /* "fastkde/floodFillSearch.pyx":205
+ *         array_rank = len(array_shape)
+ *         num_array_elements = np.prod(array_shape)
  *     except BaseException as e:             # <<<<<<<<<<<<<<
- *         raise ValueError,"inputArray does not appear to be array like.  Error was: {}".format(e)
+ *         raise ValueError("input_array does not appear to be array like.  Error was: {}".format(e))
  * 
  */
     __pyx_t_8 = __Pyx_PyErr_ExceptionMatches(__pyx_builtin_BaseException);
     if (__pyx_t_8) {
-      __Pyx_AddTraceback("fastkde.floodFillSearch.floodFillSearch", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_9, &__pyx_t_7, &__pyx_t_4) < 0) __PYX_ERR(0, 213, __pyx_L5_except_error)
+      __Pyx_AddTraceback("fastkde.floodFillSearch.flood_fill_search", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      if (__Pyx_GetException(&__pyx_t_9, &__pyx_t_7, &__pyx_t_4) < 0) __PYX_ERR(0, 205, __pyx_L5_except_error)
       __Pyx_XGOTREF(__pyx_t_9);
       __Pyx_XGOTREF(__pyx_t_7);
       __Pyx_XGOTREF(__pyx_t_4);
       __Pyx_INCREF(__pyx_t_7);
       __pyx_v_e = __pyx_t_7;
 
-      /* "fastkde/floodFillSearch.pyx":214
- *         numArrayElements = np.prod(arrayShape)
+      /* "fastkde/floodFillSearch.pyx":206
+ *         num_array_elements = np.prod(array_shape)
  *     except BaseException as e:
- *         raise ValueError,"inputArray does not appear to be array like.  Error was: {}".format(e)             # <<<<<<<<<<<<<<
+ *         raise ValueError("input_array does not appear to be array like.  Error was: {}".format(e))             # <<<<<<<<<<<<<<
  * 
  *     #Set the dimension wrapping array
  */
-      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_inputArray_does_not_appear_to_be, __pyx_n_s_format); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 214, __pyx_L5_except_error)
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_input_array_does_not_appear_to_b, __pyx_n_s_format); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 206, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_6);
       __pyx_t_16 = NULL;
       __pyx_t_8 = 0;
@@ -20649,22 +20651,25 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
         PyObject *__pyx_callargs[2] = {__pyx_t_16, __pyx_v_e};
         __pyx_t_5 = __Pyx_PyObject_FastCall(__pyx_t_6, __pyx_callargs+1-__pyx_t_8, 1+__pyx_t_8);
         __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
-        if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 214, __pyx_L5_except_error)
+        if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 206, __pyx_L5_except_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
-      __Pyx_Raise(__pyx_builtin_ValueError, __pyx_t_5, 0, 0);
+      __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_builtin_ValueError, __pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 206, __pyx_L5_except_error)
+      __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __PYX_ERR(0, 214, __pyx_L5_except_error)
+      __Pyx_Raise(__pyx_t_6, 0, 0, 0);
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __PYX_ERR(0, 206, __pyx_L5_except_error)
     }
     goto __pyx_L5_except_error;
 
-    /* "fastkde/floodFillSearch.pyx":209
+    /* "fastkde/floodFillSearch.pyx":201
  * 
- *     #Determine the rank of inputArray
+ *     #Determine the rank of input_array
  *     try:             # <<<<<<<<<<<<<<
- *         arrayShape = np.array(np.shape(inputArray),dtype=np.int64)
- *         arrayRank = len(arrayShape)
+ *         array_shape = np.array(np.shape(input_array),dtype=np.int64)
+ *         array_rank = len(array_shape)
  */
     __pyx_L5_except_error:;
     __Pyx_XGIVEREF(__pyx_t_1);
@@ -20675,40 +20680,40 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
     __pyx_L8_try_end:;
   }
 
-  /* "fastkde/floodFillSearch.pyx":217
+  /* "fastkde/floodFillSearch.pyx":209
  * 
  *     #Set the dimension wrapping array
- *     dimensionWraps = arrayRank*[False]             # <<<<<<<<<<<<<<
- *     if wrapDimensions is not None:
+ *     dimension_wraps = array_rank*[False]             # <<<<<<<<<<<<<<
+ *     if wrap_dimensions is not None:
  *         try:
  */
-  __pyx_t_4 = PyList_New(1 * ((__pyx_v_arrayRank<0) ? 0:__pyx_v_arrayRank)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 217, __pyx_L1_error)
+  __pyx_t_4 = PyList_New(1 * ((__pyx_v_array_rank<0) ? 0:__pyx_v_array_rank)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 209, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   { Py_ssize_t __pyx_temp;
-    for (__pyx_temp=0; __pyx_temp < __pyx_v_arrayRank; __pyx_temp++) {
+    for (__pyx_temp=0; __pyx_temp < __pyx_v_array_rank; __pyx_temp++) {
       __Pyx_INCREF(Py_False);
       __Pyx_GIVEREF(Py_False);
-      if (__Pyx_PyList_SET_ITEM(__pyx_t_4, __pyx_temp, Py_False)) __PYX_ERR(0, 217, __pyx_L1_error);
+      if (__Pyx_PyList_SET_ITEM(__pyx_t_4, __pyx_temp, Py_False)) __PYX_ERR(0, 209, __pyx_L1_error);
     }
   }
-  __pyx_v_dimensionWraps = ((PyObject*)__pyx_t_4);
+  __pyx_v_dimension_wraps = ((PyObject*)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "fastkde/floodFillSearch.pyx":218
+  /* "fastkde/floodFillSearch.pyx":210
  *     #Set the dimension wrapping array
- *     dimensionWraps = arrayRank*[False]
- *     if wrapDimensions is not None:             # <<<<<<<<<<<<<<
+ *     dimension_wraps = array_rank*[False]
+ *     if wrap_dimensions is not None:             # <<<<<<<<<<<<<<
  *         try:
- *             dimensionWraps[list(wrapDimensions)] = True
+ *             dimension_wraps[list(wrap_dimensions)] = True
  */
-  __pyx_t_17 = (__pyx_v_wrapDimensions != Py_None);
+  __pyx_t_17 = (__pyx_v_wrap_dimensions != Py_None);
   if (__pyx_t_17) {
 
-    /* "fastkde/floodFillSearch.pyx":219
- *     dimensionWraps = arrayRank*[False]
- *     if wrapDimensions is not None:
+    /* "fastkde/floodFillSearch.pyx":211
+ *     dimension_wraps = array_rank*[False]
+ *     if wrap_dimensions is not None:
  *         try:             # <<<<<<<<<<<<<<
- *             dimensionWraps[list(wrapDimensions)] = True
+ *             dimension_wraps[list(wrap_dimensions)] = True
  *         except BaseException as e:
  */
     {
@@ -20720,27 +20725,27 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
       __Pyx_XGOTREF(__pyx_t_1);
       /*try:*/ {
 
-        /* "fastkde/floodFillSearch.pyx":220
- *     if wrapDimensions is not None:
+        /* "fastkde/floodFillSearch.pyx":212
+ *     if wrap_dimensions is not None:
  *         try:
- *             dimensionWraps[list(wrapDimensions)] = True             # <<<<<<<<<<<<<<
+ *             dimension_wraps[list(wrap_dimensions)] = True             # <<<<<<<<<<<<<<
  *         except BaseException as e:
- *             raise ValueError,"wrapDimensions must be a list of valid dimensions for inputArray. Original error was: {}".format(e)
+ *             raise ValueError("wrap_dimensions must be a list of valid dimensions for input_array. Original error was: {}".format(e))
  */
-        if (unlikely(__pyx_v_dimensionWraps == Py_None)) {
+        if (unlikely(__pyx_v_dimension_wraps == Py_None)) {
           PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-          __PYX_ERR(0, 220, __pyx_L12_error)
+          __PYX_ERR(0, 212, __pyx_L12_error)
         }
-        __pyx_t_4 = PySequence_List(__pyx_v_wrapDimensions); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 220, __pyx_L12_error)
+        __pyx_t_4 = PySequence_List(__pyx_v_wrap_dimensions); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 212, __pyx_L12_error)
         __Pyx_GOTREF(__pyx_t_4);
-        if (unlikely((PyObject_SetItem(__pyx_v_dimensionWraps, __pyx_t_4, Py_True) < 0))) __PYX_ERR(0, 220, __pyx_L12_error)
+        if (unlikely((PyObject_SetItem(__pyx_v_dimension_wraps, __pyx_t_4, Py_True) < 0))) __PYX_ERR(0, 212, __pyx_L12_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "fastkde/floodFillSearch.pyx":219
- *     dimensionWraps = arrayRank*[False]
- *     if wrapDimensions is not None:
+        /* "fastkde/floodFillSearch.pyx":211
+ *     dimension_wraps = array_rank*[False]
+ *     if wrap_dimensions is not None:
  *         try:             # <<<<<<<<<<<<<<
- *             dimensionWraps[list(wrapDimensions)] = True
+ *             dimension_wraps[list(wrap_dimensions)] = True
  *         except BaseException as e:
  */
       }
@@ -20756,65 +20761,68 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-      /* "fastkde/floodFillSearch.pyx":221
+      /* "fastkde/floodFillSearch.pyx":213
  *         try:
- *             dimensionWraps[list(wrapDimensions)] = True
+ *             dimension_wraps[list(wrap_dimensions)] = True
  *         except BaseException as e:             # <<<<<<<<<<<<<<
- *             raise ValueError,"wrapDimensions must be a list of valid dimensions for inputArray. Original error was: {}".format(e)
+ *             raise ValueError("wrap_dimensions must be a list of valid dimensions for input_array. Original error was: {}".format(e))
  * 
  */
       __pyx_t_8 = __Pyx_PyErr_ExceptionMatches(__pyx_builtin_BaseException);
       if (__pyx_t_8) {
-        __Pyx_AddTraceback("fastkde.floodFillSearch.floodFillSearch", __pyx_clineno, __pyx_lineno, __pyx_filename);
-        if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_7, &__pyx_t_9) < 0) __PYX_ERR(0, 221, __pyx_L14_except_error)
+        __Pyx_AddTraceback("fastkde.floodFillSearch.flood_fill_search", __pyx_clineno, __pyx_lineno, __pyx_filename);
+        if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_7, &__pyx_t_9) < 0) __PYX_ERR(0, 213, __pyx_L14_except_error)
         __Pyx_XGOTREF(__pyx_t_4);
         __Pyx_XGOTREF(__pyx_t_7);
         __Pyx_XGOTREF(__pyx_t_9);
         __Pyx_INCREF(__pyx_t_7);
         __pyx_v_e = __pyx_t_7;
 
-        /* "fastkde/floodFillSearch.pyx":222
- *             dimensionWraps[list(wrapDimensions)] = True
+        /* "fastkde/floodFillSearch.pyx":214
+ *             dimension_wraps[list(wrap_dimensions)] = True
  *         except BaseException as e:
- *             raise ValueError,"wrapDimensions must be a list of valid dimensions for inputArray. Original error was: {}".format(e)             # <<<<<<<<<<<<<<
+ *             raise ValueError("wrap_dimensions must be a list of valid dimensions for input_array. Original error was: {}".format(e))             # <<<<<<<<<<<<<<
  * 
  *     #Set an array of the same size indicating which elements have been set
  */
-        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_wrapDimensions_must_be_a_list_of, __pyx_n_s_format); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 222, __pyx_L14_except_error)
-        __Pyx_GOTREF(__pyx_t_6);
+        __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_wrap_dimensions_must_be_a_list_o, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 214, __pyx_L14_except_error)
+        __Pyx_GOTREF(__pyx_t_5);
         __pyx_t_16 = NULL;
         __pyx_t_8 = 0;
         #if CYTHON_UNPACK_METHODS
-        if (likely(PyMethod_Check(__pyx_t_6))) {
-          __pyx_t_16 = PyMethod_GET_SELF(__pyx_t_6);
+        if (likely(PyMethod_Check(__pyx_t_5))) {
+          __pyx_t_16 = PyMethod_GET_SELF(__pyx_t_5);
           if (likely(__pyx_t_16)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
             __Pyx_INCREF(__pyx_t_16);
             __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_6, function);
+            __Pyx_DECREF_SET(__pyx_t_5, function);
             __pyx_t_8 = 1;
           }
         }
         #endif
         {
           PyObject *__pyx_callargs[2] = {__pyx_t_16, __pyx_v_e};
-          __pyx_t_5 = __Pyx_PyObject_FastCall(__pyx_t_6, __pyx_callargs+1-__pyx_t_8, 1+__pyx_t_8);
+          __pyx_t_6 = __Pyx_PyObject_FastCall(__pyx_t_5, __pyx_callargs+1-__pyx_t_8, 1+__pyx_t_8);
           __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
-          if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 222, __pyx_L14_except_error)
-          __Pyx_GOTREF(__pyx_t_5);
-          __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+          if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 214, __pyx_L14_except_error)
+          __Pyx_GOTREF(__pyx_t_6);
+          __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         }
-        __Pyx_Raise(__pyx_builtin_ValueError, __pyx_t_5, 0, 0);
+        __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_builtin_ValueError, __pyx_t_6); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 214, __pyx_L14_except_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+        __Pyx_Raise(__pyx_t_5, 0, 0, 0);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __PYX_ERR(0, 222, __pyx_L14_except_error)
+        __PYX_ERR(0, 214, __pyx_L14_except_error)
       }
       goto __pyx_L14_except_error;
 
-      /* "fastkde/floodFillSearch.pyx":219
- *     dimensionWraps = arrayRank*[False]
- *     if wrapDimensions is not None:
+      /* "fastkde/floodFillSearch.pyx":211
+ *     dimension_wraps = array_rank*[False]
+ *     if wrap_dimensions is not None:
  *         try:             # <<<<<<<<<<<<<<
- *             dimensionWraps[list(wrapDimensions)] = True
+ *             dimension_wraps[list(wrap_dimensions)] = True
  *         except BaseException as e:
  */
       __pyx_L14_except_error:;
@@ -20826,52 +20834,52 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
       __pyx_L17_try_end:;
     }
 
-    /* "fastkde/floodFillSearch.pyx":218
+    /* "fastkde/floodFillSearch.pyx":210
  *     #Set the dimension wrapping array
- *     dimensionWraps = arrayRank*[False]
- *     if wrapDimensions is not None:             # <<<<<<<<<<<<<<
+ *     dimension_wraps = array_rank*[False]
+ *     if wrap_dimensions is not None:             # <<<<<<<<<<<<<<
  *         try:
- *             dimensionWraps[list(wrapDimensions)] = True
+ *             dimension_wraps[list(wrap_dimensions)] = True
  */
   }
 
-  /* "fastkde/floodFillSearch.pyx":226
+  /* "fastkde/floodFillSearch.pyx":218
  *     #Set an array of the same size indicating which elements have been set
- *     cdef np.ndarray isNotSearched
- *     isNotSearched = np.ones(arrayShape,dtype = 'int')             # <<<<<<<<<<<<<<
+ *     cdef np.ndarray is_not_searched
+ *     is_not_searched = np.ones(array_shape,dtype = 'int')             # <<<<<<<<<<<<<<
  * 
  *     #Set the raveled input array
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_np); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 226, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_np); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 218, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_ones); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 226, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_ones); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 218, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-  __pyx_t_9 = PyTuple_New(1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 226, __pyx_L1_error)
+  __pyx_t_9 = PyTuple_New(1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 218, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
-  __Pyx_INCREF((PyObject *)__pyx_v_arrayShape);
-  __Pyx_GIVEREF((PyObject *)__pyx_v_arrayShape);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_9, 0, ((PyObject *)__pyx_v_arrayShape))) __PYX_ERR(0, 226, __pyx_L1_error);
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 226, __pyx_L1_error)
+  __Pyx_INCREF((PyObject *)__pyx_v_array_shape);
+  __Pyx_GIVEREF((PyObject *)__pyx_v_array_shape);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_9, 0, ((PyObject *)__pyx_v_array_shape))) __PYX_ERR(0, 218, __pyx_L1_error);
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 218, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, __pyx_n_s_int) < 0) __PYX_ERR(0, 226, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_9, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 226, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, __pyx_n_s_int) < 0) __PYX_ERR(0, 218, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_9, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 218, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 226, __pyx_L1_error)
-  __pyx_v_isNotSearched = ((PyArrayObject *)__pyx_t_5);
+  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 218, __pyx_L1_error)
+  __pyx_v_is_not_searched = ((PyArrayObject *)__pyx_t_5);
   __pyx_t_5 = 0;
 
-  /* "fastkde/floodFillSearch.pyx":229
+  /* "fastkde/floodFillSearch.pyx":221
  * 
  *     #Set the raveled input array
- *     cdef np.float_t [:] raveledInputArray = inputArray.ravel()             # <<<<<<<<<<<<<<
+ *     cdef np.float_t [:] raveledInputArray = input_array.ravel()             # <<<<<<<<<<<<<<
  *     #And ravel the search inidcator array
- *     cdef np.int_t [:] raveledIsNotSearched = isNotSearched.ravel()
+ *     cdef np.int_t [:] raveledIsNotSearched = is_not_searched.ravel()
  */
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_inputArray), __pyx_n_s_ravel); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 229, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_input_array), __pyx_n_s_ravel); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 221, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_9 = NULL;
   __pyx_t_8 = 0;
@@ -20891,24 +20899,24 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
     PyObject *__pyx_callargs[2] = {__pyx_t_9, NULL};
     __pyx_t_5 = __Pyx_PyObject_FastCall(__pyx_t_4, __pyx_callargs+1-__pyx_t_8, 0+__pyx_t_8);
     __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 229, __pyx_L1_error)
+    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 221, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   }
-  __pyx_t_18 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_float_t(__pyx_t_5, PyBUF_WRITABLE); if (unlikely(!__pyx_t_18.memview)) __PYX_ERR(0, 229, __pyx_L1_error)
+  __pyx_t_18 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_float_t(__pyx_t_5, PyBUF_WRITABLE); if (unlikely(!__pyx_t_18.memview)) __PYX_ERR(0, 221, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_v_raveledInputArray = __pyx_t_18;
   __pyx_t_18.memview = NULL;
   __pyx_t_18.data = NULL;
 
-  /* "fastkde/floodFillSearch.pyx":231
- *     cdef np.float_t [:] raveledInputArray = inputArray.ravel()
+  /* "fastkde/floodFillSearch.pyx":223
+ *     cdef np.float_t [:] raveledInputArray = input_array.ravel()
  *     #And ravel the search inidcator array
- *     cdef np.int_t [:] raveledIsNotSearched = isNotSearched.ravel()             # <<<<<<<<<<<<<<
+ *     cdef np.int_t [:] raveledIsNotSearched = is_not_searched.ravel()             # <<<<<<<<<<<<<<
  * 
  *     #Set the search list to null
  */
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_isNotSearched), __pyx_n_s_ravel); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 231, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_is_not_searched), __pyx_n_s_ravel); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 223, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_9 = NULL;
   __pyx_t_8 = 0;
@@ -20928,44 +20936,44 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
     PyObject *__pyx_callargs[2] = {__pyx_t_9, NULL};
     __pyx_t_5 = __Pyx_PyObject_FastCall(__pyx_t_4, __pyx_callargs+1-__pyx_t_8, 0+__pyx_t_8);
     __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 231, __pyx_L1_error)
+    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 223, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   }
-  __pyx_t_19 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_int_t(__pyx_t_5, PyBUF_WRITABLE); if (unlikely(!__pyx_t_19.memview)) __PYX_ERR(0, 231, __pyx_L1_error)
+  __pyx_t_19 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_int_t(__pyx_t_5, PyBUF_WRITABLE); if (unlikely(!__pyx_t_19.memview)) __PYX_ERR(0, 223, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_v_raveledIsNotSearched = __pyx_t_19;
   __pyx_t_19.memview = NULL;
   __pyx_t_19.data = NULL;
 
-  /* "fastkde/floodFillSearch.pyx":234
+  /* "fastkde/floodFillSearch.pyx":226
  * 
  *     #Set the search list to null
- *     contiguousAreas = []             # <<<<<<<<<<<<<<
+ *     contiguous_areas = []             # <<<<<<<<<<<<<<
  * 
  *     cdef np.int64_t i
  */
-  __pyx_t_5 = PyList_New(0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 234, __pyx_L1_error)
+  __pyx_t_5 = PyList_New(0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 226, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_v_contiguousAreas = ((PyObject*)__pyx_t_5);
+  __pyx_v_contiguous_areas = ((PyObject*)__pyx_t_5);
   __pyx_t_5 = 0;
 
-  /* "fastkde/floodFillSearch.pyx":238
+  /* "fastkde/floodFillSearch.pyx":230
  *     cdef np.int64_t i
  *     #Loop over the array
- *     for i in xrange(numArrayElements):             # <<<<<<<<<<<<<<
- *         #print "{}/{}".format(i,numArrayElements)
+ *     for i in range(num_array_elements):             # <<<<<<<<<<<<<<
+ *         #print "{}/{}".format(i,num_array_elements)
  *         #Check if the current element meets the search condition
  */
-  __pyx_t_15 = __pyx_v_numArrayElements;
+  __pyx_t_15 = __pyx_v_num_array_elements;
   __pyx_t_20 = __pyx_t_15;
   for (__pyx_t_21 = 0; __pyx_t_21 < __pyx_t_20; __pyx_t_21+=1) {
     __pyx_v_i = __pyx_t_21;
 
-    /* "fastkde/floodFillSearch.pyx":241
- *         #print "{}/{}".format(i,numArrayElements)
+    /* "fastkde/floodFillSearch.pyx":233
+ *         #print "{}/{}".format(i,num_array_elements)
  *         #Check if the current element meets the search condition
- *         if raveledInputArray[i] >= searchThreshold and raveledIsNotSearched[i]:             # <<<<<<<<<<<<<<
+ *         if raveledInputArray[i] >= search_threshold and raveledIsNotSearched[i]:             # <<<<<<<<<<<<<<
  *             #Flag that this cell has been searched
  *             raveledIsNotSearched[i] = 0
  */
@@ -20977,9 +20985,9 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
     } else if (unlikely(__pyx_t_22 >= __pyx_v_raveledInputArray.shape[0])) __pyx_t_8 = 0;
     if (unlikely(__pyx_t_8 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_8);
-      __PYX_ERR(0, 241, __pyx_L1_error)
+      __PYX_ERR(0, 233, __pyx_L1_error)
     }
-    __pyx_t_23 = ((*((__pyx_t_5numpy_float_t *) ( /* dim=0 */ (__pyx_v_raveledInputArray.data + __pyx_t_22 * __pyx_v_raveledInputArray.strides[0]) ))) >= __pyx_v_searchThreshold);
+    __pyx_t_23 = ((*((__pyx_t_5numpy_float_t *) ( /* dim=0 */ (__pyx_v_raveledInputArray.data + __pyx_t_22 * __pyx_v_raveledInputArray.strides[0]) ))) >= __pyx_v_search_threshold);
     if (__pyx_t_23) {
     } else {
       __pyx_t_17 = __pyx_t_23;
@@ -20993,15 +21001,15 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
     } else if (unlikely(__pyx_t_22 >= __pyx_v_raveledIsNotSearched.shape[0])) __pyx_t_8 = 0;
     if (unlikely(__pyx_t_8 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_8);
-      __PYX_ERR(0, 241, __pyx_L1_error)
+      __PYX_ERR(0, 233, __pyx_L1_error)
     }
     __pyx_t_23 = ((*((__pyx_t_5numpy_int_t *) ( /* dim=0 */ (__pyx_v_raveledIsNotSearched.data + __pyx_t_22 * __pyx_v_raveledIsNotSearched.strides[0]) ))) != 0);
     __pyx_t_17 = __pyx_t_23;
     __pyx_L23_bool_binop_done:;
     if (__pyx_t_17) {
 
-      /* "fastkde/floodFillSearch.pyx":243
- *         if raveledInputArray[i] >= searchThreshold and raveledIsNotSearched[i]:
+      /* "fastkde/floodFillSearch.pyx":235
+ *         if raveledInputArray[i] >= search_threshold and raveledIsNotSearched[i]:
  *             #Flag that this cell has been searched
  *             raveledIsNotSearched[i] = 0             # <<<<<<<<<<<<<<
  * 
@@ -21015,52 +21023,52 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
       } else if (unlikely(__pyx_t_22 >= __pyx_v_raveledIsNotSearched.shape[0])) __pyx_t_8 = 0;
       if (unlikely(__pyx_t_8 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_8);
-        __PYX_ERR(0, 243, __pyx_L1_error)
+        __PYX_ERR(0, 235, __pyx_L1_error)
       }
       *((__pyx_t_5numpy_int_t *) ( /* dim=0 */ (__pyx_v_raveledIsNotSearched.data + __pyx_t_22 * __pyx_v_raveledIsNotSearched.strides[0]) )) = 0;
 
-      /* "fastkde/floodFillSearch.pyx":251
+      /* "fastkde/floodFillSearch.pyx":243
  *                                     findNeighbors(  i,  \
- *                                                     searchThreshold,    \
- *                                                     arrayShape,         \             # <<<<<<<<<<<<<<
- *                                                     arrayRank,          \
- *                                                     dimensionWraps,     \
+ *                                                     search_threshold,    \
+ *                                                     array_shape,         \             # <<<<<<<<<<<<<<
+ *                                                     array_rank,          \
+ *                                                     dimension_wraps,     \
  */
-      __pyx_t_24 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_int64_t(((PyObject *)__pyx_v_arrayShape), PyBUF_WRITABLE); if (unlikely(!__pyx_t_24.memview)) __PYX_ERR(0, 251, __pyx_L1_error)
+      __pyx_t_24 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_int64_t(((PyObject *)__pyx_v_array_shape), PyBUF_WRITABLE); if (unlikely(!__pyx_t_24.memview)) __PYX_ERR(0, 243, __pyx_L1_error)
 
-      /* "fastkde/floodFillSearch.pyx":249
- *             #of this element is appended to contiguousAreas
- *             contiguousAreas.append(\
+      /* "fastkde/floodFillSearch.pyx":241
+ *             #of this element is appended to contiguous_areas
+ *             contiguous_areas.append(\
  *                                     findNeighbors(  i,  \             # <<<<<<<<<<<<<<
- *                                                     searchThreshold,    \
- *                                                     arrayShape,         \
+ *                                                     search_threshold,    \
+ *                                                     array_shape,         \
  */
-      __pyx_t_5 = __pyx_f_7fastkde_15floodFillSearch_findNeighbors(__pyx_v_i, __pyx_v_searchThreshold, __pyx_t_24, __pyx_v_arrayRank, __pyx_v_dimensionWraps, __pyx_v_raveledInputArray, __pyx_v_raveledIsNotSearched); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 249, __pyx_L1_error)
+      __pyx_t_5 = __pyx_f_7fastkde_15floodFillSearch_findNeighbors(__pyx_v_i, __pyx_v_search_threshold, __pyx_t_24, __pyx_v_array_rank, __pyx_v_dimension_wraps, __pyx_v_raveledInputArray, __pyx_v_raveledIsNotSearched); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 241, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __PYX_XCLEAR_MEMVIEW(&__pyx_t_24, 1);
       __pyx_t_24.memview = NULL; __pyx_t_24.data = NULL;
 
-      /* "fastkde/floodFillSearch.pyx":248
+      /* "fastkde/floodFillSearch.pyx":240
  *             #the element for which the search condition is satisified. At very least, the index
- *             #of this element is appended to contiguousAreas
- *             contiguousAreas.append(\             # <<<<<<<<<<<<<<
+ *             #of this element is appended to contiguous_areas
+ *             contiguous_areas.append(\             # <<<<<<<<<<<<<<
  *                                     findNeighbors(  i,  \
- *                                                     searchThreshold,    \
+ *                                                     search_threshold,    \
  */
-      __pyx_t_25 = __Pyx_PyList_Append(__pyx_v_contiguousAreas, __pyx_t_5); if (unlikely(__pyx_t_25 == ((int)-1))) __PYX_ERR(0, 248, __pyx_L1_error)
+      __pyx_t_25 = __Pyx_PyList_Append(__pyx_v_contiguous_areas, __pyx_t_5); if (unlikely(__pyx_t_25 == ((int)-1))) __PYX_ERR(0, 240, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-      /* "fastkde/floodFillSearch.pyx":241
- *         #print "{}/{}".format(i,numArrayElements)
+      /* "fastkde/floodFillSearch.pyx":233
+ *         #print "{}/{}".format(i,num_array_elements)
  *         #Check if the current element meets the search condition
- *         if raveledInputArray[i] >= searchThreshold and raveledIsNotSearched[i]:             # <<<<<<<<<<<<<<
+ *         if raveledInputArray[i] >= search_threshold and raveledIsNotSearched[i]:             # <<<<<<<<<<<<<<
  *             #Flag that this cell has been searched
  *             raveledIsNotSearched[i] = 0
  */
       goto __pyx_L22;
     }
 
-    /* "fastkde/floodFillSearch.pyx":259
+    /* "fastkde/floodFillSearch.pyx":251
  *         else:
  *             #Flag that this cell has been searched
  *             raveledIsNotSearched[i] = 0             # <<<<<<<<<<<<<<
@@ -21076,31 +21084,31 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
       } else if (unlikely(__pyx_t_22 >= __pyx_v_raveledIsNotSearched.shape[0])) __pyx_t_8 = 0;
       if (unlikely(__pyx_t_8 != -1)) {
         __Pyx_RaiseBufferIndexError(__pyx_t_8);
-        __PYX_ERR(0, 259, __pyx_L1_error)
+        __PYX_ERR(0, 251, __pyx_L1_error)
       }
       *((__pyx_t_5numpy_int_t *) ( /* dim=0 */ (__pyx_v_raveledIsNotSearched.data + __pyx_t_22 * __pyx_v_raveledIsNotSearched.strides[0]) )) = 0;
     }
     __pyx_L22:;
   }
 
-  /* "fastkde/floodFillSearch.pyx":264
+  /* "fastkde/floodFillSearch.pyx":256
  * 
  *     #Set the list of contiguous area indices
- *     return contiguousAreas             # <<<<<<<<<<<<<<
+ *     return contiguous_areas             # <<<<<<<<<<<<<<
  * 
- * def sortByDistanceFromCenter(inds,varShape):
+ * def sort_by_distance_from_center(inds,var_shape):
  */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_INCREF(__pyx_v_contiguousAreas);
-  __pyx_r = __pyx_v_contiguousAreas;
+  __Pyx_INCREF(__pyx_v_contiguous_areas);
+  __pyx_r = __pyx_v_contiguous_areas;
   goto __pyx_L0;
 
-  /* "fastkde/floodFillSearch.pyx":170
- *     return np.unravel_index(contiguousIndices,arrayShape)
+  /* "fastkde/floodFillSearch.pyx":163
+ *     return np.unravel_index(contiguous_indices,array_shape)
  * 
- * cpdef list floodFillSearch( \             # <<<<<<<<<<<<<<
- *                 np.ndarray inputArray, \
- *                 np.float_t searchThreshold = 0.0, \
+ * cpdef list flood_fill_search( \             # <<<<<<<<<<<<<<
+ *                 np.ndarray input_array, \
+ *                 np.float_t search_threshold = 0.0, \
  */
 
   /* function exit code */
@@ -21118,19 +21126,19 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
     __Pyx_PyThreadState_declare
     __Pyx_PyThreadState_assign
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_arrayShape.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_array_shape.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("fastkde.floodFillSearch.floodFillSearch", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("fastkde.floodFillSearch.flood_fill_search", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   goto __pyx_L2;
   __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_arrayShape.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_array_shape.rcbuffer->pybuffer);
   __pyx_L2:;
-  __Pyx_XDECREF((PyObject *)__pyx_v_arrayShape);
-  __Pyx_XDECREF(__pyx_v_dimensionWraps);
-  __Pyx_XDECREF(__pyx_v_contiguousAreas);
+  __Pyx_XDECREF((PyObject *)__pyx_v_array_shape);
+  __Pyx_XDECREF(__pyx_v_dimension_wraps);
+  __Pyx_XDECREF(__pyx_v_contiguous_areas);
   __Pyx_XDECREF(__pyx_v_e);
-  __Pyx_XDECREF((PyObject *)__pyx_v_isNotSearched);
+  __Pyx_XDECREF((PyObject *)__pyx_v_is_not_searched);
   __PYX_XCLEAR_MEMVIEW(&__pyx_v_raveledInputArray, 1);
   __PYX_XCLEAR_MEMVIEW(&__pyx_v_raveledIsNotSearched, 1);
   __Pyx_XGIVEREF(__pyx_r);
@@ -21139,25 +21147,25 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_floodFillSearch(PyArrayObjec
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7fastkde_15floodFillSearch_1floodFillSearch(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_7fastkde_15floodFillSearch_1flood_fill_search(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_7fastkde_15floodFillSearch_floodFillSearch, "Given an N-dimensional array, find contiguous areas of the array\n    satisfiying a given condition and return a list of contiguous indices\n    for each contiguous area.\n        \n        input:\n        ------\n\n            inputArray      :   (array-like) an array from which to search\n                                contiguous areas\n\n            searchThreshold :   The threshold for defining fill regions\n                                (inputArray > searchThreshold)\n\n            wrapDimensions :    A list of dimensions in which searching\n                                should have a wraparound condition\n\n        output:\n        -------\n\n            An unordered list, where each item corresponds to a unique\n            contiguous area for which inputArray > searchThreshold, and\n            where the contents of each item are a list of array indicies\n            that access the elements of the array for a given contiguous\n            area.\n\n    ");
-static PyMethodDef __pyx_mdef_7fastkde_15floodFillSearch_1floodFillSearch = {"floodFillSearch", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7fastkde_15floodFillSearch_1floodFillSearch, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7fastkde_15floodFillSearch_floodFillSearch};
-static PyObject *__pyx_pw_7fastkde_15floodFillSearch_1floodFillSearch(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_7fastkde_15floodFillSearch_flood_fill_search, "Given an N-dimensional array, find contiguous areas of the array\n    satisfiying a given condition and return a list of contiguous indices\n    for each contiguous area.\n        \n        input:\n        ------\n\n            input_array      :   (array-like) an array from which to search\n                                contiguous areas\n\n            search_threshold :   The threshold for defining fill regions\n                                (input_array > search_threshold)\n\n            wrap_dimensions :    A list of dimensions in which searching\n                                should have a wraparound condition\n\n        output:\n        -------\n\n            An unordered list, where each item corresponds to a unique\n            contiguous area for which input_array > search_threshold, and\n            where the contents of each item are a list of array indicies\n            that access the elements of the array for a given contiguous\n            area.\n\n    ");
+static PyMethodDef __pyx_mdef_7fastkde_15floodFillSearch_1flood_fill_search = {"flood_fill_search", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7fastkde_15floodFillSearch_1flood_fill_search, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7fastkde_15floodFillSearch_flood_fill_search};
+static PyObject *__pyx_pw_7fastkde_15floodFillSearch_1flood_fill_search(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ) {
-  PyArrayObject *__pyx_v_inputArray = 0;
-  __pyx_t_5numpy_float_t __pyx_v_searchThreshold;
-  PyObject *__pyx_v_wrapDimensions = 0;
+  PyArrayObject *__pyx_v_input_array = 0;
+  __pyx_t_5numpy_float_t __pyx_v_search_threshold;
+  PyObject *__pyx_v_wrap_dimensions = 0;
   #if !CYTHON_METH_FASTCALL
   CYTHON_UNUSED Py_ssize_t __pyx_nargs;
   #endif
@@ -21168,7 +21176,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("floodFillSearch (wrapper)", 0);
+  __Pyx_RefNannySetupContext("flood_fill_search (wrapper)", 0);
   #if !CYTHON_METH_FASTCALL
   #if CYTHON_ASSUME_SAFE_MACROS
   __pyx_nargs = PyTuple_GET_SIZE(__pyx_args);
@@ -21178,12 +21186,12 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   #endif
   __pyx_kwvalues = __Pyx_KwValues_FASTCALL(__pyx_args, __pyx_nargs);
   {
-    PyObject **__pyx_pyargnames[] = {&__pyx_n_s_inputArray,&__pyx_n_s_searchThreshold,&__pyx_n_s_wrapDimensions,0};
+    PyObject **__pyx_pyargnames[] = {&__pyx_n_s_input_array,&__pyx_n_s_search_threshold,&__pyx_n_s_wrap_dimensions,0};
 
-    /* "fastkde/floodFillSearch.pyx":173
- *                 np.ndarray inputArray, \
- *                 np.float_t searchThreshold = 0.0, \
- *                 wrapDimensions = None):             # <<<<<<<<<<<<<<
+    /* "fastkde/floodFillSearch.pyx":166
+ *                 np.ndarray input_array, \
+ *                 np.float_t search_threshold = 0.0, \
+ *                 wrap_dimensions = None):             # <<<<<<<<<<<<<<
  *     """Given an N-dimensional array, find contiguous areas of the array
  *     satisfiying a given condition and return a list of contiguous indices
  */
@@ -21203,30 +21211,30 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       kw_args = __Pyx_NumKwargs_FASTCALL(__pyx_kwds);
       switch (__pyx_nargs) {
         case  0:
-        if (likely((values[0] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_inputArray)) != 0)) {
+        if (likely((values[0] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_input_array)) != 0)) {
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 170, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 163, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_searchThreshold);
+          PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_search_threshold);
           if (value) { values[1] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 170, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 163, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_wrapDimensions);
+          PyObject* value = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_wrap_dimensions);
           if (value) { values[2] = __Pyx_Arg_NewRef_FASTCALL(value); kw_args--; }
-          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 170, __pyx_L3_error)
+          else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 163, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "floodFillSearch") < 0)) __PYX_ERR(0, 170, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "flood_fill_search") < 0)) __PYX_ERR(0, 163, __pyx_L3_error)
       }
     } else {
       switch (__pyx_nargs) {
@@ -21239,17 +21247,17 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_inputArray = ((PyArrayObject *)values[0]);
+    __pyx_v_input_array = ((PyArrayObject *)values[0]);
     if (values[1]) {
-      __pyx_v_searchThreshold = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_searchThreshold == ((npy_double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 172, __pyx_L3_error)
+      __pyx_v_search_threshold = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_search_threshold == ((npy_double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 165, __pyx_L3_error)
     } else {
-      __pyx_v_searchThreshold = ((__pyx_t_5numpy_float_t)0.0);
+      __pyx_v_search_threshold = ((__pyx_t_5numpy_float_t)0.0);
     }
-    __pyx_v_wrapDimensions = values[2];
+    __pyx_v_wrap_dimensions = values[2];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("floodFillSearch", 0, 1, 3, __pyx_nargs); __PYX_ERR(0, 170, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("flood_fill_search", 0, 1, 3, __pyx_nargs); __PYX_ERR(0, 163, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -21259,19 +21267,19 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __Pyx_Arg_XDECREF_FASTCALL(values[__pyx_temp]);
     }
   }
-  __Pyx_AddTraceback("fastkde.floodFillSearch.floodFillSearch", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("fastkde.floodFillSearch.flood_fill_search", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_inputArray), __pyx_ptype_5numpy_ndarray, 1, "inputArray", 0))) __PYX_ERR(0, 171, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7fastkde_15floodFillSearch_floodFillSearch(__pyx_self, __pyx_v_inputArray, __pyx_v_searchThreshold, __pyx_v_wrapDimensions);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_input_array), __pyx_ptype_5numpy_ndarray, 1, "input_array", 0))) __PYX_ERR(0, 164, __pyx_L1_error)
+  __pyx_r = __pyx_pf_7fastkde_15floodFillSearch_flood_fill_search(__pyx_self, __pyx_v_input_array, __pyx_v_search_threshold, __pyx_v_wrap_dimensions);
 
-  /* "fastkde/floodFillSearch.pyx":170
- *     return np.unravel_index(contiguousIndices,arrayShape)
+  /* "fastkde/floodFillSearch.pyx":163
+ *     return np.unravel_index(contiguous_indices,array_shape)
  * 
- * cpdef list floodFillSearch( \             # <<<<<<<<<<<<<<
- *                 np.ndarray inputArray, \
- *                 np.float_t searchThreshold = 0.0, \
+ * cpdef list flood_fill_search( \             # <<<<<<<<<<<<<<
+ *                 np.ndarray input_array, \
+ *                 np.float_t search_threshold = 0.0, \
  */
 
   /* function exit code */
@@ -21289,20 +21297,20 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7fastkde_15floodFillSearch_floodFillSearch(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_inputArray, __pyx_t_5numpy_float_t __pyx_v_searchThreshold, PyObject *__pyx_v_wrapDimensions) {
+static PyObject *__pyx_pf_7fastkde_15floodFillSearch_flood_fill_search(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_input_array, __pyx_t_5numpy_float_t __pyx_v_search_threshold, PyObject *__pyx_v_wrap_dimensions) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
-  struct __pyx_opt_args_7fastkde_15floodFillSearch_floodFillSearch __pyx_t_2;
+  struct __pyx_opt_args_7fastkde_15floodFillSearch_flood_fill_search __pyx_t_2;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("floodFillSearch", 1);
+  __Pyx_RefNannySetupContext("flood_fill_search", 1);
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_2.__pyx_n = 2;
-  __pyx_t_2.searchThreshold = __pyx_v_searchThreshold;
-  __pyx_t_2.wrapDimensions = __pyx_v_wrapDimensions;
-  __pyx_t_1 = __pyx_f_7fastkde_15floodFillSearch_floodFillSearch(__pyx_v_inputArray, 0, &__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 170, __pyx_L1_error)
+  __pyx_t_2.search_threshold = __pyx_v_search_threshold;
+  __pyx_t_2.wrap_dimensions = __pyx_v_wrap_dimensions;
+  __pyx_t_1 = __pyx_f_7fastkde_15floodFillSearch_flood_fill_search(__pyx_v_input_array, 0, &__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 163, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -21311,7 +21319,7 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_floodFillSearch(CYTHON_UNUS
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("fastkde.floodFillSearch.floodFillSearch", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("fastkde.floodFillSearch.flood_fill_search", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -21319,25 +21327,25 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_floodFillSearch(CYTHON_UNUS
   return __pyx_r;
 }
 
-/* "fastkde/floodFillSearch.pyx":266
- *     return contiguousAreas
+/* "fastkde/floodFillSearch.pyx":258
+ *     return contiguous_areas
  * 
- * def sortByDistanceFromCenter(inds,varShape):             # <<<<<<<<<<<<<<
- *     """Takes sets of indicies [e.g., from floodFillSearchC.floodFillSearch()] and sorts them by distance from the center of the array from which the indices were taken.
+ * def sort_by_distance_from_center(inds,var_shape):             # <<<<<<<<<<<<<<
+ *     """Takes sets of indicies [e.g., from flood_fill_searchC.flood_fill_search()] and sorts them by distance from the center of the array from which the indices were taken.
  * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7fastkde_15floodFillSearch_3sortByDistanceFromCenter(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_7fastkde_15floodFillSearch_3sort_by_distance_from_center(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_7fastkde_15floodFillSearch_2sortByDistanceFromCenter, "Takes sets of indicies [e.g., from floodFillSearchC.floodFillSearch()] and sorts them by distance from the center of the array from which the indices were taken.\n    \n        input:\n        ------\n        \n            inds     :  a list of tuples of numpy ndarrays (of type integer and\n                        rank 1), where each tuple item contains a vector of\n                        indices for each index of an array.  Each list item\n                        should conform to the output of the numpy where()\n                        function.  It is assumed that each set of indices\n                        represents a contiguous portion of an array.\n                       \n            varShape : the shape of the variable from which inds originate\n            \n        returns:\n        --------\n\n             A sorted version of inds, where the items are sorted by the\n             distance of the contiguous area relative to the center of the\n             array whose shape is varShape.  The first item is the closest to\n             the center of the array.\n             \n    ");
-static PyMethodDef __pyx_mdef_7fastkde_15floodFillSearch_3sortByDistanceFromCenter = {"sortByDistanceFromCenter", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7fastkde_15floodFillSearch_3sortByDistanceFromCenter, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7fastkde_15floodFillSearch_2sortByDistanceFromCenter};
-static PyObject *__pyx_pw_7fastkde_15floodFillSearch_3sortByDistanceFromCenter(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_7fastkde_15floodFillSearch_2sort_by_distance_from_center, "Takes sets of indicies [e.g., from flood_fill_searchC.flood_fill_search()] and sorts them by distance from the center of the array from which the indices were taken.\n    \n        input:\n        ------\n        \n            inds     :  a list of tuples of numpy ndarrays (of type integer and\n                        rank 1), where each tuple item contains a vector of\n                        indices for each index of an array.  Each list item\n                        should conform to the output of the numpy where()\n                        function.  It is assumed that each set of indices\n                        represents a contiguous portion of an array.\n                       \n            var_shape : the shape of the variable from which inds originate\n            \n        returns:\n        --------\n\n             A sorted version of inds, where the items are sorted by the\n             distance of the contiguous area relative to the center of the\n             array whose shape is var_shape.  The first item is the closest to\n             the center of the array.\n             \n    ");
+static PyMethodDef __pyx_mdef_7fastkde_15floodFillSearch_3sort_by_distance_from_center = {"sort_by_distance_from_center", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7fastkde_15floodFillSearch_3sort_by_distance_from_center, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7fastkde_15floodFillSearch_2sort_by_distance_from_center};
+static PyObject *__pyx_pw_7fastkde_15floodFillSearch_3sort_by_distance_from_center(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -21345,7 +21353,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ) {
   PyObject *__pyx_v_inds = 0;
-  PyObject *__pyx_v_varShape = 0;
+  PyObject *__pyx_v_var_shape = 0;
   #if !CYTHON_METH_FASTCALL
   CYTHON_UNUSED Py_ssize_t __pyx_nargs;
   #endif
@@ -21356,7 +21364,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("sortByDistanceFromCenter (wrapper)", 0);
+  __Pyx_RefNannySetupContext("sort_by_distance_from_center (wrapper)", 0);
   #if !CYTHON_METH_FASTCALL
   #if CYTHON_ASSUME_SAFE_MACROS
   __pyx_nargs = PyTuple_GET_SIZE(__pyx_args);
@@ -21366,7 +21374,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   #endif
   __pyx_kwvalues = __Pyx_KwValues_FASTCALL(__pyx_args, __pyx_nargs);
   {
-    PyObject **__pyx_pyargnames[] = {&__pyx_n_s_inds,&__pyx_n_s_varShape,0};
+    PyObject **__pyx_pyargnames[] = {&__pyx_n_s_inds,&__pyx_n_s_var_shape,0};
     if (__pyx_kwds) {
       Py_ssize_t kw_args;
       switch (__pyx_nargs) {
@@ -21384,22 +21392,22 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 266, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 258, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
-        if (likely((values[1] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_varShape)) != 0)) {
+        if (likely((values[1] = __Pyx_GetKwValue_FASTCALL(__pyx_kwds, __pyx_kwvalues, __pyx_n_s_var_shape)) != 0)) {
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 266, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 258, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("sortByDistanceFromCenter", 1, 2, 2, 1); __PYX_ERR(0, 266, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("sort_by_distance_from_center", 1, 2, 2, 1); __PYX_ERR(0, 258, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "sortByDistanceFromCenter") < 0)) __PYX_ERR(0, 266, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "sort_by_distance_from_center") < 0)) __PYX_ERR(0, 258, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 2)) {
       goto __pyx_L5_argtuple_error;
@@ -21408,11 +21416,11 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[1] = __Pyx_Arg_FASTCALL(__pyx_args, 1);
     }
     __pyx_v_inds = values[0];
-    __pyx_v_varShape = values[1];
+    __pyx_v_var_shape = values[1];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("sortByDistanceFromCenter", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 266, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("sort_by_distance_from_center", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 258, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -21422,11 +21430,11 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __Pyx_Arg_XDECREF_FASTCALL(values[__pyx_temp]);
     }
   }
-  __Pyx_AddTraceback("fastkde.floodFillSearch.sortByDistanceFromCenter", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("fastkde.floodFillSearch.sort_by_distance_from_center", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(__pyx_self, __pyx_v_inds, __pyx_v_varShape);
+  __pyx_r = __pyx_pf_7fastkde_15floodFillSearch_2sort_by_distance_from_center(__pyx_self, __pyx_v_inds, __pyx_v_var_shape);
 
   /* function exit code */
   {
@@ -21438,9 +21446,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
-static PyObject *__pyx_gb_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_2generator(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
+static PyObject *__pyx_gb_7fastkde_15floodFillSearch_28sort_by_distance_from_center_2generator(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
-/* "fastkde/floodFillSearch.pyx":294
+/* "fastkde/floodFillSearch.pyx":286
  * 
  *     #Transform the indices to be center-relative
  *     centeredInds = [ tuple([ aind - cind] for aind,cind in zip(indTuples,center)) for indTuples in inds ]             # <<<<<<<<<<<<<<
@@ -21448,7 +21456,7 @@ static PyObject *__pyx_gb_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_
  *     #Calculate center-of-mass ffor each contiguous array
  */
 
-static PyObject *__pyx_pf_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_genexpr(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_genexpr_arg_0) {
+static PyObject *__pyx_pf_7fastkde_15floodFillSearch_28sort_by_distance_from_center_genexpr(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_genexpr_arg_0) {
   struct __pyx_obj_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr *__pyx_cur_scope;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -21460,7 +21468,7 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_
   if (unlikely(!__pyx_cur_scope)) {
     __pyx_cur_scope = ((struct __pyx_obj_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr *)Py_None);
     __Pyx_INCREF(Py_None);
-    __PYX_ERR(0, 294, __pyx_L1_error)
+    __PYX_ERR(0, 286, __pyx_L1_error)
   } else {
     __Pyx_GOTREF((PyObject *)__pyx_cur_scope);
   }
@@ -21468,7 +21476,7 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_
   __Pyx_INCREF(__pyx_cur_scope->__pyx_genexpr_arg_0);
   __Pyx_GIVEREF(__pyx_cur_scope->__pyx_genexpr_arg_0);
   {
-    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_2generator, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_sortByDistanceFromCenter_locals, __pyx_n_s_fastkde_floodFillSearch); if (unlikely(!gen)) __PYX_ERR(0, 294, __pyx_L1_error)
+    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_7fastkde_15floodFillSearch_28sort_by_distance_from_center_2generator, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_sort_by_distance_from_center_loc, __pyx_n_s_fastkde_floodFillSearch); if (unlikely(!gen)) __PYX_ERR(0, 286, __pyx_L1_error)
     __Pyx_DECREF(__pyx_cur_scope);
     __Pyx_RefNannyFinishContext();
     return (PyObject *) gen;
@@ -21476,7 +21484,7 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("fastkde.floodFillSearch.sortByDistanceFromCenter.genexpr", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("fastkde.floodFillSearch.sort_by_distance_from_center.genexpr", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_DECREF((PyObject *)__pyx_cur_scope);
   __Pyx_XGIVEREF(__pyx_r);
@@ -21484,7 +21492,7 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_
   return __pyx_r;
 }
 
-static PyObject *__pyx_gb_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_2generator(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value) /* generator body */
+static PyObject *__pyx_gb_7fastkde_15floodFillSearch_28sort_by_distance_from_center_2generator(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value) /* generator body */
 {
   struct __pyx_obj_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr *__pyx_cur_scope = ((struct __pyx_obj_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr *)__pyx_generator->closure);
   PyObject *__pyx_r = NULL;
@@ -21509,16 +21517,16 @@ static PyObject *__pyx_gb_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_
     return NULL;
   }
   __pyx_L3_first_run:;
-  if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 294, __pyx_L1_error)
-  if (unlikely(!__pyx_cur_scope->__pyx_genexpr_arg_0)) { __Pyx_RaiseUnboundLocalError(".0"); __PYX_ERR(0, 294, __pyx_L1_error) }
+  if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 286, __pyx_L1_error)
+  if (unlikely(!__pyx_cur_scope->__pyx_genexpr_arg_0)) { __Pyx_RaiseUnboundLocalError(".0"); __PYX_ERR(0, 286, __pyx_L1_error) }
   if (likely(PyList_CheckExact(__pyx_cur_scope->__pyx_genexpr_arg_0)) || PyTuple_CheckExact(__pyx_cur_scope->__pyx_genexpr_arg_0)) {
     __pyx_t_1 = __pyx_cur_scope->__pyx_genexpr_arg_0; __Pyx_INCREF(__pyx_t_1);
     __pyx_t_2 = 0;
     __pyx_t_3 = NULL;
   } else {
-    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_cur_scope->__pyx_genexpr_arg_0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 294, __pyx_L1_error)
+    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_cur_scope->__pyx_genexpr_arg_0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 286, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 294, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 286, __pyx_L1_error)
   }
   for (;;) {
     if (likely(!__pyx_t_3)) {
@@ -21526,28 +21534,28 @@ static PyObject *__pyx_gb_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_
         {
           Py_ssize_t __pyx_temp = __Pyx_PyList_GET_SIZE(__pyx_t_1);
           #if !CYTHON_ASSUME_SAFE_MACROS
-          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 294, __pyx_L1_error)
+          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 286, __pyx_L1_error)
           #endif
           if (__pyx_t_2 >= __pyx_temp) break;
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely((0 < 0))) __PYX_ERR(0, 294, __pyx_L1_error)
+        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely((0 < 0))) __PYX_ERR(0, 286, __pyx_L1_error)
         #else
-        __pyx_t_4 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 294, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 286, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       } else {
         {
           Py_ssize_t __pyx_temp = __Pyx_PyTuple_GET_SIZE(__pyx_t_1);
           #if !CYTHON_ASSUME_SAFE_MACROS
-          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 294, __pyx_L1_error)
+          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 286, __pyx_L1_error)
           #endif
           if (__pyx_t_2 >= __pyx_temp) break;
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely((0 < 0))) __PYX_ERR(0, 294, __pyx_L1_error)
+        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely((0 < 0))) __PYX_ERR(0, 286, __pyx_L1_error)
         #else
-        __pyx_t_4 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 294, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 286, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       }
@@ -21557,7 +21565,7 @@ static PyObject *__pyx_gb_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 294, __pyx_L1_error)
+          else __PYX_ERR(0, 286, __pyx_L1_error)
         }
         break;
       }
@@ -21569,7 +21577,7 @@ static PyObject *__pyx_gb_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_
       if (unlikely(size != 2)) {
         if (size > 2) __Pyx_RaiseTooManyValuesError(2);
         else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-        __PYX_ERR(0, 294, __pyx_L1_error)
+        __PYX_ERR(0, 286, __pyx_L1_error)
       }
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
       if (likely(PyTuple_CheckExact(sequence))) {
@@ -21582,15 +21590,15 @@ static PyObject *__pyx_gb_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_
       __Pyx_INCREF(__pyx_t_5);
       __Pyx_INCREF(__pyx_t_6);
       #else
-      __pyx_t_5 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 294, __pyx_L1_error)
+      __pyx_t_5 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 286, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_6 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 294, __pyx_L1_error)
+      __pyx_t_6 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 286, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       #endif
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     } else {
       Py_ssize_t index = -1;
-      __pyx_t_7 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 294, __pyx_L1_error)
+      __pyx_t_7 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 286, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_t_8 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_7);
@@ -21598,7 +21606,7 @@ static PyObject *__pyx_gb_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_
       __Pyx_GOTREF(__pyx_t_5);
       index = 1; __pyx_t_6 = __pyx_t_8(__pyx_t_7); if (unlikely(!__pyx_t_6)) goto __pyx_L6_unpacking_failed;
       __Pyx_GOTREF(__pyx_t_6);
-      if (__Pyx_IternextUnpackEndCheck(__pyx_t_8(__pyx_t_7), 2) < 0) __PYX_ERR(0, 294, __pyx_L1_error)
+      if (__Pyx_IternextUnpackEndCheck(__pyx_t_8(__pyx_t_7), 2) < 0) __PYX_ERR(0, 286, __pyx_L1_error)
       __pyx_t_8 = NULL;
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       goto __pyx_L7_unpacking_done;
@@ -21606,7 +21614,7 @@ static PyObject *__pyx_gb_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __pyx_t_8 = NULL;
       if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-      __PYX_ERR(0, 294, __pyx_L1_error)
+      __PYX_ERR(0, 286, __pyx_L1_error)
       __pyx_L7_unpacking_done:;
     }
     __Pyx_XGOTREF(__pyx_cur_scope->__pyx_v_aind);
@@ -21617,12 +21625,12 @@ static PyObject *__pyx_gb_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_
     __Pyx_XDECREF_SET(__pyx_cur_scope->__pyx_v_cind, __pyx_t_6);
     __Pyx_GIVEREF(__pyx_t_6);
     __pyx_t_6 = 0;
-    __pyx_t_4 = PyNumber_Subtract(__pyx_cur_scope->__pyx_v_aind, __pyx_cur_scope->__pyx_v_cind); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 294, __pyx_L1_error)
+    __pyx_t_4 = PyNumber_Subtract(__pyx_cur_scope->__pyx_v_aind, __pyx_cur_scope->__pyx_v_cind); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 286, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_6 = PyList_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 294, __pyx_L1_error)
+    __pyx_t_6 = PyList_New(1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 286, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_GIVEREF(__pyx_t_4);
-    if (__Pyx_PyList_SET_ITEM(__pyx_t_6, 0, __pyx_t_4)) __PYX_ERR(0, 294, __pyx_L1_error);
+    if (__Pyx_PyList_SET_ITEM(__pyx_t_6, 0, __pyx_t_4)) __PYX_ERR(0, 286, __pyx_L1_error);
     __pyx_t_4 = 0;
     __pyx_r = __pyx_t_6;
     __pyx_t_6 = 0;
@@ -21642,7 +21650,7 @@ static PyObject *__pyx_gb_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_
     __Pyx_XGOTREF(__pyx_t_1);
     __pyx_t_2 = __pyx_cur_scope->__pyx_t_1;
     __pyx_t_3 = __pyx_cur_scope->__pyx_t_2;
-    if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 294, __pyx_L1_error)
+    if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 286, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   CYTHON_MAYBE_UNUSED_VAR(__pyx_cur_scope);
@@ -21668,22 +21676,22 @@ static PyObject *__pyx_gb_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_
   return __pyx_r;
 }
 
-/* "fastkde/floodFillSearch.pyx":266
- *     return contiguousAreas
+/* "fastkde/floodFillSearch.pyx":258
+ *     return contiguous_areas
  * 
- * def sortByDistanceFromCenter(inds,varShape):             # <<<<<<<<<<<<<<
- *     """Takes sets of indicies [e.g., from floodFillSearchC.floodFillSearch()] and sorts them by distance from the center of the array from which the indices were taken.
+ * def sort_by_distance_from_center(inds,var_shape):             # <<<<<<<<<<<<<<
+ *     """Takes sets of indicies [e.g., from flood_fill_searchC.flood_fill_search()] and sorts them by distance from the center of the array from which the indices were taken.
  * 
  */
 
-static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_inds, PyObject *__pyx_v_varShape) {
+static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sort_by_distance_from_center(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_inds, PyObject *__pyx_v_var_shape) {
   PyObject *__pyx_v_center = NULL;
   PyObject *__pyx_v_centeredInds = NULL;
   PyObject *__pyx_v_centersOfMass = NULL;
   PyObject *__pyx_v_distances = NULL;
   PyObject *__pyx_v_isort = NULL;
   PyObject *__pyx_v_indTuples = NULL;
-  PyObject *__pyx_gb_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_2generator = 0;
+  PyObject *__pyx_gb_7fastkde_15floodFillSearch_28sort_by_distance_from_center_2generator = 0;
   PyObject *__pyx_v_aind = NULL;
   PyObject *__pyx_v_indices = NULL;
   PyObject *__pyx_v_i = NULL;
@@ -21705,23 +21713,23 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("sortByDistanceFromCenter", 1);
+  __Pyx_RefNannySetupContext("sort_by_distance_from_center", 1);
 
-  /* "fastkde/floodFillSearch.pyx":291
+  /* "fastkde/floodFillSearch.pyx":283
  *     """
  *     #Get the center index
- *     center = np.around(np.array(varShape)/2)             # <<<<<<<<<<<<<<
+ *     center = np.around(np.array(var_shape)/2)             # <<<<<<<<<<<<<<
  * 
  *     #Transform the indices to be center-relative
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 291, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 283, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_around); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 291, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_around); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 283, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 291, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 283, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_array); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 291, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_array); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 283, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_4 = NULL;
@@ -21739,14 +21747,14 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
   }
   #endif
   {
-    PyObject *__pyx_callargs[2] = {__pyx_t_4, __pyx_v_varShape};
+    PyObject *__pyx_callargs[2] = {__pyx_t_4, __pyx_v_var_shape};
     __pyx_t_2 = __Pyx_PyObject_FastCall(__pyx_t_5, __pyx_callargs+1-__pyx_t_6, 1+__pyx_t_6);
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 291, __pyx_L1_error)
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 283, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   }
-  __pyx_t_5 = __Pyx_PyNumber_Divide(__pyx_t_2, __pyx_int_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 291, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyNumber_Divide(__pyx_t_2, __pyx_int_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 283, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -21768,30 +21776,30 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_3, __pyx_callargs+1-__pyx_t_6, 1+__pyx_t_6);
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 291, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 283, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   }
   __pyx_v_center = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "fastkde/floodFillSearch.pyx":294
+  /* "fastkde/floodFillSearch.pyx":286
  * 
  *     #Transform the indices to be center-relative
  *     centeredInds = [ tuple([ aind - cind] for aind,cind in zip(indTuples,center)) for indTuples in inds ]             # <<<<<<<<<<<<<<
  * 
  *     #Calculate center-of-mass ffor each contiguous array
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 294, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 286, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (likely(PyList_CheckExact(__pyx_v_inds)) || PyTuple_CheckExact(__pyx_v_inds)) {
     __pyx_t_3 = __pyx_v_inds; __Pyx_INCREF(__pyx_t_3);
     __pyx_t_7 = 0;
     __pyx_t_8 = NULL;
   } else {
-    __pyx_t_7 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_v_inds); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 294, __pyx_L1_error)
+    __pyx_t_7 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_v_inds); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 286, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_8 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 294, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 286, __pyx_L1_error)
   }
   for (;;) {
     if (likely(!__pyx_t_8)) {
@@ -21799,28 +21807,28 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
         {
           Py_ssize_t __pyx_temp = __Pyx_PyList_GET_SIZE(__pyx_t_3);
           #if !CYTHON_ASSUME_SAFE_MACROS
-          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 294, __pyx_L1_error)
+          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 286, __pyx_L1_error)
           #endif
           if (__pyx_t_7 >= __pyx_temp) break;
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_5 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_7); __Pyx_INCREF(__pyx_t_5); __pyx_t_7++; if (unlikely((0 < 0))) __PYX_ERR(0, 294, __pyx_L1_error)
+        __pyx_t_5 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_7); __Pyx_INCREF(__pyx_t_5); __pyx_t_7++; if (unlikely((0 < 0))) __PYX_ERR(0, 286, __pyx_L1_error)
         #else
-        __pyx_t_5 = __Pyx_PySequence_ITEM(__pyx_t_3, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 294, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PySequence_ITEM(__pyx_t_3, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 286, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         #endif
       } else {
         {
           Py_ssize_t __pyx_temp = __Pyx_PyTuple_GET_SIZE(__pyx_t_3);
           #if !CYTHON_ASSUME_SAFE_MACROS
-          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 294, __pyx_L1_error)
+          if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 286, __pyx_L1_error)
           #endif
           if (__pyx_t_7 >= __pyx_temp) break;
         }
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_5 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_7); __Pyx_INCREF(__pyx_t_5); __pyx_t_7++; if (unlikely((0 < 0))) __PYX_ERR(0, 294, __pyx_L1_error)
+        __pyx_t_5 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_7); __Pyx_INCREF(__pyx_t_5); __pyx_t_7++; if (unlikely((0 < 0))) __PYX_ERR(0, 286, __pyx_L1_error)
         #else
-        __pyx_t_5 = __Pyx_PySequence_ITEM(__pyx_t_3, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 294, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PySequence_ITEM(__pyx_t_3, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 286, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         #endif
       }
@@ -21830,7 +21838,7 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 294, __pyx_L1_error)
+          else __PYX_ERR(0, 286, __pyx_L1_error)
         }
         break;
       }
@@ -21838,38 +21846,38 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
     }
     __Pyx_XDECREF_SET(__pyx_v_indTuples, __pyx_t_5);
     __pyx_t_5 = 0;
-    __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 294, __pyx_L1_error)
+    __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 286, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_INCREF(__pyx_v_indTuples);
     __Pyx_GIVEREF(__pyx_v_indTuples);
-    if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_v_indTuples)) __PYX_ERR(0, 294, __pyx_L1_error);
+    if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_v_indTuples)) __PYX_ERR(0, 286, __pyx_L1_error);
     __Pyx_INCREF(__pyx_v_center);
     __Pyx_GIVEREF(__pyx_v_center);
-    if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_v_center)) __PYX_ERR(0, 294, __pyx_L1_error);
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_zip, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 294, __pyx_L1_error)
+    if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_v_center)) __PYX_ERR(0, 286, __pyx_L1_error);
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_zip, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 286, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = __pyx_pf_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_genexpr(NULL, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 294, __pyx_L1_error)
+    __pyx_t_5 = __pyx_pf_7fastkde_15floodFillSearch_28sort_by_distance_from_center_genexpr(NULL, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 286, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PySequence_Tuple(__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 294, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PySequence_Tuple(__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 286, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_t_2))) __PYX_ERR(0, 294, __pyx_L1_error)
+    if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_t_2))) __PYX_ERR(0, 286, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_centeredInds = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "fastkde/floodFillSearch.pyx":297
+  /* "fastkde/floodFillSearch.pyx":289
  * 
  *     #Calculate center-of-mass ffor each contiguous array
  *     centersOfMass = [ np.array([np.average(aind) for aind in indTuples]) for indTuples in centeredInds]             # <<<<<<<<<<<<<<
  * 
  *     #Calculate the distance from the origin of each center of mass
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 297, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 289, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_3 = __pyx_v_centeredInds; __Pyx_INCREF(__pyx_t_3);
   __pyx_t_7 = 0;
@@ -21877,33 +21885,33 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
     {
       Py_ssize_t __pyx_temp = __Pyx_PyList_GET_SIZE(__pyx_t_3);
       #if !CYTHON_ASSUME_SAFE_MACROS
-      if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 297, __pyx_L1_error)
+      if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 289, __pyx_L1_error)
       #endif
       if (__pyx_t_7 >= __pyx_temp) break;
     }
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    __pyx_t_2 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_7); __Pyx_INCREF(__pyx_t_2); __pyx_t_7++; if (unlikely((0 < 0))) __PYX_ERR(0, 297, __pyx_L1_error)
+    __pyx_t_2 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_7); __Pyx_INCREF(__pyx_t_2); __pyx_t_7++; if (unlikely((0 < 0))) __PYX_ERR(0, 289, __pyx_L1_error)
     #else
-    __pyx_t_2 = __Pyx_PySequence_ITEM(__pyx_t_3, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 297, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PySequence_ITEM(__pyx_t_3, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 289, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     #endif
     __Pyx_XDECREF_SET(__pyx_v_indTuples, __pyx_t_2);
     __pyx_t_2 = 0;
-    __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 297, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 289, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_array); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 297, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_array); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 289, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = PyList_New(0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 297, __pyx_L1_error)
+    __pyx_t_5 = PyList_New(0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 289, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     if (likely(PyList_CheckExact(__pyx_v_indTuples)) || PyTuple_CheckExact(__pyx_v_indTuples)) {
       __pyx_t_9 = __pyx_v_indTuples; __Pyx_INCREF(__pyx_t_9);
       __pyx_t_10 = 0;
       __pyx_t_8 = NULL;
     } else {
-      __pyx_t_10 = -1; __pyx_t_9 = PyObject_GetIter(__pyx_v_indTuples); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 297, __pyx_L1_error)
+      __pyx_t_10 = -1; __pyx_t_9 = PyObject_GetIter(__pyx_v_indTuples); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 289, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
-      __pyx_t_8 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_9); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 297, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyObject_GetIterNextFunc(__pyx_t_9); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 289, __pyx_L1_error)
     }
     for (;;) {
       if (likely(!__pyx_t_8)) {
@@ -21911,28 +21919,28 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
           {
             Py_ssize_t __pyx_temp = __Pyx_PyList_GET_SIZE(__pyx_t_9);
             #if !CYTHON_ASSUME_SAFE_MACROS
-            if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 297, __pyx_L1_error)
+            if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 289, __pyx_L1_error)
             #endif
             if (__pyx_t_10 >= __pyx_temp) break;
           }
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_11 = PyList_GET_ITEM(__pyx_t_9, __pyx_t_10); __Pyx_INCREF(__pyx_t_11); __pyx_t_10++; if (unlikely((0 < 0))) __PYX_ERR(0, 297, __pyx_L1_error)
+          __pyx_t_11 = PyList_GET_ITEM(__pyx_t_9, __pyx_t_10); __Pyx_INCREF(__pyx_t_11); __pyx_t_10++; if (unlikely((0 < 0))) __PYX_ERR(0, 289, __pyx_L1_error)
           #else
-          __pyx_t_11 = __Pyx_PySequence_ITEM(__pyx_t_9, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 297, __pyx_L1_error)
+          __pyx_t_11 = __Pyx_PySequence_ITEM(__pyx_t_9, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 289, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_11);
           #endif
         } else {
           {
             Py_ssize_t __pyx_temp = __Pyx_PyTuple_GET_SIZE(__pyx_t_9);
             #if !CYTHON_ASSUME_SAFE_MACROS
-            if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 297, __pyx_L1_error)
+            if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 289, __pyx_L1_error)
             #endif
             if (__pyx_t_10 >= __pyx_temp) break;
           }
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_11 = PyTuple_GET_ITEM(__pyx_t_9, __pyx_t_10); __Pyx_INCREF(__pyx_t_11); __pyx_t_10++; if (unlikely((0 < 0))) __PYX_ERR(0, 297, __pyx_L1_error)
+          __pyx_t_11 = PyTuple_GET_ITEM(__pyx_t_9, __pyx_t_10); __Pyx_INCREF(__pyx_t_11); __pyx_t_10++; if (unlikely((0 < 0))) __PYX_ERR(0, 289, __pyx_L1_error)
           #else
-          __pyx_t_11 = __Pyx_PySequence_ITEM(__pyx_t_9, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 297, __pyx_L1_error)
+          __pyx_t_11 = __Pyx_PySequence_ITEM(__pyx_t_9, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 289, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_11);
           #endif
         }
@@ -21942,7 +21950,7 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 297, __pyx_L1_error)
+            else __PYX_ERR(0, 289, __pyx_L1_error)
           }
           break;
         }
@@ -21950,9 +21958,9 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
       }
       __Pyx_XDECREF_SET(__pyx_v_aind, __pyx_t_11);
       __pyx_t_11 = 0;
-      __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_n_s_np); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 297, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_12, __pyx_n_s_np); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 289, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
-      __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_n_s_average); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 297, __pyx_L1_error)
+      __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_n_s_average); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 289, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_13);
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       __pyx_t_12 = NULL;
@@ -21973,11 +21981,11 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
         PyObject *__pyx_callargs[2] = {__pyx_t_12, __pyx_v_aind};
         __pyx_t_11 = __Pyx_PyObject_FastCall(__pyx_t_13, __pyx_callargs+1-__pyx_t_6, 1+__pyx_t_6);
         __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-        if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 297, __pyx_L1_error)
+        if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 289, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_11);
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
       }
-      if (unlikely(__Pyx_ListComp_Append(__pyx_t_5, (PyObject*)__pyx_t_11))) __PYX_ERR(0, 297, __pyx_L1_error)
+      if (unlikely(__Pyx_ListComp_Append(__pyx_t_5, (PyObject*)__pyx_t_11))) __PYX_ERR(0, 289, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     }
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
@@ -22000,25 +22008,25 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
       __pyx_t_2 = __Pyx_PyObject_FastCall(__pyx_t_4, __pyx_callargs+1-__pyx_t_6, 1+__pyx_t_6);
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 297, __pyx_L1_error)
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 289, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     }
-    if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_t_2))) __PYX_ERR(0, 297, __pyx_L1_error)
+    if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_t_2))) __PYX_ERR(0, 289, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_centersOfMass = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "fastkde/floodFillSearch.pyx":300
+  /* "fastkde/floodFillSearch.pyx":292
  * 
  *     #Calculate the distance from the origin of each center of mass
  *     distances = [ np.sqrt(sum(indices**2)) for indices in centersOfMass]             # <<<<<<<<<<<<<<
  * 
  *     #Determine the sorting indices that will sort inds by distance from the center
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 300, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 292, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_3 = __pyx_v_centersOfMass; __Pyx_INCREF(__pyx_t_3);
   __pyx_t_7 = 0;
@@ -22026,26 +22034,26 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
     {
       Py_ssize_t __pyx_temp = __Pyx_PyList_GET_SIZE(__pyx_t_3);
       #if !CYTHON_ASSUME_SAFE_MACROS
-      if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 300, __pyx_L1_error)
+      if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 292, __pyx_L1_error)
       #endif
       if (__pyx_t_7 >= __pyx_temp) break;
     }
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    __pyx_t_2 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_7); __Pyx_INCREF(__pyx_t_2); __pyx_t_7++; if (unlikely((0 < 0))) __PYX_ERR(0, 300, __pyx_L1_error)
+    __pyx_t_2 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_7); __Pyx_INCREF(__pyx_t_2); __pyx_t_7++; if (unlikely((0 < 0))) __PYX_ERR(0, 292, __pyx_L1_error)
     #else
-    __pyx_t_2 = __Pyx_PySequence_ITEM(__pyx_t_3, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 300, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PySequence_ITEM(__pyx_t_3, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 292, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     #endif
     __Pyx_XDECREF_SET(__pyx_v_indices, __pyx_t_2);
     __pyx_t_2 = 0;
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 300, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 292, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_sqrt); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 300, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_sqrt); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 292, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_Power(__pyx_v_indices, __pyx_int_2, Py_None); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 300, __pyx_L1_error)
+    __pyx_t_4 = PyNumber_Power(__pyx_v_indices, __pyx_int_2, Py_None); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 292, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_9 = __Pyx_PyObject_CallOneArg(__pyx_builtin_sum, __pyx_t_4); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 300, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyObject_CallOneArg(__pyx_builtin_sum, __pyx_t_4); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 292, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_4 = NULL;
@@ -22067,27 +22075,27 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
       __pyx_t_2 = __Pyx_PyObject_FastCall(__pyx_t_5, __pyx_callargs+1-__pyx_t_6, 1+__pyx_t_6);
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 300, __pyx_L1_error)
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 292, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     }
-    if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_t_2))) __PYX_ERR(0, 300, __pyx_L1_error)
+    if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_t_2))) __PYX_ERR(0, 292, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_distances = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "fastkde/floodFillSearch.pyx":303
+  /* "fastkde/floodFillSearch.pyx":295
  * 
  *     #Determine the sorting indices that will sort inds by distance from the center
  *     isort = list(np.argsort(distances))             # <<<<<<<<<<<<<<
  * 
  *     #Return the sorted index array
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 303, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 295, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_argsort); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 303, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_argsort); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 295, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -22108,23 +22116,23 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
     PyObject *__pyx_callargs[2] = {__pyx_t_3, __pyx_v_distances};
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_2, __pyx_callargs+1-__pyx_t_6, 1+__pyx_t_6);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 303, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 295, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
-  __pyx_t_2 = __Pyx_PySequence_ListKeepNew(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 303, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PySequence_ListKeepNew(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 295, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_isort = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "fastkde/floodFillSearch.pyx":306
+  /* "fastkde/floodFillSearch.pyx":298
  * 
  *     #Return the sorted index array
  *     return [inds[i] for i in isort]             # <<<<<<<<<<<<<<
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 306, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 298, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_1 = __pyx_v_isort; __Pyx_INCREF(__pyx_t_1);
   __pyx_t_7 = 0;
@@ -22132,21 +22140,21 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
     {
       Py_ssize_t __pyx_temp = __Pyx_PyList_GET_SIZE(__pyx_t_1);
       #if !CYTHON_ASSUME_SAFE_MACROS
-      if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 306, __pyx_L1_error)
+      if (unlikely((__pyx_temp < 0))) __PYX_ERR(0, 298, __pyx_L1_error)
       #endif
       if (__pyx_t_7 >= __pyx_temp) break;
     }
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_7); __Pyx_INCREF(__pyx_t_3); __pyx_t_7++; if (unlikely((0 < 0))) __PYX_ERR(0, 306, __pyx_L1_error)
+    __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_7); __Pyx_INCREF(__pyx_t_3); __pyx_t_7++; if (unlikely((0 < 0))) __PYX_ERR(0, 298, __pyx_L1_error)
     #else
-    __pyx_t_3 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 306, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PySequence_ITEM(__pyx_t_1, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 298, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     #endif
     __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_3);
     __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_inds, __pyx_v_i); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 306, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_inds, __pyx_v_i); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 298, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_3))) __PYX_ERR(0, 306, __pyx_L1_error)
+    if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_3))) __PYX_ERR(0, 298, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -22154,11 +22162,11 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "fastkde/floodFillSearch.pyx":266
- *     return contiguousAreas
+  /* "fastkde/floodFillSearch.pyx":258
+ *     return contiguous_areas
  * 
- * def sortByDistanceFromCenter(inds,varShape):             # <<<<<<<<<<<<<<
- *     """Takes sets of indicies [e.g., from floodFillSearchC.floodFillSearch()] and sorts them by distance from the center of the array from which the indices were taken.
+ * def sort_by_distance_from_center(inds,var_shape):             # <<<<<<<<<<<<<<
+ *     """Takes sets of indicies [e.g., from flood_fill_searchC.flood_fill_search()] and sorts them by distance from the center of the array from which the indices were taken.
  * 
  */
 
@@ -22173,7 +22181,7 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
   __Pyx_XDECREF(__pyx_t_11);
   __Pyx_XDECREF(__pyx_t_12);
   __Pyx_XDECREF(__pyx_t_13);
-  __Pyx_AddTraceback("fastkde.floodFillSearch.sortByDistanceFromCenter", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("fastkde.floodFillSearch.sort_by_distance_from_center", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_center);
@@ -22182,7 +22190,7 @@ static PyObject *__pyx_pf_7fastkde_15floodFillSearch_2sortByDistanceFromCenter(C
   __Pyx_XDECREF(__pyx_v_distances);
   __Pyx_XDECREF(__pyx_v_isort);
   __Pyx_XDECREF(__pyx_v_indTuples);
-  __Pyx_XDECREF(__pyx_gb_7fastkde_15floodFillSearch_24sortByDistanceFromCenter_2generator);
+  __Pyx_XDECREF(__pyx_gb_7fastkde_15floodFillSearch_28sort_by_distance_from_center_2generator);
   __Pyx_XDECREF(__pyx_v_aind);
   __Pyx_XDECREF(__pyx_v_indices);
   __Pyx_XDECREF(__pyx_v_i);
@@ -23398,8 +23406,8 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_n_s_error, __pyx_k_error, sizeof(__pyx_k_error), 0, 0, 1, 1},
     {&__pyx_n_s_fastkde_floodFillSearch, __pyx_k_fastkde_floodFillSearch, sizeof(__pyx_k_fastkde_floodFillSearch), 0, 0, 1, 1},
     {&__pyx_n_s_flags, __pyx_k_flags, sizeof(__pyx_k_flags), 0, 0, 1, 1},
-    {&__pyx_n_s_floodFillSearch, __pyx_k_floodFillSearch, sizeof(__pyx_k_floodFillSearch), 0, 0, 1, 1},
     {&__pyx_kp_s_floodFillSearch_pyx, __pyx_k_floodFillSearch_pyx, sizeof(__pyx_k_floodFillSearch_pyx), 0, 0, 1, 0},
+    {&__pyx_n_s_flood_fill_search, __pyx_k_flood_fill_search, sizeof(__pyx_k_flood_fill_search), 0, 0, 1, 1},
     {&__pyx_n_s_format, __pyx_k_format, sizeof(__pyx_k_format), 0, 0, 1, 1},
     {&__pyx_n_s_fortran, __pyx_k_fortran, sizeof(__pyx_k_fortran), 0, 0, 1, 1},
     {&__pyx_n_u_fortran, __pyx_k_fortran, sizeof(__pyx_k_fortran), 0, 1, 0, 1},
@@ -23416,8 +23424,8 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_n_s_indices, __pyx_k_indices, sizeof(__pyx_k_indices), 0, 0, 1, 1},
     {&__pyx_n_s_inds, __pyx_k_inds, sizeof(__pyx_k_inds), 0, 0, 1, 1},
     {&__pyx_n_s_initializing, __pyx_k_initializing, sizeof(__pyx_k_initializing), 0, 0, 1, 1},
-    {&__pyx_n_s_inputArray, __pyx_k_inputArray, sizeof(__pyx_k_inputArray), 0, 0, 1, 1},
-    {&__pyx_kp_s_inputArray_does_not_appear_to_be, __pyx_k_inputArray_does_not_appear_to_be, sizeof(__pyx_k_inputArray_does_not_appear_to_be), 0, 0, 1, 0},
+    {&__pyx_n_s_input_array, __pyx_k_input_array, sizeof(__pyx_k_input_array), 0, 0, 1, 1},
+    {&__pyx_kp_s_input_array_does_not_appear_to_b, __pyx_k_input_array_does_not_appear_to_b, sizeof(__pyx_k_input_array_does_not_appear_to_b), 0, 0, 1, 0},
     {&__pyx_n_s_int, __pyx_k_int, sizeof(__pyx_k_int), 0, 0, 1, 1},
     {&__pyx_n_s_int64, __pyx_k_int64, sizeof(__pyx_k_int64), 0, 0, 1, 1},
     {&__pyx_n_s_is_coroutine, __pyx_k_is_coroutine, sizeof(__pyx_k_is_coroutine), 0, 0, 1, 1},
@@ -23456,14 +23464,14 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_n_s_reduce_cython, __pyx_k_reduce_cython, sizeof(__pyx_k_reduce_cython), 0, 0, 1, 1},
     {&__pyx_n_s_reduce_ex, __pyx_k_reduce_ex, sizeof(__pyx_k_reduce_ex), 0, 0, 1, 1},
     {&__pyx_n_s_register, __pyx_k_register, sizeof(__pyx_k_register), 0, 0, 1, 1},
-    {&__pyx_n_s_searchThreshold, __pyx_k_searchThreshold, sizeof(__pyx_k_searchThreshold), 0, 0, 1, 1},
+    {&__pyx_n_s_search_threshold, __pyx_k_search_threshold, sizeof(__pyx_k_search_threshold), 0, 0, 1, 1},
     {&__pyx_n_s_send, __pyx_k_send, sizeof(__pyx_k_send), 0, 0, 1, 1},
     {&__pyx_n_s_setstate, __pyx_k_setstate, sizeof(__pyx_k_setstate), 0, 0, 1, 1},
     {&__pyx_n_s_setstate_cython, __pyx_k_setstate_cython, sizeof(__pyx_k_setstate_cython), 0, 0, 1, 1},
     {&__pyx_n_s_shape, __pyx_k_shape, sizeof(__pyx_k_shape), 0, 0, 1, 1},
     {&__pyx_n_s_size, __pyx_k_size, sizeof(__pyx_k_size), 0, 0, 1, 1},
-    {&__pyx_n_s_sortByDistanceFromCenter, __pyx_k_sortByDistanceFromCenter, sizeof(__pyx_k_sortByDistanceFromCenter), 0, 0, 1, 1},
-    {&__pyx_n_s_sortByDistanceFromCenter_locals, __pyx_k_sortByDistanceFromCenter_locals, sizeof(__pyx_k_sortByDistanceFromCenter_locals), 0, 0, 1, 1},
+    {&__pyx_n_s_sort_by_distance_from_center, __pyx_k_sort_by_distance_from_center, sizeof(__pyx_k_sort_by_distance_from_center), 0, 0, 1, 1},
+    {&__pyx_n_s_sort_by_distance_from_center_loc, __pyx_k_sort_by_distance_from_center_loc, sizeof(__pyx_k_sort_by_distance_from_center_loc), 0, 0, 1, 1},
     {&__pyx_n_s_spec, __pyx_k_spec, sizeof(__pyx_k_spec), 0, 0, 1, 1},
     {&__pyx_n_s_sqrt, __pyx_k_sqrt, sizeof(__pyx_k_sqrt), 0, 0, 1, 1},
     {&__pyx_n_s_start, __pyx_k_start, sizeof(__pyx_k_start), 0, 0, 1, 1},
@@ -23483,11 +23491,10 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_n_s_unpack, __pyx_k_unpack, sizeof(__pyx_k_unpack), 0, 0, 1, 1},
     {&__pyx_n_s_unravel_index, __pyx_k_unravel_index, sizeof(__pyx_k_unravel_index), 0, 0, 1, 1},
     {&__pyx_n_s_update, __pyx_k_update, sizeof(__pyx_k_update), 0, 0, 1, 1},
-    {&__pyx_n_s_varShape, __pyx_k_varShape, sizeof(__pyx_k_varShape), 0, 0, 1, 1},
+    {&__pyx_n_s_var_shape, __pyx_k_var_shape, sizeof(__pyx_k_var_shape), 0, 0, 1, 1},
     {&__pyx_n_s_version_info, __pyx_k_version_info, sizeof(__pyx_k_version_info), 0, 0, 1, 1},
-    {&__pyx_n_s_wrapDimensions, __pyx_k_wrapDimensions, sizeof(__pyx_k_wrapDimensions), 0, 0, 1, 1},
-    {&__pyx_kp_s_wrapDimensions_must_be_a_list_of, __pyx_k_wrapDimensions_must_be_a_list_of, sizeof(__pyx_k_wrapDimensions_must_be_a_list_of), 0, 0, 1, 0},
-    {&__pyx_n_s_xrange, __pyx_k_xrange, sizeof(__pyx_k_xrange), 0, 0, 1, 1},
+    {&__pyx_n_s_wrap_dimensions, __pyx_k_wrap_dimensions, sizeof(__pyx_k_wrap_dimensions), 0, 0, 1, 1},
+    {&__pyx_kp_s_wrap_dimensions_must_be_a_list_o, __pyx_k_wrap_dimensions_must_be_a_list_o, sizeof(__pyx_k_wrap_dimensions_must_be_a_list_o), 0, 0, 1, 0},
     {&__pyx_n_s_zip, __pyx_k_zip, sizeof(__pyx_k_zip), 0, 0, 1, 1},
     {0, 0, 0, 0, 0, 0, 0}
   };
@@ -23495,25 +23502,20 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
 }
 /* #### Code section: cached_builtins ### */
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  #if PY_MAJOR_VERSION >= 3
-  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_xrange) __PYX_ERR(0, 28, __pyx_L1_error)
-  #else
-  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_xrange); if (!__pyx_builtin_xrange) __PYX_ERR(0, 28, __pyx_L1_error)
-  #endif
-  __pyx_builtin_BaseException = __Pyx_GetBuiltinName(__pyx_n_s_BaseException); if (!__pyx_builtin_BaseException) __PYX_ERR(0, 213, __pyx_L1_error)
-  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 214, __pyx_L1_error)
-  __pyx_builtin_sum = __Pyx_GetBuiltinName(__pyx_n_s_sum); if (!__pyx_builtin_sum) __PYX_ERR(0, 300, __pyx_L1_error)
-  __pyx_builtin_zip = __Pyx_GetBuiltinName(__pyx_n_s_zip); if (!__pyx_builtin_zip) __PYX_ERR(0, 294, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 28, __pyx_L1_error)
+  __pyx_builtin_BaseException = __Pyx_GetBuiltinName(__pyx_n_s_BaseException); if (!__pyx_builtin_BaseException) __PYX_ERR(0, 205, __pyx_L1_error)
+  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 206, __pyx_L1_error)
+  __pyx_builtin_sum = __Pyx_GetBuiltinName(__pyx_n_s_sum); if (!__pyx_builtin_sum) __PYX_ERR(0, 292, __pyx_L1_error)
+  __pyx_builtin_zip = __Pyx_GetBuiltinName(__pyx_n_s_zip); if (!__pyx_builtin_zip) __PYX_ERR(0, 286, __pyx_L1_error)
   __pyx_builtin___import__ = __Pyx_GetBuiltinName(__pyx_n_s_import); if (!__pyx_builtin___import__) __PYX_ERR(1, 100, __pyx_L1_error)
   __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(1, 156, __pyx_L1_error)
   __pyx_builtin_enumerate = __Pyx_GetBuiltinName(__pyx_n_s_enumerate); if (!__pyx_builtin_enumerate) __PYX_ERR(1, 159, __pyx_L1_error)
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 2, __pyx_L1_error)
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(1, 261, __pyx_L1_error)
   __pyx_builtin_AssertionError = __Pyx_GetBuiltinName(__pyx_n_s_AssertionError); if (!__pyx_builtin_AssertionError) __PYX_ERR(1, 373, __pyx_L1_error)
   __pyx_builtin_Ellipsis = __Pyx_GetBuiltinName(__pyx_n_s_Ellipsis); if (!__pyx_builtin_Ellipsis) __PYX_ERR(1, 408, __pyx_L1_error)
   __pyx_builtin_id = __Pyx_GetBuiltinName(__pyx_n_s_id); if (!__pyx_builtin_id) __PYX_ERR(1, 618, __pyx_L1_error)
   __pyx_builtin_IndexError = __Pyx_GetBuiltinName(__pyx_n_s_IndexError); if (!__pyx_builtin_IndexError) __PYX_ERR(1, 914, __pyx_L1_error)
-  __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(2, 991, __pyx_L1_error)
+  __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(2, 983, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -23560,25 +23562,25 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":991
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":983
  *         __pyx_import_array()
  *     except Exception:
  *         raise ImportError("numpy.core.multiarray failed to import")             # <<<<<<<<<<<<<<
  * 
  * cdef inline int import_umath() except -1:
  */
-  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_multiarray_failed_to); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(2, 991, __pyx_L1_error)
+  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_multiarray_failed_to); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(2, 983, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
 
-  /* "../../../anaconda3/envs/fastkde_test/lib/python3.12/site-packages/Cython/Includes/numpy/__init__.pxd":997
+  /* "../../../../mambaforge/envs/fastkde_test/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":989
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
  * 
  * cdef inline int import_ufunc() except -1:
  */
-  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(2, 997, __pyx_L1_error)
+  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(2, 989, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__10);
   __Pyx_GIVEREF(__pyx_tuple__10);
 
@@ -23683,32 +23685,32 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__20);
   __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_Enum, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(1, 1, __pyx_L1_error)
 
-  /* "fastkde/floodFillSearch.pyx":170
- *     return np.unravel_index(contiguousIndices,arrayShape)
+  /* "fastkde/floodFillSearch.pyx":163
+ *     return np.unravel_index(contiguous_indices,array_shape)
  * 
- * cpdef list floodFillSearch( \             # <<<<<<<<<<<<<<
- *                 np.ndarray inputArray, \
- *                 np.float_t searchThreshold = 0.0, \
+ * cpdef list flood_fill_search( \             # <<<<<<<<<<<<<<
+ *                 np.ndarray input_array, \
+ *                 np.float_t search_threshold = 0.0, \
  */
-  __pyx_tuple__22 = PyTuple_Pack(3, __pyx_n_s_inputArray, __pyx_n_s_searchThreshold, __pyx_n_s_wrapDimensions); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 170, __pyx_L1_error)
+  __pyx_tuple__22 = PyTuple_Pack(3, __pyx_n_s_input_array, __pyx_n_s_search_threshold, __pyx_n_s_wrap_dimensions); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 163, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__22);
   __Pyx_GIVEREF(__pyx_tuple__22);
-  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_floodFillSearch_pyx, __pyx_n_s_floodFillSearch, 170, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 170, __pyx_L1_error)
-  __pyx_tuple__24 = PyTuple_Pack(2, __pyx_float_0_0, Py_None); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 170, __pyx_L1_error)
+  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_floodFillSearch_pyx, __pyx_n_s_flood_fill_search, 163, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 163, __pyx_L1_error)
+  __pyx_tuple__24 = PyTuple_Pack(2, __pyx_float_0_0, Py_None); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 163, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__24);
   __Pyx_GIVEREF(__pyx_tuple__24);
 
-  /* "fastkde/floodFillSearch.pyx":266
- *     return contiguousAreas
+  /* "fastkde/floodFillSearch.pyx":258
+ *     return contiguous_areas
  * 
- * def sortByDistanceFromCenter(inds,varShape):             # <<<<<<<<<<<<<<
- *     """Takes sets of indicies [e.g., from floodFillSearchC.floodFillSearch()] and sorts them by distance from the center of the array from which the indices were taken.
+ * def sort_by_distance_from_center(inds,var_shape):             # <<<<<<<<<<<<<<
+ *     """Takes sets of indicies [e.g., from flood_fill_searchC.flood_fill_search()] and sorts them by distance from the center of the array from which the indices were taken.
  * 
  */
-  __pyx_tuple__25 = PyTuple_Pack(13, __pyx_n_s_inds, __pyx_n_s_varShape, __pyx_n_s_center, __pyx_n_s_centeredInds, __pyx_n_s_centersOfMass, __pyx_n_s_distances, __pyx_n_s_isort, __pyx_n_s_indTuples, __pyx_n_s_genexpr, __pyx_n_s_genexpr, __pyx_n_s_aind, __pyx_n_s_indices, __pyx_n_s_i); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(0, 266, __pyx_L1_error)
+  __pyx_tuple__25 = PyTuple_Pack(13, __pyx_n_s_inds, __pyx_n_s_var_shape, __pyx_n_s_center, __pyx_n_s_centeredInds, __pyx_n_s_centersOfMass, __pyx_n_s_distances, __pyx_n_s_isort, __pyx_n_s_indTuples, __pyx_n_s_genexpr, __pyx_n_s_genexpr, __pyx_n_s_aind, __pyx_n_s_indices, __pyx_n_s_i); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(0, 258, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__25);
   __Pyx_GIVEREF(__pyx_tuple__25);
-  __pyx_codeobj__26 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 13, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__25, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_floodFillSearch_pyx, __pyx_n_s_sortByDistanceFromCenter, 266, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__26)) __PYX_ERR(0, 266, __pyx_L1_error)
+  __pyx_codeobj__26 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 13, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__25, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_floodFillSearch_pyx, __pyx_n_s_sort_by_distance_from_center, 258, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__26)) __PYX_ERR(0, 258, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -23812,15 +23814,15 @@ static int __Pyx_modinit_type_init_code(void) {
   __Pyx_RefNannySetupContext("__Pyx_modinit_type_init_code", 0);
   /*--- Type init code ---*/
   #if CYTHON_USE_TYPE_SPECS
-  __pyx_ptype_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr = (PyTypeObject *) __Pyx_PyType_FromModuleAndSpec(__pyx_m, &__pyx_type_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr_spec, NULL); if (unlikely(!__pyx_ptype_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr)) __PYX_ERR(0, 294, __pyx_L1_error)
-  if (__Pyx_fix_up_extension_type_from_spec(&__pyx_type_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr_spec, __pyx_ptype_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr) < 0) __PYX_ERR(0, 294, __pyx_L1_error)
+  __pyx_ptype_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr = (PyTypeObject *) __Pyx_PyType_FromModuleAndSpec(__pyx_m, &__pyx_type_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr_spec, NULL); if (unlikely(!__pyx_ptype_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr)) __PYX_ERR(0, 286, __pyx_L1_error)
+  if (__Pyx_fix_up_extension_type_from_spec(&__pyx_type_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr_spec, __pyx_ptype_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr) < 0) __PYX_ERR(0, 286, __pyx_L1_error)
   #else
   __pyx_ptype_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr = &__pyx_type_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr;
   #endif
   #if !CYTHON_COMPILING_IN_LIMITED_API
   #endif
   #if !CYTHON_USE_TYPE_SPECS
-  if (__Pyx_PyType_Ready(__pyx_ptype_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr) < 0) __PYX_ERR(0, 294, __pyx_L1_error)
+  if (__Pyx_PyType_Ready(__pyx_ptype_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr) < 0) __PYX_ERR(0, 286, __pyx_L1_error)
   #endif
   #if PY_MAJOR_VERSION < 3
   __pyx_ptype_7fastkde_15floodFillSearch___pyx_scope_struct__genexpr->tp_print = 0;
@@ -23998,23 +24000,23 @@ static int __Pyx_modinit_type_import_code(void) {
   #endif
   __Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_7cpython_4type_type) __PYX_ERR(3, 9, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyImport_ImportModule("numpy"); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 207, __pyx_L1_error)
+  __pyx_t_1 = PyImport_ImportModule("numpy"); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 202, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_ptype_5numpy_dtype = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "dtype", sizeof(PyArray_Descr), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyArray_Descr),__Pyx_ImportType_CheckSize_Ignore_3_0_3); if (!__pyx_ptype_5numpy_dtype) __PYX_ERR(2, 207, __pyx_L1_error)
-  __pyx_ptype_5numpy_flatiter = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "flatiter", sizeof(PyArrayIterObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyArrayIterObject),__Pyx_ImportType_CheckSize_Ignore_3_0_3); if (!__pyx_ptype_5numpy_flatiter) __PYX_ERR(2, 230, __pyx_L1_error)
-  __pyx_ptype_5numpy_broadcast = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "broadcast", sizeof(PyArrayMultiIterObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyArrayMultiIterObject),__Pyx_ImportType_CheckSize_Ignore_3_0_3); if (!__pyx_ptype_5numpy_broadcast) __PYX_ERR(2, 234, __pyx_L1_error)
-  __pyx_ptype_5numpy_ndarray = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "ndarray", sizeof(PyArrayObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyArrayObject),__Pyx_ImportType_CheckSize_Ignore_3_0_3); if (!__pyx_ptype_5numpy_ndarray) __PYX_ERR(2, 243, __pyx_L1_error)
-  __pyx_ptype_5numpy_generic = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "generic", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_generic) __PYX_ERR(2, 815, __pyx_L1_error)
-  __pyx_ptype_5numpy_number = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "number", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_number) __PYX_ERR(2, 817, __pyx_L1_error)
-  __pyx_ptype_5numpy_integer = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "integer", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_integer) __PYX_ERR(2, 819, __pyx_L1_error)
-  __pyx_ptype_5numpy_signedinteger = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "signedinteger", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_signedinteger) __PYX_ERR(2, 821, __pyx_L1_error)
-  __pyx_ptype_5numpy_unsignedinteger = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "unsignedinteger", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_unsignedinteger) __PYX_ERR(2, 823, __pyx_L1_error)
-  __pyx_ptype_5numpy_inexact = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "inexact", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_inexact) __PYX_ERR(2, 825, __pyx_L1_error)
-  __pyx_ptype_5numpy_floating = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "floating", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_floating) __PYX_ERR(2, 827, __pyx_L1_error)
-  __pyx_ptype_5numpy_complexfloating = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "complexfloating", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_complexfloating) __PYX_ERR(2, 829, __pyx_L1_error)
-  __pyx_ptype_5numpy_flexible = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "flexible", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_flexible) __PYX_ERR(2, 831, __pyx_L1_error)
-  __pyx_ptype_5numpy_character = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "character", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_character) __PYX_ERR(2, 833, __pyx_L1_error)
-  __pyx_ptype_5numpy_ufunc = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "ufunc", sizeof(PyUFuncObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyUFuncObject),__Pyx_ImportType_CheckSize_Ignore_3_0_3); if (!__pyx_ptype_5numpy_ufunc) __PYX_ERR(2, 871, __pyx_L1_error)
+  __pyx_ptype_5numpy_dtype = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "dtype", sizeof(PyArray_Descr), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyArray_Descr),__Pyx_ImportType_CheckSize_Ignore_3_0_3); if (!__pyx_ptype_5numpy_dtype) __PYX_ERR(2, 202, __pyx_L1_error)
+  __pyx_ptype_5numpy_flatiter = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "flatiter", sizeof(PyArrayIterObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyArrayIterObject),__Pyx_ImportType_CheckSize_Ignore_3_0_3); if (!__pyx_ptype_5numpy_flatiter) __PYX_ERR(2, 225, __pyx_L1_error)
+  __pyx_ptype_5numpy_broadcast = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "broadcast", sizeof(PyArrayMultiIterObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyArrayMultiIterObject),__Pyx_ImportType_CheckSize_Ignore_3_0_3); if (!__pyx_ptype_5numpy_broadcast) __PYX_ERR(2, 229, __pyx_L1_error)
+  __pyx_ptype_5numpy_ndarray = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "ndarray", sizeof(PyArrayObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyArrayObject),__Pyx_ImportType_CheckSize_Ignore_3_0_3); if (!__pyx_ptype_5numpy_ndarray) __PYX_ERR(2, 238, __pyx_L1_error)
+  __pyx_ptype_5numpy_generic = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "generic", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_generic) __PYX_ERR(2, 809, __pyx_L1_error)
+  __pyx_ptype_5numpy_number = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "number", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_number) __PYX_ERR(2, 811, __pyx_L1_error)
+  __pyx_ptype_5numpy_integer = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "integer", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_integer) __PYX_ERR(2, 813, __pyx_L1_error)
+  __pyx_ptype_5numpy_signedinteger = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "signedinteger", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_signedinteger) __PYX_ERR(2, 815, __pyx_L1_error)
+  __pyx_ptype_5numpy_unsignedinteger = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "unsignedinteger", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_unsignedinteger) __PYX_ERR(2, 817, __pyx_L1_error)
+  __pyx_ptype_5numpy_inexact = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "inexact", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_inexact) __PYX_ERR(2, 819, __pyx_L1_error)
+  __pyx_ptype_5numpy_floating = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "floating", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_floating) __PYX_ERR(2, 821, __pyx_L1_error)
+  __pyx_ptype_5numpy_complexfloating = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "complexfloating", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_complexfloating) __PYX_ERR(2, 823, __pyx_L1_error)
+  __pyx_ptype_5numpy_flexible = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "flexible", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_flexible) __PYX_ERR(2, 825, __pyx_L1_error)
+  __pyx_ptype_5numpy_character = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "character", sizeof(PyObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyObject),__Pyx_ImportType_CheckSize_Warn_3_0_3); if (!__pyx_ptype_5numpy_character) __PYX_ERR(2, 827, __pyx_L1_error)
+  __pyx_ptype_5numpy_ufunc = __Pyx_ImportType_3_0_3(__pyx_t_1, "numpy", "ufunc", sizeof(PyUFuncObject), __PYX_GET_STRUCT_ALIGNMENT_3_0_3(PyUFuncObject),__Pyx_ImportType_CheckSize_Ignore_3_0_3); if (!__pyx_ptype_5numpy_ufunc) __PYX_ERR(2, 865, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_RefNannyFinishContext();
   return 0;
@@ -24851,29 +24853,29 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_7) < 0) __PYX_ERR(0, 3, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "fastkde/floodFillSearch.pyx":170
- *     return np.unravel_index(contiguousIndices,arrayShape)
+  /* "fastkde/floodFillSearch.pyx":163
+ *     return np.unravel_index(contiguous_indices,array_shape)
  * 
- * cpdef list floodFillSearch( \             # <<<<<<<<<<<<<<
- *                 np.ndarray inputArray, \
- *                 np.float_t searchThreshold = 0.0, \
+ * cpdef list flood_fill_search( \             # <<<<<<<<<<<<<<
+ *                 np.ndarray input_array, \
+ *                 np.float_t search_threshold = 0.0, \
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_7fastkde_15floodFillSearch_1floodFillSearch, 0, __pyx_n_s_floodFillSearch, NULL, __pyx_n_s_fastkde_floodFillSearch, __pyx_d, ((PyObject *)__pyx_codeobj__23)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 170, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_7fastkde_15floodFillSearch_1flood_fill_search, 0, __pyx_n_s_flood_fill_search, NULL, __pyx_n_s_fastkde_floodFillSearch, __pyx_d, ((PyObject *)__pyx_codeobj__23)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 163, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_7, __pyx_tuple__24);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_floodFillSearch, __pyx_t_7) < 0) __PYX_ERR(0, 170, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_flood_fill_search, __pyx_t_7) < 0) __PYX_ERR(0, 163, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "fastkde/floodFillSearch.pyx":266
- *     return contiguousAreas
+  /* "fastkde/floodFillSearch.pyx":258
+ *     return contiguous_areas
  * 
- * def sortByDistanceFromCenter(inds,varShape):             # <<<<<<<<<<<<<<
- *     """Takes sets of indicies [e.g., from floodFillSearchC.floodFillSearch()] and sorts them by distance from the center of the array from which the indices were taken.
+ * def sort_by_distance_from_center(inds,var_shape):             # <<<<<<<<<<<<<<
+ *     """Takes sets of indicies [e.g., from flood_fill_searchC.flood_fill_search()] and sorts them by distance from the center of the array from which the indices were taken.
  * 
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_7fastkde_15floodFillSearch_3sortByDistanceFromCenter, 0, __pyx_n_s_sortByDistanceFromCenter, NULL, __pyx_n_s_fastkde_floodFillSearch, __pyx_d, ((PyObject *)__pyx_codeobj__26)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 266, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_7fastkde_15floodFillSearch_3sort_by_distance_from_center, 0, __pyx_n_s_sort_by_distance_from_center, NULL, __pyx_n_s_fastkde_floodFillSearch, __pyx_d, ((PyObject *)__pyx_codeobj__26)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 258, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_sortByDistanceFromCenter, __pyx_t_7) < 0) __PYX_ERR(0, 266, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_sort_by_distance_from_center, __pyx_t_7) < 0) __PYX_ERR(0, 258, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "fastkde/floodFillSearch.pyx":1

@@ -30,10 +30,10 @@ cdef double complex cexp(double complex x) noexcept nogil:
 cpdef np.ndarray[double complex] nuifft( \
                             np.float_t [:,:] abscissas, \
                             np.complex128_t [:] ordinates, \
-                            np.float_t [:,:] frequencyGrids, \
-                            np.float_t missingFreqVal = -1e20, \
+                            np.float_t [:,:] frequency_grids, \
+                            np.float_t missing_freq_val = -1e20, \
                             int precision = 2, \
-                            int beVerbose = 0):
+                            int be_verbose = 0):
     """Approximates the unnormalized direct Fourier transform of abscissa, ordinate pairs
        using the non-uniform FFT method.
         
@@ -47,19 +47,19 @@ cpdef np.ndarray[double complex] nuifft( \
             ordinates   : ordinates values.
                           A numpy array of shape (npoints)
 
-            frequencyGrids : The frequency grids on which to calcualte the DFT
+            frequency_grids : The frequency grids on which to calcualte the DFT
                              A masked numpy array of shape (ndimensions,ntmax), where ntmax
                              is the length of the longest frequency grid.  
 
-            missingFreqVal : A value indicating missing frequency values.  This is used to 
+            missing_freq_val : A value indicating missing frequency values.  This is used to 
                              allow each dimension to have different sized frequency spaces;
                              dimensions with smaller frequency spaces (than ntmax) should be 
-                             padded at the end with missingFreqVal.
+                             padded at the end with missing_freq_val.
 
             precision   : Sets the precision of the approximation.  1 for floating point
                           and 2 for double precision accuracy.
 
-            beVerbose   : Flags whether to print to STDOUT as the method progresses
+            be_verbose   : Flags whether to print to STDOUT as the method progresses
                           (int 0=don't print 1=print)
 
         output:
@@ -69,7 +69,7 @@ cpdef np.ndarray[double complex] nuifft( \
 
             DFT[t] = sum( [ a[i] * exp(j * x[i] * t ) for i in range(N) ] ) 
 
-            for each of the t points in frequencyGrids (and where j = sqrt(-1)).
+            for each of the t points in frequency_grids (and where j = sqrt(-1)).
     
     """
 
@@ -81,31 +81,31 @@ cpdef np.ndarray[double complex] nuifft( \
     # Get variable dimensionalities
     # and do consistency checks
     #*******************************
-    vprint("Checking dimensionalities and arguments",beVerbose)
+    vprint("Checking dimensionalities and arguments",be_verbose)
     #Get the shape of abscissas 
     try:
         numDimensions = np.shape(abscissas)[0]
         numDataPoints = np.shape(abscissas)[1]
     except:
-        raise ValueError,"Could not determine shape of abscissas"
+        raise ValueError("Could not determine shape of abscissas")
 
     #Check ordinates
     try:
         ordShape = np.shape(ordinates)[0]
     except:
-        raise ValueError,"Could not determine shape of ordinates"
+        raise ValueError("Could not determine shape of ordinates")
         
     if ordShape != numDataPoints:
-            raise ValueError, "Incompatible shapes for ordinates and abscissas"
+            raise ValueError("Incompatible shapes for ordinates and abscissas")
 
-    #Check frequencyGrids
+    #Check frequency_grids
     try:
-        freqShape = np.shape(frequencyGrids)
+        freqShape = np.shape(frequency_grids)
     except:
-        raise ValueError,"Could not determine shape of ordinates"
+        raise ValueError("Could not determine shape of ordinates")
 
     if freqShape[0] != numDimensions:
-            raise ValueError, "Incompatible shapes for abscissas and frequencyGrids"
+            raise ValueError("Incompatible shapes for abscissas and frequency_grids")
 
     #Get the max number of frequency points
     ntMax = freqShape[1]
@@ -114,19 +114,19 @@ cpdef np.ndarray[double complex] nuifft( \
     #********************************************
     # Calculate the size of the frequency spaces
     #********************************************
-    vprint("Getting the size of the frequency spaces",beVerbose)
+    vprint("Getting the size of the frequency spaces",be_verbose)
     cdef int n,t,iNotMissing
     cdef np.int_t [:] frequencySizes = np.zeros([numDimensions],dtype=np.int_)
 
     for n in range(numDimensions):
         iNotMissing = 0
         for t in range(ntMax):
-            if frequencyGrids[n,t] != missingFreqVal:
+            if frequency_grids[n,t] != missing_freq_val:
                 iNotMissing += 1
         if iNotMissing != 0:
             frequencySizes[n] = <np.int_t>iNotMissing
         else:
-            raise ValueError,"Some frequencies in frequencyGrids have no valid points"
+            raise ValueError("Some frequencies in frequency_grids have no valid points")
 
     #Get the total size of the frequency space
     cdef np.int_t freqSpaceSize = np.prod(frequencySizes)
@@ -134,13 +134,13 @@ cpdef np.ndarray[double complex] nuifft( \
 
 
     cdef np.float_t [:,:] \
-            abscissaGrids = missingFreqVal*np.ones([numDimensions,ntMax])
+            abscissaGrids = missing_freq_val*np.ones([numDimensions,ntMax])
     #******************************
     # Calculate the abscissa grids
     #******************************
-    vprint("Creating the convolution grid",beVerbose)
+    vprint("Creating the convolution grid",be_verbose)
     for n in range(numDimensions):
-        xdum = calcXfromT(frequencyGrids[n,:frequencySizes[n]])
+        xdum = calc_x_from_t(frequency_grids[n,:frequencySizes[n]])
         for t in range(frequencySizes[n]):
             abscissaGrids[n,t] = xdum[t]
 
@@ -148,7 +148,7 @@ cpdef np.ndarray[double complex] nuifft( \
     #*******************************
     # Define convolution parameters 
     #*******************************
-    vprint("Initializing the convolution",beVerbose)
+    vprint("Initializing the convolution",be_verbose)
     cdef np.float_t tau,fourTau
     cdef long nspread
     cdef long nspreadhalf, hyperSlabSize
@@ -167,7 +167,7 @@ cpdef np.ndarray[double complex] nuifft( \
     #get the shape of a hyperslab
     #cdef np.ndarray[np.int_t,ndim=1] hyperSlabShape = nspread*np.ones([numDimensions],dtype=np.int_)
     cdef np.int_t [:] hyperSlabShape = nspread*np.ones([numDimensions],dtype=np.int_)
-    vprint("\tconvolution hyperslab shape: {}".format(hyperSlabShape),beVerbose)
+    vprint("\tconvolution hyperslab shape: {}".format(hyperSlabShape),be_verbose)
 
     #Calculate the quantities necessary for estimating x-indices
     cdef np.float_t [:]  \
@@ -193,7 +193,7 @@ cpdef np.ndarray[double complex] nuifft( \
     #***********************************
     # Convolve the data with a gaussian
     #***********************************
-    vprint("Performing the convolution",beVerbose)
+    vprint("Performing the convolution",be_verbose)
     with nogil:
         for j in range(numDataPoints):
             
@@ -237,11 +237,11 @@ cpdef np.ndarray[double complex] nuifft( \
     #  first index] of the array, as required by ifft)
     #And fftshift is used to put the zero-frequency in the center of the array
     #reshape is used to form a proper n-dimensional array from the vector of convolved data
-    vprint("Raveling and doing FFT on convolved data",beVerbose)
+    vprint("Raveling and doing FFT on convolved data",be_verbose)
     convolvedFFT = fft.fftshift(fft.ifftn(fft.ifftshift(np.reshape(convolvedData,frequencySizes))))
-    vprint("\tshape(convolvedFFT) = {}".format(np.shape(convolvedFFT)),beVerbose)
+    vprint("\tshape(convolvedFFT) = {}".format(np.shape(convolvedFFT)),be_verbose)
 
-    vprint("Initializing the deconvolution",beVerbose)
+    vprint("Initializing the deconvolution",be_verbose)
 
     #Ravel the convolved data
     cdef double complex [:] convolvedFFTRaveled = convolvedFFT.ravel()
@@ -252,18 +252,18 @@ cpdef np.ndarray[double complex] nuifft( \
     cdef np.int_t [:] dimInds = np.zeros([numDimensions],dtype=np.int_)
 
     #Deconvolve the FFT (divide by the FFT of the gaussian) to obtain the DFT estimate
-    vprint("Deconvolving the Fourier transformed data",beVerbose)
+    vprint("Deconvolving the Fourier transformed data",be_verbose)
     with nogil:
         for i in range(freqSpaceSize):
             unravelIndex(i,frequencySizes,dimInds,numDimensions)
             gaussArg = 0.0
             for v in range(numDimensions):
-               gaussArg = gaussArg + (frequencyGrids[v,dimInds[v]]*deltaxs[v])**2
+               gaussArg = gaussArg + (frequency_grids[v,dimInds[v]]*deltaxs[v])**2
             DFT[i] = convolvedFFTRaveled[i] * cexp(tau*gaussArg)
 
 
     #Reshape the DFT to an array
-    vprint("Reshaping and returning.",beVerbose)
+    vprint("Reshaping and returning.",be_verbose)
     return np.reshape(DFT,tuple(frequencySizes))
 
 
@@ -276,9 +276,9 @@ cpdef np.ndarray[double complex] nuifft( \
 cpdef np.ndarray[double complex] idft( \
                             np.float_t [:,:] abscissas, \
                             np.complex128_t [:] ordinates, \
-                            np.float_t [:,:] frequencyGrids, \
-                            np.float_t missingFreqVal = -1e20, \
-                            beVerbose = False):
+                            np.float_t [:,:] frequency_grids, \
+                            np.float_t missing_freq_val = -1e20, \
+                            be_verbose = False):
     """Calculates the unnormalized direct Fourier transform of abscissa, ordinate pairs
         
         input:
@@ -291,16 +291,16 @@ cpdef np.ndarray[double complex] idft( \
             ordinates   : ordinates values.
                           A numpy array of shape (npoints)
 
-            frequencyGrids : The frequency grids on which to calcualte the DFT
+            frequency_grids : The frequency grids on which to calcualte the DFT
                              A masked numpy array of shape (ndimensions,ntmax), where ntmax
                              is the length of the longest frequency grid.  
 
-            missingFreqVal : A value indicating missing frequency values.  This is used to 
+            missing_freq_val : A value indicating missing frequency values.  This is used to 
                              allow each dimension to have different sized frequency spaces;
                              dimensions with smaller frequency spaces (than ntmax) should be 
-                             padded at the end with missingFreqVal.
+                             padded at the end with missing_freq_val.
 
-            beVerbose   : Flags whether to print to STDOUT as the method progresses
+            be_verbose   : Flags whether to print to STDOUT as the method progresses
                           (int 0=don't print 1=print)
         output:
         -------
@@ -309,7 +309,7 @@ cpdef np.ndarray[double complex] idft( \
 
             DFT[t] = sum( [ a[i] * exp(j * x[i] * t ) for i in range(N) ] ) 
 
-            for each of the t points in frequencyGrids (and where j = sqrt(-1)).
+            for each of the t points in frequency_grids (and where j = sqrt(-1)).
     
     """
 
@@ -322,30 +322,30 @@ cpdef np.ndarray[double complex] idft( \
     # and do consistency checks
     #*******************************
     #Get the shape of abscissas 
-    vprint("Checking dimensionalities and arguments",beVerbose)
+    vprint("Checking dimensionalities and arguments",be_verbose)
     try:
         numDimensions = np.shape(abscissas)[0]
         numDataPoints = np.shape(abscissas)[1]
     except:
-        raise ValueError,"Could not determine shape of abscissas"
+        raise ValueError("Could not determine shape of abscissas")
 
     #Check ordinates
     try:
         ordShape = np.shape(ordinates)[0]
     except:
-        raise ValueError,"Could not determine shape of ordinates"
+        raise ValueError("Could not determine shape of ordinates")
         
     if ordShape != numDataPoints:
-            raise ValueError, "Incompatible shapes for ordinates and abscissas"
+            raise ValueError("Incompatible shapes for ordinates and abscissas")
 
-    #Check frequencyGrids
+    #Check frequency_grids
     try:
-        freqShape = np.shape(frequencyGrids)
+        freqShape = np.shape(frequency_grids)
     except:
-        raise ValueError,"Could not determine shape of ordinates"
+        raise ValueError("Could not determine shape of ordinates")
 
     if freqShape[0] != numDimensions:
-            raise ValueError, "Incompatible shapes for abscissas and frequencyGrids"
+            raise ValueError("Incompatible shapes for abscissas and frequency_grids")
 
     #Get the max number of frequency points
     ntMax = freqShape[1]
@@ -354,19 +354,19 @@ cpdef np.ndarray[double complex] idft( \
     #********************************************
     # Calculate the size of the frequency spaces
     #********************************************
-    vprint("Getting the size of the frequency spaces",beVerbose)
+    vprint("Getting the size of the frequency spaces",be_verbose)
     cdef int n,t,iNotMissing
     cdef np.int_t [:] frequencySizes = np.zeros([numDimensions],dtype=np.int_)
 
     for n in range(numDimensions):
         iNotMissing = 0
         for t in range(ntMax):
-            if frequencyGrids[n,t] != missingFreqVal:
+            if frequency_grids[n,t] != missing_freq_val:
                 iNotMissing += 1
         if iNotMissing != 0:
             frequencySizes[n] = <np.int_t>iNotMissing
         else:
-            raise ValueError,"Some frequencies in frequencyGrids have no valid points"
+            raise ValueError("Some frequencies in frequency_grids have no valid points")
 
     #Get the total size of the frequency space
     cdef np.int_t freqSpaceSize = np.prod(frequencySizes)
@@ -385,7 +385,7 @@ cpdef np.ndarray[double complex] idft( \
     cdef double complex dftConst = 1.0j #* <double complex> np.pi
 
 
-    vprint("Calculting the DFT",beVerbose)
+    vprint("Calculting the DFT",be_verbose)
     with nogil:
         for i in range(freqSpaceSize):
             unravelIndex(i,frequencySizes,dimInds,numDimensions)
@@ -396,7 +396,7 @@ cpdef np.ndarray[double complex] idft( \
                 expArg = 0.0
 
                 for k in range(numDimensions):
-                    expArg = expArg +(abscissas[k,j] * frequencyGrids[k,dimInds[k]])
+                    expArg = expArg +(abscissas[k,j] * frequency_grids[k,dimInds[k]])
 
                 myDFT = myDFT + ordinates[j]*cexp(dftConst * <double complex> expArg)
 
@@ -465,23 +465,23 @@ cdef inline int ravelIndex( \
 #******************* Frequency/real-space conversions ************************
 #*****************************************************************************
 #*****************************************************************************
-def calcXfromT(tpoints):
+def calc_x_from_t(tpoints):
   """Calculates real space points given a set of hermetian frequency points. """
   #Use fftfreq to produce a set of frequencies that correspond to the fourier
   #transform of a signal on the tpoints points
   deltaT = tpoints[1] - tpoints[0]
   return  fft.fftshift(fft.fftfreq(len(tpoints),deltaT/(2*np.pi)))
 
-def calcTfromX(xpoints):
+def calc_t_from_x(xpoints):
   """Calculates frequency points given a signal in real space. """
   #Use fftfreq to produce a set of frequencies that correspond to the fourier
   #transform of a signal on the x points
   deltaX = xpoints[1] - xpoints[0]
   return fft.fftshift(fft.fftfreq(len(xpoints),deltaX/(2*np.pi)))
 
-def vprint(msg,beVerbose):
-    """Prints only if beVerbose is True"""
-    if beVerbose:
+def vprint(msg,be_verbose):
+    """Prints only if be_verbose is True"""
+    if be_verbose:
         print(msg)
 
 
@@ -492,17 +492,17 @@ def vprint(msg,beVerbose):
 #*******************************************************************************
 @cython.boundscheck(False)
 cpdef np.ndarray[double complex] dft_points( \
-                            np.float_t [:,:] frequencyGrids, \
+                            np.float_t [:,:] frequency_grids, \
                             np.complex128_t [:] ordinates, \
                             np.float_t [:,:] outputPoints, \
-                            np.float_t missingFreqVal = -1e20, \
-                            beVerbose = False):
+                            np.float_t missing_freq_val = -1e20, \
+                            be_verbose = False):
     """Calculates the unnormalized direct inverse Fourier transform of abscissa, ordinate pairs
         
         input:
         ------
 
-            frequencyGrids   : abscissa values.
+            frequency_grids   : abscissa values.
                           A numpy array of shape (ndimensions,npoints)
                           (assumed to be real)
 
@@ -513,7 +513,7 @@ cpdef np.ndarray[double complex] dft_points( \
                              A masked numpy array of shape (ndimensions,noutputpoints). 
 
 
-            beVerbose   : Flags whether to print to STDOUT as the method progresses
+            be_verbose   : Flags whether to print to STDOUT as the method progresses
                           (int 0=don't print 1=print)
         output:
         -------
@@ -534,27 +534,27 @@ cpdef np.ndarray[double complex] dft_points( \
     # Get variable dimensionalities
     # and do consistency checks
     #*******************************
-    #Get the shape of frequencyGrids 
-    vprint("Checking dimensionalities and arguments",beVerbose)
+    #Get the shape of frequency_grids 
+    vprint("Checking dimensionalities and arguments",be_verbose)
     try:
-        numDimensions = np.shape(frequencyGrids)[0]
+        numDimensions = np.shape(frequency_grids)[0]
     except:
-        raise ValueError,"Could not determine shape of frequencyGrids"
+        raise ValueError("Could not determine shape of frequency_grids")
 
     #Check ordinates
     try:
         ordShape = np.shape(ordinates)[0]
     except:
-        raise ValueError,"Could not determine shape of ordinates"
+        raise ValueError("Could not determine shape of ordinates")
         
     #Check outputPoints
     try:
         outputShape = np.shape(outputPoints)
     except:
-        raise ValueError,"Could not determine shape of outputPoints"
+        raise ValueError("Could not determine shape of outputPoints")
 
     if outputShape[0] != numDimensions:
-            raise ValueError, "Incompatible shapes for frequencyGrids and outputPoints"
+            raise ValueError( "Incompatible shapes for frequency_grids and outputPoints")
 
     #Get the number output data points
     numOutputPoints = outputShape[1]
@@ -572,24 +572,24 @@ cpdef np.ndarray[double complex] dft_points( \
 
     #Get the max number of frequency points
     cdef int ntMax
-    ntMax = np.shape(frequencyGrids)[1]
+    ntMax = np.shape(frequency_grids)[1]
 
     #********************************************
     # Calculate the size of the frequency spaces
     #********************************************
-    vprint("Getting the size of the frequency spaces",beVerbose)
+    vprint("Getting the size of the frequency spaces",be_verbose)
     cdef int t,iNotMissing
     cdef np.int_t [:] frequencySizes = np.zeros([numDimensions],dtype=np.int_)
 
     for n in range(numDimensions):
         iNotMissing = 0
         for t in range(ntMax):
-            if frequencyGrids[n,t] != missingFreqVal:
+            if frequency_grids[n,t] != missing_freq_val:
                 iNotMissing += 1
         if iNotMissing != 0:
             frequencySizes[n] = <np.int_t>iNotMissing
         else:
-            raise ValueError,"Some frequencies in frequencyGrids have no valid points"
+            raise ValueError("Some frequencies in frequency_grids have no valid points")
 
     #Get the total size of the frequency space
     cdef np.int_t freqSpaceSize = np.prod(frequencySizes)
@@ -600,7 +600,7 @@ cpdef np.ndarray[double complex] dft_points( \
     #Pre declare a dimension index vector
     cdef np.int_t [:] dimInds = np.zeros([numDimensions],dtype=np.int_)
 
-    vprint("Calculating the DFT",beVerbose)
+    vprint("Calculating the DFT",be_verbose)
     with nogil:
         for i in range(numOutputPoints):
             myiDFT = 0.0 
@@ -612,7 +612,7 @@ cpdef np.ndarray[double complex] dft_points( \
 
                 for k in range(numDimensions):
 
-                    expArg = expArg +(frequencyGrids[k,dimInds[k]] * outputPoints[k,i])
+                    expArg = expArg +(frequency_grids[k,dimInds[k]] * outputPoints[k,i])
 
                 #Calculate the flattened array index of the current point
                 myiDFT = myiDFT + (ordinates[j]*cexp(idftConst * <double complex> expArg)).real

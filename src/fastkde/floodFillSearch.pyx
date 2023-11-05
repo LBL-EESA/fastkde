@@ -5,172 +5,165 @@ cimport numpy as np
 cimport cython
 
 cdef inline np.int64_t ravel_shift(   tuple indices, \
-                                np.int64_t arrayRank, \
-                                np.int64_t [:] arrayShape, \
+                                np.int64_t array_rank, \
+                                np.int64_t [:] array_shape, \
                                 np.int64_t dimension,  \
                                 np.int64_t amount,     \
-                                np.int64_t dimensionWraps):
+                                np.int64_t dimension_wraps):
     """Return the raveled index of a shifted version of indices, where a
     specific dimension has been shifted by a certain amount.  If wrapping is
     not flagged and the shift is out of bounds, returns -1"""
 
 
-    cdef np.int64_t runningProduct
+    cdef np.int64_t running_product
     cdef np.int64_t n
     cdef np.int64_t i
     cdef np.int64_t npp
-    cdef np.int64_t thisIndex
+    cdef np.int64_t this_index
 
-    runningProduct = 1
+    running_product = 1
     i = 0
 
     #Loop over dimensions, starting at the rightmost dimension
-    for n in xrange(arrayRank,0,-1):
+    for n in range(array_rank,0,-1):
         #Calculate the running product of dimension sizes
-        if( n != arrayRank):
-            runningProduct *= arrayShape[n]
+        if( n != array_rank):
+            running_product *= array_shape[n]
 
         #Set the current index
-        thisIndex = indices[n-1]
+        this_index = indices[n-1]
 
         npp = n-1
         if(npp == dimension):
             #If this is the shifting dimension,
             #increment it
-            thisIndex += amount
+            this_index += amount
 
             #Check if we need to deal with a
             #wrap around dimension
-            if(dimensionWraps):
-                if(thisIndex < 0):
-                    thisIndex += arrayShape[npp]
-                if(thisIndex >= arrayShape[npp]):
-                    thisIndex -= arrayShape[npp]
+            if(dimension_wraps):
+                if(this_index < 0):
+                    this_index += array_shape[npp]
+                if(this_index >= array_shape[npp]):
+                    this_index -= array_shape[npp]
 
             #Check if the current index is out of bounds;
             #return -1 if so
-            if(thisIndex < 0 or thisIndex >= arrayShape[npp]):
+            if(this_index < 0 or this_index >= array_shape[npp]):
                 i = -1
                 break
 
         #increment the counter
-        i += runningProduct*thisIndex
+        i += running_product*this_index
 
     #Check whether the index is within the memory bounds of the array
     #return the -1 flag if not
-    runningProduct *= arrayShape[0]
-    if(i >= runningProduct or i < 0):
+    running_product *= array_shape[0]
+    if(i >= running_product or i < 0):
         i = -1
 
     return i
 
 @cython.boundscheck(False)
-cdef tuple findNeighbors(   np.int64_t raveledStartIndex, \
-                            np.float_t searchThreshold, \
-                            np.int64_t [:] arrayShape, \
-                            np.int64_t arrayRank, \
-                            list dimensionWraps, \
-                            np.float_t [:] inputArray, \
-                            np.int_t [:] isNotSearched, \
+cdef tuple findNeighbors(   np.int64_t raveled_start_index, \
+                            np.float_t search_threshold, \
+                            np.int64_t [:] array_shape, \
+                            np.int64_t array_rank, \
+                            list dimension_wraps, \
+                            np.float_t [:] input_array, \
+                            np.int_t [:] is_not_searched, \
                    ):
-    """Does a flood fill algorithim on inputArray in the vicinity of
-    raveledStartIndex to find contiguous areas where raveledStartIndex > searchThreshold 
+    """Does a flood fill algorithim on input_array in the vicinity of
+    raveled_start_index to find contiguous areas where raveled_start_index > search_threshold 
     
         input:
         ------
-            raveledStartIndex   :   (integer) the index of inputArray.ravel() at which to start
+            raveled_start_index   :   (integer) the index of input_array.ravel() at which to start
 
-            searchThreshold :   The threshold for defining fill regions
-                                (inputArray > searchThreshold)
+            search_threshold :   The threshold for defining fill regions
+                                (input_array > search_threshold)
 
         output:
         -------
             A list of N-d array indices.
     
     """
-
-    
-    cdef list itemsToSearch #Running item search list
-    cdef list contiguousIndices #A list of indices
-    cdef np.int64_t r #Current array dimension
-    cdef np.int64_t testIndexLeft # A test index
-    cdef np.int64_t testIndexRight # A test index
-    cdef tuple contiguousArray #A tuple of contiguous indices
-    cdef np.ndarray contiguousIndexArray #An array of contiguous indices
-    cdef np.int64_t testInd #The raveled index of the test point
-
-    cdef tuple itemTuple #The tuple index of the current search item
-
-    cdef np.int64_t shiftAmount
+    cdef list items_to_search #Running item search list
+    cdef list contiguous_indices #A list of indices
+    cdef np.int64_t r # current array dimension
+    cdef np.int64_t test_index_left # A test index
+    cdef np.int64_t test_index_right # A test index
+    cdef tuple item_tuple # the tuple index of the current search item
+    cdef np.int64_t shift_amount # indicates the shift direction when searching
 
     #Initialize the contiguous index list
-    contiguousIndices = []
+    contiguous_indices = []
 
     #Initialize the search list
-    itemsToSearch = [raveledStartIndex]
+    items_to_search = [raveled_start_index]
 
-    while itemsToSearch != []:
+    while items_to_search != []:
 
         #Get the index of the current item
-        itemTuple = np.unravel_index(itemsToSearch[0],arrayShape)
+        item_tuple = np.unravel_index(items_to_search[0],array_shape)
 
-        for r in xrange(arrayRank):
+        for r in range(array_rank):
             #Shift the current coordinate to the right by 1 in the r dimension
-            shiftAmount = 1
-            testIndexRight = ravel_shift( \
-                                        itemTuple, \
-                                        arrayRank, \
-                                        arrayShape, \
+            shift_amount = 1
+            test_index_right = ravel_shift( \
+                                        item_tuple, \
+                                        array_rank, \
+                                        array_shape, \
                                         r, \
-                                        shiftAmount,
-                                        dimensionWraps[r])
+                                        shift_amount,
+                                        dimension_wraps[r])
 
             #Check that this coordinate is still within bounds
-            if(testIndexRight >= 0):
+            if(test_index_right >= 0):
                 #Check if this index satisfies the search condition
-                if(inputArray[testIndexRight] > searchThreshold and \
-                        isNotSearched[testIndexRight] == 1):
+                if(input_array[test_index_right] > search_threshold and \
+                        is_not_searched[test_index_right] == 1):
                     #Append it to the search list if so
-                    itemsToSearch.append(testIndexRight)
+                    items_to_search.append(test_index_right)
                     #Flags that this cell has been searched
-                    isNotSearched[testIndexRight] = 0
+                    is_not_searched[test_index_right] = 0
 
 
             #Shift the current coordinate to the right by 1 in the r dimension
-            shiftAmount = -1
-            testIndexLeft = ravel_shift( \
-                                        itemTuple, \
-                                        arrayRank, \
-                                        arrayShape, \
+            shift_amount = -1
+            test_index_left = ravel_shift( \
+                                        item_tuple, \
+                                        array_rank, \
+                                        array_shape, \
                                         r, \
-                                        shiftAmount,
-                                        dimensionWraps[r])
+                                        shift_amount,
+                                        dimension_wraps[r])
 
             #Check that this coordinate is still within bounds
-            if(testIndexLeft > 0):
+            if(test_index_left > 0):
                 #Check if this index satisfies the search condition
-                if(inputArray[testIndexLeft] > searchThreshold and \
-                        isNotSearched[testIndexLeft] == 1 ):
+                if(input_array[test_index_left] > search_threshold and \
+                        is_not_searched[test_index_left] == 1 ):
                     #Append it to the search list if so
-                    itemsToSearch.append(testIndexLeft)
+                    items_to_search.append(test_index_left)
                     #Flags that this cell has been searched
-                    isNotSearched[testIndexLeft] = 0
+                    is_not_searched[test_index_left] = 0
 
  
 
         #Flag that this index has been searched
-        #isNotSearched[tuple(itemsToSearch[0])] = 0
+        #is_not_searched[tuple(items_to_search[0])] = 0
         #Now that the neighbors of the first item in the list have been tested,
         #remove it from the list and put it in the list of contiguous values
-        contiguousIndices.append(itemsToSearch.pop(0))
+        contiguous_indices.append(items_to_search.pop(0))
 
     #Return the list of contiguous indices (converted to index tuples)
-    return np.unravel_index(contiguousIndices,arrayShape)
+    return np.unravel_index(contiguous_indices,array_shape)
 
-cpdef list floodFillSearch( \
-                np.ndarray inputArray, \
-                np.float_t searchThreshold = 0.0, \
-                wrapDimensions = None):
+cpdef list flood_fill_search( \
+                np.ndarray input_array, \
+                np.float_t search_threshold = 0.0, \
+                wrap_dimensions = None):
     """Given an N-dimensional array, find contiguous areas of the array
     satisfiying a given condition and return a list of contiguous indices
     for each contiguous area.
@@ -178,79 +171,78 @@ cpdef list floodFillSearch( \
         input:
         ------
 
-            inputArray      :   (array-like) an array from which to search
+            input_array      :   (array-like) an array from which to search
                                 contiguous areas
 
-            searchThreshold :   The threshold for defining fill regions
-                                (inputArray > searchThreshold)
+            search_threshold :   The threshold for defining fill regions
+                                (input_array > search_threshold)
 
-            wrapDimensions :    A list of dimensions in which searching
+            wrap_dimensions :    A list of dimensions in which searching
                                 should have a wraparound condition
 
         output:
         -------
 
             An unordered list, where each item corresponds to a unique
-            contiguous area for which inputArray > searchThreshold, and
+            contiguous area for which input_array > search_threshold, and
             where the contents of each item are a list of array indicies
             that access the elements of the array for a given contiguous
             area.
 
     """
-    cdef np.ndarray[np.int64_t,ndim=1] arrayShape
-    cdef np.int64_t arrayRank
-    cdef np.int64_t numArrayElements
-    cdef list dimensionWraps
-    cdef list contiguousAreas
+    cdef np.ndarray[np.int64_t,ndim=1] array_shape
+    cdef np.int64_t array_rank
+    cdef np.int64_t num_array_elements
+    cdef list dimension_wraps
+    cdef list contiguous_areas
 
-    cdef tuple contiguousArray 
 
-    #Determine the rank of inputArray
+    #Determine the rank of input_array
     try:
-        arrayShape = np.array(np.shape(inputArray),dtype=np.int64)
-        arrayRank = len(arrayShape)
-        numArrayElements = np.prod(arrayShape)
+        array_shape = np.array(np.shape(input_array),dtype=np.int64)
+        array_rank = len(array_shape)
+        num_array_elements = np.prod(array_shape)
     except BaseException as e:
-        raise ValueError,"inputArray does not appear to be array like.  Error was: {}".format(e)
+        raise ValueError("input_array does not appear to be array like.  Error was: {}".format(e))
 
     #Set the dimension wrapping array
-    dimensionWraps = arrayRank*[False]
-    if wrapDimensions is not None:
+    dimension_wraps = array_rank*[False]
+    if wrap_dimensions is not None:
         try:
-            dimensionWraps[list(wrapDimensions)] = True
+            dimension_wraps[list(wrap_dimensions)] = True
         except BaseException as e:
-            raise ValueError,"wrapDimensions must be a list of valid dimensions for inputArray. Original error was: {}".format(e)
+            raise ValueError("wrap_dimensions must be a list of valid dimensions for input_array. Original error was: {}".format(e))
 
     #Set an array of the same size indicating which elements have been set
-    cdef np.ndarray isNotSearched
-    isNotSearched = np.ones(arrayShape,dtype = 'int')
+    cdef np.ndarray is_not_searched
+    is_not_searched = np.ones(array_shape,dtype = 'int')
 
     #Set the raveled input array
-    cdef np.float_t [:] raveledInputArray = inputArray.ravel()
+    cdef np.float_t [:] raveledInputArray = input_array.ravel()
     #And ravel the search inidcator array
-    cdef np.int_t [:] raveledIsNotSearched = isNotSearched.ravel()
+    cdef np.int_t [:] raveledIsNotSearched = is_not_searched.ravel()
     
     #Set the search list to null
-    contiguousAreas = []
+    contiguous_areas = []
 
     cdef np.int64_t i
     #Loop over the array
-    for i in xrange(numArrayElements):
-        #print "{}/{}".format(i,numArrayElements)
+    for i in range(num_array_elements):
+        #print "{}/{}".format(i,num_array_elements)
         #Check if the current element meets the search condition
-        if raveledInputArray[i] >= searchThreshold and raveledIsNotSearched[i]:
+        if raveledInputArray[i] >= search_threshold and raveledIsNotSearched[i]:
             #Flag that this cell has been searched
             raveledIsNotSearched[i] = 0
 
             #If it does, use a flood fill search to find the contiguous area surrouinding
             #the element for which the search condition is satisified. At very least, the index
-            #of this element is appended to contiguousAreas
-            contiguousAreas.append(\
+            #of this element is appended to contiguous_areas
+            contiguous_areas.append(\
                                     findNeighbors(  i,  \
-                                                    searchThreshold,    \
-                                                    arrayShape,         \
-                                                    arrayRank,          \
-                                                    dimensionWraps,     \
+                                                    search_threshold,    \
+                                                    array_shape,         \
+                                                    array_rank,          \
+                                                    dimension_wraps,     \
                                                     raveledInputArray,         \
                                                     raveledIsNotSearched      ))
 
@@ -261,10 +253,10 @@ cpdef list floodFillSearch( \
 
 
     #Set the list of contiguous area indices
-    return contiguousAreas
+    return contiguous_areas
 
-def sortByDistanceFromCenter(inds,varShape):
-    """Takes sets of indicies [e.g., from floodFillSearchC.floodFillSearch()] and sorts them by distance from the center of the array from which the indices were taken.
+def sort_by_distance_from_center(inds,var_shape):
+    """Takes sets of indicies [e.g., from flood_fill_searchC.flood_fill_search()] and sorts them by distance from the center of the array from which the indices were taken.
     
         input:
         ------
@@ -276,19 +268,19 @@ def sortByDistanceFromCenter(inds,varShape):
                         function.  It is assumed that each set of indices
                         represents a contiguous portion of an array.
                        
-            varShape : the shape of the variable from which inds originate
+            var_shape : the shape of the variable from which inds originate
             
         returns:
         --------
 
              A sorted version of inds, where the items are sorted by the
              distance of the contiguous area relative to the center of the
-             array whose shape is varShape.  The first item is the closest to
+             array whose shape is var_shape.  The first item is the closest to
              the center of the array.
              
     """
     #Get the center index
-    center = np.around(np.array(varShape)/2)
+    center = np.around(np.array(var_shape)/2)
     
     #Transform the indices to be center-relative
     centeredInds = [ tuple([ aind - cind] for aind,cind in zip(indTuples,center)) for indTuples in inds ]
