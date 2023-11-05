@@ -286,9 +286,9 @@ class testDistribution(object):
         numSamplesMax=2097152,
         numRepetitions=30,
         scKWArgs={
-            "fracContiguousHyperVolumes": 1,
-            "numPoints": 257,
-            "positiveShift": False,
+            "frac_contiguous_hyper_volumes": 1,
+            "num_points": 257,
+            "positive_shift": False,
         },
         numProcs=1,
     ):
@@ -592,16 +592,6 @@ class testMixtureModel(testDistribution):
             pdfStandard += stat.multivariate_normal.pdf(xarrays, mu, cov) / numNormals
 
         return pdfStandard.T
-
-
-#    def doTesting(self, \
-#                  scKWArgs = {'fracContiguousHyperVolumes' : 1, \
-#                              'numPoints' : 513}, \
-#                  **kwargs):
-#        """Default to 513 points for the mixture model"""
-#        if 'scKWArgs' in kwargs:
-#            del(kwargs['scKWArgs'])
-#        super(testMixtureModel,self).doTesting(scKWArgs=scKWArgs,**kwargs)
 
 
 class transitionPDF(testDistribution):
