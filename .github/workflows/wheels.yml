@@ -13,8 +13,9 @@ on:
     types:
       - published
   push:
-    tags:
-      - '*'
+    branches:
+      - main
+
 
 concurrency:
   group: wheels-${{ github.head_ref }}
@@ -132,7 +133,6 @@ jobs:
     name: Upload if release
     needs: [build_wheels, build_arch_wheels, build_sdist]
     runs-on: ubuntu-latest
-    if: github.event_name == 'create' && github.ref_type == 'tag'
 
     steps:
     - uses: actions/download-artifact@v3
@@ -144,5 +144,6 @@ jobs:
       run: ls -lh dist
 
     - uses: pypa/gh-action-pypi-publish@release/v1
+      if: github.event_name == 'release' && github.event.action == 'published'
       with:
         password: ${{ secrets.pypi_password }}
