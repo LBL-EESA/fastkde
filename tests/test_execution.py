@@ -34,11 +34,6 @@ def test_simple_3D():
     # the numPoints argument results in a coarser PDF--but one that is calculated
     # faster (and with less memory)
 
-    # calculate the index of the mode of the distribution
-    # (we'll plot 2D slices through the mode)
-    i_mode_ravel = np.argmax(pdf.ravel())
-    nmode = np.unravel_index(i_mode_ravel, np.shape(pdf))
-
 def test_simple_2D_with_xarray():
     np.random.seed(42)
     N = int(2e5)
