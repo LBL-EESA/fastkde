@@ -28,8 +28,9 @@ def test_simple_3D():
     x_3 = stats.betaprime.rvs(5, 6, size=N)
 
     # calculate the 3D PDF
-    pdf, values = fastKDE.pdf(x_1, x_2, x_3, num_points=[65, 65,
-                                                        65])  # simply add more variables to the argument list for higher dimensions
+    pdf, values = fastKDE.pdf(
+        x_1, x_2, x_3, num_points=[65, 65, 65]
+    )  # simply add more variables to the argument list for higher dimensions
     # note though that memory quickly becomes an issue
     # the numPoints argument results in a coarser PDF--but one that is calculated
     # faster (and with less memory)
@@ -38,5 +39,3 @@ def test_simple_3D():
     # (we'll plot 2D slices through the mode)
     i_mode_ravel = np.argmax(pdf.ravel())
     nmode = np.unravel_index(i_mode_ravel, np.shape(pdf))
-
-
