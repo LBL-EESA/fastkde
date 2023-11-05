@@ -9,17 +9,12 @@ on:
     inputs:
       overrideVersion:
         description: Manually force a version
-  pull_request:
-    branches:
-      - master
-      - main
-  push:
-    branches:
-      - master
-      - main
   release:
     types:
       - published
+  push:
+    tags:
+      - '*'
 
 concurrency:
   group: wheels-${{ github.head_ref }}
@@ -137,6 +132,7 @@ jobs:
     name: Upload if release
     needs: [build_wheels, build_arch_wheels, build_sdist]
     runs-on: ubuntu-latest
+    if: github.event_name == 'create' && github.ref_type == 'tag'
 
     steps:
     - uses: actions/download-artifact@v3
@@ -148,6 +144,5 @@ jobs:
       run: ls -lh dist
 
     - uses: pypa/gh-action-pypi-publish@release/v1
-      if: github.event_name == 'release' && github.event.action == 'published'
       with:
         password: ${{ secrets.pypi_password }}
