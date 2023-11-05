@@ -1080,7 +1080,7 @@ def pdf(*args, **kwargs):
             use_xarray = False
 
     # if use_xarray was given, check that xarray is installed
-    if use_xarray == True:
+    if use_xarray:
         try:
             import xarray
         except ImportError:
@@ -1361,7 +1361,7 @@ def conditional(inputVars, conditioningVars, **kwargs):
             use_xarray = False
 
     # if use_xarray was given, check that xarray is installed
-    if use_xarray == True:
+    if use_xarray:
         try:
             import xarray
         except ImportError:
