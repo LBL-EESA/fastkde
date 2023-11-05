@@ -210,7 +210,7 @@ def pair_plot(
                        plotted).  If None is given, matplotlib will choose
                        PDF levels.
 
-        log_scale    : flags whether to use the logAxes argument for
+        log_scale    : flags whether to use the log_axes argument for
                        fastKDE.  If a single bool value, it applies to all
                        variables; if a list, each item in the list
                        corresponds to a variable
@@ -273,7 +273,9 @@ def pair_plot(
     for n in range(num_vars):
         #  calculate PDFs
         marginal_pdfs[n], marginal_vals[n] = fastKDE.pdf(
-            input_var_array[n, :], logAxes=log_scale[n]
+            input_var_array[n, :],
+            log_axes=log_scale[n],
+            use_xarray=False,
         )
 
         #  define axis limits
@@ -292,19 +294,22 @@ def pair_plot(
                     bivariate_pdfs[n1, n2], _ = fastKDE.pdf(
                         input_var_array[n1, :],
                         input_var_array[n2, :],
-                        logAxes=[log_scale[n1], log_scale[n2]],
+                        log_axes=[log_scale[n1], log_scale[n2]],
+                        use_xarray=False,
                     )
                 else:
                     bivariate_pdfs[n1, n2], _ = fastKDE.conditional(
                         input_var_array[n2, :],
                         input_var_array[n1, :],
-                        logAxes=[log_scale[n1], log_scale[n2]],
+                        log_axes=[log_scale[n1], log_scale[n2]],
+                        use_xarray=False,
                     )
 
                     bivariate_pdfs[n2, n1], _ = fastKDE.conditional(
                         input_var_array[n1, :],
                         input_var_array[n2, :],
-                        logAxes=[log_scale[n2], log_scale[n1]],
+                        log_axes=[log_scale[n2], log_scale[n1]],
+                        use_xarray=False,
                     )
 
     #  set variable labels if needed

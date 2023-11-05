@@ -1,6 +1,6 @@
 [![PyPI version](https://badge.fury.io/py/fastkde.svg)](https://badge.fury.io/py/fastkde)
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/lbl-eesa/fastkde/test.yml?event=push&label=tests)
-<a target="_blank" href="https://colab.research.google.com/github/LBL-EESA/fastkde/blob/main/testing/readme_test.ipynb"> <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/> </a>
+<a target="_blank" href="https://colab.research.google.com/github/LBL-EESA/fastkde/blob/main/examples/readme_test.ipynb"> <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/> </a>
 
 # fastKDE
 
@@ -23,26 +23,20 @@ dimensionality).
 **For a standard PDF**
 
 ```python
+""" Demonstrate the first README example. """
 import numpy as np
-from fastkde import fastKDE
+import fastkde
 import matplotlib.pyplot as plt
 
-#Generate two random variables dataset (representing 100000 pairs of datapoints)
-N = int(2e5)
-var1 = 50*np.random.normal(size=N) + 0.1
-var2 = 0.01*np.random.normal(size=N) - 300
+#Generate two random variables dataset (representing 100,000 pairs of datapoints)
+N = int(1e5)
+x = 50*np.random.normal(size=N) + 0.1
+y = 0.01*np.random.normal(size=N) - 300
 
 #Do the self-consistent density estimate
-myPDF, values = fastKDE.pdf(var1,var2)
+PDF = fastkde.pdf(x, y, var_names = ['x', 'y'])
 
-#Extract the axes from the pdf values list
-v1,v2 = values
-
-#Plot contours of the PDF should be a set of concentric ellipsoids centered on
-#(0.1, -300) Comparitively, the y axis range should be tiny and the x axis range
-#should be large
-plt.contour(v1,v2,myPDF)
-plt.show()
+PDF.plot();
 ```
 
 
@@ -83,7 +77,7 @@ conditional
 #***************************
 # Calculate the conditional
 #***************************
-pOfYGivenX, values = fastKDE.conditional(y,x)
+cPDF = fastkde.conditional(y, x, var_names = ['y', 'x'])
 ```
 
 The following plot shows the results:
@@ -92,30 +86,19 @@ The following plot shows the results:
 #***************************
 # Plot the conditional
 #***************************
-fig,axs = plt.subplots(1,2,figsize=(10,5))
+fig,axs = plt.subplots(1,2,figsize=(10,5), sharex=True, sharey=True)
 
 #Plot a scatter plot of the incoming data
 axs[0].plot(x,y,'k.',alpha=0.1)
 axs[0].set_title('Original (x,y) data')
-
-#Set axis labels
-for i in (0,1):
-    axs[i].set_xlabel('x')
-    axs[i].set_ylabel('y')
+axs[0].set_xlabel('x')
+axs[0].set_ylabel('y')
 
 #Draw a contour plot of the conditional
-axs[1].contourf(values[0],values[1],pOfYGivenX,64)
+cPDF.plot(ax = axs[1], add_colorbar = False)
 #Overplot the original underlying relationship
-axs[1].plot(values[0],underlyingFunction(values[0]),linewidth=3,linestyle='--',alpha=0.5)
+axs[1].plot(cPDF.x,underlyingFunction(cPDF.x),linewidth=3,linestyle='--',alpha=0.5)
 axs[1].set_title('P(y|x)')
-
-#Set axis limits to be the same (limit to the range of the data)
-xlim = [x.min(),x.max()]
-ylim = [y.min(),y.max()]
-axs[1].set_xlim(xlim)
-axs[1].set_ylim(ylim)
-axs[0].set_xlim(xlim)
-axs[0].set_ylim(ylim)
 
 plt.savefig('conditional_demo.png')
 plt.show()
@@ -128,9 +111,8 @@ plt.show()
 To see the KDE values at specified points (not necessarily those that were used to generate the KDE):
 
 ```python
-import numpy as np
-from fastkde import fastKDE
-
+""" Demonstrate using the pdf_at_points function. """""
+import fastkde
 train_x = 50*np.random.normal(size=100) + 0.1
 train_y = 0.01*np.random.normal(size=100) - 300
 
@@ -138,7 +120,7 @@ test_x = 50*np.random.normal(size=100) + 0.1
 test_y = 0.01*np.random.normal(size=100) - 300
 
 test_points = list(zip(test_x, test_y))
-test_point_pdf_values = fastKDE.pdf_at_points(train_x, train_y, list_of_points = test_points)
+test_point_pdf_values = fastkde.pdf_at_points(train_x, train_y, list_of_points = test_points)
 ```
 
 Note that this method can be significantly slower than calls to `fastkde.pdf()` since it does not benefit from using a fast Fourier transform during the final stage in which the PDF estimate is transformed from spectral space into data space, whereas `fastkde.pdf()` does.

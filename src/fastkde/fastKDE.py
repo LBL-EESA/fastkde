@@ -668,14 +668,14 @@ class fastKDE:
             ) / self.dataNorm[v]
 
         # Set the fill value for the frequency grids
-        fillValue = -1e20
+        fill_value = -1e20
 
         # Get the maximum frequency grid length
         tgrids = self.tgrids
         ntmax = npy.amax([len(tgrid) for tgrid in tgrids])
 
         # Create the frequency grids array
-        frequencyGrids = fillValue * npy.ones([self.num_variables, ntmax])
+        frequencyGrids = fill_value * npy.ones([self.num_variables, ntmax])
         # Fill the frequency grids array
         for v in range(self.num_variables):
             frequencyGrids[v, : len(tgrids[v])] = tgrids[v]
@@ -686,7 +686,7 @@ class fastKDE:
                 frequencyGrids,
                 self.phiSC.ravel(),
                 list_of_points,
-                missingFreqVal=fillValue,
+                missing_freq_val=fill_value,
             )
             * npy.prod(self.deltaT)
             * (1.0 / (2 * npy.pi)) ** self.num_variables
@@ -712,7 +712,7 @@ class fastKDE:
         """A wrapper for getCopula; this function is deprecated."""
         return self.getCopula(data)
 
-    def estimateConditionals(self, variables, data, peakFrac=0.0, reApplyFilter=False):
+    def estimateConditionals(self, variables, data, peak_frac=0.0, reApplyFilter=False):
         """For a multidimensional PDF, estimates the conditional P(x_i | x_j).
 
         input:
@@ -740,7 +740,7 @@ class fastKDE:
                           This is needed to calculated the various marginals
                           required in the conditional computation.
 
-            peakFrac    : The fractional threshold below which to truncate the
+            peak_frac    : The fractional threshold below which to truncate the
                           marginal PDF (to avoid divding by small numbers); this
                           is the fraction of the height of the mode.
 
@@ -831,7 +831,7 @@ class fastKDE:
             sumAxes.append(ip)
         conformantSlice = tuple(conformantSlice)
 
-        marginalThreshold = peakFrac * npy.amax(marginalObject.pdf)
+        marginalThreshold = peak_frac * npy.amax(marginalObject.pdf)
         # Create and mask the marginal PDF
         marginalPDF = npy.ma.masked_less_equal(
             marginalObject.pdf[conformantSlice], marginalThreshold
@@ -860,7 +860,7 @@ class fastKDE:
         dxProd = dxProd[cslice[::-1]]
 
         normFactor = npy.ma.masked_equal(
-            sum(conditionalPDF * dxProd, axis=tuple(sumAxes)), 0.0
+            npy.sum(conditionalPDF * dxProd, axis=tuple(sumAxes)), 0.0
         )
 
         # Normalize the conditional PDF for the leftside variables
@@ -873,7 +873,7 @@ class fastKDE:
     # ******************* getCopula      ******************************************
     # *****************************************************************************
     # *****************************************************************************
-    def getCopula(self, data=None, peakFrac=0.0):
+    def getCopula(self, data=None, peak_frac=0.0):
         """Estimates the copula of the underlying PDF"""
 
         # If the data are univariate, simply return the PDF itself
@@ -909,7 +909,7 @@ class fastKDE:
         marginals = []
         for obj in marginalObjects:
             # Add the marginal to the list while masking <0 values
-            marginalThreshold = peakFrac * npy.amax(obj.pdf)
+            marginalThreshold = peak_frac * npy.amax(obj.pdf)
             # Create and mask the marginal PDF
             marginals.append(npy.ma.masked_less_equal(obj.pdf, marginalThreshold))
 
@@ -1006,13 +1006,24 @@ def pdf(*args, **kwargs):
     input:
     ------
 
-        var1            : An input variable.
+        var0            : An input variable.
 
-        var2, var3...   : Additional input varibles whose length corresponds
-                          to the length of var1.  As input variables are
+        var1, var2...   : Additional input varibles whose length corresponds
+                          to the length of var0.  As input variables are
                           added, the dimensionality of the resulting PDF
-                          increases (e.g., supplying var1 and var2 results
+                          increases (e.g., supplying var0 and var1 results
                           in a 2D PDF).
+
+        use_xarray      : If True, returns an xarray DataArray object; otherwise
+                          returns a tuple of numpy arrays.  If None, defaults to
+                          True if xarray is installed.
+
+        var_names       : A list of names for the input variables.  If None, the
+                          variables are named var0, var1, etc.
+
+        do_xarray_subset : If True, returns a subset of the xarray DataArray limited
+                           to the range of the input variables.  If False, returns
+                           the full xarray DataArray.  If None, defaults to True.
 
         **kwargs        : Any additional keyword arguments get passed
                           directly to fastKDE.fastKDE();  see the docstring
@@ -1033,41 +1044,85 @@ def pdf(*args, **kwargs):
     method grows exponentially with the number of input variables.
     """
 
-    # Try to get var1 from the args or kwargs
+    # try to get the use_xarray keyword argument
     try:
-        var1 = args[0]
+        use_xarray = kwargs["use_xarray"]
+        del kwargs["use_xarray"]
+    except KeyError:
+        use_xarray = None
+
+    # try to get the var_names keyword argument
+    try:
+        var_names = kwargs["var_names"]
+        del kwargs["var_names"]
+    except KeyError:
+        var_names = None
+
+    # try to get the do_xarray_subset keyword argument
+    try:
+        do_xarray_subset = kwargs["do_xarray_subset"]
+        del kwargs["do_xarray_subset"]
+    except KeyError:
+        do_xarray_subset = None
+
+    # set the default value of do_xarray_subset
+    if do_xarray_subset is None:
+        do_xarray_subset = True
+
+    # Check if use_xarray was given; set defaults
+    if use_xarray is None:
+        # Check if xarray is installed
+        try:
+            import xarray
+
+            use_xarray = True
+        except ImportError:
+            use_xarray = False
+
+    # if use_xarray was given, check that xarray is installed
+    if use_xarray == True:
+        try:
+            import xarray
+        except ImportError:
+            raise ImportError(
+                "xarray is not installed, but use_xarray=True was provided"
+            )
+
+    # Try to get var0 from the args or kwargs
+    try:
+        var0 = args[0]
     except IndexError:
         try:
-            var1 = kwargs["var1"]
+            var0 = kwargs["var0"]
         except KeyError:
             raise ValueError("No input data were provided.")
 
-    # Check that var1 is arraylike
+    # Check that var0 is arraylike
     try:
-        var1Shape = npy.shape(var1)
-        assert len(var1Shape) != 0, "var1 is not an array"
+        var0Shape = npy.shape(var0)
+        assert len(var0Shape) != 0, "var0 is not an array"
     except TypeError or AssertionError:
         raise ValueError(
-            "Could not get shape of var1; it does not appear to be array-like."
+            "Could not get shape of var0; it does not appear to be array-like."
         )
 
-    # Check that var1 is a vector
-    if len(var1Shape) != 1:
+    # Check that var0 is a vector
+    if len(var0Shape) != 1:
         raise ValueError(
-            "var1 should be a vector.  If multiple variables are combined in a "
+            "var0 should be a vector.  If multiple variables are combined in a "
             "single array, please use the fastKDE class interface instead."
         )
 
-    # Get the length of var1
-    N = var1Shape[0]
+    # Get the length of var0
+    N = var0Shape[0]
 
     # Check for input varibles provided as key word arguments
-    varArgs = []
+    var_args = []
     varKeys = sorted([v for v in kwargs if "var" in v])
     for key in varKeys:
-        # Ignore var1 since this was either provided as an argument
+        # Ignore var0 since this was either provided as an argument
         # or was read as a keyword argument above
-        if key != "var1":
+        if key != "var0":
             try:
                 int(key[3:])
             except ValueError:
@@ -1076,10 +1131,10 @@ def pdf(*args, **kwargs):
                 )
 
             # Append this variable
-            varArgs.append(kwargs[key])
+            var_args.append(kwargs[key])
 
     # Check if a mixture of keyword and arguments were provided for additional variables
-    if len(varArgs) != 0 and len(args) > 1:
+    if len(var_args) != 0 and len(args) > 1:
         raise ValueError(
             "additional variables were provided as a mixture of arguments and "
             "keyword arguments. They all must be one or the other."
@@ -1088,7 +1143,7 @@ def pdf(*args, **kwargs):
     # Set the additional variables to be the rest of the input arguments
     # if none were provided as key word arguments
     if len(args) > 1:
-        varArgs = args[1:]
+        var_args = args[1:]
 
     # Remove the variables from kwargs
     for key in list(varKeys):
@@ -1096,13 +1151,33 @@ def pdf(*args, **kwargs):
 
     # Start preparing the input data for
     # concatenation
-    inputVariables = npy.array(var1[npy.newaxis, :])
+    inputVariables = npy.array(var0[npy.newaxis, :])
+
+    # get the number of variables (add one because we already popped var0)
+    num_variables = len(var_args) + 1
+
+    # get or set the variable names
+    if var_names is None:
+        var_names = ["var{}".format(i) for i in range(num_variables)]
+    else:
+        # check that var_names is a list of strings of appropriate length
+        if len(var_names) != num_variables:
+            raise ValueError(
+                "var_names must be a list of strings of length {}".format(num_variables)
+            )
+        for i in range(num_variables):
+            if not isinstance(var_names[i], str):
+                raise ValueError(
+                    "var_names must be a list of strings of length {}".format(
+                        num_variables
+                    )
+                )
 
     # Attempt to read additional variables
     # and concatenate them to the input variable
-    for i in range(len(varArgs)):
+    for i in range(num_variables - 1):
         try:
-            varn = npy.array(varArgs[i][npy.newaxis, :])
+            varn = npy.array(var_args[i][npy.newaxis, :])
         except BaseException as e:
             print(e)
             raise ValueError(
@@ -1113,7 +1188,7 @@ def pdf(*args, **kwargs):
         if lenN != N:
             raise ValueError(
                 (
-                    "len(var{}) is {}, but it should be the same of len(var1) " + "= {}"
+                    "len(var{}) is {}, but it should be the same of len(var0) " + "= {}"
                 ).format(i + 1, lenN, N)
             )
 
@@ -1129,9 +1204,47 @@ def pdf(*args, **kwargs):
     # Calculate the PDF
     _pdfobj = fastKDE(inputVariables, do_save_marginals=False, **kwargs)
     if len(_pdfobj.axes) == 1:
-        return _pdfobj.pdf, _pdfobj.axes[0]
+        pdf_tuple = _pdfobj.pdf, _pdfobj.axes[0]
     else:
-        return _pdfobj.pdf, _pdfobj.axes
+        pdf_tuple = _pdfobj.pdf, _pdfobj.axes
+
+    # Return the PDF
+    if use_xarray:
+        # set the coordinates
+        coords = {}
+        dims = []
+        for i in range(num_variables):
+            # set the variable name
+            varname = var_names[i]
+            # set the coordinate
+            coords[varname] = pdf_tuple[1][i]
+            # set the dimension
+            dims.append(varname)
+
+        # construct the xarray object; the two transpose operations ensure
+        # that the dimensions are in an intuitive order
+        pdf_da = xarray.DataArray(pdf_tuple[0].T, coords=coords, dims=dims).T
+
+        # set the long name
+        pdf_da.attrs["long_name"] = f"PDF({','.join(var_names)})"
+
+        # subset the xarray object if requested
+        if do_xarray_subset:
+            subset_dict = {}
+            for i in range(num_variables):
+                varname = var_names[i]
+                # get the min and max of the variable
+                varmin = npy.amin(inputVariables[i])
+                varmax = npy.amax(inputVariables[i])
+                # set the subset dictionary entry
+                subset_dict[varname] = slice(varmin, varmax)
+
+            # subset the xarray object
+            pdf_da = pdf_da.sel(**subset_dict)
+
+        return pdf_da
+    else:
+        return pdf_tuple
 
 
 def conditional(inputVars, conditioningVars, **kwargs):
@@ -1140,6 +1253,18 @@ def conditional(inputVars, conditioningVars, **kwargs):
         inputVars           : A vector of input values, or a list of such vectors
 
         conditioningVars    : A vector of conditioning values, or a list of such vectors
+
+        use_xarray      : If True, returns an xarray DataArray object; otherwise
+                          returns a tuple of numpy arrays.  If None, defaults to
+                          True if xarray is installed.
+
+        var_names       : A list of names for the input variables, starting with
+                          the conditioning variables. If None, the variables are
+                          named var0, var1, etc.
+                          
+        do_xarray_subset : If True, returns a subset of the xarray DataArray limited
+                           to the range of the input variables.  If False, returns
+                           the full xarray DataArray.  If None, defaults to True.
 
         **kwargs            : Any additional keyword arguments get passed
                               directly to fastKDE.fastKDE() or
@@ -1151,7 +1276,7 @@ def conditional(inputVars, conditioningVars, **kwargs):
                               Note the following two arguments have different
                               default values here:
                                   positive_shift=True by default, and
-                                  peakFrac = 0.01 by default.
+                                  peak_frac = 0.01 by default.
 
         :returns: (cPDF, axes) \
                 where cPDF is the PDF(inputVars | conditioningVars), and axes is a list
@@ -1200,6 +1325,49 @@ def conditional(inputVars, conditioningVars, **kwargs):
         ```
 
     """
+    # try to get the use_xarray keyword argument
+    try:
+        use_xarray = kwargs["use_xarray"]
+        del kwargs["use_xarray"]
+    except KeyError:
+        use_xarray = None
+
+    # try to get the input_var_names keyword argument
+    try:
+        var_names = kwargs["var_names"]
+        del kwargs["var_names"]
+    except KeyError:
+        var_names = None
+
+    # try to get the do_xarray_subset keyword argument
+    try:
+        do_xarray_subset = kwargs["do_xarray_subset"]
+        del kwargs["do_xarray_subset"]
+    except KeyError:
+        do_xarray_subset = None
+
+    # set the default value of do_xarray_subset
+    if do_xarray_subset is None:
+        do_xarray_subset = True
+
+    # Check if use_xarray was given; set defaults
+    if use_xarray is None:
+        # Check if xarray is installed
+        try:
+            import xarray
+
+            use_xarray = True
+        except ImportError:
+            use_xarray = False
+
+    # if use_xarray was given, check that xarray is installed
+    if use_xarray == True:
+        try:
+            import xarray
+        except ImportError:
+            raise ImportError(
+                "xarray is not installed, but use_xarray=True was provided"
+            )
 
     # Check whether inputVars is an iterable of vectors or a single vector;
     # ensure it is an iterable
@@ -1229,12 +1397,12 @@ def conditional(inputVars, conditioningVars, **kwargs):
             ).format(ivarLengths, cvarLengths)
         )
 
-    # Extract the peakFrac argument
-    if "peakFrac" in kwargs:
-        peakFrac = kwargs["peakFrac"]
-        del kwargs["peakFrac"]
+    # Extract the peak_frac argument
+    if "peak_frac" in kwargs:
+        peak_frac = kwargs["peak_frac"]
+        del kwargs["peak_frac"]
     else:
-        peakFrac = 0.01
+        peak_frac = 0.01
 
     # Default to positive_shift=True
     if "positive_shift" in kwargs:
@@ -1242,6 +1410,35 @@ def conditional(inputVars, conditioningVars, **kwargs):
         del kwargs["positive_shift"]
     else:
         positive_shift = True
+
+    # set the input variable names
+    if var_names is None:
+        var_names = ["var{}".format(i) for i in range(len(fullVarList))]
+    else:
+        # check that var_names is a list of strings of appropriate length
+        if len(var_names) != len(fullVarList):
+            raise ValueError(
+                "var_names must be a list of strings of length {}".format(
+                    len(fullVarList)
+                )
+            )
+        for i in range(len(fullVarList)):
+            if not isinstance(var_names[i], str):
+                raise ValueError(
+                    "var_names must be a list of strings of length {}".format(
+                        len(fullVarList)
+                    )
+                )
+
+        # reorder the variable names so that the conditioning variables are first
+        var_names = (
+            var_names[len(conditioningVars) :] + var_names[: len(conditioningVars)]
+        )
+
+    # extract the conditioning variable names
+    conditioning_var_names = var_names[len(conditioningVars) :]
+    # extract the input variable names
+    input_var_names = var_names[: len(conditioningVars)]
 
     # Estimate the full joint PDF
     _pdf = fastKDE(npy.array(fullVarList), positive_shift=positive_shift, **kwargs)
@@ -1251,11 +1448,49 @@ def conditional(inputVars, conditioningVars, **kwargs):
 
     # Estimate the conditional
     cpdf = _pdf.estimateConditionals(
-        cvarInds, npy.array(fullVarList), peakFrac=peakFrac
+        cvarInds, npy.array(fullVarList), peak_frac=peak_frac
     )
 
-    # Return the conditional and the axes
-    return cpdf, _pdf.axes
+    # Return the PDF
+    if use_xarray:
+        # set the coordinates
+        coords = {}
+        dims = []
+        for i in range(len(fullVarList)):
+            # set the variable name
+            varname = var_names[i]
+            # set the coordinate
+            coords[varname] = _pdf.axes[i]
+            # set the dimension
+            dims.append(varname)
+
+        # construct the xarray object; the two transpose operations ensure
+        # that the dimensions are in an intuitive order
+        cdf_da = xarray.DataArray(cpdf.T, coords=coords, dims=dims).T
+
+        # set the long name
+        cdf_da.attrs[
+            "long_name"
+        ] = f"PDF({','.join(input_var_names)}|{','.join(conditioning_var_names)})"
+
+        # subset the xarray object if requested
+        if do_xarray_subset:
+            subset_dict = {}
+            for i in range(len(fullVarList)):
+                varname = var_names[i]
+                # get the min and max of the variable
+                varmin = npy.amin(fullVarList[i])
+                varmax = npy.amax(fullVarList[i])
+                # set the subset dictionary entry
+                subset_dict[varname] = slice(varmin, varmax)
+
+            # subset the xarray object
+            cdf_da = cdf_da.sel(**subset_dict)
+
+        return cdf_da
+    else:
+        # Return the conditional and the axes
+        return cpdf, _pdf.axes
 
 
 def pdf_at_points(*args, **kwargs):
@@ -1331,7 +1566,7 @@ def pdf_at_points(*args, **kwargs):
     N = var1Shape[0]
 
     # Check for input varibles provided as key word arguments
-    varArgs = []
+    var_args = []
     varKeys = sorted([v for v in kwargs if "var" in v])
     for key in varKeys:
         # Ignore var1 since this was either provided as an argument
@@ -1345,10 +1580,10 @@ def pdf_at_points(*args, **kwargs):
                 )
 
             # Append this variable
-            varArgs.append(kwargs[key])
+            var_args.append(kwargs[key])
 
     # Check if a mixture of keyword and arguments were provided for additional variables
-    if len(varArgs) != 0 and len(args) > 1:
+    if len(var_args) != 0 and len(args) > 1:
         raise ValueError(
             "additional variables were provided as a mixture of arguments and "
             "keyword arguments.  They all must be one or the other."
@@ -1357,7 +1592,7 @@ def pdf_at_points(*args, **kwargs):
     # Set the additional variables to be the rest of the input arguments
     # if none were provided as key word arguments
     if len(args) > 1:
-        varArgs = args[1:]
+        var_args = args[1:]
 
     # Remove the variables from kwargs
     for key in list(varKeys):
@@ -1369,9 +1604,9 @@ def pdf_at_points(*args, **kwargs):
 
     # Attempt to read additional variables
     # and concatenate them to the input variable
-    for i in range(len(varArgs)):
+    for i in range(len(var_args)):
         try:
-            varn = npy.array(varArgs[i][npy.newaxis, :])
+            varn = npy.array(var_args[i][npy.newaxis, :])
         except BaseException as e:
             print(e)
             raise ValueError(
