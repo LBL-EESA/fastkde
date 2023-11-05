@@ -1,11 +1,4 @@
 #!/usr/bin/env python
-
-try:
-    from builtins import range  # Python 2.7/3.x compatibility
-except:
-    from builtins import range
-
-
 from numpy import *
 import numpy as npy
 from numpy.random import randn
@@ -86,7 +79,7 @@ if __name__ == "__main__":
 
                 with Timer(nsample[i]):
                     # Do the BP11 density estimate
-                    bkernel = fastKDE(randgauss, doApproximateECF=True, numPoints=513)
+                    bkernel = fastKDE(randgauss, num_points=513)
 
                 # Calculate the mean squared error between the estimated density
                 # And the gaussian
@@ -185,7 +178,7 @@ if __name__ == "__main__":
             print(randsample)
             # Simply do the BP11 density estimate and plot it
             bkernel = fastKDE(
-                randsample, doApproximateECF=True, beVerbose=True, numPoints=513
+                randsample, do_approximate_ecf=True, be_verbose=True, num_points=513
             )
             # Plot the optimal distribution
             P.subplot(2, 1, 1)
@@ -297,7 +290,10 @@ if __name__ == "__main__":
                 with Timer(nsample[z]):
                     # Do the BP11 density estimate
                     bkernel = fastKDE(
-                        randsub, beVerbose=False, doSaveMarginals=False, numPoints=129
+                        randsub,
+                        be_verbose=False,
+                        do_save_marginals=False,
+                        num_points=129,
                     )
 
                 x, y = tuple(bkernel.axes)
@@ -321,7 +317,7 @@ if __name__ == "__main__":
         else:
             with Timer(shape(randsample)[1]):
                 bkernel = fastKDE(
-                    randsample, beVerbose=True, doSaveMarginals=False, numPoints=129
+                    randsample, be_verbose=True, do_save_marginals=False, num_points=129
                 )
 
         doPlot = True
