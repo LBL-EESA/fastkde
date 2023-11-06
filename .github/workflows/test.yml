@@ -1,6 +1,9 @@
 name: Run tests
 
-on: [push]
+on:
+  push:
+  schedule:
+    - cron: '5 4 * * MON' # This will run the workflow every Monday at 4:05AM UTC
 
 jobs:
   tests:
