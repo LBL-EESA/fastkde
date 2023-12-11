@@ -1217,7 +1217,10 @@ def pdf(*args, **kwargs):
             # set the variable name
             varname = var_names[i]
             # set the coordinate
-            coords[varname] = pdf_tuple[1][i]
+            if num_variables == 1:
+                coords[varname] = pdf_tuple[1]
+            else:
+                coords[varname] = pdf_tuple[1][i]
             # set the dimension
             dims.append(varname)
 
