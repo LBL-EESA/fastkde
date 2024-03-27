@@ -34,6 +34,15 @@ def test_simple_3D():
     # the numPoints argument results in a coarser PDF--but one that is calculated
     # faster (and with less memory)
 
+def test_simple_1D_with_xarray():
+    np.random.seed(42)
+    N = int(2e5)
+    var1 = 50 * np.random.normal(size=N) + 0.1
+
+    # Do the self-consistent density estimate
+    myPDF = fastkde.pdf(var1, use_xarray=True)
+
+
 def test_simple_2D_with_xarray():
     np.random.seed(42)
     N = int(2e5)
