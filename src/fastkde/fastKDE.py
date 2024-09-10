@@ -158,9 +158,9 @@ class fastKDE:
             data_rank = len(npy.shape(data))
             # If the data are a vector, promote the data to a rank-1 array with only 1 column
             if data_rank == 1:
-                data = npy.array(original_data[npy.newaxis, :], dtype=npy.float_)
+                data = npy.array(original_data[npy.newaxis, :], dtype=npy.float64)
             else:
-                data = npy.array(original_data, dtype=npy.float_)
+                data = npy.array(original_data, dtype=npy.float64)
             if data_rank > 2:
                 raise ValueError(
                     "data must be a rank-2 array of shape [num_variables,num_data_points]"
@@ -1642,7 +1642,7 @@ def pdf_at_points(*args, **kwargs):
     #  make sure list_of_points is in the expected format
     if list_of_points_provided_in_kwargs:
         try:
-            list_of_points = npy.array(list_of_points, copy=True, dtype=npy.float_).T
+            list_of_points = npy.array(list_of_points, copy=True, dtype=npy.float64).T
         except ValueError:
             raise RuntimeError("Could not convert list_of_points to a numpy array.")
 
@@ -1652,7 +1652,7 @@ def pdf_at_points(*args, **kwargs):
         # If the data are a vector, promote the data to a rank-1 array with only
         # 1 column
         if data_rank == 1:
-            list_of_points = npy.array(list_of_points[npy.newaxis, :], dtype=npy.float_)
+            list_of_points = npy.array(list_of_points[npy.newaxis, :], dtype=npy.float64)
 
         if data_rank > 2:
             #  raise an error indicating the proper shape for list_of_points

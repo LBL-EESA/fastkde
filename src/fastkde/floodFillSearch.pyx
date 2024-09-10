@@ -71,7 +71,7 @@ cdef tuple findNeighbors(   np.int64_t raveled_start_index, \
                             np.int64_t array_rank, \
                             list dimension_wraps, \
                             np.float_t [:] input_array, \
-                            np.int_t [:] is_not_searched, \
+                            np.int64_t [:] is_not_searched, \
                    ):
     """Does a flood fill algorithim on input_array in the vicinity of
     raveled_start_index to find contiguous areas where raveled_start_index > search_threshold 
@@ -220,7 +220,7 @@ cpdef list flood_fill_search( \
     #Set the raveled input array
     cdef np.float_t [:] raveledInputArray = input_array.ravel()
     #And ravel the search inidcator array
-    cdef np.int_t [:] raveledIsNotSearched = is_not_searched.ravel()
+    cdef np.int64_t [:] raveledIsNotSearched = is_not_searched.ravel()
     
     #Set the search list to null
     contiguous_areas = []
