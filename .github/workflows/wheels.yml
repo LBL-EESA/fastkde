@@ -32,7 +32,7 @@ env:
 jobs:
   build_sdist:
     name: Build SDist
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
       with:
@@ -43,27 +43,32 @@ jobs:
       if: github.event.inputs.overrideVersion
       run: echo "SETUPTOOLS_SCM_PRETEND_VERSION=${{ github.event.inputs.overrideVersion }}" >> $GITHUB_ENV
 
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
     - name: Build SDist
       run: pipx run build --sdist
 
     - name: Check metadata
       run: pipx run twine check --strict dist/*
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         path: dist/*.tar.gz
 
 
   build_arch_wheels:
     name: ${{ matrix.python }} on ${{ matrix.arch }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
-        python: [37, 38, 39, 310, 311, 312]
+        python: [39, 310, 311, 312]
         arch: [aarch64]
     steps:
 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
         submodules: true
@@ -77,7 +82,7 @@ jobs:
       with:
         platforms: all
 
-    - uses: pypa/cibuildwheel@v2.16
+    - uses: pypa/cibuildwheel@v2.20
       env:
         CIBW_BUILD: cp${{ matrix.python }}-manylinux_*
         CIBW_ARCHS: ${{ matrix.arch }}
@@ -87,7 +92,7 @@ jobs:
       shell: bash
 
     - name: Upload wheels
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         path: wheelhouse/*.whl
 
@@ -115,7 +120,7 @@ jobs:
       shell: bash
       run: echo "SETUPTOOLS_SCM_PRETEND_VERSION=${{ github.event.inputs.overrideVersion }}" >> $GITHUB_ENV
 
-    - uses: pypa/cibuildwheel@v2.16
+    - uses: pypa/cibuildwheel@v2.20
       env:
         CIBW_BUILD: ${{ matrix.build }}
         CIBW_ARCHS: ${{ matrix.arch }}
@@ -125,7 +130,7 @@ jobs:
       shell: bash
 
     - name: Upload wheels
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         path: wheelhouse/*.whl
 
