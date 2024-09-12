@@ -116,7 +116,7 @@ cpdef np.ndarray[double complex] nuifft( \
     #********************************************
     vprint("Getting the size of the frequency spaces",be_verbose)
     cdef int n,t,iNotMissing
-    cdef np.int_t [:] frequencySizes = np.zeros([numDimensions],dtype=np.int_)
+    cdef np.int64_t [:] frequencySizes = np.zeros([numDimensions],dtype=np.int_)
 
     for n in range(numDimensions):
         iNotMissing = 0
@@ -124,12 +124,12 @@ cpdef np.ndarray[double complex] nuifft( \
             if frequency_grids[n,t] != missing_freq_val:
                 iNotMissing += 1
         if iNotMissing != 0:
-            frequencySizes[n] = <np.int_t>iNotMissing
+            frequencySizes[n] = <np.int64_t>iNotMissing
         else:
             raise ValueError("Some frequencies in frequency_grids have no valid points")
 
     #Get the total size of the frequency space
-    cdef np.int_t freqSpaceSize = np.prod(frequencySizes)
+    cdef np.int64_t freqSpaceSize = np.prod(frequencySizes)
 
 
 
@@ -165,8 +165,8 @@ cpdef np.ndarray[double complex] nuifft( \
     hyperSlabSize = nspread**numDimensions
 
     #get the shape of a hyperslab
-    #cdef np.ndarray[np.int_t,ndim=1] hyperSlabShape = nspread*np.ones([numDimensions],dtype=np.int_)
-    cdef np.int_t [:] hyperSlabShape = nspread*np.ones([numDimensions],dtype=np.int_)
+    #cdef np.ndarray[np.int64_t,ndim=1] hyperSlabShape = nspread*np.ones([numDimensions],dtype=np.int_)
+    cdef np.int64_t [:] hyperSlabShape = nspread*np.ones([numDimensions],dtype=np.int_)
     vprint("\tconvolution hyperslab shape: {}".format(hyperSlabShape),be_verbose)
 
     #Calculate the quantities necessary for estimating x-indices
@@ -177,8 +177,8 @@ cpdef np.ndarray[double complex] nuifft( \
 
     #Inialize worker terms for the convolution
     #cdef np.ndarray[long,ndim=1] mvec = np.zeros([numDimensions],dtype=np.int_)
-    cdef np.int_t [:] mvec = np.zeros([numDimensions],dtype=np.int_)
-    cdef np.int_t [:] m0vec = np.zeros([numDimensions],dtype=np.int_)
+    cdef np.int64_t [:] mvec = np.zeros([numDimensions],dtype=np.int_)
+    cdef np.int64_t [:] m0vec = np.zeros([numDimensions],dtype=np.int_)
     cdef np.float_t [:] mprimevec = np.zeros([numDimensions])
     cdef np.float_t mprime = 0.0
     cdef double complex gaussTerm = 0.0
@@ -249,7 +249,7 @@ cpdef np.ndarray[double complex] nuifft( \
     #Pre-declare and allocate a raveled form of the DFT
     cdef double complex [:] DFT = np.zeros([freqSpaceSize],dtype=np.complex128)
     #Pre declare a dimension index vector
-    cdef np.int_t [:] dimInds = np.zeros([numDimensions],dtype=np.int_)
+    cdef np.int64_t [:] dimInds = np.zeros([numDimensions],dtype=np.int_)
 
     #Deconvolve the FFT (divide by the FFT of the gaussian) to obtain the DFT estimate
     vprint("Deconvolving the Fourier transformed data",be_verbose)
@@ -356,7 +356,7 @@ cpdef np.ndarray[double complex] idft( \
     #********************************************
     vprint("Getting the size of the frequency spaces",be_verbose)
     cdef int n,t,iNotMissing
-    cdef np.int_t [:] frequencySizes = np.zeros([numDimensions],dtype=np.int_)
+    cdef np.int64_t [:] frequencySizes = np.zeros([numDimensions],dtype=np.int_)
 
     for n in range(numDimensions):
         iNotMissing = 0
@@ -364,12 +364,12 @@ cpdef np.ndarray[double complex] idft( \
             if frequency_grids[n,t] != missing_freq_val:
                 iNotMissing += 1
         if iNotMissing != 0:
-            frequencySizes[n] = <np.int_t>iNotMissing
+            frequencySizes[n] = <np.int64_t>iNotMissing
         else:
             raise ValueError("Some frequencies in frequency_grids have no valid points")
 
     #Get the total size of the frequency space
-    cdef np.int_t freqSpaceSize = np.prod(frequencySizes)
+    cdef np.int64_t freqSpaceSize = np.prod(frequencySizes)
 
     #Pre-declare and allocate a raveled form of the DFT
     cdef double complex [:] DFT = np.zeros([freqSpaceSize],dtype=np.complex128)
@@ -377,7 +377,7 @@ cpdef np.ndarray[double complex] idft( \
     cdef int i,k
 
     #Pre declare a dimension index vector
-    cdef np.int_t [:] dimInds = np.zeros([numDimensions],dtype=np.int_)
+    cdef np.int64_t [:] dimInds = np.zeros([numDimensions],dtype=np.int_)
 
     cdef double complex myDFT
     cdef double expArg
@@ -411,15 +411,15 @@ cpdef np.ndarray[double complex] idft( \
 #*******************************************************************************
 @cython.boundscheck(False)
 cdef inline int unravelIndex( \
-                   np.int_t i, \
-                   np.int_t [:] frequencySizes, \
-                   np.int_t [:] dimInds, \
-                   np.int_t ndims) nogil:
+                   np.int64_t i, \
+                   np.int64_t [:] frequencySizes, \
+                   np.int64_t [:] dimInds, \
+                   np.int64_t ndims) nogil:
     """Takes the 1D index i of a raveled variable of shape frequencySizes and returns
     an array of the unraveled indices."""
 
-    cdef np.int_t n,nd,iDum
-    cdef np.int_t hyperSize
+    cdef np.int64_t n,nd,iDum
+    cdef np.int64_t hyperSize
 
     hyperSize = 1
     for n in range(1,ndims):
@@ -427,7 +427,7 @@ cdef inline int unravelIndex( \
         
     iDum = i
     for n in range(ndims):
-        dimInds[n] = <np.int_t> floor((<double> iDum)/(<double> hyperSize))
+        dimInds[n] = <np.int64_t> floor((<double> iDum)/(<double> hyperSize))
         iDum -= dimInds[n]*hyperSize
         if n < (ndims-1):
             hyperSize /= frequencySizes[n+1]
@@ -443,15 +443,15 @@ cdef inline int unravelIndex( \
 #*******************************************************************************
 @cython.boundscheck(False)
 cdef inline int ravelIndex( \
-                   np.int_t [:] frequencySizes, \
-                   np.int_t [:] dimInds, \
-                   np.int_t ndims) nogil:
+                   np.int64_t [:] frequencySizes, \
+                   np.int64_t [:] dimInds, \
+                   np.int64_t ndims) nogil:
     """Calculates the 1D index i of a raveled variable of shape frequencySizes, given
     an array of the unraveled indices."""
 
-    cdef np.int_t n
-    cdef np.int_t hyperSize
-    cdef np.int_t i
+    cdef np.int64_t n
+    cdef np.int64_t hyperSize
+    cdef np.int64_t i
 
     hyperSize = 1
     i = 0
@@ -579,7 +579,7 @@ cpdef np.ndarray[double complex] dft_points( \
     #********************************************
     vprint("Getting the size of the frequency spaces",be_verbose)
     cdef int t,iNotMissing
-    cdef np.int_t [:] frequencySizes = np.zeros([numDimensions],dtype=np.int_)
+    cdef np.int64_t [:] frequencySizes = np.zeros([numDimensions],dtype=np.int_)
 
     for n in range(numDimensions):
         iNotMissing = 0
@@ -587,18 +587,18 @@ cpdef np.ndarray[double complex] dft_points( \
             if frequency_grids[n,t] != missing_freq_val:
                 iNotMissing += 1
         if iNotMissing != 0:
-            frequencySizes[n] = <np.int_t>iNotMissing
+            frequencySizes[n] = <np.int64_t>iNotMissing
         else:
             raise ValueError("Some frequencies in frequency_grids have no valid points")
 
     #Get the total size of the frequency space
-    cdef np.int_t freqSpaceSize = np.prod(frequencySizes)
+    cdef np.int64_t freqSpaceSize = np.prod(frequencySizes)
 
     #Pre-declare and allocate a raveled form of the DFT
     cdef double complex [:] DFT = np.zeros([freqSpaceSize],dtype=np.complex128)
 
     #Pre declare a dimension index vector
-    cdef np.int_t [:] dimInds = np.zeros([numDimensions],dtype=np.int_)
+    cdef np.int64_t [:] dimInds = np.zeros([numDimensions],dtype=np.int_)
 
     vprint("Calculating the DFT",be_verbose)
     with nogil:

@@ -1,6 +1,12 @@
 [project]
+requires-python = ">=3.9"
 name = "fastkde"
-dynamic = ["dependencies", "version", "optional-dependencies", "description", "readme", "authors", "keywords"]
+dynamic = ["version", "optional-dependencies", "description", "readme", "authors", "keywords"]
+dependencies = [
+    "numpy>=1.26.4",
+    "scipy",
+    "xarray",
+]
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
@@ -16,7 +22,7 @@ requires = [
     "wheel",
     "toml",
     "setuptools_scm>=4.1.2",
-    "oldest-supported-numpy; python_version>='3.5'",
+    "numpy>=2.0.0",
 ]
 
 build-backend = "setuptools.build_meta"
