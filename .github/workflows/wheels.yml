@@ -60,11 +60,11 @@ jobs:
 
 
   build_arch_wheels:
-    name: ${{ matrix.python }} on ${{ matrix.arch }}
+    name: ${{ matrix.python }}-${{ matrix.arch }}
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        python: [39, 310, 311, 312]
+        python: [39, 310, 311, 312, 313]
         arch: [aarch64]
     steps:
 
@@ -94,6 +94,7 @@ jobs:
     - name: Upload wheels
       uses: actions/upload-artifact@v4
       with:
+        name: arch-wheels-${{ matrix.python }}-${{ matrix.arch }}
         path: wheelhouse/*.whl
 
   build_wheels:
@@ -102,12 +103,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2019, macos-latest, ubuntu-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
         arch: [auto64]
 
         include:
           - os: macos-latest
-            arch: universal2
+            arch: arm64
 
     steps:
     - uses: actions/checkout@v4
@@ -132,6 +133,7 @@ jobs:
     - name: Upload wheels
       uses: actions/upload-artifact@v4
       with:
+        name: wheels-${{ matrix.os }}-${{ matrix.arch }}
         path: wheelhouse/*.whl
 
   upload_all:
@@ -142,7 +144,8 @@ jobs:
     steps:
     - uses: actions/download-artifact@v4.1.7
       with:
-        name: artifact
+        name: artifact-*
+        merge-multiple: true
         path: dist
 
     - name: List all files
