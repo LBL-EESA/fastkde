@@ -1433,15 +1433,10 @@ def conditional(inputVars, conditioningVars, **kwargs):
                     )
                 )
 
-        # reorder the variable names so that the conditioning variables are first
-        var_names = (
-            var_names[len(conditioningVars) :] + var_names[: len(conditioningVars)]
-        )
-
     # extract the conditioning variable names
-    conditioning_var_names = var_names[len(conditioningVars) :]
+    conditioning_var_names = var_names[:len(conditioningVars)]
     # extract the input variable names
-    input_var_names = var_names[: len(conditioningVars)]
+    input_var_names = var_names[len(conditioningVars):]
 
     # Estimate the full joint PDF
     _pdf = fastKDE(npy.array(fullVarList), positive_shift=positive_shift, **kwargs)
