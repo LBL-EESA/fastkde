@@ -77,7 +77,9 @@ conditional
 #***************************
 # Calculate the conditional
 #***************************
-cPDF = fastkde.conditional(y, x, var_names = ['y', 'x'])
+# note that conditiong variables ('x' in this case) are listed first
+# in the var_names argument
+cPDF = fastkde.conditional(y, x, var_names = ['x', 'y'])
 ```
 
 The following plot shows the results:
