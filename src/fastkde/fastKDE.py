@@ -69,7 +69,7 @@ class fastKDE:
                                 or 2-dimensional. If 2-dimensional, this flags calculation
                                 of an N-dimensional PDF.  The first index
                                 should refer to each variable and the second index the
-                                observations of the varibles.
+                                observations of the variables.
 
           axes                : the axis-values of the estimated PDF.  They must be evenly
                                 spaced and they should have a length that is a power of two
