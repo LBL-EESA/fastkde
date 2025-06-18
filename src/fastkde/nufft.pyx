@@ -116,7 +116,7 @@ cpdef np.ndarray[double complex] nuifft( \
     #********************************************
     vprint("Getting the size of the frequency spaces",be_verbose)
     cdef int n,t,iNotMissing
-    cdef np.int64_t [:] frequencySizes = np.zeros([numDimensions],dtype=np.int_)
+    cdef np.int64_t [:] frequencySizes = np.zeros([numDimensions],dtype=np.int64)
 
     for n in range(numDimensions):
         iNotMissing = 0
@@ -165,8 +165,8 @@ cpdef np.ndarray[double complex] nuifft( \
     hyperSlabSize = nspread**numDimensions
 
     #get the shape of a hyperslab
-    #cdef np.ndarray[np.int64_t,ndim=1] hyperSlabShape = nspread*np.ones([numDimensions],dtype=np.int_)
-    cdef np.int64_t [:] hyperSlabShape = nspread*np.ones([numDimensions],dtype=np.int_)
+    #cdef np.ndarray[np.int64_t,ndim=1] hyperSlabShape = nspread*np.ones([numDimensions],dtype=np.int64)
+    cdef np.int64_t [:] hyperSlabShape = nspread*np.ones([numDimensions],dtype=np.int64)
     vprint("\tconvolution hyperslab shape: {}".format(hyperSlabShape),be_verbose)
 
     #Calculate the quantities necessary for estimating x-indices
@@ -176,9 +176,9 @@ cpdef np.ndarray[double complex] nuifft( \
             deltaxs = np.array([ abscissaGrids[n,1] - abscissaGrids[n,0] for n in range(numDimensions) ])
 
     #Inialize worker terms for the convolution
-    #cdef np.ndarray[long,ndim=1] mvec = np.zeros([numDimensions],dtype=np.int_)
-    cdef np.int64_t [:] mvec = np.zeros([numDimensions],dtype=np.int_)
-    cdef np.int64_t [:] m0vec = np.zeros([numDimensions],dtype=np.int_)
+    #cdef np.ndarray[long,ndim=1] mvec = np.zeros([numDimensions],dtype=np.int64)
+    cdef np.int64_t [:] mvec = np.zeros([numDimensions],dtype=np.int64)
+    cdef np.int64_t [:] m0vec = np.zeros([numDimensions],dtype=np.int64)
     cdef np.float_t [:] mprimevec = np.zeros([numDimensions])
     cdef np.float_t mprime = 0.0
     cdef double complex gaussTerm = 0.0
@@ -249,7 +249,7 @@ cpdef np.ndarray[double complex] nuifft( \
     #Pre-declare and allocate a raveled form of the DFT
     cdef double complex [:] DFT = np.zeros([freqSpaceSize],dtype=np.complex128)
     #Pre declare a dimension index vector
-    cdef np.int64_t [:] dimInds = np.zeros([numDimensions],dtype=np.int_)
+    cdef np.int64_t [:] dimInds = np.zeros([numDimensions],dtype=np.int64)
 
     #Deconvolve the FFT (divide by the FFT of the gaussian) to obtain the DFT estimate
     vprint("Deconvolving the Fourier transformed data",be_verbose)
@@ -356,7 +356,7 @@ cpdef np.ndarray[double complex] idft( \
     #********************************************
     vprint("Getting the size of the frequency spaces",be_verbose)
     cdef int n,t,iNotMissing
-    cdef np.int64_t [:] frequencySizes = np.zeros([numDimensions],dtype=np.int_)
+    cdef np.int64_t [:] frequencySizes = np.zeros([numDimensions],dtype=np.int64)
 
     for n in range(numDimensions):
         iNotMissing = 0
@@ -377,7 +377,7 @@ cpdef np.ndarray[double complex] idft( \
     cdef int i,k
 
     #Pre declare a dimension index vector
-    cdef np.int64_t [:] dimInds = np.zeros([numDimensions],dtype=np.int_)
+    cdef np.int64_t [:] dimInds = np.zeros([numDimensions],dtype=np.int64)
 
     cdef double complex myDFT
     cdef double expArg
@@ -579,7 +579,7 @@ cpdef np.ndarray[double complex] dft_points( \
     #********************************************
     vprint("Getting the size of the frequency spaces",be_verbose)
     cdef int t,iNotMissing
-    cdef np.int64_t [:] frequencySizes = np.zeros([numDimensions],dtype=np.int_)
+    cdef np.int64_t [:] frequencySizes = np.zeros([numDimensions],dtype=np.int64)
 
     for n in range(numDimensions):
         iNotMissing = 0
@@ -598,7 +598,7 @@ cpdef np.ndarray[double complex] dft_points( \
     cdef double complex [:] DFT = np.zeros([freqSpaceSize],dtype=np.complex128)
 
     #Pre declare a dimension index vector
-    cdef np.int64_t [:] dimInds = np.zeros([numDimensions],dtype=np.int_)
+    cdef np.int64_t [:] dimInds = np.zeros([numDimensions],dtype=np.int64)
 
     vprint("Calculating the DFT",be_verbose)
     with nogil:
