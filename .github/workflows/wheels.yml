@@ -100,7 +100,7 @@ jobs:
 
   build_wheels:
 
-    name: Build wheels on ${{ matrix.os }}
+    name: Build wheels on ${{ matrix.os }}-${{ matrix.arch }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -148,7 +148,7 @@ jobs:
     steps:
     - uses: actions/download-artifact@v4
       with:
-        pattern: wheels-*
+        pattern: cibw-wheels-*
         merge-multiple: true
         path: dist
 
