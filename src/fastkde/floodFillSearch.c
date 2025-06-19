@@ -3458,7 +3458,6 @@ static const char __pyx_k_np[] = "np";
 static const char __pyx_k_abc[] = "abc";
 static const char __pyx_k_and[] = " and ";
 static const char __pyx_k_got[] = " (got ";
-static const char __pyx_k_int[] = "int";
 static const char __pyx_k_new[] = "__new__";
 static const char __pyx_k_obj[] = "obj";
 static const char __pyx_k_pop[] = "pop";
@@ -3587,7 +3586,7 @@ static const char __pyx_k_sort_by_distance_from_center[] = "sort_by_distance_fro
 static const char __pyx_k_unable_to_allocate_array_data[] = "unable to allocate array data.";
 static const char __pyx_k_strided_and_direct_or_indirect[] = "<strided and direct or indirect>";
 static const char __pyx_k_2_Rwar_q_1_2U_RRVVccd_Bb_aq_6_X[] = "\200\001\3602\000\005\016\210R\210w\220a\220r\230\026\230q\240\n\250!\2501\360\006\000\005\024\2202\220U\230!\320\033R\320RV\320Vc\320cd\360\006\000\005\025\220B\220b\230\006\230a\230q\240\002\240(\250!\2506\260\024\260X\270\\\310\024\310]\320Z[\360\006\000\005\021\220\002\220\"\220E\230\021\230#\230Q\230g\240R\240t\2504\250{\270!\360\006\000\005\r\210D\220\001\220\022\2208\2301\230A\360\006\000\005\014\2101\210D\220\001\220\023\220D\230\005\230Q";
-static const char __pyx_k_F_b_ar_q_V2Q_S_RuAQ_A_j_WW____j[] = "\200\001\340./\330\"#\360F\001\000\005\006\330\010\026\220b\230\006\230a\230r\240\026\240q\250\r\260V\2702\270Q\330\010\025\220S\230\001\230\021\330\010\035\230R\230u\240A\240Q\330\004\013\320\013\034\230A\330\010\016\210j\230\001\320\031W\320W^\320^_\320_`\360\006\000\005\027\220j\240\001\240\021\240!\330\004\007\320\007\027\220w\230a\330\010\t\330\014\033\2301\230D\240\001\320!5\260Q\330\010\017\320\017 \240\001\330\014\022\220*\230A\320\035y\360\000\000z\001A\002\360\000\000A\002B\002\360\000\000B\002C\002\360\010\000\005\027\220b\230\005\230Q\230l\250(\260!\360\006\000\005-\250K\260v\270Q\340\004/\250\270f\300A\360\006\000\005\030\220q\360\010\000\005\t\210\005\210U\220!\2201\360\006\000\t\014\320\013\034\230A\230S\240\003\320#4\260D\3208L\310A\310Q\340\014 \240\001\240\025\240a\360\n\000\r\035\230G\2401\330$1\260\023\260A\33045\33045\33045\33045\33045\33045\360\010\000\r!\240\001\240\025\240a\360\n\000\005\014\2101";
+static const char __pyx_k_F_b_ar_q_V2Q_S_RuAQ_A_j_WW____j[] = "\200\001\340./\330\"#\360F\001\000\005\006\330\010\026\220b\230\006\230a\230r\240\026\240q\250\r\260V\2702\270Q\330\010\025\220S\230\001\230\021\330\010\035\230R\230u\240A\240Q\330\004\013\320\013\034\230A\330\010\016\210j\230\001\320\031W\320W^\320^_\320_`\360\006\000\005\027\220j\240\001\240\021\240!\330\004\007\320\007\027\220w\230a\330\010\t\330\014\033\2301\230D\240\001\320!5\260Q\330\010\017\320\017 \240\001\330\014\022\220*\230A\320\035y\360\000\000z\001A\002\360\000\000A\002B\002\360\000\000B\002C\002\360\010\000\005\027\220b\230\005\230Q\230l\250(\260\"\260A\360\006\000\005-\250K\260v\270Q\340\004/\250\270f\300A\360\006\000\005\030\220q\360\010\000\005\t\210\005\210U\220!\2201\360\006\000\t\014\320\013\034\230A\230S\240\003\320#4\260D\3208L\310A\310Q\340\014 \240\001\240\025\240a\360\n\000\r\035\230G\2401\330$1\260\023\260A\33045\33045\33045\33045\33045\33045\360\010\000\r!\240\001\240\025\240a\360\n\000\005\014\2101";
 static const char __pyx_k_All_dimensions_preceding_dimensi[] = "All dimensions preceding dimension %d must be indexed and not sliced";
 static const char __pyx_k_Buffer_view_does_not_expose_stri[] = "Buffer view does not expose strides";
 static const char __pyx_k_Can_only_create_a_buffer_that_is[] = "Can only create a buffer that is contiguous in memory.";
@@ -3727,7 +3726,7 @@ typedef struct {
   PyObject *__pyx_slice[1];
   PyObject *__pyx_tuple[3];
   PyObject *__pyx_codeobj_tab[3];
-  PyObject *__pyx_string_tab[165];
+  PyObject *__pyx_string_tab[164];
   PyObject *__pyx_float_0_0;
   PyObject *__pyx_int_0;
   PyObject *__pyx_int_1;
@@ -3876,78 +3875,77 @@ static __pyx_mstatetype * const __pyx_mstate_global = &__pyx_mstate_global_stati
 #define __pyx_n_u_initializing __pyx_string_tab[90]
 #define __pyx_n_u_input_array __pyx_string_tab[91]
 #define __pyx_kp_u_input_array_does_not_appear_to_b __pyx_string_tab[92]
-#define __pyx_n_u_int __pyx_string_tab[93]
-#define __pyx_n_u_int64 __pyx_string_tab[94]
-#define __pyx_n_u_is_coroutine __pyx_string_tab[95]
-#define __pyx_kp_u_isenabled __pyx_string_tab[96]
-#define __pyx_n_u_isort __pyx_string_tab[97]
-#define __pyx_n_u_itemsize __pyx_string_tab[98]
-#define __pyx_kp_u_itemsize_0_for_cython_array __pyx_string_tab[99]
-#define __pyx_n_u_main __pyx_string_tab[100]
-#define __pyx_n_u_memview __pyx_string_tab[101]
-#define __pyx_n_u_mode __pyx_string_tab[102]
-#define __pyx_n_u_module __pyx_string_tab[103]
-#define __pyx_n_u_name __pyx_string_tab[104]
-#define __pyx_n_u_name_2 __pyx_string_tab[105]
-#define __pyx_n_u_ndim __pyx_string_tab[106]
-#define __pyx_n_u_new __pyx_string_tab[107]
-#define __pyx_n_u_next __pyx_string_tab[108]
-#define __pyx_kp_u_no_default___reduce___due_to_non __pyx_string_tab[109]
-#define __pyx_n_u_np __pyx_string_tab[110]
-#define __pyx_n_u_numpy __pyx_string_tab[111]
-#define __pyx_kp_u_numpy__core_multiarray_failed_to __pyx_string_tab[112]
-#define __pyx_kp_u_numpy__core_umath_failed_to_impo __pyx_string_tab[113]
-#define __pyx_n_u_obj __pyx_string_tab[114]
-#define __pyx_kp_u_object __pyx_string_tab[115]
-#define __pyx_n_u_ones __pyx_string_tab[116]
-#define __pyx_n_u_pack __pyx_string_tab[117]
-#define __pyx_n_u_pickle __pyx_string_tab[118]
-#define __pyx_n_u_pop __pyx_string_tab[119]
-#define __pyx_n_u_prod __pyx_string_tab[120]
-#define __pyx_n_u_pyx_checksum __pyx_string_tab[121]
-#define __pyx_n_u_pyx_state __pyx_string_tab[122]
-#define __pyx_n_u_pyx_type __pyx_string_tab[123]
-#define __pyx_n_u_pyx_unpickle_Enum __pyx_string_tab[124]
-#define __pyx_n_u_pyx_vtable __pyx_string_tab[125]
-#define __pyx_n_u_qualname __pyx_string_tab[126]
-#define __pyx_n_u_range __pyx_string_tab[127]
-#define __pyx_n_u_ravel __pyx_string_tab[128]
-#define __pyx_n_u_reduce __pyx_string_tab[129]
-#define __pyx_n_u_reduce_cython __pyx_string_tab[130]
-#define __pyx_n_u_reduce_ex __pyx_string_tab[131]
-#define __pyx_n_u_register __pyx_string_tab[132]
-#define __pyx_n_u_search_threshold __pyx_string_tab[133]
-#define __pyx_n_u_send __pyx_string_tab[134]
-#define __pyx_n_u_set_name __pyx_string_tab[135]
-#define __pyx_n_u_setstate __pyx_string_tab[136]
-#define __pyx_n_u_setstate_cython __pyx_string_tab[137]
-#define __pyx_n_u_shape __pyx_string_tab[138]
-#define __pyx_n_u_size __pyx_string_tab[139]
-#define __pyx_n_u_sort_by_distance_from_center __pyx_string_tab[140]
-#define __pyx_n_u_sort_by_distance_from_center_loc __pyx_string_tab[141]
-#define __pyx_n_u_spec __pyx_string_tab[142]
-#define __pyx_n_u_sqrt __pyx_string_tab[143]
-#define __pyx_n_u_start __pyx_string_tab[144]
-#define __pyx_n_u_step __pyx_string_tab[145]
-#define __pyx_n_u_stop __pyx_string_tab[146]
-#define __pyx_kp_u_strided_and_direct __pyx_string_tab[147]
-#define __pyx_kp_u_strided_and_direct_or_indirect __pyx_string_tab[148]
-#define __pyx_kp_u_strided_and_indirect __pyx_string_tab[149]
-#define __pyx_n_u_struct __pyx_string_tab[150]
-#define __pyx_n_u_sum __pyx_string_tab[151]
-#define __pyx_n_u_test __pyx_string_tab[152]
-#define __pyx_n_u_throw __pyx_string_tab[153]
-#define __pyx_kp_u_unable_to_allocate_array_data __pyx_string_tab[154]
-#define __pyx_kp_u_unable_to_allocate_shape_and_str __pyx_string_tab[155]
-#define __pyx_n_u_unpack __pyx_string_tab[156]
-#define __pyx_n_u_unravel_index __pyx_string_tab[157]
-#define __pyx_n_u_update __pyx_string_tab[158]
-#define __pyx_n_u_value __pyx_string_tab[159]
-#define __pyx_n_u_var_shape __pyx_string_tab[160]
-#define __pyx_n_u_wrap_dimensions __pyx_string_tab[161]
-#define __pyx_kp_u_wrap_dimensions_must_be_a_list_o __pyx_string_tab[162]
-#define __pyx_n_u_x __pyx_string_tab[163]
-#define __pyx_n_u_zip __pyx_string_tab[164]
+#define __pyx_n_u_int64 __pyx_string_tab[93]
+#define __pyx_n_u_is_coroutine __pyx_string_tab[94]
+#define __pyx_kp_u_isenabled __pyx_string_tab[95]
+#define __pyx_n_u_isort __pyx_string_tab[96]
+#define __pyx_n_u_itemsize __pyx_string_tab[97]
+#define __pyx_kp_u_itemsize_0_for_cython_array __pyx_string_tab[98]
+#define __pyx_n_u_main __pyx_string_tab[99]
+#define __pyx_n_u_memview __pyx_string_tab[100]
+#define __pyx_n_u_mode __pyx_string_tab[101]
+#define __pyx_n_u_module __pyx_string_tab[102]
+#define __pyx_n_u_name __pyx_string_tab[103]
+#define __pyx_n_u_name_2 __pyx_string_tab[104]
+#define __pyx_n_u_ndim __pyx_string_tab[105]
+#define __pyx_n_u_new __pyx_string_tab[106]
+#define __pyx_n_u_next __pyx_string_tab[107]
+#define __pyx_kp_u_no_default___reduce___due_to_non __pyx_string_tab[108]
+#define __pyx_n_u_np __pyx_string_tab[109]
+#define __pyx_n_u_numpy __pyx_string_tab[110]
+#define __pyx_kp_u_numpy__core_multiarray_failed_to __pyx_string_tab[111]
+#define __pyx_kp_u_numpy__core_umath_failed_to_impo __pyx_string_tab[112]
+#define __pyx_n_u_obj __pyx_string_tab[113]
+#define __pyx_kp_u_object __pyx_string_tab[114]
+#define __pyx_n_u_ones __pyx_string_tab[115]
+#define __pyx_n_u_pack __pyx_string_tab[116]
+#define __pyx_n_u_pickle __pyx_string_tab[117]
+#define __pyx_n_u_pop __pyx_string_tab[118]
+#define __pyx_n_u_prod __pyx_string_tab[119]
+#define __pyx_n_u_pyx_checksum __pyx_string_tab[120]
+#define __pyx_n_u_pyx_state __pyx_string_tab[121]
+#define __pyx_n_u_pyx_type __pyx_string_tab[122]
+#define __pyx_n_u_pyx_unpickle_Enum __pyx_string_tab[123]
+#define __pyx_n_u_pyx_vtable __pyx_string_tab[124]
+#define __pyx_n_u_qualname __pyx_string_tab[125]
+#define __pyx_n_u_range __pyx_string_tab[126]
+#define __pyx_n_u_ravel __pyx_string_tab[127]
+#define __pyx_n_u_reduce __pyx_string_tab[128]
+#define __pyx_n_u_reduce_cython __pyx_string_tab[129]
+#define __pyx_n_u_reduce_ex __pyx_string_tab[130]
+#define __pyx_n_u_register __pyx_string_tab[131]
+#define __pyx_n_u_search_threshold __pyx_string_tab[132]
+#define __pyx_n_u_send __pyx_string_tab[133]
+#define __pyx_n_u_set_name __pyx_string_tab[134]
+#define __pyx_n_u_setstate __pyx_string_tab[135]
+#define __pyx_n_u_setstate_cython __pyx_string_tab[136]
+#define __pyx_n_u_shape __pyx_string_tab[137]
+#define __pyx_n_u_size __pyx_string_tab[138]
+#define __pyx_n_u_sort_by_distance_from_center __pyx_string_tab[139]
+#define __pyx_n_u_sort_by_distance_from_center_loc __pyx_string_tab[140]
+#define __pyx_n_u_spec __pyx_string_tab[141]
+#define __pyx_n_u_sqrt __pyx_string_tab[142]
+#define __pyx_n_u_start __pyx_string_tab[143]
+#define __pyx_n_u_step __pyx_string_tab[144]
+#define __pyx_n_u_stop __pyx_string_tab[145]
+#define __pyx_kp_u_strided_and_direct __pyx_string_tab[146]
+#define __pyx_kp_u_strided_and_direct_or_indirect __pyx_string_tab[147]
+#define __pyx_kp_u_strided_and_indirect __pyx_string_tab[148]
+#define __pyx_n_u_struct __pyx_string_tab[149]
+#define __pyx_n_u_sum __pyx_string_tab[150]
+#define __pyx_n_u_test __pyx_string_tab[151]
+#define __pyx_n_u_throw __pyx_string_tab[152]
+#define __pyx_kp_u_unable_to_allocate_array_data __pyx_string_tab[153]
+#define __pyx_kp_u_unable_to_allocate_shape_and_str __pyx_string_tab[154]
+#define __pyx_n_u_unpack __pyx_string_tab[155]
+#define __pyx_n_u_unravel_index __pyx_string_tab[156]
+#define __pyx_n_u_update __pyx_string_tab[157]
+#define __pyx_n_u_value __pyx_string_tab[158]
+#define __pyx_n_u_var_shape __pyx_string_tab[159]
+#define __pyx_n_u_wrap_dimensions __pyx_string_tab[160]
+#define __pyx_kp_u_wrap_dimensions_must_be_a_list_o __pyx_string_tab[161]
+#define __pyx_n_u_x __pyx_string_tab[162]
+#define __pyx_n_u_zip __pyx_string_tab[163]
 /* #### Code section: module_state_clear ### */
 #if CYTHON_USE_MODULE_STATE
 static CYTHON_SMALL_CODE int __pyx_m_clear(PyObject *m) {
@@ -3997,7 +3995,7 @@ static CYTHON_SMALL_CODE int __pyx_m_clear(PyObject *m) {
   for (int i=0; i<1; ++i) { Py_CLEAR(clear_module_state->__pyx_slice[i]); }
   for (int i=0; i<3; ++i) { Py_CLEAR(clear_module_state->__pyx_tuple[i]); }
   for (int i=0; i<3; ++i) { Py_CLEAR(clear_module_state->__pyx_codeobj_tab[i]); }
-  for (int i=0; i<165; ++i) { Py_CLEAR(clear_module_state->__pyx_string_tab[i]); }
+  for (int i=0; i<164; ++i) { Py_CLEAR(clear_module_state->__pyx_string_tab[i]); }
   Py_CLEAR(clear_module_state->__pyx_float_0_0);
   Py_CLEAR(clear_module_state->__pyx_int_0);
   Py_CLEAR(clear_module_state->__pyx_int_1);
@@ -4055,7 +4053,7 @@ static CYTHON_SMALL_CODE int __pyx_m_traverse(PyObject *m, visitproc visit, void
   for (int i=0; i<1; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_slice[i]); }
   for (int i=0; i<3; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_tuple[i]); }
   for (int i=0; i<3; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_codeobj_tab[i]); }
-  for (int i=0; i<165; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_string_tab[i]); }
+  for (int i=0; i<164; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_string_tab[i]); }
   __Pyx_VISIT_CONST(traverse_module_state->__pyx_float_0_0);
   __Pyx_VISIT_CONST(traverse_module_state->__pyx_int_0);
   __Pyx_VISIT_CONST(traverse_module_state->__pyx_int_1);
@@ -20522,7 +20520,7 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_flood_fill_search(PyArrayObj
   /* "fastkde/floodFillSearch.pyx":218
  *     #Set an array of the same size indicating which elements have been set
  *     cdef np.ndarray is_not_searched
- *     is_not_searched = np.ones(array_shape,dtype = 'int')             # <<<<<<<<<<<<<<
+ *     is_not_searched = np.ones(array_shape,dtype = np.int64)             # <<<<<<<<<<<<<<
  * 
  *     #Set the raveled input array
 */
@@ -20531,6 +20529,11 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_flood_fill_search(PyArrayObj
   __Pyx_GOTREF(__pyx_t_7);
   __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_mstate_global->__pyx_n_u_ones); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 218, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_mstate_global->__pyx_n_u_np); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 218, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_mstate_global->__pyx_n_u_int64); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 218, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_9);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __pyx_t_11 = 1;
   #if CYTHON_UNPACK_METHODS
@@ -20548,9 +20551,10 @@ static PyObject *__pyx_f_7fastkde_15floodFillSearch_flood_fill_search(PyArrayObj
     PyObject *__pyx_callargs[2 + ((CYTHON_VECTORCALL) ? 1 : 0)] = {__pyx_t_8, ((PyObject *)__pyx_v_array_shape)};
     __pyx_t_7 = __Pyx_MakeVectorcallBuilderKwds(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 218, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    if (__Pyx_VectorcallBuilder_AddArg(__pyx_mstate_global->__pyx_n_u_dtype, __pyx_mstate_global->__pyx_n_u_int, __pyx_t_7, __pyx_callargs+2, 0) < 0) __PYX_ERR(0, 218, __pyx_L1_error)
+    if (__Pyx_VectorcallBuilder_AddArg(__pyx_mstate_global->__pyx_n_u_dtype, __pyx_t_9, __pyx_t_7, __pyx_callargs+2, 0) < 0) __PYX_ERR(0, 218, __pyx_L1_error)
     __pyx_t_4 = __Pyx_Object_Vectorcall_CallFromBuilder(__pyx_t_10, __pyx_callargs+__pyx_t_11, (2-__pyx_t_11) | (__pyx_t_11*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET), __pyx_t_7);
     __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
     if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 218, __pyx_L1_error)
@@ -24298,7 +24302,6 @@ static const __Pyx_StringTabEntry __pyx_string_tab[] = {
   {__pyx_k_initializing, sizeof(__pyx_k_initializing), 0, 1, 1}, /* PyObject cname: __pyx_n_u_initializing */
   {__pyx_k_input_array, sizeof(__pyx_k_input_array), 0, 1, 1}, /* PyObject cname: __pyx_n_u_input_array */
   {__pyx_k_input_array_does_not_appear_to_b, sizeof(__pyx_k_input_array_does_not_appear_to_b), 0, 1, 0}, /* PyObject cname: __pyx_kp_u_input_array_does_not_appear_to_b */
-  {__pyx_k_int, sizeof(__pyx_k_int), 0, 1, 1}, /* PyObject cname: __pyx_n_u_int */
   {__pyx_k_int64, sizeof(__pyx_k_int64), 0, 1, 1}, /* PyObject cname: __pyx_n_u_int64 */
   {__pyx_k_is_coroutine, sizeof(__pyx_k_is_coroutine), 0, 1, 1}, /* PyObject cname: __pyx_n_u_is_coroutine */
   {__pyx_k_isenabled, sizeof(__pyx_k_isenabled), 0, 1, 0}, /* PyObject cname: __pyx_kp_u_isenabled */
@@ -24505,7 +24508,7 @@ static int __Pyx_CreateCodeObjects(__pyx_mstatetype *__pyx_mstate) {
     __pyx_mstate_global->__pyx_codeobj_tab[0] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_floodFillSearch_pyx, __pyx_mstate->__pyx_n_u_genexpr, __pyx_k_1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[0])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {3, 0, 0, 3, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 163, 307};
+    const __Pyx_PyCode_New_function_description descr = {3, 0, 0, 3, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 163, 309};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_input_array, __pyx_mstate->__pyx_n_u_search_threshold, __pyx_mstate->__pyx_n_u_wrap_dimensions};
     __pyx_mstate_global->__pyx_codeobj_tab[1] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_floodFillSearch_pyx, __pyx_mstate->__pyx_n_u_flood_fill_search, __pyx_k_F_b_ar_q_V2Q_S_RuAQ_A_j_WW____j, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[1])) goto bad;
   }
