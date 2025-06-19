@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        python: [39, 310, 311, 312, 313]
+        python: [39, 310, 311, 312, 313, 314]
         arch: [aarch64]
     steps:
 
@@ -99,16 +99,17 @@ jobs:
         path: wheelhouse/*.whl
 
   build_wheels:
-    name: ${{ matrix.type }} ${{ matrix.arch }} on ${{ matrix.os }}
+
+    name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        # macos-13 is an intel runner, macos-14 is apple silicon
+        os: [ubuntu-latest, ubuntu-24.04-arm, windows-latest, macos-13, macos-14]
         arch: [auto64]
 
         include:
-          - os: macos-latest
+          - os: windows-latest
             arch: arm64
 
     steps:
@@ -122,10 +123,12 @@ jobs:
       shell: bash
       run: echo "SETUPTOOLS_SCM_PRETEND_VERSION=${{ github.event.inputs.overrideVersion }}" >> $GITHUB_ENV
 
-    - uses: pypa/cibuildwheel@v2.20
+    - uses: pypa/cibuildwheel@v3.0.0
       env:
-        CIBW_BUILD: ${{ matrix.build }}
         CIBW_ARCHS: ${{ matrix.arch }}
+      with:
+        package-dir: .
+        output-dir: wheelhouse
 
     - name: Verify clean directory
       run: git diff --exit-code
@@ -134,7 +137,7 @@ jobs:
     - name: Upload wheels
       uses: actions/upload-artifact@v4
       with:
-        name: wheels-${{ matrix.os }}-${{ matrix.arch }}
+        name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
         path: wheelhouse/*.whl
 
   upload_all:
@@ -156,6 +159,14 @@ jobs:
 
     - name: List all files
       run: ls -lh dist
+
+    - name: Check wheel integrity
+      run: |
+        for whl in dist/*.whl; do
+          echo "Checking $whl"
+          unzip -t "$whl"
+        done
+        pipx run twine check --strict dist/*
 
     - uses: pypa/gh-action-pypi-publish@release/v1
       if: github.event_name == 'release' && github.event.action == 'published'
