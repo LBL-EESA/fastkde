@@ -215,7 +215,7 @@ cpdef list flood_fill_search( \
 
     #Set an array of the same size indicating which elements have been set
     cdef np.ndarray is_not_searched
-    is_not_searched = np.ones(array_shape,dtype = 'int')
+    is_not_searched = np.ones(array_shape,dtype = np.int64)
 
     #Set the raveled input array
     cdef np.float_t [:] raveledInputArray = input_array.ravel()
