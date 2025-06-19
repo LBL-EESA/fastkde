@@ -110,7 +110,7 @@ jobs:
 
         include:
           - os: windows-latest
-            arch: arm64
+            arch: ARM64
 
     steps:
     - uses: actions/checkout@v4
