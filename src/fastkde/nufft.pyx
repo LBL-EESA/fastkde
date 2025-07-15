@@ -280,36 +280,37 @@ cpdef np.ndarray[double complex] idft( \
                             np.float_t missing_freq_val = -1e20, \
                             be_verbose = False):
     """Calculates the unnormalized direct Fourier transform of abscissa, ordinate pairs
-        
-        input:
-        ------
+    
+    input:
+    ------
 
-            abscissas   : abscissa values.
-                          A numpy array of shape (ndimensions,npoints)
-                          (assumed to be real)
+        abscissas   : abscissa values.
+                        A numpy array of shape (ndimensions,npoints)
+                        (assumed to be real)
 
-            ordinates   : ordinates values.
-                          A numpy array of shape (npoints)
+        ordinates   : ordinates values.
+                        A numpy array of shape (npoints)
 
-            frequency_grids : The frequency grids on which to calcualte the DFT
-                             A masked numpy array of shape (ndimensions,ntmax), where ntmax
-                             is the length of the longest frequency grid.  
+        frequency_grids : The frequency grids on which to calcualte the DFT
+                          A masked numpy array of shape (ndimensions,ntmax), where ntmax
+                          is the length of the longest frequency grid.  
 
-            missing_freq_val : A value indicating missing frequency values.  This is used to 
-                             allow each dimension to have different sized frequency spaces;
-                             dimensions with smaller frequency spaces (than ntmax) should be 
-                             padded at the end with missing_freq_val.
+        missing_freq_val : A value indicating missing frequency values.
+                           This is used to allow each dimension to have
+                           different sized frequency spaces; dimensions with
+                           smaller frequency spaces (than ntmax) should be 
+                           padded at the end with missing_freq_val.
+                           
+        be_verbose   : Flags whether to print to STDOUT as the method progresses
+                       (int 0=don't print 1=print)
+    output:
+    -------
 
-            be_verbose   : Flags whether to print to STDOUT as the method progresses
-                          (int 0=don't print 1=print)
-        output:
-        -------
+        The DFT of abscissa/ordinate pairs.  Calculated in one dimension as:
 
-            The DFT of abscissa/ordinate pairs.  Calculated in one dimension as:
+        DFT[t] = sum( [ a[i] * exp(j * x[i] * t ) for i in range(N) ] ) 
 
-            DFT[t] = sum( [ a[i] * exp(j * x[i] * t ) for i in range(N) ] ) 
-
-            for each of the t points in frequency_grids (and where j = sqrt(-1)).
+        for each of the t points in frequency_grids (and where j = sqrt(-1)).
     
     """
 
@@ -499,30 +500,31 @@ cpdef np.ndarray[double complex] dft_points( \
                             be_verbose = False):
     """Calculates the unnormalized direct inverse Fourier transform of abscissa, ordinate pairs
         
-        input:
-        ------
+    input:
+    ------
 
-            frequency_grids   : abscissa values.
-                          A numpy array of shape (ndimensions,npoints)
-                          (assumed to be real)
+        frequency_grids   : abscissa values.
+                            A numpy array of shape (ndimensions,npoints)
+                            (assumed to be real)
 
-            ordinates   : ordinates values.
-                          A numpy array of shape (npoints)
+        ordinates   : ordinates values.
+                      A numpy array of shape (npoints)
 
-            outputPoints :  The real-space points at which to calcualte the DFT
-                             A masked numpy array of shape (ndimensions,noutputpoints). 
+        outputPoints :  The real-space points at which to calcualte the DFT
+                        A masked numpy array of shape
+                        (ndimensions,noutputpoints). 
+                        
+                        
+        be_verbose   : Flags whether to print to STDOUT as the method progresses
+                       (int 0=don't print 1=print)
+    output:
+    -------
 
+        The iDFT of abscissa/ordinate pairs.  Calculated in one dimension as:
+        
+        iDFT[x] = sum( [ a[i] * exp(-j * x * t[i] ) for i in range(N) ] ) 
 
-            be_verbose   : Flags whether to print to STDOUT as the method progresses
-                          (int 0=don't print 1=print)
-        output:
-        -------
-
-            The iDFT of abscissa/ordinate pairs.  Calculated in one dimension as:
-
-            iDFT[x] = sum( [ a[i] * exp(-j * x * t[i] ) for i in range(N) ] ) 
-
-            for each of the x points in output_points (and where j = sqrt(-1)).
+        for each of the x points in output_points (and where j = sqrt(-1)).
     
     """
 

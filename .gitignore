@@ -155,3 +155,8 @@ dmypy.json
 .prof
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+
+# Sphinx documentation
+docs/_build/
+docs/jupyter_execute
+docs/.jupyter_cache

@@ -7,23 +7,24 @@ def cumulative_integral(pdf, axes, integration_axes=None, reverse_axes=None):
     """
     Calculates the cumulative integral of the pdf, given the axis values
 
-       input:
-       ------
-           pdf              : a PDF (presumably from the .pdf member of a
-                              fastKDE object)
+    input:
+    ------
+           pdf              : a PDF
+                             (presumably from the .pdf member of a fastKDE
+                             object)
+                             
+           axes             : a list of PDF axes
+                              (presumably from the .axes member of a fastKDE
+                              object)
+                              
+           integration_axes : the axes along which to integrate
+                              (default is all).  These have the same ordering as
+                              axes in the axes input variable.
+                              
+           reverse_axes     : axes along which to reverse the direction of the cumulative calculation, if any
 
-           axes             : a list of PDF axes (presumably from the .axes
-                              member of a fastKDE object)
-
-           integration_axes : the axes along which to integrate (default is
-                              all).  These have the same ordering as axes in the
-                              axes input variable.
-
-           reverse_axes     : axes along which to reverse the direction of the
-                              cumulative calculation
-
-       output:
-       -------
+    output:
+    -------
 
            returns an array with the same shape as PDF, but with the integral
            calculated cumulatively

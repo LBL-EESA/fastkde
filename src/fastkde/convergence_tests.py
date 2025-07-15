@@ -145,7 +145,8 @@ def powLaw(x, a, c):
 class Timer:
     """A simple timer class
 
-    Example:
+    Example::
+
         ```python
         myTimer = Timer()
         with myTimer:
@@ -168,7 +169,7 @@ def genCovMat(varianceList, correlationDict):
     
     The dict's keys must be tuples that describe the pair of points for the correlation coefficient.
     
-    For example, the following would be valid input for for a 3 variable distribution:
+    For example, the following would be valid input for for a 3 variable distribution::
     
         ```python
         varianceList = [0.1, 10.0, 100.0]

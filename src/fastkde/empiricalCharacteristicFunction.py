@@ -4,6 +4,39 @@ import fastkde.nufft as nufft
 
 
 class ECF:
+    """
+    Calculates the empirical characteristic function of arbitrary sets of
+    variables.
+
+    Uses either the direct Fourier transform or nuFFT method (described by
+    O'Brien et al. (2014, J. Roy. Stat. Soc. C) to calculate the Fourier transform
+    of the data to yield the ECF.
+
+
+    input:
+    ------
+
+            input_data   : The input data.
+                            Array like with shape = (nvariables,npoints).
+
+            tgrids      : The frequency-space grids to which to transform the
+                            data
+
+                            A list of frequency arrays for each variable dimension.
+
+            use_fft_approximation : Flag whether to use the nuFFT approximation
+                                    to the DFT
+
+            be_verbose : Flags whether to be verbose
+
+
+    output:
+    -------
+
+            An ECF object.  The ECF itself is stored in self.ECF
+
+    """
+
     def __init__(
         self,
         input_data,
@@ -12,38 +45,7 @@ class ECF:
         use_fft_approximation=True,
         be_verbose=False,
     ):
-        """
-        Calculates the empirical characteristic function of arbitrary sets of
-        variables.
 
-        Uses either the direct Fourier transform or nuFFT method (described by
-        O'Brien et al. (2014, J. Roy. Stat. Soc. C) to calculate the Fourier transform
-        of the data to yield the ECF.
-
-
-            input:
-            ------
-
-                input_data   : The input data.
-                              Array like with shape = (nvariables,npoints).
-
-                tgrids      : The frequency-space grids to which to transform the
-                              data
-
-                              A list of frequency arrays for each variable dimension.
-
-                use_fft_approximation : Flag whether to use the nuFFT approximation
-                                        to the DFT
-
-                be_verbose : Flags whether to be verbose
-
-
-            output:
-            -------
-
-                An ECF object.  The ECF itself is stored in self.ECF
-
-        """
 
         # Set whether we use the nuFFT approximation
         self.use_fft_approximation = use_fft_approximation
