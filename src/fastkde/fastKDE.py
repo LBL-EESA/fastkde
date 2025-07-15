@@ -29,6 +29,94 @@ def next_highest_power_of_two(number):
 
 
 class fastKDE:
+    """
+
+    Estimates the density function of a given dataset using the self-consistent
+    method of Bernacchia and Pigolotti (2011, J. R. Statistic Soc. B.).  Prior
+    to estimating the PDF, the data are standardized to have a mean of 0 and a
+    variance of 1.
+
+    Standardization is done so that PDFs of varying widths can be calculated on
+    a unified grid; the original PDF can be re-obtained by scaling, offsetting,
+    and renormalizing the calculated PDF.  Assuming the PDF is reasonably
+    narrow, then most of the information in the PDF should be contained in the
+    returned domain.  The width of the domain is set in terms of multiples of
+    unit standard deviations of the data; the default is 20-sigma.
+
+    input:
+    ------
+
+        data (array_like)   : the data from which to estimate the PDF.  Should be 1-
+                            or 2-dimensional. If 2-dimensional, this flags calculation
+                            of an N-dimensional PDF.  The first index
+                            should refer to each variable and the second index the
+                            observations of the variables.
+
+        axes                : the axis-values of the estimated PDF.  They must be evenly
+                            spaced and they should have a length that is a power of two
+                            plus one (e.g., 33).
+
+        log_axes            : Flags whether axes should be log spaced (i.e., the
+                            PDF is calculated based on log(data) and then
+                            transformed back to sample space).  Should be a
+                            logical value (True or False) or a list of logical
+                            values with an item for each variable (i.e,
+                            len(log_axes) == shape(data)[0]) specifying which
+                            axes should use log spacing.  If only True or False
+                            is given, that value is used for all variables.
+
+        num_points_per_sigma   : the number of points on the data grid per
+                                standard deviation; this influences the total
+                                size of the axes that are automatically
+                                calculated if no other aspects of the grid are
+                                specified.
+
+        num_points           : the number of points to use for the pdf grid. If
+                                provided as a scalar, each axis will have the same
+                                number of points.  Otherwise, it should be an
+                                iterable with a value for each axis length.  Axis
+                                lengths should be a power of two plus one (e.g.,
+                                33)
+
+        deltaX              : if given, this specifies the spacing between domain
+                            values.
+
+        do_approximate_ecf    : flags whether to approximate the ECF
+                                using a (much faster) FFT.  In tests, this is
+                                accurate to ~1e-14 over low frequencies, but is
+                                inaccurate to ~1e-2 for the highest ~5% of
+                                frequencies.
+                                
+        ecf_precision        : sets the precision of the approximate ECF.  If set
+                                to 2, it uses double precision accuracy; 1
+                                otherwise
+
+        do_fft               : flags whether to calculate phiSC and its FFT to
+                                obtain pdf
+
+        do_save_marginals     : flags whether to calculate and save the marginal
+                                distributions
+
+        frac_contiguous_hyper_volumes : the fraction of contiguous hypervolumes of
+                                        the ECF, that are above the ECF threshold,
+                                        to use in the density estimate
+
+        num_contiguous_hyper_volumes : like frac_contiguous_hyper_volumes, but
+                                        specify an integer number to use.
+                                        frac_contiguous_hyper_volumes will be
+                                        ignored if this is provided as an argument.
+
+        positive_shift     : translate the PDF vertically such that the estimate
+                            is positive or 0 everywhere
+
+        axis_expansion_factor : sets the amount by which the KDE grid will be expanded
+                                relative to the original min-max spread for each
+                                variable: 1.0 means a 100% (2x) expansion in the
+                                range.  Such an expansion is necessary to avoid
+                                kernel power from one end of the grid leaking
+                                into the opposite end due to the perioidicity of
+                                the Fourier transform.  """
+                                
     def __init__(
         self,
         data=None,
@@ -45,102 +133,9 @@ class fastKDE:
         frac_contiguous_hyper_volumes=1,
         num_contiguous_hyper_volumes=None,
         positive_shift=True,
-        count_threshold=None,
         axis_expansion_factor=1.0,
     ):
-        """
 
-        Estimates the density function of a given dataset using the self-consistent
-        method of Bernacchia and Pigolotti (2011, J. R. Statistic Soc. B.).  Prior
-        to estimating the PDF, the data are standardized to have a mean of 0 and a
-        variance of 1.
-
-        Standardization is done so that PDFs of varying widths can be calculated on
-        a unified grid; the original PDF can be re-obtained by scaling, offsetting,
-        and renormalizing the calculated PDF.  Assuming the PDF is reasonably
-        narrow, then most of the information in the PDF should be contained in the
-        returned domain.  The width of the domain is set in terms of multiples of
-        unit standard deviations of the data; the default is 20-sigma.
-
-        input:
-        ------
-
-          data (array_like)   : the data from which to estimate the PDF.  Should be 1-
-                                or 2-dimensional. If 2-dimensional, this flags calculation
-                                of an N-dimensional PDF.  The first index
-                                should refer to each variable and the second index the
-                                observations of the variables.
-
-          axes                : the axis-values of the estimated PDF.  They must be evenly
-                                spaced and they should have a length that is a power of two
-                                plus one (e.g., 33).
-
-          log_axes            : Flags whether axes should be log spaced (i.e., the
-                                PDF is calculated based on log(data) and then
-                                transformed back to sample space).  Should be a
-                                logical value (True or False) or a list of logical
-                                values with an item for each variable (i.e,
-                                len(log_axes) == shape(data)[0]) specifying which
-                                axes should use log spacing.  If only True or False
-                                is given, that value is used for all variables.
-
-          num_points_per_sigma   : the number of points on the data grid per
-                                   standard deviation; this influences the total
-                                   size of the axes that are automatically
-                                   calculated if no other aspects of the grid are
-                                   specified.
-
-          num_points           : the number of points to use for the pdf grid. If
-                                 provided as a scalar, each axis will have the same
-                                 number of points.  Otherwise, it should be an
-                                 iterable with a value for each axis length.  Axis
-                                 lengths should be a power of two plus one (e.g.,
-                                 33)
-
-          deltaX              : if given, this specifies the spacing between domain
-                                values.
-
-          do_approximate_ecf    : flags whether to approximate the ECF using a (much
-                                  faster) FFT.  In tests, this is accurate to ~1e-14
-                                  over low frequencies, but is inaccurate to ~1e-2
-                                  for the highest ~5% of frequencies.
-
-          ecf_precision        : sets the precision of the approximate ECF.  If set
-                                 to 2, it uses double precision accuracy; 1
-                                 otherwise
-
-          do_fft               : flags whether to calculate phiSC and its FFT to
-                                 obtain pdf
-
-          do_save_marginals     : flags whether to calculate and save the marginal
-                                  distributions
-
-          frac_contiguous_hyper_volumes : the fraction of contiguous hypervolumes of
-                                          the ECF, that are above the ECF threshold,
-                                          to use in the density estimate
-
-          num_contiguous_hyper_volumes : like frac_contiguous_hyper_volumes, but
-                                         specify an integer number to use.
-                                         frac_contiguous_hyper_volumes will be
-                                         ignored if this is provided as an argument.
-
-          positive_shift     : translate the PDF vertically such that the estimate
-                               is positive or 0 everywhere
-
-          count_threshold    : this argument does nothing; it has been deprecated.
-                               It is kept as an argument for backward compatibility.
-
-          axis_expansion_factor : sets the amount by which the KDE grid will be
-                                  expanded relative to the original min-max spread
-                                  for each variable: 1.0 means a 100% (2x) expansion
-                                  in the range.  Such an expansion is necessary to
-                                  avoid kernel power from one end of the grid
-                                  leaking into the opposite end due to the
-                                  perioidicity of the Fourier transform.
-
-        Returns: a fastKDE object
-
-        """
 
         def vprint(msg):
             """Only print if be_verbose is True"""
@@ -1025,7 +1020,7 @@ def pdf(*args, **kwargs):
                            to the range of the input variables.  If False, returns
                            the full xarray DataArray.  If None, defaults to True.
 
-        **kwargs        : Any additional keyword arguments get passed
+        ``**kwargs``        : Any additional keyword arguments get passed
                           directly to fastKDE.fastKDE();  see the docstring
                           of fastKDE.fastKDE() for details of kwargs.
 
@@ -1040,8 +1035,20 @@ def pdf(*args, **kwargs):
                             corresponding to an input variable.
 
 
-    NOTE: The computational expense and the memory requirement of this
-    method grows exponentially with the number of input variables.
+    .. warning::
+
+        The computational expense and the memory requirement of this method
+        grows exponentially with the number of input variables. It is likely
+        that memory errors will occur if a moderately large number of variables
+        are used (e.g., four or more).  Try modifying num_points to reduce
+        memory usage if needed.
+        
+    .. note::
+
+        If `use_xarray` is True, the number of points in the returned xarray
+        object coordinates will not match the `num_points` argument; set
+        `do_xarray_subset = False` if this is not desired
+        
     """
 
     # try to get the use_xarray keyword argument
@@ -1250,12 +1257,12 @@ def pdf(*args, **kwargs):
         return pdf_tuple
 
 
-def conditional(inputVars, conditioningVars, **kwargs):
-    """Estimates the conditional PDF of `inputVars` given `conditioningVars`
+def conditional(input_vars, conditioning_vars, **kwargs):
+    """Estimates the conditional PDF of `input_vars` given `conditioning_vars`
 
-        inputVars           : A vector of input values, or a list of such vectors
+        input_vars           : A vector of input values, or a list of such vectors
 
-        conditioningVars    : A vector of conditioning values, or a list of such vectors
+        conditioning_vars    : A vector of conditioning values, or a list of such vectors
 
         use_xarray      : If True, returns an xarray DataArray object; otherwise
                           returns a tuple of numpy arrays.  If None, defaults to
@@ -1269,7 +1276,7 @@ def conditional(inputVars, conditioningVars, **kwargs):
                            to the range of the input variables.  If False, returns
                            the full xarray DataArray.  If None, defaults to True.
 
-        **kwargs            : Any additional keyword arguments get passed
+        ``**kwargs``            : Any additional keyword arguments get passed
                               directly to fastKDE.fastKDE() or
                               fastKDE.estimateConditionals();  see the
                               docstrings of fastKDE.fastKDE() and
@@ -1277,55 +1284,56 @@ def conditional(inputVars, conditioningVars, **kwargs):
                               kwargs.
                               
                               Note the following two arguments have different
-                              default values here:
+                              default values here::
+
                                   positive_shift=True by default, and
                                   peak_frac = 0.01 by default.
 
         :returns: (cPDF, axes) \
-                where cPDF is the PDF(inputVars | conditioningVars), and axes is a list
+                where cPDF is the PDF(input_vars | conditioning_vars), and axes is a list
                 of axis vectors giving the points at which cPDF is defined.
 
-                If N conditioningVars were provided, then axes[0:N-1]
-                corresponds to the variables provided in conditioningVars, in
+                If N conditioning_vars were provided, then axes[0:N-1]
+                corresponds to the variables provided in conditioning_vars, in
                 the order they were provided; axes[N:M-1] corresponds to the M
-                inputVars provided, in the order provided.
+                input_vars provided, in the order provided.
 
-                Ex:
+                Ex::
 
-        ```python
+                        ```python
 
-        import pylab as PP
-        from numpy import *
+                        import pylab as PP
+                        from numpy import *
 
-        # ***************************
-        #  Generate random samples
-        # ***************************
-        #  Stochastically sample from the function underlyingFunction() (a sigmoid):
-        #  sample the absicissa values from a gamma distribution
-        #  relate the ordinate values to the sample absicissa values and add
-        #  noise from a normal distribution
+                        # ***************************
+                        #  Generate random samples
+                        # ***************************
+                        #  Stochastically sample from the function underlyingFunction() (a sigmoid):
+                        #  sample the absicissa values from a gamma distribution
+                        #  relate the ordinate values to the sample absicissa values and add
+                        #  noise from a normal distribution
 
-        # Set the number of samples
-        numSamples = int(1e6)
+                        # Set the number of samples
+                        numSamples = int(1e6)
 
-        # Define a sigmoid function
-        def underlyingFunction(x,x0=305,y0=200,yrange=4):
-            return (yrange/2)*tanh(x-x0) + y0
+                        # Define a sigmoid function
+                        def underlyingFunction(x,x0=305,y0=200,yrange=4):
+                            return (yrange/2)*tanh(x-x0) + y0
 
-        xp1,xp2,xmid = 5,2,305  # Set gamma distribution parameters
-        yp1,yp2 = 0,12          # Set normal distribution parameters (mean and std)
+                        xp1,xp2,xmid = 5,2,305  # Set gamma distribution parameters
+                        yp1,yp2 = 0,12          # Set normal distribution parameters (mean and std)
 
-        # Generate random samples of X from the gamma distribution
-        x = -(random.gamma(xp1,xp2,int(numSamples))-xp1*xp2) + xmid
-        # Generate random samples of y from x and add normally distributed noise
-        y = underlyingFunction(x) + random.normal(loc=yp1,scale=yp2,size=numSamples)
+                        # Generate random samples of X from the gamma distribution
+                        x = -(random.gamma(xp1,xp2,int(numSamples))-xp1*xp2) + xmid
+                        # Generate random samples of y from x and add normally distributed noise
+                        y = underlyingFunction(x) + random.normal(loc=yp1,scale=yp2,size=numSamples)
 
-        # ***************************
-        #  Calculate the conditional
-        # ***************************
-        pOfYGivenX,axes = fastKDE.conditional(y,x)
+                        # ***************************
+                        #  Calculate the conditional
+                        # ***************************
+                        pOfYGivenX,axes = fastKDE.conditional(y,x)
 
-        ```
+                        ```
 
     """
     # try to get the use_xarray keyword argument
@@ -1372,31 +1380,31 @@ def conditional(inputVars, conditioningVars, **kwargs):
                 "xarray is not installed, but use_xarray=True was provided"
             )
 
-    # Check whether inputVars is an iterable of vectors or a single vector;
+    # Check whether input_vars is an iterable of vectors or a single vector;
     # ensure it is an iterable
     try:
-        ivarLengths = [len(v) for v in inputVars]
+        ivarLengths = [len(v) for v in input_vars]
     except TypeError:
-        inputVars = [inputVars]
-        ivarLengths = [len(v) for v in inputVars]
+        input_vars = [input_vars]
+        ivarLengths = [len(v) for v in input_vars]
 
-    # Check whether conditioningVars is an iterable of vectors or a single vector;
+    # Check whether conditioning_vars is an iterable of vectors or a single vector;
     # ensure it is an iterable
     try:
-        cvarLengths = [len(v) for v in conditioningVars]
+        cvarLengths = [len(v) for v in conditioning_vars]
     except TypeError:
-        conditioningVars = [conditioningVars]
-        cvarLengths = [len(v) for v in conditioningVars]
+        conditioning_vars = [conditioning_vars]
+        cvarLengths = [len(v) for v in conditioning_vars]
 
     # Create a list of all variables
-    fullVarList = conditioningVars + inputVars
+    fullVarList = conditioning_vars + input_vars
 
     # Check that all input variable lengths are the same
     if not all(npy.array([len(v) for v in fullVarList]) == ivarLengths[0]):
         raise ValueError(
             (
-                "inputVars and conditioningVars all must be the same length. "
-                + "Got {} for inputVars and {} for conditioningVars"
+                "input_vars and conditioning_vars all must be the same length. "
+                + "Got {} for input_vars and {} for conditioning_vars"
             ).format(ivarLengths, cvarLengths)
         )
 
@@ -1434,15 +1442,15 @@ def conditional(inputVars, conditioningVars, **kwargs):
                 )
 
     # extract the conditioning variable names
-    conditioning_var_names = var_names[:len(conditioningVars)]
+    conditioning_var_names = var_names[:len(conditioning_vars)]
     # extract the input variable names
-    input_var_names = var_names[len(conditioningVars):]
+    input_var_names = var_names[len(conditioning_vars):]
 
     # Estimate the full joint PDF
     _pdf = fastKDE(npy.array(fullVarList), positive_shift=positive_shift, **kwargs)
 
     # Set the indices of the conditional variables
-    cvarInds = list(range(len(conditioningVars)))
+    cvarInds = list(range(len(conditioning_vars)))
 
     # Estimate the conditional
     cpdf = _pdf.estimateConditionals(
@@ -1512,7 +1520,7 @@ def pdf_at_points(*args, **kwargs):
                           PDF should be estimated.  If not provided, the
                           input data points will be used by default.
 
-        **kwargs        : Any additional keyword arguments get passed
+        ``**kwargs``        : Any additional keyword arguments get passed
                           directly to fastKDE.fastKDE();  see the docstring
                           of fastKDE.fastKDE() for details of kwargs.
 

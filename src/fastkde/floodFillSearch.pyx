@@ -164,30 +164,31 @@ cpdef list flood_fill_search( \
                 np.ndarray input_array, \
                 np.float_t search_threshold = 0.0, \
                 wrap_dimensions = None):
-    """Given an N-dimensional array, find contiguous areas of the array
+    """
+    Given an N-dimensional array, find contiguous areas of the array
     satisfiying a given condition and return a list of contiguous indices
     for each contiguous area.
         
-        input:
-        ------
+    input:
+    ------
 
-            input_array      :   (array-like) an array from which to search
-                                contiguous areas
+        input_array      :   (array-like) an array from which to search
+                            contiguous areas
 
-            search_threshold :   The threshold for defining fill regions
-                                (input_array > search_threshold)
+        search_threshold :   The threshold for defining fill regions
+                            (input_array > search_threshold)
 
-            wrap_dimensions :    A list of dimensions in which searching
-                                should have a wraparound condition
+        wrap_dimensions :    A list of dimensions in which searching
+                            should have a wraparound condition
 
-        output:
-        -------
+    output:
+    -------
 
-            An unordered list, where each item corresponds to a unique
-            contiguous area for which input_array > search_threshold, and
-            where the contents of each item are a list of array indicies
-            that access the elements of the array for a given contiguous
-            area.
+        An unordered list, where each item corresponds to a unique
+        contiguous area for which input_array > search_threshold, and
+        where the contents of each item are a list of array indicies
+        that access the elements of the array for a given contiguous
+        area.
 
     """
     cdef np.ndarray[np.int64_t,ndim=1] array_shape

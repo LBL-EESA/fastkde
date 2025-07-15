@@ -1,0 +1,9 @@
+matplotlib
+myst-nb
+myst-parser
+numpy
+scipy
+sphinx
+sphinx-autodoc-typehints
+sphinx-rtd-theme
+xarray

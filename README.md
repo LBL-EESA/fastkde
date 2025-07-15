@@ -1,3 +1,4 @@
+[![Documentation Status](https://readthedocs.org/projects/fastkde/badge/?version=latest)](https://fastkde.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/fastkde.svg)](https://badge.fury.io/py/fastkde)
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/lbl-eesa/fastkde/test.yml?event=schedule&label=tests)
 <a target="_blank" href="https://colab.research.google.com/github/LBL-EESA/fastkde/blob/main/examples/readme_test.ipynb"> <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/> </a>
